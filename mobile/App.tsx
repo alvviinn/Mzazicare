@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
 import { getProfile, SESSION_EXPIRED } from './src/api/client';
 import { clearSession, loadSession, Session } from './src/auth/session';
 import { Button } from './src/components/ui';
@@ -11,6 +12,9 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import UserHome from './src/screens/UserHome';
 import { colors, spacing } from './src/theme';
 import { Profile } from './src/types';
+
+// Keep the splash screen up until the saved session (and role) has loaded.
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -51,7 +55,13 @@ export default function App() {
     if (session) refresh(session);
   }, [session, refresh]);
 
-  if (!ready || (session && !profile && !loadError)) {
+  const loading = !ready || (session && !profile && !loadError);
+
+  useEffect(() => {
+    if (!loading) SplashScreen.hideAsync().catch(() => {});
+  }, [loading]);
+
+  if (loading) {
     return (
       <View style={styles.center}>
         <ActivityIndicator color={colors.primary} />
