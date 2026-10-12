@@ -1,11 +1,12 @@
 import * as SecureStore from 'expo-secure-store';
+import { AuthResult, Role } from '../types';
 
 const KEY = 'mzazicare_session';
 export const SESSION_DAYS = 90; // users stay signed in for about 3 months
 
-export type Session = { token: string; name: string; role: string; expiresAt: number };
+export type Session = { token: string; name: string; role: Role; expiresAt: number };
 
-export async function saveSession(s: { token: string; name: string; role: string }): Promise<Session> {
+export async function saveSession(s: AuthResult): Promise<Session> {
   const session: Session = { ...s, expiresAt: Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000 };
   await SecureStore.setItemAsync(KEY, JSON.stringify(session));
   return session;
