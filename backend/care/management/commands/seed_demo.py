@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from accounts.models import Role, User
-from care.models import Alert, Chore, Shift, ToneReading
+from care.models import Alert, Chore, Shift, ShiftSegment, Task, ToneReading
 
 CHORES = ['Morning medication', 'Breakfast', 'Bathing assistance', 'Light housekeeping', 'Lunch', 'Afternoon walk']
 # (happy, calm, neutral, stressed, angry) weights; mostly positive so the sample looks realistic.
@@ -30,6 +30,16 @@ class Command(BaseCommand):
         rng = random.Random(7)
         Shift.objects.filter(is_demo=True, caretaker__sponsor=sponsor).delete()
         Alert.objects.filter(is_demo=True, sponsor=sponsor).delete()
+        Task.objects.filter(is_demo=True, caretaker__sponsor=sponsor).delete()
+
+        # Sample to-do list for today, so the family's "today's chores" card has something to show.
+        for c in caretakers:
+            for i, desc in enumerate(CHORES):
+                done = i < 3
+                Task.objects.create(
+                    caretaker=c, title=desc, recurring=True, is_demo=True, is_done=done,
+                    done_at=timezone.now() - timedelta(minutes=90 - 20 * i) if done else None,
+                )
 
         now = timezone.now()
         last_shift = None
@@ -40,7 +50,11 @@ class Command(BaseCommand):
                 start = now - timedelta(hours=1)
             # Today's shift is still running; earlier ones ended after 4-7 hours.
             end = None if day == 0 else start + timedelta(minutes=rng.randint(240, 420))
-            shift = Shift.objects.create(caretaker=caretaker, elderly=person, start_time=start, end_time=end, is_demo=True)
+            shift = Shift.objects.create(
+                caretaker=caretaker, elderly=person, start_time=start, end_time=end, is_demo=True,
+                ended_by='auto' if end else '',
+            )
+            ShiftSegment.objects.create(shift=shift, start=start, end=end)  # verified the whole visit
 
             for desc in CHORES:
                 done = rng.random() < (0.5 if day == 0 else 0.88)

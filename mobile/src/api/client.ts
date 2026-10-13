@@ -1,4 +1,4 @@
-import { AuthResult, ChatMessage, Dashboard, Profile } from '../types';
+import { AuthResult, ChatMessage, Dashboard, Hours, Profile, ShiftState, TaskItem } from '../types';
 import { mockAddMember, mockLogin, mockProfile, mockRegister } from './mockDb';
 
 // When EXPO_PUBLIC_API_URL is set the app talks to the Django backend;
@@ -60,6 +60,58 @@ export function getMessages(token: string, withEmail: string): Promise<ChatMessa
 export function sendMessage(token: string, to: string, body: string): Promise<ChatMessage> {
   if (!API_URL) needBackend();
   return request('/api/chat/', { method: 'POST', token, body: JSON.stringify({ to, body }) });
+}
+
+// ---- Phones (caretaker and elderly) ----
+
+export function sendLocation(
+  token: string,
+  fix: { latitude: number; longitude: number; accuracy: number | null; mocked: boolean },
+): Promise<void> {
+  if (!API_URL) needBackend();
+  return request('/api/location/', { method: 'POST', token, body: JSON.stringify(fix) });
+}
+
+// ---- Caretaker ----
+
+export function getShiftState(token: string): Promise<ShiftState> {
+  if (!API_URL) needBackend();
+  return request('/api/shift/state/', { token });
+}
+
+export function startShift(token: string): Promise<ShiftState> {
+  if (!API_URL) needBackend();
+  return request('/api/shift/start/', { method: 'POST', token });
+}
+
+export function stopShift(token: string): Promise<ShiftState> {
+  if (!API_URL) needBackend();
+  return request('/api/shift/stop/', { method: 'POST', token });
+}
+
+export function getHours(token: string): Promise<Hours> {
+  if (!API_URL) needBackend();
+  return request('/api/hours/', { token });
+}
+
+export function getTasks(token: string): Promise<TaskItem[]> {
+  if (!API_URL) needBackend();
+  return request('/api/tasks/', { token });
+}
+
+export function addTask(token: string, title: string, recurring: boolean): Promise<TaskItem> {
+  if (!API_URL) needBackend();
+  return request('/api/tasks/', { method: 'POST', token, body: JSON.stringify({ title, recurring }) });
+}
+
+export function updateTask(token: string, id: number, changes: { is_done?: boolean; recurring?: boolean }): Promise<TaskItem> {
+  if (!API_URL) needBackend();
+  return request(`/api/tasks/${id}/`, { method: 'PATCH', token, body: JSON.stringify(changes) });
+}
+
+export function deleteTask(token: string, id: number): Promise<void> {
+  if (!API_URL) needBackend();
+  return request(`/api/tasks/${id}/`, { method: 'DELETE', token });
 }
 
 export function addMember(token: string, email: string, role: 'caretaker' | 'elderly'): Promise<void> {

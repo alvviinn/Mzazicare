@@ -31,6 +31,12 @@
           "resizeMode": "contain",
           "backgroundColor": "#F8F6F1"
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "MzaziCare uses your location to confirm that the caretaker is with the elderly person during care visits."
+        }
       ]
     ]
   }

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Tone(models.TextChoices):
@@ -15,13 +16,28 @@ TONE_EMOJI = {'happy': '😊', 'calm': '😌', 'neutral': '😐', 'stressed': '�
 POSITIVE_TONES = ('happy', 'calm')
 
 
+class Location(models.Model):
+    """Latest known position of a phone. Only the newest fix is kept (no movement trail)."""
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='location')
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    accuracy = models.FloatField(null=True, blank=True)  # metres, as reported by the phone
+    mocked = models.BooleanField(default=False)  # phone says the fix comes from a mock-location app
+    updated_at = models.DateTimeField(default=timezone.now)
+
+
 class Shift(models.Model):
-    """One caretaker visit to one elderly person."""
+    """One caretaker visit to one elderly person. Worked time is the sum of its segments."""
 
     caretaker = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='shifts')
     elderly = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='care_visits')
     start_time = models.DateTimeField()
-    end_time = models.DateTimeField(null=True, blank=True)  # null while the shift is still running
+    end_time = models.DateTimeField(null=True, blank=True)  # null while the shift is still open
+    source = models.CharField(max_length=10, default='auto')  # 'auto' (geofence) or 'manual' (button)
+    ended_by = models.CharField(max_length=10, blank=True)  # 'manual' or 'auto'
+    rearmed = models.BooleanField(default=False)  # after a manual stop, auto-start waits until she leaves range
+    last_in_range_at = models.DateTimeField(null=True, blank=True)
     is_demo = models.BooleanField(default=False)  # sample data created by seed_demo
 
     class Meta:
@@ -31,8 +47,32 @@ class Shift(models.Model):
         return f'{self.caretaker.email} -> {self.elderly.email} @ {self.start_time:%Y-%m-%d %H:%M}'
 
 
+class ShiftSegment(models.Model):
+    """A stretch of time the caretaker was verified within range of the elder's phone."""
+
+    shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='segments')
+    start = models.DateTimeField()
+    end = models.DateTimeField(null=True, blank=True)  # null while still in range
+
+    class Meta:
+        ordering = ['start']
+
+
+class Task(models.Model):
+    """A to-do item the caretaker writes for herself. Recurring ones reset on each working day."""
+
+    caretaker = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tasks')
+    title = models.CharField(max_length=200)
+    recurring = models.BooleanField(default=False)
+    is_done = models.BooleanField(default=False)
+    done_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_demo = models.BooleanField(default=False)
+
+
 class Chore(models.Model):
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='chores')
+    task = models.ForeignKey(Task, null=True, blank=True, on_delete=models.SET_NULL, related_name='chores')
     description = models.CharField(max_length=200)
     is_done = models.BooleanField(default=False)
     done_at = models.DateTimeField(null=True, blank=True)

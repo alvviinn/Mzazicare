@@ -179,16 +179,19 @@ function TodayCard({ dash }: { dash: Dashboard }) {
   let detail = 'Nobody has started a shift today.';
   if (status === 'on_shift' && s) {
     headline = `${s.caretaker} is on shift`;
-    detail = `Arrived ${fmtTime(s.start)} · ${fmtDuration(s.minutes)} so far`;
+    detail = `Verified with ${s.elderly} since ${fmtTime(s.start)} · ${fmtDuration(s.minutes)} counted so far`;
+  } else if (status === 'paused' && s) {
+    headline = `${s.caretaker} stepped away`;
+    detail = `Not within 15 m of ${s.elderly}. The timer is paused at ${fmtDuration(s.minutes)} and resumes when they return.`;
   } else if (status === 'completed' && s) {
     headline = `${s.caretaker}'s visit is complete`;
     detail = `${fmtTime(s.start)} – ${s.end ? fmtTime(s.end) : ''} · ${fmtDuration(s.minutes)}`;
   }
-  const live = status === 'on_shift';
+  const dotColor = status === 'on_shift' ? colors.success : status === 'paused' ? colors.warning : colors.border;
   return (
     <Card>
       <View style={styles.statusRow}>
-        <View style={[styles.dot, { backgroundColor: live ? colors.success : colors.border }]} />
+        <View style={[styles.dot, { backgroundColor: dotColor }]} />
         <Text style={styles.cardTitle}>{headline}</Text>
       </View>
       <Text style={[styles.muted, { marginTop: spacing.xs }]}>{detail}</Text>

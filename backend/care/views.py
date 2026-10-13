@@ -8,7 +8,9 @@ from rest_framework.views import APIView
 
 from accounts.models import Role, User
 
+from . import presence
 from .models import POSITIVE_TONES, TONE_EMOJI, Alert, Message, Shift, Tone, ToneReading
+from .tasks import visible_tasks
 
 
 def require_family(user):
@@ -16,8 +18,10 @@ def require_family(user):
         raise PermissionDenied('Only family accounts can view the dashboard.')
 
 
-def minutes_between(start, end):
-    return max(1, int(((end or timezone.now()) - start).total_seconds() // 60))
+def shift_status(s):
+    if s.end_time is not None:
+        return 'ended'
+    return 'on_shift' if presence.open_segment(s) else 'paused'
 
 
 def tone_summary(shifts):
@@ -28,7 +32,7 @@ def tone_summary(shifts):
         readings = list(s.tones.all())
         if not readings:
             continue
-        w = minutes_between(s.start_time, s.end_time)
+        w = max(1, presence.worked_minutes(s))
         weight += w
         for r in readings:
             totals[r.tone] += r.percent * w
@@ -58,7 +62,9 @@ def shift_json(s):
         'elderly': s.elderly.name,
         'start': s.start_time.isoformat(),
         'end': s.end_time.isoformat() if s.end_time else None,
-        'minutes': minutes_between(s.start_time, s.end_time),
+        'minutes': presence.worked_minutes(s),  # verified time near the elder, not just start to end
+        'status': shift_status(s),
+        'source': s.source,
         'chores_done': sum(c.is_done for c in chores),
         'chores_total': len(chores),
         'dominant_emoji': TONE_EMOJI[top] if top else None,
@@ -84,20 +90,29 @@ class DashboardView(APIView):
             return {'email': u.email, 'name': u.name, 'unread': unread}
 
         now = timezone.now()
+        for c in caretakers:
+            presence.evaluate(c, now)  # settle live shifts before reporting them
+
         shifts_qs = (
             Shift.objects.filter(Q(caretaker__sponsor=me) | Q(elderly__sponsor=me))
             .select_related('caretaker', 'elderly')
-            .prefetch_related('chores', 'tones')
+            .prefetch_related('chores', 'tones', 'segments')
         )
         week = list(shifts_qs.filter(start_time__gte=now - timedelta(days=7)))
         today = [s for s in week if timezone.localtime(s.start_time).date() == timezone.localdate()]
 
         month_done = shifts_qs.filter(start_time__gte=now - timedelta(days=30), end_time__isnull=False)
-        durations = [minutes_between(s.start_time, s.end_time) for s in month_done]
+        durations = [presence.worked_minutes(s) for s in month_done]
         chores_week = [c for s in week for c in s.chores.all()]
 
-        if any(s.end_time is None for s in today):
+        today_tasks = [t for c in caretakers for t in visible_tasks(c, now)]
+        today_tasks.sort(key=lambda t: (t.is_done, t.created_at))
+
+        statuses = {shift_status(s) for s in today}
+        if 'on_shift' in statuses:
             status = 'on_shift'
+        elif 'paused' in statuses:
+            status = 'paused'
         elif today:
             status = 'completed'
         else:
@@ -105,17 +120,18 @@ class DashboardView(APIView):
 
         return Response(
             {
-                'demo': shifts_qs.filter(is_demo=True).exists(),
+                'demo': shifts_qs.filter(is_demo=True).exists() or any(t.is_demo for t in today_tasks),
                 'matched': caretakers.exists() and elderly.exists(),
                 'caretakers': [person(u) for u in caretakers],
                 'elderly': [person(u) for u in elderly],
                 'today': {
                     'status': status,
                     'shifts': [shift_json(s) for s in today],
+                    # the caretaker's own to-do list for today
                     'chores': [
-                        {'description': c.description, 'is_done': c.is_done,
-                         'done_at': c.done_at.isoformat() if c.done_at else None}
-                        for s in today for c in s.chores.all()
+                        {'description': t.title, 'is_done': t.is_done,
+                         'done_at': t.done_at.isoformat() if t.done_at else None}
+                        for t in today_tasks
                     ],
                 },
                 'stats': {

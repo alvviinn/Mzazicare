@@ -32,7 +32,9 @@ export type ShiftSummary = {
   elderly: string;
   start: string;
   end: string | null;
-  minutes: number;
+  minutes: number; // verified time near the elder
+  status: 'on_shift' | 'paused' | 'ended';
+  source: 'auto' | 'manual';
   chores_done: number;
   chores_total: number;
   dominant_emoji: string | null;
@@ -53,7 +55,7 @@ export type Dashboard = {
   caretakers: ChatPerson[];
   elderly: ChatPerson[];
   today: {
-    status: 'on_shift' | 'completed' | 'none';
+    status: 'on_shift' | 'paused' | 'completed' | 'none';
     shifts: ShiftSummary[];
     chores: { description: string; is_done: boolean; done_at: string | null }[];
   };
@@ -68,4 +70,37 @@ export type Dashboard = {
   alerts: AlertItem[];
 };
 
-export type ChatMessage = { id: number; mine: boolean; body: string; created_at: string };
+// ---- Caretaker ----
+
+export type ShiftState = {
+  status: 'none' | 'active' | 'waiting'; // waiting = shift open but not within range of the elder
+  source: 'auto' | 'manual' | null;
+  started_at: string | null;
+  shift_minutes: number;
+  today_minutes: number;
+  elderly: { name: string; email: string } | null;
+  range: {
+    state: 'in' | 'out' | 'unknown';
+    distance_m: number | null;
+    elder_sharing: boolean; // false when the elder's phone isn't sending a fresh location
+    radius_m: number;
+  };
+};
+
+export type TaskItem = {
+  id: number;
+  title: string;
+  recurring: boolean;
+  is_done: boolean;
+  done_at: string | null;
+};
+
+export type Hours = {
+  today: number;
+  week: number;
+  month: number;
+  total: number;
+  recent: { id: number; elderly: string; start: string; end: string | null; minutes: number; source: 'auto' | 'manual' }[];
+};
+
+export type ChatMessage ={ id: number; mine: boolean; body: string; created_at: string };
