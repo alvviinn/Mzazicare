@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Profile, Role } from '../types';
 import { colors, radius, spacing } from '../theme';
 import { Card } from './ui';
@@ -14,26 +14,43 @@ export function HomeShell({
   profile,
   onSignOut,
   children,
+  footer,
+  refreshing,
+  onRefresh,
 }: {
   profile: Profile;
   onSignOut: () => void;
   children: React.ReactNode;
+  footer?: React.ReactNode; // fixed bar under the scrolling content (e.g. tabs)
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }) {
   return (
-    <ScrollView style={styles.flex} contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.hello}>Hello, {profile.name.split(' ')[0]}</Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{ROLE_LABEL[profile.role]}</Text>
+    <View style={styles.flex}>
+      <ScrollView
+        style={styles.flex}
+        contentContainerStyle={styles.container}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+          ) : undefined
+        }
+      >
+        <View style={styles.header}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.hello}>Hello, {profile.name.split(' ')[0]}</Text>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{ROLE_LABEL[profile.role]}</Text>
+            </View>
           </View>
+          <Pressable onPress={onSignOut}>
+            <Text style={styles.signOut}>Sign out</Text>
+          </Pressable>
         </View>
-        <Pressable onPress={onSignOut}>
-          <Text style={styles.signOut}>Sign out</Text>
-        </Pressable>
-      </View>
-      {children}
-    </ScrollView>
+        {children}
+      </ScrollView>
+      {footer}
+    </View>
   );
 }
 

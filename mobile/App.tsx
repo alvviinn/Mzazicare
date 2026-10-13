@@ -88,9 +88,9 @@ export default function App() {
       </View>
     );
   } else if (profile.role === 'caretaker') {
-    content = <CaretakerHome profile={profile} onSignOut={signOut} />;
+    content = <CaretakerHome token={session.token} profile={profile} onSignOut={signOut} />;
   } else if (profile.role === 'elderly') {
-    content = <ElderlyHome profile={profile} onSignOut={signOut} />;
+    content = <ElderlyHome token={session.token} profile={profile} onSignOut={signOut} />;
   } else {
     content = (
       <UserHome token={session.token} profile={profile} onChanged={() => refresh(session)} onSignOut={signOut} />

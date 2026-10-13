@@ -1,104 +1,112 @@
-import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { addMember } from '../api/client';
-import { FamilyCard, HomeShell, SectionTitle } from '../components/HomeShell';
-import { Button, Card, ErrorText, Field } from '../components/ui';
+import { useCallback, useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { getDashboard } from '../api/client';
+import { HomeShell } from '../components/HomeShell';
 import { colors, spacing } from '../theme';
-import { Profile } from '../types';
+import { Dashboard, Profile } from '../types';
+import ChatScreen from './ChatScreen';
+import ChatsTab from './user/ChatsTab';
+import Overview from './user/Overview';
+import PeopleTab from './user/PeopleTab';
 
 type Props = { token: string; profile: Profile; onChanged: () => Promise<void>; onSignOut: () => void };
+type Tab = 'overview' | 'chats' | 'people';
 
-function AddPerson({
-  token,
-  role,
-  title,
-  hint,
-  onChanged,
-}: {
-  token: string;
-  role: 'caretaker' | 'elderly';
-  title: string;
-  hint: string;
-  onChanged: () => Promise<void>;
-}) {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [done, setDone] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function submit() {
-    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError('Enter a valid email address.');
-    setError('');
-    setDone('');
-    setLoading(true);
-    try {
-      await addMember(token, email.trim(), role);
-      setDone(`${email.trim()} added.`);
-      setEmail('');
-      await onChanged();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <Card>
-      <Text style={styles.cardTitle}>{title}</Text>
-      <Text style={styles.hint}>{hint}</Text>
-      <Field
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        placeholder="name@example.com"
-        keyboardType="email-address"
-        returnKeyType="done"
-        onSubmitEditing={submit}
-      />
-      <ErrorText>{error}</ErrorText>
-      {!!done && <Text style={styles.success}>{done}</Text>}
-      <Button title="Add" onPress={submit} loading={loading} />
-    </Card>
-  );
-}
+const TABS: { key: Tab; label: string; icon: string }[] = [
+  { key: 'overview', label: 'Overview', icon: '🏠' },
+  { key: 'chats', label: 'Chats', icon: '💬' },
+  { key: 'people', label: 'People', icon: '👥' },
+];
 
 export default function UserHome({ token, profile, onChanged, onSignOut }: Props) {
+  const [tab, setTab] = useState<Tab>('overview');
+  const [dash, setDash] = useState<Dashboard | null>(null);
+  const [error, setError] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+  const [chatPeer, setChatPeer] = useState<{ name: string; email: string } | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      setDash(await getDashboard(token));
+      setError('');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not load the dashboard.');
+    }
+  }, [token]);
+
+  // Load on open, keep fresh every 30s, and reload when coming back from a chat or changing the circle.
+  useEffect(() => {
+    load();
+    const id = setInterval(load, 30000);
+    return () => clearInterval(id);
+  }, [load, chatPeer, profile]);
+
+  async function refresh() {
+    setRefreshing(true);
+    await Promise.all([load(), onChanged()]);
+    setRefreshing(false);
+  }
+
+  if (chatPeer) {
+    return <ChatScreen token={token} peer={chatPeer} onBack={() => setChatPeer(null)} />;
+  }
+
+  const unread = dash ? [...dash.caretakers, ...dash.elderly].reduce((n, p) => n + p.unread, 0) : 0;
+
+  const footer = (
+    <View style={styles.tabBar}>
+      {TABS.map((t) => (
+        <Pressable key={t.key} style={styles.tab} onPress={() => setTab(t.key)}>
+          <Text style={styles.tabIcon}>{t.icon}</Text>
+          <Text style={[styles.tabLabel, tab === t.key && styles.tabActive]}>{t.label}</Text>
+          {t.key === 'chats' && unread > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{unread}</Text>
+            </View>
+          )}
+        </Pressable>
+      ))}
+    </View>
+  );
+
   return (
-    <HomeShell profile={profile} onSignOut={onSignOut}>
-      <Card>
-        <Text style={styles.cardTitle}>Care overview</Text>
-        <Text style={styles.hint}>
-          {profile.caretakers.length} caretaker{profile.caretakers.length === 1 ? '' : 's'} ·{' '}
-          {profile.elderly.length} elderly {profile.elderly.length === 1 ? 'person' : 'people'}
-        </Text>
-      </Card>
-
-      <SectionTitle>Your care circle</SectionTitle>
-      <FamilyCard profile={profile} />
-
-      <SectionTitle>Add people</SectionTitle>
-      <AddPerson
-        token={token}
-        role="caretaker"
-        title="Add a caretaker"
-        hint="If they already have an account it becomes a caretaker account. Otherwise it is set up when they register."
-        onChanged={onChanged}
-      />
-      <View style={{ height: spacing.md }} />
-      <AddPerson
-        token={token}
-        role="elderly"
-        title="Add an elderly person"
-        hint="Their account will see their own care home screen, linked to you and your caretakers."
-        onChanged={onChanged}
-      />
+    <HomeShell profile={profile} onSignOut={onSignOut} footer={footer} refreshing={refreshing} onRefresh={refresh}>
+      {tab === 'overview' && (
+        <Overview
+          token={token}
+          profile={profile}
+          dash={dash}
+          error={error}
+          onChanged={load}
+          onGoPeople={() => setTab('people')}
+        />
+      )}
+      {tab === 'chats' && <ChatsTab dash={dash} onOpen={setChatPeer} onGoPeople={() => setTab('people')} />}
+      {tab === 'people' && <PeopleTab token={token} profile={profile} onChanged={onChanged} />}
     </HomeShell>
   );
 }
 
 const styles = StyleSheet.create({
-  cardTitle: { fontSize: 17, fontWeight: '700', color: colors.text },
-  hint: { color: colors.textMuted, fontSize: 14, marginTop: spacing.xs, marginBottom: spacing.md },
-  success: { color: colors.primary, marginBottom: spacing.md, fontSize: 14 },
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingBottom: spacing.sm,
+  },
+  tab: { flex: 1, alignItems: 'center', paddingTop: spacing.sm },
+  tabIcon: { fontSize: 20 },
+  tabLabel: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
+  tabActive: { color: colors.primary, fontWeight: '700' },
+  badge: {
+    position: 'absolute',
+    top: 2,
+    right: '28%',
+    backgroundColor: colors.danger,
+    borderRadius: 9,
+    minWidth: 18,
+    paddingHorizontal: 4,
+  },
+  badgeText: { color: colors.onPrimary, fontSize: 11, fontWeight: '700', textAlign: 'center' },
 });

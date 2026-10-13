@@ -9,7 +9,20 @@ export const colors = {
   textMuted: '#6B7774',
   border: '#D9DED9',
   danger: '#B3372F',
+  dangerSoft: '#F9E7E5',
+  warning: '#A8700F',
+  warningSoft: '#FBF1DC',
+  success: '#2E7D5B',
   onPrimary: '#FFFFFF',
+};
+
+// Bar colours for the voice-tone breakdown.
+export const toneColors: Record<string, string> = {
+  happy: '#3E9B6B',
+  calm: '#6FB7A8',
+  neutral: '#A6AFAC',
+  stressed: '#D9A03A',
+  angry: '#C4503F',
 };
 
 export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };

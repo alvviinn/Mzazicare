@@ -1,4 +1,4 @@
-import os
+﻿import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'accounts',
+    'care',
 ]
 
 MIDDLEWARE = [
@@ -91,3 +92,4 @@ SIMPLE_JWT = {
 
 # The sponsor web dashboard will call this API from the browser.
 CORS_ALLOW_ALL_ORIGINS = DEBUG
+
