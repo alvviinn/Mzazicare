@@ -74,7 +74,18 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
 
   return (
     <>
-      <SharingBanner status={sharing} />
+      {state.emergency && (
+        <View style={styles.emergency}>
+          <Text style={styles.emergencyTitle}>🆘 Emergency</Text>
+          <Text style={styles.emergencyText}>
+            {state.emergency.message} Check on them now, and tell the family what you find.
+          </Text>
+        </View>
+      )}
+
+      <View style={{ marginBottom: spacing.sm }}>
+        <SharingBanner status={sharing} />
+      </View>
 
       <Card>
         <View style={styles.row}>
@@ -143,6 +154,14 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
 }
 
 const styles = StyleSheet.create({
+  emergency: {
+    backgroundColor: colors.danger,
+    borderRadius: 16,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  emergencyTitle: { color: colors.onPrimary, fontSize: 18, fontWeight: '800' },
+  emergencyText: { color: colors.onPrimary, fontSize: 15, marginTop: spacing.xs },
   title: { fontSize: 17, fontWeight: '700', color: colors.text, flexShrink: 1 },
   muted: { color: colors.textMuted, fontSize: 14, marginTop: spacing.xs },
   row: { flexDirection: 'row', alignItems: 'center' },

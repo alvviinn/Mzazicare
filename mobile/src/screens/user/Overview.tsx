@@ -19,9 +19,26 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
   if (!dash) {
     return <Text style={styles.muted}>{error || 'Loading your care overview…'}</Text>;
   }
-  if (!dash.matched) return <Onboarding profile={profile} onGoPeople={onGoPeople} />;
-
   const openAlerts = dash.alerts.filter((a) => a.status === 'open');
+  const alertCards = openAlerts.length > 0 && (
+    <>
+      <SectionTitle>Needs your attention</SectionTitle>
+      {openAlerts.map((a) => (
+        <AlertCard key={a.id} alert={a} token={token} onChanged={onChanged} />
+      ))}
+    </>
+  );
+
+  // An emergency can arrive before a caretaker is linked, so alerts show here too.
+  if (!dash.matched) {
+    return (
+      <>
+        {alertCards}
+        <Onboarding profile={profile} onGoPeople={onGoPeople} />
+      </>
+    );
+  }
+
   const doneChores = dash.today.chores.filter((c) => c.is_done).length;
 
   return (
@@ -34,22 +51,66 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
         </View>
       )}
 
-      <TodayCard dash={dash} />
+      {alertCards}
 
-      {openAlerts.length > 0 && (
-        <>
-          <SectionTitle>Needs your attention</SectionTitle>
-          {openAlerts.map((a) => (
-            <AlertCard key={a.id} alert={a} token={token} onChanged={onChanged} />
-          ))}
-        </>
-      )}
+      <TodayCard dash={dash} />
 
       <View style={styles.tiles}>
         <Tile value={fmtDuration(dash.stats.avg_visit_minutes)} label="Avg. time per visit" />
         <Tile value={String(dash.stats.visits_7d)} label="Visits this week" />
         <Tile value={dash.stats.chore_rate_7d === null ? '–' : `${dash.stats.chore_rate_7d}%`} label="Chores done" />
       </View>
+
+      <SectionTitle>How they are today</SectionTitle>
+      <Card>
+        {dash.wellbeing.map((w, i) => (
+          <View key={w.name} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
+            <Text style={styles.bigEmoji}>{w.emoji ?? '❔'}</Text>
+            <View style={{ flex: 1, marginLeft: spacing.md }}>
+              <Text style={styles.visitTitle}>{w.name}</Text>
+              <Text style={styles.small}>
+                {w.mood ? `Feeling ${w.label?.toLowerCase()} · checked in ${fmtTime(w.at!)}` : "Hasn't checked in yet today"}
+              </Text>
+            </View>
+          </View>
+        ))}
+      </Card>
+
+      <SectionTitle>Medicines</SectionTitle>
+      <Card>
+        {dash.medicines.total === 0 ? (
+          <Text style={styles.muted}>No medicine reminders yet. Add some in the People tab.</Text>
+        ) : (
+          <>
+            <Text style={styles.progress}>
+              {dash.medicines.taken} of {dash.medicines.total} taken today
+            </Text>
+            {dash.medicines.items.map((m, i) => (
+              <View key={m.id} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
+                <Text style={[styles.check, { color: m.taken ? colors.success : colors.border }]}>{m.taken ? '✔' : '○'}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.visitTitle}>
+                    {m.name}
+                    {m.dose ? ` · ${m.dose}` : ''}
+                  </Text>
+                  <Text style={styles.small}>
+                    {m.elderly} · {m.time}
+                  </Text>
+                </View>
+                <Text
+                  style={[
+                    styles.small,
+                    m.state === 'missed' && { color: colors.danger, fontWeight: '700' },
+                    m.state === 'due' && { color: colors.warning, fontWeight: '700' },
+                  ]}
+                >
+                  {m.state === 'taken' && m.taken_at ? `Taken ${fmtTime(m.taken_at)}` : m.state === 'missed' ? 'Not taken' : m.state === 'due' ? 'Due now' : 'Later'}
+                </Text>
+              </View>
+            ))}
+          </>
+        )}
+      </Card>
 
       <SectionTitle>Today's chores</SectionTitle>
       <Card>
@@ -259,18 +320,23 @@ function AlertCard({ alert, token, onChanged }: { alert: AlertItem; token: strin
     await resolveAlert(token, alert.id, status);
     onChanged();
   }
+  const sos = alert.kind === 'sos';
+  const yes = sos ? 'Handled' : alert.kind === 'unwell' ? 'Noted' : 'Confirm';
+  const no = sos ? 'False alarm' : 'Dismiss';
   return (
-    <View style={styles.alert}>
-      <Text style={styles.alertTitle}>
+    <View style={[styles.alert, sos && styles.sosAlert]}>
+      <Text style={[styles.alertTitle, sos && { fontSize: 18 }]}>
+        {sos ? '🆘 ' : ''}
         {alert.label} · <Text style={styles.small}>{timeAgo(alert.created_at)}</Text>
       </Text>
       <Text style={styles.alertBody}>{alert.message}</Text>
+      {sos && <Text style={styles.alertBody}>Call them or message them now. Their chat is in the Chats tab.</Text>}
       <View style={styles.alertActions}>
         <View style={{ flex: 1 }}>
-          <Button title="Confirm" onPress={() => act('confirmed')} />
+          <Button title={yes} onPress={() => act('confirmed')} />
         </View>
         <View style={{ flex: 1 }}>
-          <Button title="Dismiss" variant="secondary" onPress={() => act('dismissed')} />
+          <Button title={no} variant="secondary" onPress={() => act('dismissed')} />
         </View>
       </View>
     </View>
@@ -326,6 +392,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.sm,
   },
+  sosAlert: { borderWidth: 2, borderColor: colors.danger },
   alertTitle: { fontSize: 15, fontWeight: '700', color: colors.danger },
   alertBody: { fontSize: 14, color: colors.text, marginTop: spacing.xs },
   alertActions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },

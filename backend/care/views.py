@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 from accounts.models import Role, User
 
 from . import presence
-from .models import POSITIVE_TONES, TONE_EMOJI, Alert, Message, Shift, Tone, ToneReading
+from .elder_views import medicines_json, mood_today
+from .models import MOOD_EMOJI, POSITIVE_TONES, TONE_EMOJI, Alert, Message, Mood, Shift, Tone, ToneReading
 from .tasks import visible_tasks
 
 
@@ -108,6 +109,21 @@ class DashboardView(APIView):
         today_tasks = [t for c in caretakers for t in visible_tasks(c, now)]
         today_tasks.sort(key=lambda t: (t.is_done, t.created_at))
 
+        wellbeing = []
+        medicines = []
+        for e in elderly:
+            m = mood_today(e, now)
+            wellbeing.append(
+                {
+                    'name': e.name,
+                    'mood': m['mood'] if m else None,
+                    'emoji': MOOD_EMOJI[m['mood']] if m else None,
+                    'label': Mood(m['mood']).label if m else None,
+                    'at': m['at'] if m else None,
+                }
+            )
+            medicines += medicines_json(e, now)
+
         statuses = {shift_status(s) for s in today}
         if 'on_shift' in statuses:
             status = 'on_shift'
@@ -139,6 +155,12 @@ class DashboardView(APIView):
                     'visits_7d': len(week),
                     'chore_rate_7d': round(100 * sum(c.is_done for c in chores_week) / len(chores_week))
                     if chores_week else None,
+                },
+                'wellbeing': wellbeing,
+                'medicines': {
+                    'taken': sum(m['taken'] for m in medicines),
+                    'total': len(medicines),
+                    'items': medicines,
                 },
                 'tones': tone_summary(week),
                 'recent_shifts': [shift_json(s) for s in week[:8]],

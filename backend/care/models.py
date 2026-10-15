@@ -94,9 +94,11 @@ class Alert(models.Model):
 
     class Kind(models.TextChoices):
         VOCAL = 'vocal_distress', 'Vocal distress'
-        GEOFENCE = 'geofence', 'Left the home area'
+        GEOFENCE = 'geofence', 'Location check'
         CHORE = 'missed_chore', 'Missed chore'
         SHORT = 'short_visit', 'Short visit'
+        SOS = 'sos', 'Emergency'
+        UNWELL = 'unwell', 'Not feeling well'
 
     class Status(models.TextChoices):
         OPEN = 'open', 'Open'
@@ -113,6 +115,50 @@ class Alert(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class Mood(models.TextChoices):
+    GOOD = 'good', 'Good'
+    OKAY = 'okay', 'Okay'
+    UNWELL = 'unwell', 'Not well'
+
+
+MOOD_EMOJI = {'good': '😊', 'okay': '😐', 'unwell': '😟'}
+
+
+class CheckIn(models.Model):
+    """The elderly person's one-tap answer to "How are you feeling today?"."""
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='checkins')
+    mood = models.CharField(max_length=10, choices=Mood.choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+
+class Medication(models.Model):
+    """A daily medicine reminder the family sets for an elderly person."""
+
+    elderly = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='medications')
+    name = models.CharField(max_length=100)
+    dose = models.CharField(max_length=100, blank=True)
+    time = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['time', 'name']
+
+
+class MedicationLog(models.Model):
+    """The elderly person tapped "I took it" for one medicine on one day."""
+
+    medication = models.ForeignKey(Medication, on_delete=models.CASCADE, related_name='logs')
+    date = models.DateField()
+    taken_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('medication', 'date')
 
 
 class Message(models.Model):

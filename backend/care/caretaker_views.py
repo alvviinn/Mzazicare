@@ -85,7 +85,12 @@ def state_json(user, now):
     state, distance, elder, sharing = presence.current_reading(user, shift, now)
     seg = presence.open_segment(shift) if shift else None
     midnight = local_midnight(timezone.localdate(now))
+    sos = Alert.objects.filter(
+        sponsor_id=user.sponsor_id, kind=Alert.Kind.SOS, status=Alert.Status.OPEN,
+        created_at__gte=now - timedelta(minutes=30),
+    ).first()
     return {
+        'emergency': {'message': sos.message, 'at': sos.created_at.isoformat()} if sos else None,
         'status': 'none' if not shift else 'active' if seg else 'waiting',
         'source': shift.source if shift else None,
         'started_at': shift.start_time.isoformat() if shift else None,

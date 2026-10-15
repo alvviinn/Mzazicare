@@ -1,4 +1,4 @@
-import { AuthResult, ChatMessage, Dashboard, Hours, Profile, ShiftState, TaskItem } from '../types';
+import { AuthResult, ChatMessage, Dashboard, ElderHome, Hours, Mood, Profile, ShiftState, TaskItem } from '../types';
 import { mockAddMember, mockLogin, mockProfile, mockRegister } from './mockDb';
 
 // When EXPO_PUBLIC_API_URL is set the app talks to the Django backend;
@@ -70,6 +70,43 @@ export function sendLocation(
 ): Promise<void> {
   if (!API_URL) needBackend();
   return request('/api/location/', { method: 'POST', token, body: JSON.stringify(fix) });
+}
+
+// ---- Elderly ----
+
+export function getElderHome(token: string): Promise<ElderHome> {
+  if (!API_URL) needBackend();
+  return request('/api/elder/home/', { token });
+}
+
+export function sendCheckIn(token: string, mood: Mood): Promise<void> {
+  if (!API_URL) needBackend();
+  return request('/api/elder/checkin/', { method: 'POST', token, body: JSON.stringify({ mood }) });
+}
+
+export function sendSos(token: string): Promise<void> {
+  if (!API_URL) needBackend();
+  return request('/api/elder/sos/', { method: 'POST', token });
+}
+
+export function takeMedicine(token: string, id: number): Promise<void> {
+  if (!API_URL) needBackend();
+  return request(`/api/medicines/${id}/take/`, { method: 'POST', token });
+}
+
+// ---- Family: medicine reminders ----
+
+export function addMedicine(
+  token: string,
+  m: { elderly_email: string; name: string; dose: string; time: string },
+): Promise<void> {
+  if (!API_URL) needBackend();
+  return request('/api/medicines/', { method: 'POST', token, body: JSON.stringify(m) });
+}
+
+export function deleteMedicine(token: string, id: number): Promise<void> {
+  if (!API_URL) needBackend();
+  return request(`/api/medicines/${id}/`, { method: 'DELETE', token });
 }
 
 // ---- Caretaker ----

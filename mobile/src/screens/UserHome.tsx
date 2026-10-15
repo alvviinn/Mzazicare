@@ -71,7 +71,9 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
         />
       )}
       {tab === 'chats' && <ChatsTab dash={dash} onOpen={setChatPeer} onGoPeople={() => setTab('people')} />}
-      {tab === 'people' && <PeopleTab token={token} profile={profile} onChanged={onChanged} />}
+      {tab === 'people' && (
+        <PeopleTab token={token} profile={profile} dash={dash} onChanged={onChanged} onMedicinesChanged={load} />
+      )}
     </HomeShell>
   );
 }

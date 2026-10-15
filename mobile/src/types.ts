@@ -49,6 +49,27 @@ export type AlertItem = {
   created_at: string;
 };
 
+export type Mood = 'good' | 'okay' | 'unwell';
+
+export type Medicine = {
+  id: number;
+  elderly: string;
+  elderly_email: string;
+  name: string;
+  dose: string;
+  time: string; // 'HH:MM' (24 hour)
+  taken: boolean;
+  taken_at: string | null;
+  state: 'taken' | 'due' | 'later' | 'missed';
+};
+
+// What the elderly person's home screen shows.
+export type ElderHome = {
+  caretaker: { status: 'here' | 'away' | 'left' | 'not_arrived' | 'none'; name: string | null };
+  mood_today: { mood: Mood; at: string } | null;
+  medicines: Medicine[];
+};
+
 export type Dashboard = {
   demo: boolean; // true while the numbers are sample data
   matched: boolean; // at least one caretaker AND one elderly person linked
@@ -68,6 +89,8 @@ export type Dashboard = {
   };
   recent_shifts: ShiftSummary[];
   alerts: AlertItem[];
+  wellbeing: { name: string; mood: Mood | null; emoji: string | null; label: string | null; at: string | null }[];
+  medicines: { taken: number; total: number; items: Medicine[] };
 };
 
 // ---- Caretaker ----
@@ -78,6 +101,7 @@ export type ShiftState = {
   started_at: string | null;
   shift_minutes: number;
   today_minutes: number;
+  emergency: { message: string; at: string } | null; // an open emergency from the elderly person
   elderly: { name: string; email: string } | null;
   range: {
     state: 'in' | 'out' | 'unknown';
