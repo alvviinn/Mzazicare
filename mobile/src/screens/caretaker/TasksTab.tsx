@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { addTask, deleteTask, getTasks, updateTask } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
+import { Icon } from '../../components/Icon';
 import { Button, Card, ErrorText } from '../../components/ui';
 import { fmtTime } from '../../format';
 import { colors, radius, spacing } from '../../theme';
@@ -119,7 +120,7 @@ export default function TasksTab({ token }: { token: string }) {
           <SectionTitle>{`To do (${todo.length})`}</SectionTitle>
           <Card>
             {todo.length === 0 ? (
-              <Text style={styles.small}>All done for today 🎉</Text>
+              <Text style={styles.small}>All done for today. Well done.</Text>
             ) : (
               todo.map((t, i) => <Row key={t.id} task={t} first={i === 0} onChange={change} onRemove={remove} />)
             )}
@@ -156,20 +157,25 @@ function Row({
     <View style={[styles.row, !first && styles.rowBorder]}>
       <Pressable onPress={() => onChange(task, { is_done: !task.is_done })} hitSlop={8} style={styles.checkHit}>
         <View style={[styles.box, task.is_done && styles.boxDone]}>
-          {task.is_done && <Text style={styles.tick}>✓</Text>}
+          {task.is_done && <Icon name="check" size={18} color={colors.onPrimary} />}
         </View>
       </Pressable>
       <View style={{ flex: 1 }}>
         <Text style={[styles.taskText, task.is_done && styles.taskDone]}>{task.title}</Text>
         <View style={styles.meta}>
           <Pressable onPress={() => onChange(task, { recurring: !task.recurring })} hitSlop={6}>
-            <Text style={[styles.chip, task.recurring && styles.chipOn]}>{task.recurring ? '↻ Every working day' : 'Once'}</Text>
+            <View style={styles.chipRow}>
+              {task.recurring && <Icon name="repeat" size={14} color={colors.primary} />}
+              <Text style={[styles.chip, task.recurring && styles.chipOn]}>
+                {task.recurring ? ' Every working day' : 'Once'}
+              </Text>
+            </View>
           </Pressable>
           {task.done_at && <Text style={styles.small}> · done {fmtTime(task.done_at)}</Text>}
         </View>
       </View>
       <Pressable onPress={() => onRemove(task)} hitSlop={10}>
-        <Text style={styles.remove}>✕</Text>
+        <Icon name="close" size={20} color={colors.textMuted} />
       </Pressable>
     </View>
   );
@@ -207,6 +213,7 @@ const styles = StyleSheet.create({
   taskText: { fontSize: 16, color: colors.text },
   taskDone: { color: colors.textMuted, textDecorationLine: 'line-through' },
   meta: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  chipRow: { flexDirection: 'row', alignItems: 'center' },
   chip: { fontSize: 12, color: colors.textMuted },
   chipOn: { color: colors.primary, fontWeight: '600' },
   remove: { color: colors.textMuted, fontSize: 18, paddingLeft: spacing.md },

@@ -73,7 +73,7 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
         data={[...messages].reverse()}
         inverted
         keyExtractor={(m) => String(m.id)}
-        ListEmptyComponent={<Text style={styles.empty}>No messages yet. Say hello 👋</Text>}
+        ListEmptyComponent={<Text style={styles.empty}>No messages yet. Say hello.</Text>}
         renderItem={({ item }) => (
           <View style={[styles.bubble, item.mine ? styles.mine : styles.theirs]}>
             <Text style={[styles.body, item.mine && { color: colors.onPrimary }]}>{item.body}</Text>

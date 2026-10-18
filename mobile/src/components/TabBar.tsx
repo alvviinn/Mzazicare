@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme';
+import { Icon, IconName } from './Icon';
 
-export type TabDef<K extends string> = { key: K; label: string; icon: string; badge?: number };
+export type TabDef<K extends string> = { key: K; label: string; icon: IconName; badge?: number };
 
 export function TabBar<K extends string>({
   tabs,
@@ -16,7 +17,7 @@ export function TabBar<K extends string>({
     <View style={styles.bar}>
       {tabs.map((t) => (
         <Pressable key={t.key} style={styles.tab} onPress={() => onChange(t.key)}>
-          <Text style={styles.icon}>{t.icon}</Text>
+          <Icon name={t.icon} size={24} color={active === t.key ? colors.primary : colors.textMuted} />
           <Text style={[styles.label, active === t.key && styles.active]}>{t.label}</Text>
           {!!t.badge && t.badge > 0 && (
             <View style={styles.badge}>
@@ -38,7 +39,6 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.sm,
   },
   tab: { flex: 1, alignItems: 'center', paddingTop: spacing.sm },
-  icon: { fontSize: 20 },
   label: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
   active: { color: colors.primary, fontWeight: '700' },
   badge: {

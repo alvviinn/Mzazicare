@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SharingStatus } from '../location/useLocationSharing';
 import { colors, radius, spacing } from '../theme';
+import { Icon } from './Icon';
 
 const MESSAGES: Record<'en' | 'sw', Record<SharingStatus, { text: string; ok: boolean }>> = {
   en: {
@@ -27,17 +28,16 @@ export function SharingBanner({
   scale?: number;
 }) {
   const m = MESSAGES[lang][status];
+  const color = m.ok ? colors.primary : colors.warning;
   return (
     <View style={[styles.box, { backgroundColor: m.ok ? colors.primarySoft : colors.warningSoft }]}>
-      <Text style={[styles.text, { color: m.ok ? colors.primary : colors.warning, fontSize: 13 * scale }]}>
-        {m.ok ? '📍 ' : '⚠️ '}
-        {m.text}
-      </Text>
+      <Icon name={m.ok ? 'map-marker-outline' : 'alert-outline'} size={18 * scale} color={color} />
+      <Text style={[styles.text, { color, fontSize: 13 * scale }]}>{m.text}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  box: { borderRadius: radius.md, padding: spacing.sm + 4, marginTop: spacing.sm },
-  text: {},
+  box: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm, borderRadius: radius.md, padding: spacing.sm + 4, marginTop: spacing.sm },
+  text: { flex: 1 },
 });

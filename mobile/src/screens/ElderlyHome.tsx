@@ -3,6 +3,7 @@ import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } 
 import { getElderHome, sendCheckIn, sendSos, takeMedicine } from '../api/client';
 import { FamilyCard } from '../components/HomeShell';
 import { SharingBanner } from '../components/SharingBanner';
+import { Icon, IconName, MOOD_ICON } from '../components/Icon';
 import { Card } from '../components/ui';
 import { Lang, t } from '../elder/i18n';
 import { useElderPrefs } from '../elder/prefs';
@@ -14,13 +15,19 @@ import ChatScreen from './ChatScreen';
 
 type Props = { token: string; profile: Profile; onSignOut: () => void };
 
-const MOODS: { key: Mood; emoji: string }[] = [
-  { key: 'good', emoji: '😊' },
-  { key: 'okay', emoji: '😐' },
-  { key: 'unwell', emoji: '😟' },
+const MOODS: { key: Mood; color: string }[] = [
+  { key: 'good', color: colors.success },
+  { key: 'okay', color: colors.textMuted },
+  { key: 'unwell', color: colors.warning },
 ];
 
-const CARETAKER_ICON = { here: '👋', away: '🚶', left: '✅', not_arrived: '⏳', none: '👤' } as const;
+const CARETAKER_ICON: Record<ElderHome['caretaker']['status'], { icon: IconName; color: string }> = {
+  here: { icon: 'hand-wave-outline', color: colors.success },
+  away: { icon: 'walk', color: colors.warning },
+  left: { icon: 'check-circle-outline', color: colors.primary },
+  not_arrived: { icon: 'timer-sand', color: colors.textMuted },
+  none: { icon: 'account-outline', color: colors.textMuted },
+};
 
 // 12-hour clock for "08:00" style values
 function clock12(hhmm: string) {
@@ -93,9 +100,9 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
         onPress: async () => {
           try {
             await sendSos(token);
-            Alert.alert('✓', t(lang, 'help_sent'));
+            Alert.alert(t(lang, 'sent'), t(lang, 'help_sent'));
           } catch {
-            Alert.alert('!', t(lang, 'help_failed'));
+            Alert.alert(t(lang, 'help_failed'));
           }
         },
       },
@@ -152,7 +159,14 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
         {ct && (
           <Card>
             <View style={styles.row}>
-              <Text style={{ fontSize: f(36), marginRight: spacing.md }}>{CARETAKER_ICON[ct.status]}</Text>
+              <View
+                style={[
+                  styles.badge,
+                  { width: f(56), height: f(56), borderRadius: f(28), backgroundColor: CARETAKER_ICON[ct.status].color + '22' },
+                ]}
+              >
+                <Icon name={CARETAKER_ICON[ct.status].icon} size={f(30)} color={CARETAKER_ICON[ct.status].color} />
+              </View>
               <Text style={[styles.big, { fontSize: f(22), flex: 1 }]}>
                 {ct.status === 'none' ? t(lang, 'caretaker_none') : t(lang, `caretaker_${ct.status}`, ctName)}
               </Text>
@@ -167,16 +181,23 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
             <View style={styles.moods}>
               {MOODS.map((m) => (
                 <Pressable key={m.key} style={styles.mood} onPress={() => chooseMood(m.key)}>
-                  <Text style={{ fontSize: f(44) }}>{m.emoji}</Text>
+                  <Icon name={MOOD_ICON[m.key]} size={f(48)} color={m.color} />
                   <Text style={[styles.moodLabel, { fontSize: f(16) }]}>{t(lang, m.key)}</Text>
                 </Pressable>
               ))}
             </View>
           ) : (
             <View>
-              <Text style={[styles.answer, { fontSize: f(18) }]}>
-                {MOODS.find((m) => m.key === mood!.mood)?.emoji} {t(lang, mood!.mood)} · {fmtTime(mood!.at)}
-              </Text>
+              <View style={[styles.row, { marginTop: spacing.md }]}>
+                <Icon
+                  name={MOOD_ICON[mood!.mood]}
+                  size={f(30)}
+                  color={MOODS.find((m) => m.key === mood!.mood)?.color ?? colors.primary}
+                />
+                <Text style={[styles.answer, { fontSize: f(18), marginTop: 0, marginLeft: spacing.sm }]}>
+                  {t(lang, mood!.mood)} · {fmtTime(mood!.at)}
+                </Text>
+              </View>
               <Text style={[styles.muted, { fontSize: f(16) }]}>
                 {t(lang, mood!.mood === 'unwell' ? 'feeling_unwell_thanks' : 'feeling_thanks')}
               </Text>
@@ -190,7 +211,10 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
         {/* Today's medicine */}
         {!!home?.medicines.length && (
           <Card>
-            <Text style={[styles.big, { fontSize: f(22) }]}>💊 {t(lang, 'medicine_title')}</Text>
+            <View style={styles.row}>
+              <Icon name="pill" size={f(26)} />
+              <Text style={[styles.big, { fontSize: f(22), marginLeft: spacing.sm }]}>{t(lang, 'medicine_title')}</Text>
+            </View>
             {home.medicines.map((m, i) => (
               <View key={m.id} style={[styles.medRow, i > 0 && styles.rowBorder]}>
                 <View style={{ flex: 1 }}>
@@ -224,7 +248,12 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
         {/* Talk to family */}
         {profile.sponsor && (
           <Pressable style={styles.msgBtn} onPress={() => setChatOpen(true)}>
-            <Text style={[styles.msgText, { fontSize: f(20) }]}>💬 {t(lang, 'msg_family', familyName ?? '')}</Text>
+            <View style={styles.btnRow}>
+              <Icon name="message-text-outline" size={f(26)} color={colors.onPrimary} />
+              <Text style={[styles.msgText, { fontSize: f(20), marginLeft: spacing.sm }]}>
+                {t(lang, 'msg_family', familyName ?? '')}
+              </Text>
+            </View>
           </Pressable>
         )}
 
@@ -234,7 +263,10 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
 
         {/* Why the phone shares its location */}
         <Card>
-          <Text style={[styles.big, { fontSize: f(18) }]}>📍 {t(lang, 'phone_title')}</Text>
+          <View style={styles.row}>
+            <Icon name="map-marker-outline" size={f(22)} />
+            <Text style={[styles.big, { fontSize: f(18), marginLeft: spacing.sm }]}>{t(lang, 'phone_title')}</Text>
+          </View>
           <Text style={[styles.muted, { fontSize: f(15), marginTop: spacing.xs }]}>{t(lang, 'phone_body')}</Text>
           <SharingBanner status={sharing.status} lang={lang} scale={scale} />
         </Card>
@@ -247,7 +279,10 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
       {/* Always on screen: the emergency button */}
       <View style={styles.sosBar}>
         <Pressable style={({ pressed }) => [styles.sos, pressed && { opacity: 0.85 }]} onPress={askForHelp}>
-          <Text style={[styles.sosText, { fontSize: f(22) }]}>🆘 {t(lang, 'help_button')}</Text>
+          <View style={styles.btnRow}>
+            <Icon name="alarm-light-outline" size={f(28)} color={colors.onPrimary} />
+            <Text style={[styles.sosText, { fontSize: f(22), marginLeft: spacing.sm }]}>{t(lang, 'help_button')}</Text>
+          </View>
         </Pressable>
       </View>
     </View>
@@ -274,6 +309,8 @@ const styles = StyleSheet.create({
   prefText: { color: colors.primary, fontWeight: '700', fontSize: 14 },
   error: { color: colors.danger, marginBottom: spacing.md },
   row: { flexDirection: 'row', alignItems: 'center' },
+  btnRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
+  badge: { alignItems: 'center', justifyContent: 'center', marginRight: spacing.md },
   big: { fontWeight: '700', color: colors.text },
   muted: { color: colors.textMuted, marginTop: 2 },
   answer: { fontWeight: '700', color: colors.primary, marginTop: spacing.md },

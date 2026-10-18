@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { resolveAlert } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
+import { Icon, IconName, MOOD_ICON, TONE_ICON } from '../../components/Icon';
 import { Button, Card } from '../../components/ui';
 import { fmtDay, fmtDuration, fmtTime, timeAgo } from '../../format';
 import { colors, radius, spacing, toneColors } from '../../theme';
@@ -65,7 +66,11 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
       <Card>
         {dash.wellbeing.map((w, i) => (
           <View key={w.name} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
-            <Text style={styles.bigEmoji}>{w.emoji ?? '❔'}</Text>
+            <Icon
+              name={w.mood ? MOOD_ICON[w.mood] : 'help-circle-outline'}
+              size={38}
+              color={w.mood === 'unwell' ? colors.warning : w.mood ? colors.primary : colors.textMuted}
+            />
             <View style={{ flex: 1, marginLeft: spacing.md }}>
               <Text style={styles.visitTitle}>{w.name}</Text>
               <Text style={styles.small}>
@@ -87,7 +92,9 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
             </Text>
             {dash.medicines.items.map((m, i) => (
               <View key={m.id} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
-                <Text style={[styles.check, { color: m.taken ? colors.success : colors.border }]}>{m.taken ? '✔' : '○'}</Text>
+                <View style={styles.checkBox}>
+                  <Icon name={m.taken ? 'check-circle' : 'circle-outline'} size={22} color={m.taken ? colors.success : colors.border} />
+                </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.visitTitle}>
                     {m.name}
@@ -126,9 +133,9 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
             </View>
             {dash.today.chores.map((c, i) => (
               <View key={i} style={styles.choreRow}>
-                <Text style={[styles.check, { color: c.is_done ? colors.success : colors.border }]}>
-                  {c.is_done ? '✔' : '○'}
-                </Text>
+                <View style={styles.checkBox}>
+                  <Icon name={c.is_done ? 'check-circle' : 'circle-outline'} size={22} color={c.is_done ? colors.success : colors.border} />
+                </View>
                 <Text style={[styles.choreText, !c.is_done && { color: colors.textMuted }]}>{c.description}</Text>
                 {c.done_at && <Text style={styles.small}>{fmtTime(c.done_at)}</Text>}
               </View>
@@ -156,7 +163,9 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
                   {s.chores_done}/{s.chores_total} chores
                 </Text>
               </View>
-              {s.dominant_emoji && <Text style={styles.emoji}>{s.dominant_emoji}</Text>}
+              {s.dominant_tone && (
+                <Icon name={TONE_ICON[s.dominant_tone]} size={26} color={toneColors[s.dominant_tone]} />
+              )}
             </View>
           ))
         )}
@@ -202,7 +211,9 @@ function Onboarding({ profile, onGoPeople }: { profile: Profile; onGoPeople: () 
         </Text>
         {steps.map((s) => (
           <View key={s.title} style={styles.stepRow}>
-            <Text style={[styles.check, { color: s.done ? colors.success : colors.border }]}>{s.done ? '✔' : '○'}</Text>
+            <View style={styles.checkBox}>
+              <Icon name={s.done ? 'check-circle' : 'circle-outline'} size={22} color={s.done ? colors.success : colors.border} />
+            </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.visitTitle}>{s.title}</Text>
               <Text style={styles.small}>{s.state}</Text>
@@ -216,15 +227,20 @@ function Onboarding({ profile, onGoPeople }: { profile: Profile; onGoPeople: () 
 
       <SectionTitle>What you'll see here</SectionTitle>
       <Card>
-        {[
-          ['🕗', 'When your caretaker arrives and leaves, and how long visits last'],
-          ['✅', 'Which chores were done each day'],
-          ['😊', 'The tone of voice during care, shown as emojis with percentages'],
-          ['🔔', 'Alerts you can confirm or dismiss'],
-          ['💬', 'Separate private chats with your caretaker and your elderly loved one'],
-        ].map(([icon, text]) => (
+        {(
+          [
+            ['clock-outline', 'When your caretaker arrives and leaves, and how long visits last'],
+            ['format-list-checks', 'Which chores were done each day'],
+            ['emoticon-happy-outline', 'The tone of voice during care, with a percentage for each tone'],
+            ['pill', "Your loved one's medicines and how they say they feel"],
+            ['bell-outline', 'Alerts you can confirm or dismiss'],
+            ['message-text-outline', 'Separate private chats with your caretaker and your elderly loved one'],
+          ] as [IconName, string][]
+        ).map(([icon, text]) => (
           <View key={text} style={styles.stepRow}>
-            <Text style={styles.emoji}>{icon}</Text>
+            <View style={styles.iconBox}>
+              <Icon name={icon} size={22} />
+            </View>
             <Text style={[styles.choreText, { flex: 1 }]}>{text}</Text>
           </View>
         ))}
@@ -288,7 +304,7 @@ function ToneCard({ tones }: { tones: Dashboard['tones'] }) {
   return (
     <Card>
       <View style={styles.statusRow}>
-        <Text style={styles.bigEmoji}>{top.emoji}</Text>
+        <Icon name={TONE_ICON[top.tone]} size={46} color={toneColors[top.tone]} />
         <View style={{ flex: 1, marginLeft: spacing.md }}>
           <Text style={styles.cardTitle}>Mostly {top.label.toLowerCase()}</Text>
           <Text style={styles.small}>Dominant tone this week · {top.percent}%</Text>
@@ -302,7 +318,9 @@ function ToneCard({ tones }: { tones: Dashboard['tones'] }) {
       <View style={{ marginTop: spacing.md }}>
         {tones.items.map((t) => (
           <View key={t.tone} style={styles.toneRow}>
-            <Text style={styles.toneEmoji}>{t.emoji}</Text>
+            <View style={styles.toneIcon}>
+              <Icon name={TONE_ICON[t.tone]} size={22} color={toneColors[t.tone]} />
+            </View>
             <Text style={styles.toneLabel}>{t.label}</Text>
             <View style={styles.toneTrack}>
               <View style={[styles.fill, { width: `${t.percent}%`, backgroundColor: toneColors[t.tone] }]} />
@@ -325,10 +343,12 @@ function AlertCard({ alert, token, onChanged }: { alert: AlertItem; token: strin
   const no = sos ? 'False alarm' : 'Dismiss';
   return (
     <View style={[styles.alert, sos && styles.sosAlert]}>
-      <Text style={[styles.alertTitle, sos && { fontSize: 18 }]}>
-        {sos ? '🆘 ' : ''}
-        {alert.label} · <Text style={styles.small}>{timeAgo(alert.created_at)}</Text>
-      </Text>
+      <View style={styles.alertHead}>
+        {sos && <Icon name="alarm-light-outline" size={22} color={colors.danger} />}
+        <Text style={[styles.alertTitle, sos && { fontSize: 18, marginLeft: spacing.sm }]}>
+          {alert.label} · <Text style={styles.small}>{timeAgo(alert.created_at)}</Text>
+        </Text>
+      </View>
       <Text style={styles.alertBody}>{alert.message}</Text>
       {sos && <Text style={styles.alertBody}>Call them or message them now. Their chat is in the Chats tab.</Text>}
       <View style={styles.alertActions}>
@@ -377,12 +397,13 @@ const styles = StyleSheet.create({
   visitRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
   rowBorder: { borderTopWidth: 1, borderTopColor: colors.border },
   visitTitle: { fontSize: 15, fontWeight: '600', color: colors.text },
-  emoji: { fontSize: 22, marginRight: spacing.sm },
-  bigEmoji: { fontSize: 44 },
+  checkBox: { width: 30 },
+  iconBox: { width: 36 },
+  alertHead: { flexDirection: 'row', alignItems: 'center' },
   pill: { borderRadius: radius.md, paddingHorizontal: 10, paddingVertical: 4 },
   pillText: { fontSize: 12, fontWeight: '700' },
   toneRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
-  toneEmoji: { fontSize: 18, width: 30 },
+  toneIcon: { width: 30 },
   toneLabel: { width: 70, fontSize: 13, color: colors.text },
   toneTrack: { flex: 1, height: 8, borderRadius: 4, backgroundColor: colors.primarySoft, overflow: 'hidden' },
   tonePct: { width: 42, textAlign: 'right', fontSize: 13, fontWeight: '600', color: colors.text },

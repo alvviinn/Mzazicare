@@ -37,7 +37,7 @@ export type ShiftSummary = {
   source: 'auto' | 'manual';
   chores_done: number;
   chores_total: number;
-  dominant_emoji: string | null;
+  dominant_tone: Tone | null;
 };
 
 export type AlertItem = {

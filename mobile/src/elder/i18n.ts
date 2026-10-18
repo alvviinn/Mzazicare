@@ -28,7 +28,7 @@ const STRINGS: Record<string, { en: Str; sw: Str }> = {
 
   medicine_title: { en: "Today's medicine", sw: 'Dawa za leo' },
   took_it: { en: 'I took it', sw: 'Nimekunywa' },
-  taken: { en: 'Taken ✓', sw: 'Imekunywa ✓' },
+  taken: { en: 'Taken', sw: 'Imekunywa' },
   due_now: { en: 'Time to take it', sw: 'Ni wakati wa kunywa' },
   missed: { en: 'Not taken yet', sw: 'Bado hujakunywa' },
   later_at: { en: (t) => `At ${t}`, sw: (t) => `Saa ${t}` },
@@ -39,7 +39,8 @@ const STRINGS: Record<string, { en: Str; sw: Str }> = {
   help_body: { en: 'Your family will be told right away.', sw: 'Familia yako itaarifiwa mara moja.' },
   yes_send: { en: 'Yes, send', sw: 'Ndiyo, tuma' },
   no: { en: 'No', sw: 'Hapana' },
-  help_sent: { en: 'Your family has been told.', sw: 'Familia yako imeambiwa.' },
+  sent: { en: 'Sent', sw: 'Imetumwa' },
+  help_sent:{ en: 'Your family has been told.', sw: 'Familia yako imeambiwa.' },
   help_failed: {
     en: 'Could not send. Please call your family now.',
     sw: 'Imeshindwa kutuma. Tafadhali piga simu kwa familia yako sasa.',

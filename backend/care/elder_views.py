@@ -145,7 +145,7 @@ class SosView(APIView):
                 kind=Alert.Kind.SOS,
                 message=f'{me.name} pressed the emergency button and needs help.',
             )
-            Message.objects.create(sender=me, recipient_id=me.sponsor_id, body='🆘 I need help. Please call me now.')
+            Message.objects.create(sender=me, recipient_id=me.sponsor_id, body='I need help. Please call me now.')
         return Response({'detail': 'ok'}, status=201)
 
 

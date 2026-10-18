@@ -68,7 +68,7 @@ def shift_json(s):
         'source': s.source,
         'chores_done': sum(c.is_done for c in chores),
         'chores_total': len(chores),
-        'dominant_emoji': TONE_EMOJI[top] if top else None,
+        'dominant_tone': top,
     }
 
 

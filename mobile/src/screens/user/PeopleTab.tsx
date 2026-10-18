@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { addMedicine, addMember, deleteMedicine } from '../../api/client';
 import { FamilyCard, SectionTitle } from '../../components/HomeShell';
+import { Icon } from '../../components/Icon';
 import { Button, Card, ErrorText, Field } from '../../components/ui';
 import { colors, radius, spacing } from '../../theme';
 import { Dashboard, Medicine, Profile } from '../../types';
@@ -145,7 +146,7 @@ function MedicineSection({
                 </Text>
               </View>
               <Pressable onPress={() => remove(m)} hitSlop={10}>
-                <Text style={styles.remove}>✕</Text>
+                <Icon name="close" size={20} color={colors.textMuted} />
               </Pressable>
             </View>
           ))}

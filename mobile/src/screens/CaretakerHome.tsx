@@ -13,9 +13,9 @@ type Props = { token: string; profile: Profile; onSignOut: () => void };
 type Tab = 'shift' | 'tasks' | 'hours';
 
 const TABS: TabDef<Tab>[] = [
-  { key: 'shift', label: 'Shift', icon: '🕗' },
-  { key: 'tasks', label: 'Tasks', icon: '✅' },
-  { key: 'hours', label: 'Hours', icon: '📊' },
+  { key: 'shift', label: 'Shift', icon: 'clock-outline' },
+  { key: 'tasks', label: 'Tasks', icon: 'format-list-checks' },
+  { key: 'hours', label: 'Hours', icon: 'chart-box-outline' },
 ];
 
 export default function CaretakerHome({ token, profile, onSignOut }: Props) {

@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import { startShift, stopShift } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
 import { SharingBanner } from '../../components/SharingBanner';
+import { Icon } from '../../components/Icon';
 import { Button, Card, ErrorText } from '../../components/ui';
 import { fmtDuration, fmtTime } from '../../format';
 import { SharingStatus } from '../../location/useLocationSharing';
@@ -63,7 +64,7 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
 
   let rangeText = '';
   if (range.state === 'in') {
-    rangeText = `✓ Within ${range.radius_m} m of ${name}${range.distance_m !== null ? ` (${range.distance_m} m)` : ''}`;
+    rangeText = `Within ${range.radius_m} m of ${name}${range.distance_m !== null ? ` (${range.distance_m} m)` : ''}`;
   } else if (range.state === 'out') {
     rangeText = `You are ${range.distance_m !== null ? `${range.distance_m} m` : 'more than 15 m'} from ${name}`;
   } else if (!range.elder_sharing) {
@@ -76,7 +77,10 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
     <>
       {state.emergency && (
         <View style={styles.emergency}>
-          <Text style={styles.emergencyTitle}>🆘 Emergency</Text>
+          <View style={styles.row}>
+            <Icon name="alarm-light-outline" size={22} color={colors.onPrimary} />
+            <Text style={[styles.emergencyTitle, { marginLeft: spacing.sm }]}>Emergency</Text>
+          </View>
           <Text style={styles.emergencyText}>
             {state.emergency.message} Check on them now, and tell the family what you find.
           </Text>
@@ -105,7 +109,12 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
           </>
         )}
 
-        <Text style={[styles.range, range.state === 'in' && { color: colors.success }]}>{rangeText}</Text>
+        <View style={styles.rangeRow}>
+          {range.state === 'in' && <Icon name="check-circle" size={18} color={colors.success} />}
+          <Text style={[styles.range, range.state === 'in' && { color: colors.success, marginLeft: spacing.xs }]}>
+            {rangeText}
+          </Text>
+        </View>
 
         {waiting && (
           <Text style={styles.muted}>
@@ -167,7 +176,8 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center' },
   dot: { width: 10, height: 10, borderRadius: 5, marginRight: spacing.sm },
   big: { fontSize: 40, fontWeight: '700', color: colors.primary, marginTop: spacing.md },
-  range: { fontSize: 14, fontWeight: '600', color: colors.textMuted, marginTop: spacing.md },
+  rangeRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md },
+  range: { fontSize: 14, fontWeight: '600', color: colors.textMuted },
   note: { fontSize: 12, color: colors.textMuted, marginTop: spacing.md, textAlign: 'center' },
   tiles: { flexDirection: 'row', marginTop: spacing.md },
   tile: {

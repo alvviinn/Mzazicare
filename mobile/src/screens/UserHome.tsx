@@ -47,9 +47,9 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
 
   const unread = dash ? [...dash.caretakers, ...dash.elderly].reduce((n, p) => n + p.unread, 0) : 0;
   const tabs: TabDef<Tab>[] = [
-    { key: 'overview', label: 'Overview', icon: '🏠' },
-    { key: 'chats', label: 'Chats', icon: '💬', badge: unread },
-    { key: 'people', label: 'People', icon: '👥' },
+    { key: 'overview', label: 'Overview', icon: 'home-variant-outline' },
+    { key: 'chats', label: 'Chats', icon: 'message-text-outline', badge: unread },
+    { key: 'people', label: 'People', icon: 'account-group-outline' },
   ];
 
   return (
