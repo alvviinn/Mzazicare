@@ -27,6 +27,6 @@ export function useElderPrefs() {
     scale: SCALES[prefs.scaleIndex] ?? 1.25,
     scaleIndex: prefs.scaleIndex,
     setLang: (lang: Lang) => update({ ...prefs, lang }),
-    cycleScale: () => update({ ...prefs, scaleIndex: (prefs.scaleIndex + 1) % SCALES.length }),
+    setScaleIndex: (scaleIndex: number) => update({ ...prefs, scaleIndex }),
   };
 }
