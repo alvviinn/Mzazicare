@@ -1,0 +1,27 @@
+TEST accuracy 0.830 | macro-F1 0.754 | n=2048
+              precision    recall  f1-score   support
+
+       happy      0.677     0.478     0.560       228
+        calm      0.583     0.656     0.618        32
+     neutral      0.821     0.841     0.831       464
+    stressed      0.747     0.796     0.771       456
+       angry      0.713     0.785     0.747       228
+       noise      0.998     0.997     0.998       640
+
+    accuracy                          0.830      2048
+   macro avg      0.757     0.759     0.754      2048
+weighted avg      0.828     0.830     0.827      2048
+
+confusion matrix (rows = truth, cols = predicted)
+['happy', 'calm', 'neutral', 'stressed', 'angry', 'noise']
+[[109   4  21  56  38   0]
+ [  5  21   3   3   0   0]
+ [ 16   4 390  43  11   0]
+ [ 19   7  43 363  23   1]
+ [ 12   0  17  20 179   0]
+ [  0   0   1   1   0 638]]
+  accuracy on cremad: 0.702 (n=952)
+  accuracy on esc50: 0.997 (n=640)
+  accuracy on librispeech: 0.993 (n=280)
+  accuracy on ravdess: 0.659 (n=176)
+speech-only accuracy (5 tones, excluding noise windows): 0.754

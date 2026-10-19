@@ -90,6 +90,12 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+# ---- Acoustic tone AI ----
+# The model code lives in <repo>/ml/voice. Audio sent for analysis is held in memory only: never saved.
+VOICE_AI_ROOT = BASE_DIR.parent / 'ml'
+VOICE_AUDIO_MAX_BYTES = 3_000_000  # ~90 s of 16 kHz mono; clips from the app are far shorter
+FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.MemoryFileUploadHandler']  # never spool uploads to disk
+
 # The sponsor web dashboard will call this API from the browser.
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 

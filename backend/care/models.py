@@ -84,6 +84,7 @@ class ToneReading(models.Model):
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='tones')
     tone = models.CharField(max_length=20, choices=Tone.choices)
     percent = models.PositiveSmallIntegerField()
+    seconds = models.FloatField(default=0)  # speech time behind this tone; `percent` is derived from it
 
     class Meta:
         unique_together = ('shift', 'tone')

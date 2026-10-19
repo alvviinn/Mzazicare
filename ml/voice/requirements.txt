@@ -1,0 +1,8 @@
+# Training and evaluation (CPU is enough). Python 3.14 tested.
+torch
+numpy
+scipy
+soundfile
+scikit-learn
+onnx
+onnxruntime

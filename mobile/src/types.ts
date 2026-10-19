@@ -86,6 +86,7 @@ export type Dashboard = {
     dominant: Tone | null;
     quality: 'good' | 'fair' | 'needs_attention' | null;
     positive_percent: number | null;
+    negative_percent: number | null; // stressed + angry; the service-quality rating is based on this
   };
   recent_shifts: ShiftSummary[];
   alerts: AlertItem[];

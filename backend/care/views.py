@@ -38,7 +38,7 @@ def tone_summary(shifts):
         for r in readings:
             totals[r.tone] += r.percent * w
     if not weight:
-        return {'items': [], 'dominant': None, 'quality': None, 'positive_percent': None}
+        return {'items': [], 'dominant': None, 'quality': None, 'positive_percent': None, 'negative_percent': None}
 
     percents = {t: round(v / weight) for t, v in totals.items()}
     dominant = max(percents, key=percents.get)
@@ -49,8 +49,12 @@ def tone_summary(shifts):
     ]
     items.sort(key=lambda i: -i['percent'])
     positive = sum(percents[t] for t in POSITIVE_TONES)
-    quality = 'good' if positive >= 70 else 'fair' if positive >= 50 else 'needs_attention'
-    return {'items': items, 'dominant': dominant, 'quality': quality, 'positive_percent': positive}
+    # Rated on how much speech sounds stressed or angry. Everyday conversation is mostly neutral, so
+    # "not enough happy" must not count against the caretaker.
+    negative = percents['stressed'] + percents['angry']
+    quality = 'good' if negative <= 15 else 'fair' if negative <= 30 else 'needs_attention'
+    return {'items': items, 'dominant': dominant, 'quality': quality, 'positive_percent': positive,
+            'negative_percent': negative}
 
 
 def shift_json(s):

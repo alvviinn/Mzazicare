@@ -1,14 +1,16 @@
 from datetime import datetime, time, timedelta
 
+from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.parsers import BaseParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Role, User
 
-from . import presence
+from . import presence, voice_ai
 from .models import Alert, Chore, Location, Shift, ShiftSegment, Task
 from .tasks import MAX_TASKS, task_json, visible_tasks
 
@@ -132,6 +134,70 @@ class ShiftStopView(APIView):
         except ValueError as e:
             raise ValidationError({'detail': str(e)})
         return Response(state_json(request.user, now))
+
+
+class RawAudioParser(BaseParser):
+    """Accepts the audio clip as the raw request body (Content-Type: audio/...)."""
+
+    media_type = 'audio/*'
+
+    def parse(self, stream, media_type=None, parser_context=None):
+        return stream.read(settings.VOICE_AUDIO_MAX_BYTES + 1)
+
+
+class ToneView(APIView):
+    """The caretaker's phone sends a short clip. It is analysed in memory and thrown away.
+
+    Only the tone shares are kept, and only while a verified shift is running (the caretaker is within
+    range of the elderly person's phone).
+    """
+
+    parser_classes = [RawAudioParser]
+
+    def post(self, request):
+        user = request.user
+        require_caretaker(user)
+        audio = request.data
+        if not isinstance(audio, (bytes, bytearray)) or not audio:
+            raise ValidationError({'detail': 'Send the audio clip as the request body.'})
+        if len(audio) > settings.VOICE_AUDIO_MAX_BYTES:
+            return Response({'detail': 'Clip is too large.'}, status=413)
+
+        now = timezone.now()
+        shift = presence.evaluate(user, now)
+        if not shift or not presence.open_segment(shift):
+            return Response({'detail': 'Audio is only analysed during a verified shift.'}, status=409)
+
+        try:
+            result = voice_ai.get_analyzer().analyze(bytes(audio))
+        except FileNotFoundError:
+            return Response({'detail': 'The tone model has not been installed on this server yet.'}, status=503)
+        except Exception:
+            return Response({'detail': 'That audio could not be read. Send a WAV, FLAC or OGG clip.'}, status=400)
+        finally:
+            del audio  # nothing from the recording outlives this request
+
+        voice_ai.add_to_shift(shift, result)
+
+        if result['distress']:
+            recent = Alert.objects.filter(
+                sponsor_id=user.sponsor_id, kind=Alert.Kind.VOCAL, created_at__gte=now - timedelta(minutes=30)
+            )
+            if not recent.exists():
+                Alert.objects.create(
+                    sponsor_id=user.sponsor_id,
+                    shift=shift,
+                    kind=Alert.Kind.VOCAL,
+                    message='Angry-sounding voices were picked up during the visit. Please check in with both of them.',
+                )
+        return Response(
+            {
+                'speech_s': result['speech_s'],
+                'dominant': result['dominant'],
+                'tones': result['tones'],
+                'distress': result['distress'],
+            }
+        )
 
 
 class HoursView(APIView):
