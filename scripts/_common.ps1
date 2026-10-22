@@ -5,8 +5,10 @@ $ErrorActionPreference = 'Stop'
 
 $Root = Split-Path -Parent $PSScriptRoot
 # Virtual environments live OUTSIDE the repository (and outside OneDrive, which breaks them).
-$VenvDir = if ($env:MZAZI_VENV) { $env:MZAZI_VENV } else { Join-Path $env:LOCALAPPDATA 'mzazicare-venv' }
-$MlVenvDir = if ($env:MZAZI_ML_VENV) { $env:MZAZI_ML_VENV } else { Join-Path $env:LOCALAPPDATA 'mzazicare-ml' }
+# (LOCALAPPDATA is Windows only; the fallback lets check-secrets.ps1 also run in Linux CI.)
+$LocalData = if ($env:LOCALAPPDATA) { $env:LOCALAPPDATA } else { Join-Path $HOME '.local/share' }
+$VenvDir = if ($env:MZAZI_VENV) { $env:MZAZI_VENV } else { Join-Path $LocalData 'mzazicare-venv' }
+$MlVenvDir = if ($env:MZAZI_ML_VENV) { $env:MZAZI_ML_VENV } else { Join-Path $LocalData 'mzazicare-ml' }
 $Py = Join-Path $VenvDir 'Scripts\python.exe'
 $MlPy = Join-Path $MlVenvDir 'Scripts\python.exe'
 
