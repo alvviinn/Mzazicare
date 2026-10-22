@@ -1,6 +1,6 @@
 """Geofence presence engine.
 
-The geofence is centred on the ELDER's phone: the caretaker is "in range" when her phone is within
+The geofence is centred on the ELDER's phone: the caretaker is "in range" when their phone is within
 ENTER_RADIUS_M of it. Time is only counted while in range (ShiftSegment rows), so manual start/stop
 still produces verified hours.
 """
@@ -17,12 +17,12 @@ from .models import Chore, Location, Shift, ShiftSegment
 from .tasks import visible_tasks
 
 ENTER_RADIUS_M = 15  # within this distance the caretaker is verified as present
-EXIT_RADIUS_M = 20  # once inside, she only counts as gone beyond this (stops GPS jitter flapping the timer)
+EXIT_RADIUS_M = 20  # once inside, the caretaker only counts as gone beyond this (stops GPS jitter flapping the timer)
 FRESH_S = 120  # a location older than this is ignored
 MAX_ACCURACY_M = 40  # fixes less accurate than this can't be trusted for a 15 m check
-STALE_PAUSE_S = 180  # no usable fix for this long -> pause at the last time she was seen in range
+STALE_PAUSE_S = 180  # no usable fix for this long -> pause at the last time they were seen in range
 AUTO_END_MIN = 90  # paused this long -> the shift is closed automatically
-MANUAL_BLOCK_H = 8  # after a manual stop, don't auto-restart until she leaves range (or this long passes)
+MANUAL_BLOCK_H = 8  # after a manual stop, don't auto-restart until the caretaker leaves range (or this long passes)
 
 
 def haversine_m(lat1, lon1, lat2, lon2):
@@ -67,7 +67,7 @@ def _end(shift, by, at):
         seg.end = max(at, seg.start)
         seg.save(update_fields=['end'])
     if by == 'auto' and not shift.segments.exists():
-        shift.delete()  # she never reached the elder: nothing worth keeping
+        shift.delete()  # the caretaker never reached the elder: nothing worth keeping
         return
     shift.end_time = max(at, shift.start_time)
     shift.ended_by = by
@@ -134,7 +134,7 @@ def _maybe_auto_start(caretaker, cloc, now):
     )
     if blocked:
         if readings and all(s == 'out' for _, s, _ in readings):
-            last.rearmed = True  # she has left, so the next arrival may start a shift again
+            last.rearmed = True  # the caretaker has left, so the next arrival may start a shift again
             last.save(update_fields=['rearmed'])
         return
 

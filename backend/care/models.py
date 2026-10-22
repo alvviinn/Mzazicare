@@ -36,7 +36,7 @@ class Shift(models.Model):
     end_time = models.DateTimeField(null=True, blank=True)  # null while the shift is still open
     source = models.CharField(max_length=10, default='auto')  # 'auto' (geofence) or 'manual' (button)
     ended_by = models.CharField(max_length=10, blank=True)  # 'manual' or 'auto'
-    rearmed = models.BooleanField(default=False)  # after a manual stop, auto-start waits until she leaves range
+    rearmed = models.BooleanField(default=False)  # after a manual stop, auto-start waits until the caretaker leaves range
     last_in_range_at = models.DateTimeField(null=True, blank=True)
     is_demo = models.BooleanField(default=False)  # sample data created by seed_demo
 
@@ -59,7 +59,7 @@ class ShiftSegment(models.Model):
 
 
 class Task(models.Model):
-    """A to-do item the caretaker writes for herself. Recurring ones reset on each working day."""
+    """A to-do item the caretaker writes for themselves. Recurring ones reset on each working day."""
 
     caretaker = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField(max_length=200)
