@@ -43,5 +43,7 @@ if ($wifi -and $wifi.NetworkCategory -ne 'Private') {
 
 Push-Location $mobile
 try {
-    if ($Clear) { Run npx @('expo', 'start', '-c') } else { Run npx @('expo', 'start') }
+    # Run Expo directly. Do NOT pipe its output (for example through the Run helper): Expo then thinks it is
+    # not in a terminal and hides the QR code and the keyboard shortcuts.
+    if ($Clear) { & npx expo start -c } else { & npx expo start }
 } finally { Pop-Location }
