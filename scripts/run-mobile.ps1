@@ -28,7 +28,17 @@ if (-not (Test-Path $envLocal)) {
 }
 $detected = Get-WifiIp
 if ($detected -and -not (Select-String -Path $envLocal -Pattern ([regex]::Escape($detected)) -Quiet)) {
-    Warn "This PC's Wi-Fi address is now $detected but .env.local points elsewhere. Edit it if the app cannot connect."
+    # The PC joined a different Wi-Fi network, so its address changed. Keep the app pointing at it.
+    [IO.File]::WriteAllText($envLocal, "EXPO_PUBLIC_API_URL=http://${detected}:8000`n", (New-Object System.Text.UTF8Encoding($false)))
+    Ok "this PC's Wi-Fi address changed: updated mobile\.env.local to http://${detected}:8000"
+    $Clear = $true
+}
+
+# Windows firewall rules from docs\SETUP.md only apply to Private networks.
+$wifi = Get-NetConnectionProfile -ErrorAction SilentlyContinue | Where-Object { $_.InterfaceAlias -match 'Wi-?Fi|Wireless' -and $_.IPv4Connectivity -eq 'Internet' } | Select-Object -First 1
+if ($wifi -and $wifi.NetworkCategory -ne 'Private') {
+    Warn "Wi-Fi network '$($wifi.Name)' is set to $($wifi.NetworkCategory), so the firewall will block your phone."
+    Warn 'Fix (PowerShell as Administrator):  Set-NetConnectionProfile -InterfaceAlias "Wi-Fi" -NetworkCategory Private'
 }
 
 Push-Location $mobile
