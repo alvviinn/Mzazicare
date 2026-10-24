@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInputInstance } from 'react-native';
 import { login } from '../api/client';
 import { saveSession, Session } from '../auth/session';
 import { Button, Card, ErrorText, Field, Logo } from '../components/ui';
@@ -12,7 +12,7 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const passwordRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInputInstance>(null);
 
   async function submit() {
     if (loading) return;

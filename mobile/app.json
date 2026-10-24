@@ -38,7 +38,8 @@
           "locationWhenInUsePermission": "MzaziCare uses your location to confirm that the caretaker is with the elderly person during care visits."
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-status-bar"
     ]
   }
 }

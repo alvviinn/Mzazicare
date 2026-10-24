@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextInputInstance,
   TextInputProps,
   View,
 } from 'react-native';
@@ -13,7 +14,7 @@ import { colors, radius, spacing } from '../theme';
 type FieldProps = TextInputProps & { label: string; secure?: boolean };
 
 // Labelled text input. `secure` adds a Show/Hide toggle for passwords.
-export const Field = forwardRef<TextInput, FieldProps>(({ label, secure, style, ...props }, ref) => {
+export const Field = forwardRef<TextInputInstance, FieldProps>(({ label, secure, style, ...props }, ref) => {
   const [hidden, setHidden] = useState(true);
   return (
     <View style={{ marginBottom: spacing.md }}>
