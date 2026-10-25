@@ -52,12 +52,12 @@ IDs FR-01 to FR-05 come from the proposal; FR-06 onward were identified during d
 
 | ID | Requirement | How it is met, and evidence |
 |---|---|---|
-| NFR-01 Security | Backend-issued JWT, role-scoped access, no third-party login | JWT (90 days) from the Django backend; every endpoint checks the role (tested: 83 backend tests including 403/401 cases); passwords hashed; no third-party login or API keys |
+| NFR-01 Security | Backend-issued JWT, role-scoped access, no third-party login | JWT (90 days) from the Django backend; every endpoint checks the role (tested: 99 backend tests including 403/401 cases); passwords hashed; no third-party login or API keys |
 | NFR-02 Performance | Heavy AI asynchronous, normal interactions within 2 s | **Partly.** The tone model is small (about 0.5 MB, runs on a CPU) and runs inside the request; there is no task queue yet. A formal latency benchmark has **not** been done |
 | NFR-03 Usability | Understands conversational Kenyan phrasing | The chatbot is not built. The elderly screen is bilingual with plain-language wording |
 | NFR-04 Accuracy | Each model at least 80 % before deployment, precision prioritised | Tone model: **83.0 %** overall on unseen speakers, **75.4 %** on speech alone (below 80 %); alert rule tuned for precision. Other models not built |
 | Privacy | KDPA; raw audio not stored | Audio analysed in memory only; latest location only; see 4.3.7 and [DATA.md](DATA.md) |
-| Maintainability | Clear structure, repeatable setup, tests | Scripts for setup, run, data and tests; 83 backend + 24 ML tests; documented |
+| Maintainability | Clear structure, repeatable setup, tests | Scripts for setup, run, data and tests; 99 backend + 24 ML tests; documented |
 
 ### 4.2.4 Use cases
 
@@ -74,7 +74,9 @@ flowchart LR
   F --- U4[Chat with each person]
   F --- U5[Set medicine reminders]
   C --- U6[Shift starts or pauses by geofence]
-  C --- U7[Start or end shift manually]
+  C --- U7[Start or finish shift manually]
+  C --- U15[Review a day's shift and breaks]
+  F --- U15
   C --- U8[Manage to-do list]
   C --- U9[See hours]
   C --- U10[Send audio clip for tone analysis]
@@ -88,7 +90,8 @@ flowchart LR
 Key scenarios:
 
 * **UC-A, link a caretaker.** The family enters an email and role. If an account exists it is converted and linked; otherwise an invite is stored and applied when that person registers. Both end up on their own home screen.
-* **UC-B, automatic shift.** Both phones report their location every 15 s. When the caretaker is within 15 m of the elderly person's phone, a shift starts; if they step beyond 20 m the timer stops at the last moment they were seen in range; when they return it continues.
+* **UC-B, automatic shift.** Both phones report their location every 15 s. When the caretaker is within 15 m of the elderly person's phone, the day's shift starts. If they step beyond 20 m the timer stops at the last moment they were seen in range and a **break** is recorded; when they return, the **same shift** continues. The next day is a new shift.
+* **UC-E, review a day.** The caretaker or the family opens a day's shift and sees when the caretaker arrived, every break (when they stepped out, when they came back, how long), when they left, the active time and the chores. The family also sees the tone of that visit.
 * **UC-C, emergency.** The elderly person presses the red button and confirms. The family gets an emergency alert and a chat message, and the caretaker's screen shows an emergency banner.
 * **UC-D, tone check.** During a verified shift the caretaker's phone sends a short clip; the server classifies it in memory and adds to the visit's tone totals. If several windows are clearly angry the family gets an alert to review.
 
@@ -295,20 +298,30 @@ sequenceDiagram
   end
 ```
 
-Shift states:
+A shift is **one day** of work. Stepping out of range is a *break*: it never ends the shift, and the same shift continues when the caretaker returns. A new calendar day starts a new shift.
 
 ```mermaid
 stateDiagram-v2
-  [*] --> NoShift
-  NoShift --> Active: within 15 m (automatic)
-  NoShift --> Waiting: Start tapped while away
+  [*] --> NotArrived: day starts, no shift yet
+  NotArrived --> Active: within 15 m (shift starts by itself)
+  NotArrived --> Waiting: Start tapped while away
   Waiting --> Active: within 15 m
-  Active --> Waiting: beyond 20 m, or no usable fix for 3 minutes
-  Active --> Ended: End tapped
-  Waiting --> Ended: End tapped
-  Waiting --> Ended: paused for 90 minutes (closes itself)
-  Ended --> [*]
+  Active --> Break: beyond 20 m, or no usable fix for 3 minutes
+  Break --> Active: back within 15 m (the SAME shift continues)
+  Break --> Away: on a break for 90 minutes (display only)
+  Away --> Active: back within 15 m (still the same shift)
+  Active --> Finished: Finish for now tapped
+  Break --> Finished: Finish for now tapped
+  Finished --> Active: comes back the same day (the SAME shift continues)
+  Active --> DayClosed: midnight
+  Break --> DayClosed: midnight
+  Away --> DayClosed: midnight
+  Finished --> DayClosed: midnight
+  DayClosed --> [*]: tomorrow is a new shift
 ```
+
+Both the caretaker and the family can open any day's shift and see its timeline: when the caretaker arrived, each time they stepped out and came back (with the length of the break),
+and when they left. Active time is the sum of the in-range periods; breaks are not counted.
 
 ### 4.3.5 Geofence design
 
@@ -321,9 +334,11 @@ and uses a deterministic rule, because (a) the elderly person may not be at the 
 | Exit radius | 20 m | hysteresis: GPS jitter at the edge must not flap the timer |
 | Location freshness | 120 s | an old fix is ignored |
 | Accuracy limit | 40 m | a worse fix cannot verify a 15 m rule |
-| Stale pause | 180 s | no usable fix for this long pauses at the last moment seen in range |
-| Auto-close | 90 min paused | a shift left open is closed automatically; an empty one is discarded |
-| After a manual stop | no automatic restart until the caretaker has left range (or 8 h) | stops an instant restart |
+| Stale pause | 180 s | no usable fix for this long starts a break at the last moment seen in range |
+| Flicker merge | 120 s | coming back within 2 minutes of leaving is GPS noise, not a break |
+| Shift length | one calendar day (Nairobi) | stepping out is a break and never ends the shift; a long break (90 min) is only shown as "away" |
+| Day change | closes the old shift at midnight and starts a new one | if the caretaker was still there at midnight, the new shift carries on from 00:00; an empty shift (never arrived) is discarded |
+| After "Finish for now" | no automatic restart until the caretaker has left range; if they come back the same day the same shift continues | stops an instant restart without losing the day's record |
 | Fake GPS | ignored and flagged to the family | the phone reports mock-location fixes |
 
 Limits: two phones can read 10 to 20 m apart indoors; location is shared only while the app is open.
@@ -367,7 +382,7 @@ Full model card: [`ml/voice/README.md`](../ml/voice/README.md).
 | Level | What | Result |
 |---|---|---|
 | Unit | geofence engine with controlled time; recurring-task rules; MFCC and windowing; label mapping and speaker-disjoint splits | passing |
-| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **83 backend tests**, passing |
+| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **99 backend tests**, passing |
 | ML | held-out speakers; live-path check; alert-rule simulation; end-to-end check of the audio endpoint | figures in 4.3.6 |
 | Static | TypeScript type-check; migration consistency; secret scan | passing (`scripts/test.ps1`) |
 | Manual | app on a physical phone with Expo Go | role flows, chat, elderly screen |

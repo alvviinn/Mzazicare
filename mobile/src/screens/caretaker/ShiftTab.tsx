@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { startShift, stopShift } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
-import { SharingBanner } from '../../components/SharingBanner';
 import { Icon } from '../../components/Icon';
+import { ShiftRow } from '../../components/ShiftRow';
+import { SharingBanner } from '../../components/SharingBanner';
 import { Button, Card, ErrorText } from '../../components/ui';
 import { fmtDuration, fmtTime } from '../../format';
 import { SharingStatus } from '../../location/useLocationSharing';
@@ -18,9 +19,10 @@ type Props = {
   sponsorName: string | null;
   onChanged: () => Promise<void>;
   onChat: () => void;
+  onOpenShift: (id: number) => void;
 };
 
-export default function ShiftTab({ token, state, error, sharing, sponsorName, onChanged, onChat }: Props) {
+export default function ShiftTab({ token, state, error, sharing, sponsorName, onChanged, onChat, onOpenShift }: Props) {
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState('');
 
@@ -38,10 +40,14 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
   }
 
   function confirmStop() {
-    Alert.alert('End shift?', 'Your hours so far are saved. A new shift starts automatically next time you arrive.', [
-      { text: 'Keep going', style: 'cancel' },
-      { text: 'End shift', style: 'destructive', onPress: () => run(() => stopShift(token)) },
-    ]);
+    Alert.alert(
+      'Finish for now?',
+      "Your hours so far are saved. If you come back today, the same shift carries on. A new shift starts tomorrow.",
+      [
+        { text: 'Keep going', style: 'cancel' },
+        { text: 'End for now', style: 'destructive', onPress: () => run(() => stopShift(token)) },
+      ],
+    );
   }
 
   if (!state) return <Text style={styles.muted}>{error || 'Loading…'}</Text>;
@@ -58,9 +64,18 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
   }
 
   const name = state.elderly.name.split(' ')[0];
-  const { range } = state;
-  const active = state.status === 'active';
-  const waiting = state.status === 'waiting';
+  const { range, phase, today } = state;
+  const minutes = today ? today.minutes : state.shift_minutes;
+
+  const HEADLINE: Record<ShiftState['phase'], string> = {
+    none: 'Not on shift',
+    waiting: 'Waiting to arrive',
+    active: `On shift with ${name}`,
+    break: 'On a break',
+    away: `Away from ${name}`,
+    ended: "Today's shift is finished for now",
+  };
+  const dot = phase === 'active' ? colors.success : phase === 'break' || phase === 'away' || phase === 'waiting' ? colors.warning : colors.border;
 
   let rangeText = '';
   if (range.state === 'in') {
@@ -72,6 +87,14 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
   } else {
     rangeText = 'Getting your location…';
   }
+
+  const EXPLAIN: Partial<Record<ShiftState['phase'], string>> = {
+    none: `Your shift starts automatically when you are within ${range.radius_m} m of ${name}. There is one shift per day.`,
+    waiting: `The shift is open. Your time starts counting when you are within ${range.radius_m} m of ${name}.`,
+    break: `Your timer is paused. When you are back within ${range.radius_m} m it carries on in the same shift. A new shift starts tomorrow.`,
+    away: `You have been away a while. If you come back today it is still the same shift. A new shift starts tomorrow.`,
+    ended: "You ended today's shift. If you come back today it carries on as the same shift.",
+  };
 
   return (
     <>
@@ -93,18 +116,19 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
 
       <Card>
         <View style={styles.row}>
-          <View style={[styles.dot, { backgroundColor: active ? colors.success : waiting ? colors.warning : colors.border }]} />
-          <Text style={styles.title}>
-            {active ? `On shift with ${name}` : waiting ? 'Shift open, timer paused' : 'Not on shift'}
-          </Text>
+          <View style={[styles.dot, { backgroundColor: dot }]} />
+          <Text style={styles.title}>{HEADLINE[phase]}</Text>
         </View>
 
-        {state.status !== 'none' && (
+        {phase !== 'none' && (
           <>
-            <Text style={styles.big}>{fmtDuration(state.shift_minutes)}</Text>
+            <Text style={styles.big}>{fmtDuration(minutes)}</Text>
             <Text style={styles.muted}>
-              verified this shift{state.started_at ? ` · started ${fmtTime(state.started_at)}` : ''}
-              {state.source === 'manual' ? ' · started manually' : ''}
+              active today
+              {today?.arrived ? ` · arrived ${fmtTime(today.arrived)}` : ''}
+              {today && today.breaks > 0
+                ? ` · ${today.breaks} break${today.breaks === 1 ? '' : 's'} (${fmtDuration(today.break_minutes)})`
+                : ''}
             </Text>
           </>
         )}
@@ -116,36 +140,34 @@ export default function ShiftTab({ token, state, error, sharing, sponsorName, on
           </Text>
         </View>
 
-        {waiting && (
-          <Text style={styles.muted}>
-            Your timer resumes by itself as soon as you are back within {range.radius_m} m of {name}.
-          </Text>
-        )}
-        {state.status === 'none' && (
-          <Text style={styles.muted}>
-            Your shift starts automatically when you are within {range.radius_m} m of {name}.
-          </Text>
-        )}
+        {!!EXPLAIN[phase] && <Text style={styles.muted}>{EXPLAIN[phase]}</Text>}
 
         <ErrorText>{actionError}</ErrorText>
         <View style={{ marginTop: spacing.md }}>
-          {state.status === 'none' ? (
-            <Button title="Start shift manually" onPress={() => run(() => startShift(token))} loading={busy} />
+          {phase === 'none' || phase === 'ended' ? (
+            <Button
+              title={phase === 'ended' ? "Continue today's shift" : 'Start shift manually'}
+              onPress={() => run(() => startShift(token))}
+              loading={busy}
+            />
           ) : (
-            <Button title="End shift" variant="secondary" onPress={confirmStop} loading={busy} />
+            <Button title="Finish for now" variant="secondary" onPress={confirmStop} loading={busy} />
           )}
         </View>
         <Text style={styles.note}>
-          Manual start and stop are checked against {name}'s phone too: only time within {range.radius_m} m counts.
+          Starting and finishing by hand are checked against {name}'s phone too: only time within {range.radius_m} m counts.
         </Text>
       </Card>
 
-      <View style={styles.tiles}>
-        <View style={styles.tile}>
-          <Text style={styles.tileValue}>{fmtDuration(state.today_minutes)}</Text>
-          <Text style={styles.tileLabel}>Verified today</Text>
-        </View>
-      </View>
+      {today && (
+        <>
+          <SectionTitle>Today's shift</SectionTitle>
+          <Card>
+            <ShiftRow shift={today} first onPress={() => onOpenShift(today.id)} />
+            <Text style={styles.hint}>Tap to see when you arrived, every break and when you left.</Text>
+          </Card>
+        </>
+      )}
 
       {sponsorName && (
         <>
@@ -179,15 +201,5 @@ const styles = StyleSheet.create({
   rangeRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md },
   range: { fontSize: 14, fontWeight: '600', color: colors.textMuted },
   note: { fontSize: 12, color: colors.textMuted, marginTop: spacing.md, textAlign: 'center' },
-  tiles: { flexDirection: 'row', marginTop: spacing.md },
-  tile: {
-    flex: 1,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
-  },
-  tileValue: { fontSize: 20, fontWeight: '700', color: colors.primary },
-  tileLabel: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
+  hint: { fontSize: 12, color: colors.textMuted, marginTop: spacing.xs },
 });

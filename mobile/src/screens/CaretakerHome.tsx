@@ -5,6 +5,7 @@ import { TabBar, TabDef } from '../components/TabBar';
 import { useLocationSharing } from '../location/useLocationSharing';
 import { Profile, ShiftState } from '../types';
 import ChatScreen from './ChatScreen';
+import ShiftDetailScreen from './ShiftDetailScreen';
 import HoursTab from './caretaker/HoursTab';
 import ShiftTab from './caretaker/ShiftTab';
 import TasksTab from './caretaker/TasksTab';
@@ -24,6 +25,7 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
   const [error, setError] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [shiftId, setShiftId] = useState<number | null>(null); // the day's shift being looked at
 
   // This phone reports its position; the server compares it with the elder's phone.
   const sharing = useLocationSharing(token);
@@ -41,7 +43,7 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
     load();
     const id = setInterval(load, 10000);
     return () => clearInterval(id);
-  }, [load]);
+  }, [load, shiftId]);
 
   async function refresh() {
     setRefreshing(true);
@@ -51,6 +53,9 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
 
   if (chatOpen && profile.sponsor) {
     return <ChatScreen token={token} peer={profile.sponsor} onBack={() => setChatOpen(false)} />;
+  }
+  if (shiftId !== null) {
+    return <ShiftDetailScreen token={token} shiftId={shiftId} onBack={() => setShiftId(null)} />;
   }
 
   return (
@@ -71,6 +76,7 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
             sponsorName={profile.sponsor?.name ?? null}
             onChanged={load}
             onChat={() => setChatOpen(true)}
+            onOpenShift={setShiftId}
           />
           <SectionTitle>People you work with</SectionTitle>
           <FamilyCard
@@ -79,7 +85,7 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
         </>
       )}
       {tab === 'tasks' && <TasksTab token={token} />}
-      {tab === 'hours' && <HoursTab token={token} />}
+      {tab === 'hours' && <HoursTab token={token} onOpenShift={setShiftId} />}
     </HomeShell>
   );
 }

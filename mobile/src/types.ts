@@ -26,18 +26,42 @@ export type Tone = 'happy' | 'calm' | 'neutral' | 'stressed' | 'angry';
 
 export type ChatPerson = { email: string; name: string; unread: number };
 
+// A shift is one DAY of work. Stepping out of range is a break; the same shift continues when the caretaker returns.
+export type ShiftStatus = 'on_shift' | 'paused' | 'away' | 'waiting' | 'ended';
+
 export type ShiftSummary = {
   id: number;
+  date: string; // 'YYYY-MM-DD' (Nairobi)
   caretaker: string;
   elderly: string;
-  start: string;
-  end: string | null;
-  minutes: number; // verified time near the elder
-  status: 'on_shift' | 'paused' | 'ended';
+  start: string; // first arrival (or when it was opened, if they never arrived)
+  arrived: string | null;
+  left: string | null; // the last time they left range; null while they are there
+  end: string | null; // when the day's shift closed; null while it is still open
+  minutes: number; // active, verified time near the elder (breaks excluded)
+  breaks: number;
+  break_minutes: number;
+  status: ShiftStatus; // paused = on a break, away = a long break
   source: 'auto' | 'manual';
   chores_done: number;
   chores_total: number;
-  dominant_tone: Tone | null;
+  dominant_tone?: Tone | null; // only in the family dashboard
+};
+
+export type TimelineEvent = {
+  kind: 'started' | 'arrived' | 'stepped_out' | 'returned' | 'left';
+  at: string;
+  break_minutes?: number; // on 'returned': how long the break was
+  note?: string;
+};
+
+export type ShiftDetail = ShiftSummary & {
+  phase: 'waiting' | 'active' | 'break' | 'away' | 'ended';
+  timeline: TimelineEvent[];
+  segments: { start: string; end: string | null; minutes: number }[];
+  breaks_list: { start: string; end: string | null; minutes: number }[];
+  chores: { description: string; is_done: boolean; done_at: string | null }[];
+  tones?: Dashboard['tones']; // family only
 };
 
 export type AlertItem = {
@@ -76,7 +100,7 @@ export type Dashboard = {
   caretakers: ChatPerson[];
   elderly: ChatPerson[];
   today: {
-    status: 'on_shift' | 'paused' | 'completed' | 'none';
+    status: 'on_shift' | 'paused' | 'away' | 'waiting' | 'completed' | 'none';
     shifts: ShiftSummary[];
     chores: { description: string; is_done: boolean; done_at: string | null }[];
   };
@@ -98,6 +122,9 @@ export type Dashboard = {
 
 export type ShiftState = {
   status: 'none' | 'active' | 'waiting'; // waiting = shift open but not within range of the elder
+  // what to say: waiting (not arrived yet), active, break, away (a long break), ended (End tapped), none
+  phase: 'none' | 'waiting' | 'active' | 'break' | 'away' | 'ended';
+  today: ShiftSummary | null; // today's shift as a card, so it can be opened even after End
   source: 'auto' | 'manual' | null;
   started_at: string | null;
   shift_minutes: number;
@@ -125,7 +152,7 @@ export type Hours = {
   week: number;
   month: number;
   total: number;
-  recent: { id: number; elderly: string; start: string; end: string | null; minutes: number; source: 'auto' | 'manual' }[];
+  recent: ShiftSummary[]; // one card per day worked
 };
 
-export type ChatMessage ={ id: number; mine: boolean; body: string; created_at: string };
+export type ChatMessage = { id: number; mine: boolean; body: string; created_at: string };

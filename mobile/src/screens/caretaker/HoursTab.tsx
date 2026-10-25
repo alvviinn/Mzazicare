@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { getHours } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
+import { ShiftRow } from '../../components/ShiftRow';
 import { Card } from '../../components/ui';
-import { fmtDay, fmtDuration, fmtTime } from '../../format';
+import { fmtDuration } from '../../format';
 import { colors, radius, spacing } from '../../theme';
 import { Hours } from '../../types';
 
-export default function HoursTab({ token }: { token: string }) {
+export default function HoursTab({ token, onOpenShift }: { token: string; onOpenShift: (id: number) => void }) {
   const [hours, setHours] = useState<Hours | null>(null);
   const [error, setError] = useState('');
 
@@ -39,25 +40,17 @@ export default function HoursTab({ token }: { token: string }) {
       </View>
       <Text style={styles.note}>Only time verified within 15 m of the elderly person's phone is counted.</Text>
 
-      <SectionTitle>Recent shifts</SectionTitle>
+      <SectionTitle>My shifts (one per day)</SectionTitle>
       <Card>
         {hours.recent.length === 0 ? (
           <Text style={styles.muted}>No shifts yet. Your first one starts when you arrive.</Text>
         ) : (
-          hours.recent.map((s, i) => (
-            <View key={s.id} style={[styles.row, i > 0 && styles.rowBorder]}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.rowTitle}>
-                  {fmtDay(s.start)} · {s.elderly}
-                </Text>
-                <Text style={styles.small}>
-                  {fmtTime(s.start)} – {s.end ? fmtTime(s.end) : 'in progress'} ·{' '}
-                  {s.source === 'auto' ? 'Started automatically' : 'Started manually'}
-                </Text>
-              </View>
-              <Text style={styles.rowValue}>{fmtDuration(s.minutes)}</Text>
-            </View>
-          ))
+          <>
+            {hours.recent.map((s, i) => (
+              <ShiftRow key={s.id} shift={s} first={i === 0} onPress={() => onOpenShift(s.id)} />
+            ))}
+            <Text style={styles.small}>Tap a day to see when you arrived, took breaks and left.</Text>
+          </>
         )}
       </Card>
     </>

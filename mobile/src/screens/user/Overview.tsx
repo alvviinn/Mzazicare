@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { resolveAlert } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
 import { Icon, IconName, MOOD_ICON, TONE_ICON } from '../../components/Icon';
+import { ShiftRow } from '../../components/ShiftRow';
 import { Button, Card } from '../../components/ui';
-import { fmtDay, fmtDuration, fmtTime, timeAgo } from '../../format';
+import { fmtDuration, fmtTime, timeAgo } from '../../format';
 import { colors, radius, spacing, toneColors } from '../../theme';
 import { AlertItem, Dashboard, Profile } from '../../types';
 
@@ -14,9 +15,10 @@ type Props = {
   error: string;
   onChanged: () => void;
   onGoPeople: () => void;
+  onOpenShift: (id: number) => void;
 };
 
-export default function Overview({ token, profile, dash, error, onChanged, onGoPeople }: Props) {
+export default function Overview({ token, profile, dash, error, onChanged, onGoPeople, onOpenShift }: Props) {
   if (!dash) {
     return <Text style={styles.muted}>{error || 'Loading your care overview…'}</Text>;
   }
@@ -54,11 +56,11 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
 
       {alertCards}
 
-      <TodayCard dash={dash} />
+      <TodayCard dash={dash} onOpenShift={onOpenShift} />
 
       <View style={styles.tiles}>
-        <Tile value={fmtDuration(dash.stats.avg_visit_minutes)} label="Avg. time per visit" />
-        <Tile value={String(dash.stats.visits_7d)} label="Visits this week" />
+        <Tile value={fmtDuration(dash.stats.avg_visit_minutes)} label="Avg. active time per day" />
+        <Tile value={String(dash.stats.visits_7d)} label="Days worked this week" />
         <Tile value={dash.stats.chore_rate_7d === null ? '–' : `${dash.stats.chore_rate_7d}%`} label="Chores done" />
       </View>
 
@@ -147,30 +149,17 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
       <SectionTitle>Service quality (voice tone)</SectionTitle>
       <ToneCard tones={dash.tones} />
 
-      <SectionTitle>Recent visits</SectionTitle>
+      <SectionTitle>Recent shifts</SectionTitle>
       <Card>
         {dash.recent_shifts.length === 0 ? (
-          <Text style={styles.muted}>No visits in the last 7 days.</Text>
+          <Text style={styles.muted}>No shifts in the last 7 days.</Text>
         ) : (
           dash.recent_shifts.map((s, i) => (
-            <View key={s.id} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.visitTitle}>
-                  {fmtDay(s.start)} · {s.caretaker}
-                </Text>
-                <Text style={styles.small}>
-                  {fmtTime(s.start)} – {s.end ? fmtTime(s.end) : 'ongoing'} · {fmtDuration(s.minutes)} ·{' '}
-                  {s.chores_done}/{s.chores_total} chores
-                </Text>
-              </View>
-              {s.dominant_tone && (
-                <Icon name={TONE_ICON[s.dominant_tone]} size={26} color={toneColors[s.dominant_tone]} />
-              )}
-            </View>
+            <ShiftRow key={s.id} shift={s} showCaretaker first={i === 0} onPress={() => onOpenShift(s.id)} />
           ))
         )}
+        <Text style={styles.hint}>Tap a day to see when they arrived, took breaks and left.</Text>
       </Card>
-
       {dash.alerts.some((a) => a.status !== 'open') && (
         <>
           <SectionTitle>Past alerts</SectionTitle>
@@ -249,31 +238,42 @@ function Onboarding({ profile, onGoPeople }: { profile: Profile; onGoPeople: () 
   );
 }
 
-function TodayCard({ dash }: { dash: Dashboard }) {
+function TodayCard({ dash, onOpenShift }: { dash: Dashboard; onOpenShift: (id: number) => void }) {
   const { status, shifts } = dash.today;
   const s = shifts[0];
-  let headline = 'No visit yet today';
-  let detail = 'Nobody has started a shift today.';
+  let headline = 'No shift yet today';
+  let detail = 'Nobody has arrived today.';
   if (status === 'on_shift' && s) {
+    const breaks = s.breaks ? ` · ${s.breaks} break${s.breaks === 1 ? '' : 's'} so far` : '';
     headline = `${s.caretaker} is on shift`;
-    detail = `Verified with ${s.elderly} since ${fmtTime(s.start)} · ${fmtDuration(s.minutes)} counted so far`;
+    detail = `With ${s.elderly} since ${fmtTime(s.start)} · active ${fmtDuration(s.minutes)}${breaks}`;
   } else if (status === 'paused' && s) {
-    headline = `${s.caretaker} stepped away`;
-    detail = `Not within 15 m of ${s.elderly}. The timer is paused at ${fmtDuration(s.minutes)} and resumes when they return.`;
+    headline = `${s.caretaker} is on a break`;
+    detail = `Stepped out${s.left ? ` at ${fmtTime(s.left)}` : ''}. Active time so far: ${fmtDuration(s.minutes)}. The same shift continues when they return.`;
+  } else if (status === 'away' && s) {
+    headline = `${s.caretaker} has left for now`;
+    detail = `Last seen ${s.left ? fmtTime(s.left) : ''}. Active today: ${fmtDuration(s.minutes)}. If they return today it counts as the same shift.`;
+  } else if (status === 'waiting' && s) {
+    headline = `${s.caretaker}'s shift is open`;
+    detail = 'They have not arrived yet.';
   } else if (status === 'completed' && s) {
-    headline = `${s.caretaker}'s visit is complete`;
-    detail = `${fmtTime(s.start)} – ${s.end ? fmtTime(s.end) : ''} · ${fmtDuration(s.minutes)}`;
+    headline = `${s.caretaker} has finished for the day`;
+    detail = `${fmtTime(s.start)} – ${s.end ? fmtTime(s.end) : ''} · active ${fmtDuration(s.minutes)}`;
   }
-  const dotColor = status === 'on_shift' ? colors.success : status === 'paused' ? colors.warning : colors.border;
-  return (
+  const dotColor =
+    status === 'on_shift' ? colors.success : status === 'paused' || status === 'away' ? colors.warning : colors.border;
+  const body = (
     <Card>
       <View style={styles.statusRow}>
         <View style={[styles.dot, { backgroundColor: dotColor }]} />
-        <Text style={styles.cardTitle}>{headline}</Text>
+        <Text style={[styles.cardTitle, { flex: 1 }]}>{headline}</Text>
+        {s && <Icon name="chevron-right" size={22} color={colors.textMuted} />}
       </View>
       <Text style={[styles.muted, { marginTop: spacing.xs }]}>{detail}</Text>
+      {s && <Text style={styles.link}>See today's timeline</Text>}
     </Card>
   );
+  return s ? <Pressable onPress={() => onOpenShift(s.id)}>{body}</Pressable> : body;
 }
 
 function Tile({ value, label }: { value: string; label: string }) {
@@ -291,7 +291,7 @@ const QUALITY: Record<string, { text: string; color: string; bg: string }> = {
   needs_attention: { text: 'Needs attention', color: colors.danger, bg: colors.dangerSoft },
 };
 
-function ToneCard({ tones }: { tones: Dashboard['tones'] }) {
+export function ToneCard({ tones }: { tones: Dashboard['tones'] }) {
   if (!tones.items.length || !tones.dominant) {
     return (
       <Card>
@@ -398,6 +398,8 @@ const styles = StyleSheet.create({
   rowBorder: { borderTopWidth: 1, borderTopColor: colors.border },
   visitTitle: { fontSize: 15, fontWeight: '600', color: colors.text },
   checkBox: { width: 30 },
+  link: { color: colors.primary, fontWeight: '600', fontSize: 13, marginTop: spacing.sm },
+  hint: { color: colors.textMuted, fontSize: 12, marginTop: spacing.sm },
   iconBox: { width: 36 },
   alertHead: { flexDirection: 'row', alignItems: 'center' },
   pill: { borderRadius: radius.md, paddingHorizontal: 10, paddingVertical: 4 },

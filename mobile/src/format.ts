@@ -6,6 +6,28 @@ export function fmtDay(iso: string): string {
   return new Date(iso).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
+// The server sends a shift's day as 'YYYY-MM-DD' (Nairobi time). Noon avoids any time-zone edge.
+const parseDay = (date: string) => new Date(`${date}T12:00:00`);
+
+function localDateString(d: Date): string {
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+/** 'Today', 'Yesterday' or 'Tue 20 Oct' */
+export function fmtShiftDay(date: string): string {
+  const today = new Date();
+  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+  if (date === localDateString(today)) return 'Today';
+  if (date === localDateString(yesterday)) return 'Yesterday';
+  return parseDay(date).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+/** 'Tuesday 20 October' */
+export function fmtShiftDayLong(date: string): string {
+  return parseDay(date).toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
+}
+
 export function fmtDuration(minutes: number | null): string {
   if (minutes === null) return '–';
   const h = Math.floor(minutes / 60);

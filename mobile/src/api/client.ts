@@ -1,4 +1,16 @@
-import { AuthResult, ChatMessage, Dashboard, ElderHome, Hours, Mood, Profile, ShiftState, TaskItem } from '../types';
+import {
+  AuthResult,
+  ChatMessage,
+  Dashboard,
+  ElderHome,
+  Hours,
+  Mood,
+  Profile,
+  ShiftDetail,
+  ShiftState,
+  ShiftSummary,
+  TaskItem,
+} from '../types';
 
 // Address of the Django backend, set in mobile/.env.local (see mobile/.env.example).
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -63,6 +75,13 @@ export const addMedicine = (
 
 export const deleteMedicine = (token: string, id: number): Promise<void> =>
   request(`/api/medicines/${id}/`, { method: 'DELETE', token });
+
+// ---- Shifts (one per day): caretaker and family ----
+
+export const getShifts = (token: string, days = 30): Promise<ShiftSummary[]> =>
+  request(`/api/shifts/?days=${days}`, { token });
+
+export const getShift = (token: string, id: number): Promise<ShiftDetail> => request(`/api/shifts/${id}/`, { token });
 
 // ---- Phones (caretaker and elderly) ----
 

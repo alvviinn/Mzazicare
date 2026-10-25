@@ -12,8 +12,8 @@ Author: Kimani Alvin Thuo (167148). Supervisor: Dr. Esther Khakata.
 
 | Who | What they get |
 |---|---|
-| **Family** (the "sponsor") | Overview of today's visit, chores, medicines, how the elderly person feels, the tone of the care and alerts to confirm or dismiss. Separate private chats with the caretaker and the elderly person. Adds the people in the care circle and sets medicine reminders. |
-| **Caretaker** | A shift that starts by itself when they are within 15 m of the elderly person's phone, pauses when they step away and resumes when they return (manual start/stop is also verified). Their own to-do list with tasks that repeat on working days, verified hours, chat with the family. |
+| **Family** (the "sponsor") | Overview of today's shift, a Shifts tab with every day (tap one for the arrival, breaks and departure timeline), chores, medicines, how the elderly person feels, the tone of the care and alerts to confirm or dismiss. Separate private chats with the caretaker and the elderly person. Adds the people in the care circle and sets medicine reminders. |
+| **Caretaker** | One shift per day, started by itself when they are within 15 m of the elderly person's phone. Stepping out is a **break** (the timer pauses and the same shift continues when they return); a new day is a new shift. Tap any day to see when they arrived, every break and when they left. Manual start/finish is also verified. Their own to-do list with tasks that repeat on working days, verified hours, chat with the family. |
 | **Elderly person** | A large-text, English/Kiswahili screen: is my caretaker here, how am I feeling (one tap), today's medicines, message the family, and an always-visible emergency button. |
 
 Everyone registers as a normal user. When a family adds an email as a caretaker or elderly person, that account (existing or future) is converted to that role and linked to the family, so each role sees its own home screen.
@@ -79,7 +79,7 @@ More detail, including phone networking and firewall rules, is in [`docs/SETUP.m
 scripts\test.ps1
 ```
 
-Runs the secret scan, Django checks, **83 backend tests**, **24 ML tests** and the TypeScript type-check. The backend tests use in-memory
+Runs the secret scan, Django checks, **99 backend tests**, **24 ML tests** and the TypeScript type-check. The backend tests use in-memory
 SQLite with dummy settings, so they need no database and no secrets. (For the ML tests run `scripts\setup.ps1 -WithML` once.)
 
 ## The acoustic tone model

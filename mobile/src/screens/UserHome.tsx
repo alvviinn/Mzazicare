@@ -4,12 +4,14 @@ import { HomeShell } from '../components/HomeShell';
 import { TabBar, TabDef } from '../components/TabBar';
 import { Dashboard, Profile } from '../types';
 import ChatScreen from './ChatScreen';
+import ShiftDetailScreen from './ShiftDetailScreen';
 import ChatsTab from './user/ChatsTab';
 import Overview from './user/Overview';
 import PeopleTab from './user/PeopleTab';
+import ShiftsTab from './user/ShiftsTab';
 
 type Props = { token: string; profile: Profile; onChanged: () => Promise<void>; onSignOut: () => void };
-type Tab = 'overview' | 'chats' | 'people';
+type Tab = 'overview' | 'shifts' | 'chats' | 'people';
 
 export default function UserHome({ token, profile, onChanged, onSignOut }: Props) {
   const [tab, setTab] = useState<Tab>('overview');
@@ -17,6 +19,7 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
   const [error, setError] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [chatPeer, setChatPeer] = useState<{ name: string; email: string } | null>(null);
+  const [shiftId, setShiftId] = useState<number | null>(null); // the day's shift being looked at
 
   const load = useCallback(async () => {
     try {
@@ -28,12 +31,12 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
   }, [token]);
 
   // Load on open, keep fresh every 15s (live shift status), and reload when coming back from a chat
-  // or when the care circle changes.
+  // or a shift, or when the care circle changes.
   useEffect(() => {
     load();
     const id = setInterval(load, 15000);
     return () => clearInterval(id);
-  }, [load, chatPeer, profile]);
+  }, [load, chatPeer, shiftId, profile]);
 
   async function refresh() {
     setRefreshing(true);
@@ -44,10 +47,14 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
   if (chatPeer) {
     return <ChatScreen token={token} peer={chatPeer} onBack={() => setChatPeer(null)} />;
   }
+  if (shiftId !== null) {
+    return <ShiftDetailScreen token={token} shiftId={shiftId} onBack={() => setShiftId(null)} />;
+  }
 
   const unread = dash ? [...dash.caretakers, ...dash.elderly].reduce((n, p) => n + p.unread, 0) : 0;
   const tabs: TabDef<Tab>[] = [
     { key: 'overview', label: 'Overview', icon: 'home-variant-outline' },
+    { key: 'shifts', label: 'Shifts', icon: 'calendar-clock' },
     { key: 'chats', label: 'Chats', icon: 'message-text-outline', badge: unread },
     { key: 'people', label: 'People', icon: 'account-group-outline' },
   ];
@@ -68,8 +75,10 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
           error={error}
           onChanged={load}
           onGoPeople={() => setTab('people')}
+          onOpenShift={setShiftId}
         />
       )}
+      {tab === 'shifts' && <ShiftsTab token={token} onOpenShift={setShiftId} />}
       {tab === 'chats' && <ChatsTab dash={dash} onOpen={setChatPeer} onGoPeople={() => setTab('people')} />}
       {tab === 'people' && (
         <PeopleTab token={token} profile={profile} dash={dash} onChanged={onChanged} onMedicinesChanged={load} />
