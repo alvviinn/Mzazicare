@@ -11,18 +11,13 @@ from accounts.models import Role, User
 from . import presence
 from .elder_views import medicines_json, mood_today
 from .models import MOOD_EMOJI, POSITIVE_TONES, TONE_EMOJI, Alert, Message, Mood, Shift, Tone, ToneReading
+from .shift_views import shift_card, shift_status
 from .tasks import visible_tasks
 
 
 def require_family(user):
     if user.role != Role.USER:
         raise PermissionDenied('Only family accounts can view the dashboard.')
-
-
-def shift_status(s):
-    if s.end_time is not None:
-        return 'ended'
-    return 'on_shift' if presence.open_segment(s) else 'paused'
 
 
 def tone_summary(shifts):
@@ -58,22 +53,9 @@ def tone_summary(shifts):
 
 
 def shift_json(s):
-    chores = list(s.chores.all())
     readings = list(s.tones.all())
     top = max(readings, key=lambda r: r.percent).tone if readings else None
-    return {
-        'id': s.pk,
-        'caretaker': s.caretaker.name,
-        'elderly': s.elderly.name,
-        'start': s.start_time.isoformat(),
-        'end': s.end_time.isoformat() if s.end_time else None,
-        'minutes': presence.worked_minutes(s),  # verified time near the elder, not just start to end
-        'status': shift_status(s),
-        'source': s.source,
-        'chores_done': sum(c.is_done for c in chores),
-        'chores_total': len(chores),
-        'dominant_tone': top,
-    }
+    return {**shift_card(s), 'dominant_tone': top}
 
 
 def can_chat(a, b):
@@ -106,8 +88,10 @@ class DashboardView(APIView):
         week = list(shifts_qs.filter(start_time__gte=now - timedelta(days=7)))
         today = [s for s in week if timezone.localtime(s.start_time).date() == timezone.localdate()]
 
-        month_done = shifts_qs.filter(start_time__gte=now - timedelta(days=30), end_time__isnull=False)
-        durations = [presence.worked_minutes(s) for s in month_done]
+        # Average active time per DAY (a shift is a day). Finished days count; today only if nothing else exists.
+        month = list(shifts_qs.filter(start_time__gte=now - timedelta(days=30)))
+        finished = [s for s in month if timezone.localtime(s.start_time).date() != timezone.localdate()]
+        durations = [m for m in (presence.worked_minutes(s, now) for s in (finished or month)) if m > 0]
         chores_week = [c for s in week for c in s.chores.all()]
 
         today_tasks = [t for c in caretakers for t in visible_tasks(c, now)]
@@ -128,15 +112,10 @@ class DashboardView(APIView):
             )
             medicines += medicines_json(e, now)
 
-        statuses = {shift_status(s) for s in today}
-        if 'on_shift' in statuses:
-            status = 'on_shift'
-        elif 'paused' in statuses:
-            status = 'paused'
-        elif today:
-            status = 'completed'
-        else:
-            status = 'none'
+        statuses = {shift_status(s, now) for s in today}
+        status = next((k for k in ('on_shift', 'paused', 'away', 'waiting') if k in statuses), None)
+        if status is None:
+            status = 'completed' if today else 'none'
 
         return Response(
             {

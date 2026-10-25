@@ -12,6 +12,7 @@ from accounts.models import Role, User
 
 from . import presence, voice_ai
 from .models import Alert, Chore, Location, Shift, ShiftSegment, Task
+from .shift_views import shift_card
 from .tasks import MAX_TASKS, task_json, visible_tasks
 
 
@@ -87,6 +88,8 @@ def state_json(user, now):
     state, distance, elder, sharing = presence.current_reading(user, shift, now)
     seg = presence.open_segment(shift) if shift else None
     midnight = local_midnight(timezone.localdate(now))
+    # Today's shift as a card, even if it was ended with the End button (so it can still be opened).
+    todays = shift or next(iter(presence.todays_shifts(user, now)), None)
     sos = Alert.objects.filter(
         sponsor_id=user.sponsor_id, kind=Alert.Kind.SOS, status=Alert.Status.OPEN,
         created_at__gte=now - timedelta(minutes=30),
@@ -94,6 +97,9 @@ def state_json(user, now):
     return {
         'emergency': {'message': sos.message, 'at': sos.created_at.isoformat()} if sos else None,
         'status': 'none' if not shift else 'active' if seg else 'waiting',
+        # what the screen says: none | waiting (not arrived yet) | active | break | away (long break) | ended
+        'phase': presence.phase_of(shift, now) if shift else ('ended' if todays else 'none'),
+        'today': shift_card(todays, now) if todays else None,
         'source': shift.source if shift else None,
         'started_at': shift.start_time.isoformat() if shift else None,
         'shift_minutes': presence.worked_minutes(shift, now) if shift else 0,
@@ -208,8 +214,8 @@ class HoursView(APIView):
         today = timezone.localdate(now)
         recent = (
             Shift.objects.filter(caretaker=user, is_demo=False)
-            .select_related('elderly')
-            .prefetch_related('segments')[:14]
+            .select_related('caretaker', 'elderly')
+            .prefetch_related('segments', 'chores')[:30]
         )
         return Response(
             {
@@ -217,17 +223,7 @@ class HoursView(APIView):
                 'week': minutes_since(user, local_midnight(today - timedelta(days=today.weekday())), now),
                 'month': minutes_since(user, local_midnight(today.replace(day=1)), now),
                 'total': minutes_since(user, timezone.make_aware(datetime(2000, 1, 1)), now),
-                'recent': [
-                    {
-                        'id': s.pk,
-                        'elderly': s.elderly.name,
-                        'start': s.start_time.isoformat(),
-                        'end': s.end_time.isoformat() if s.end_time else None,
-                        'minutes': presence.worked_minutes(s, now),
-                        'source': s.source,
-                    }
-                    for s in recent
-                ],
+                'recent': [shift_card(s, now) for s in recent],  # one card per day worked
             }
         )
 
@@ -236,8 +232,8 @@ class HoursView(APIView):
 
 
 def sync_chore(user, task):
-    """While a shift is open, keep its chore record in step with the task."""
-    shift = Shift.objects.filter(caretaker=user, end_time__isnull=True, is_demo=False).first()
+    """Keep today's shift record of this task in step with it (also after tapping End: the day is still today)."""
+    shift = next(iter(presence.todays_shifts(user)), None)
     if shift:
         Chore.objects.update_or_create(
             shift=shift,

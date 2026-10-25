@@ -1,12 +1,15 @@
 from django.urls import path
 
-from . import caretaker_views, elder_views, views
+from . import caretaker_views, elder_views, shift_views, views
 
 urlpatterns = [
     # family
     path('dashboard/', views.DashboardView.as_view()),
     path('alerts/<int:pk>/', views.AlertView.as_view()),
     path('chat/', views.ChatView.as_view()),
+    # shifts (one per day): caretaker and family
+    path('shifts/', shift_views.ShiftListView.as_view()),
+    path('shifts/<int:pk>/', shift_views.ShiftDetailView.as_view()),
     # phones (caretaker and elderly)
     path('location/', caretaker_views.LocationView.as_view()),
     # elderly

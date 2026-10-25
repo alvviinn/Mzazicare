@@ -54,7 +54,17 @@ class Command(BaseCommand):
                 caretaker=caretaker, elderly=person, start_time=start, end_time=end, is_demo=True,
                 ended_by='auto' if end else '',
             )
-            ShiftSegment.objects.create(shift=shift, start=start, end=end)  # verified the whole visit
+            if end is None:
+                ShiftSegment.objects.create(shift=shift, start=start)  # today: still there
+            else:
+                # A finished day: most days include one break (lunch, an errand) in the middle.
+                if rng.random() < 0.75:
+                    split = start + timedelta(minutes=rng.randint(100, 150))
+                    back = split + timedelta(minutes=rng.choice([30, 40, 45, 60]))
+                    ShiftSegment.objects.create(shift=shift, start=start, end=split)
+                    ShiftSegment.objects.create(shift=shift, start=back, end=end)
+                else:
+                    ShiftSegment.objects.create(shift=shift, start=start, end=end)
 
             for desc in CHORES:
                 done = rng.random() < (0.5 if day == 0 else 0.88)
