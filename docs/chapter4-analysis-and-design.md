@@ -52,12 +52,12 @@ IDs FR-01 to FR-05 come from the proposal; FR-06 onward were identified during d
 
 | ID | Requirement | How it is met, and evidence |
 |---|---|---|
-| NFR-01 Security | Backend-issued JWT, role-scoped access, no third-party login | JWT (90 days) from the Django backend; every endpoint checks the role (tested: 99 backend tests including 403/401 cases); passwords hashed; no third-party login or API keys |
+| NFR-01 Security | Backend-issued JWT, role-scoped access, no third-party login | JWT (90 days) from the Django backend; every endpoint checks the role (tested: 103 backend tests including 403/401 cases); passwords hashed; no third-party login or API keys |
 | NFR-02 Performance | Heavy AI asynchronous, normal interactions within 2 s | **Partly.** The tone model is small (about 0.5 MB, runs on a CPU) and runs inside the request; there is no task queue yet. A formal latency benchmark has **not** been done |
 | NFR-03 Usability | Understands conversational Kenyan phrasing | The chatbot is not built. The elderly screen is bilingual with plain-language wording |
 | NFR-04 Accuracy | Each model at least 80 % before deployment, precision prioritised | Tone model: **83.0 %** overall on unseen speakers, **75.4 %** on speech alone (below 80 %); alert rule tuned for precision. Other models not built |
 | Privacy | KDPA; raw audio not stored | Audio analysed in memory only; latest location only; see 4.3.7 and [DATA.md](DATA.md) |
-| Maintainability | Clear structure, repeatable setup, tests | Scripts for setup, run, data and tests; 99 backend + 24 ML tests; documented |
+| Maintainability | Clear structure, repeatable setup, tests | Scripts for setup, run, data and tests; 103 backend + 24 ML tests; documented |
 
 ### 4.2.4 Use cases
 
@@ -382,7 +382,7 @@ Full model card: [`ml/voice/README.md`](../ml/voice/README.md).
 | Level | What | Result |
 |---|---|---|
 | Unit | geofence engine with controlled time; recurring-task rules; MFCC and windowing; label mapping and speaker-disjoint splits | passing |
-| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **99 backend tests**, passing |
+| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **103 backend tests**, passing |
 | ML | held-out speakers; live-path check; alert-rule simulation; end-to-end check of the audio endpoint | figures in 4.3.6 |
 | Static | TypeScript type-check; migration consistency; secret scan | passing (`scripts/test.ps1`) |
 | Manual | app on a physical phone with Expo Go | role flows, chat, elderly screen |

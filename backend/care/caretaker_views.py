@@ -242,6 +242,20 @@ def sync_chore(user, task):
         )
 
 
+def require_in_range(user):
+    """Refuse unless the caretaker's phone is verified within the geofence of an elderly person."""
+    state, distance, _, _ = presence.current_reading(user, None)
+    if state == 'in':
+        return
+    if state == 'out':
+        raise PermissionDenied(
+            f'You are about {round(distance)} m from the elderly person. Move within {presence.ENTER_RADIUS_M} m to mark this done.'
+        )
+    raise PermissionDenied(
+        'Your location could not be verified. Turn on location sharing, make sure the elderly person is sharing too, then try again.'
+    )
+
+
 class TaskListView(APIView):
     def get(self, request):
         require_caretaker(request.user)
@@ -274,6 +288,8 @@ class TaskDetailView(APIView):
         task = self._task(request, pk)
         if 'is_done' in request.data:
             task.is_done = bool(request.data['is_done'])
+            if task.is_done and not task.done_at:
+                require_in_range(request.user)  # a task can only be ticked off at the elderly person's side
             task.done_at = timezone.now() if task.is_done else None
         if 'recurring' in request.data:
             task.recurring = bool(request.data['recurring'])

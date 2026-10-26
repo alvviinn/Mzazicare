@@ -46,7 +46,7 @@ time counts as hours.
 | `POST /shift/start/` | Manual start of today's shift (or continue it after "finish for now"). Only in-range time is counted. 400 if today's shift is already open (it started by itself, or the caretaker is on a break). |
 | `POST /shift/stop/` | "Finish for now". 400 if nothing is running. The day's shift is closed, but if the caretaker comes back the same day it continues as the same shift. |
 | `GET /hours/` | Active minutes for today, this week, this month, all time, and one card per recent day worked. |
-| `GET/POST /tasks/`, `PATCH/DELETE /tasks/<id>/` | The caretaker's own to-do list. `POST {title (max 200), recurring}`; `PATCH {is_done?, recurring?}`. Recurring tasks reset on each working day (Mon to Fri). |
+| `GET/POST /tasks/`, `PATCH/DELETE /tasks/<id>/` | The caretaker's own to-do list. `POST {title (max 200), recurring}`; `PATCH {is_done?, recurring?}`. Recurring tasks reset on each working day (Mon to Fri). Marking a task done (`is_done: true`) is refused with `403` unless the caretaker's phone is verified within 15 m of an elderly person (same checks as the geofence: fresh, accurate, not mocked). Un-ticking and editing work anywhere. |
 | `POST /audio/tone/` | **Raw audio body** (`Content-Type: audio/wav`, up to 3 MB). Analysed in memory and discarded; only tone totals are kept. Returns `{speech_s, dominant, tones, distress}`. 409 if there is no verified shift running, 413 too large, 400 unreadable, 503 model missing. |
 
 ## Elderly

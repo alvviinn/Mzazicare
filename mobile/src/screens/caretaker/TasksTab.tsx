@@ -53,8 +53,11 @@ export default function TasksTab({ token }: { token: string }) {
     );
     try {
       await updateTask(token, task.id, changes);
-    } catch {
-      load();
+    } catch (e) {
+      load(); // put the tick back the way the server has it
+      if (changes.is_done) {
+        Alert.alert('Not marked as done', e instanceof Error ? e.message : 'Could not update the task.');
+      }
     }
   }
 

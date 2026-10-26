@@ -44,6 +44,7 @@ class TaskApiTests(FamilyTestCase):
         r = self.caretaker_api.post('/api/tasks/', {'title': 'Give tea', 'recurring': True}, format='json')
         self.assertEqual(r.status_code, 201)
         tid = r.data['id']
+        self.put_in_range()
         done = self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json').data
         self.assertTrue(done['is_done'])
         self.assertIsNotNone(done['done_at'])
@@ -51,6 +52,41 @@ class TaskApiTests(FamilyTestCase):
         self.assertIsNone(undone['done_at'])
         self.assertEqual(self.caretaker_api.delete(f'/api/tasks/{tid}/').status_code, 204)
         self.assertEqual(self.caretaker_api.get('/api/tasks/').data, [])
+
+    def _new_task(self):
+        return self.caretaker_api.post('/api/tasks/', {'title': 'Give tea'}, format='json').data['id']
+
+    def test_cannot_mark_done_outside_the_elders_area(self):
+        tid = self._new_task()
+        self.put_in_range(metres=60)
+        r = self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json')
+        self.assertEqual(r.status_code, 403)
+        self.assertIn('60 m', r.data['detail'])
+        self.assertFalse(Task.objects.get(pk=tid).is_done)
+
+    def test_cannot_mark_done_when_location_is_unknown(self):
+        tid = self._new_task()  # nobody has shared a location yet
+        r = self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json')
+        self.assertEqual(r.status_code, 403)
+        self.assertFalse(Task.objects.get(pk=tid).is_done)
+
+    def test_cannot_mark_done_with_a_faked_location(self):
+        from .helpers import place
+
+        tid = self._new_task()
+        place(self.elder, 0)
+        place(self.caretaker, 5, mocked=True)
+        r = self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json')
+        self.assertEqual(r.status_code, 403)
+
+    def test_unticking_and_editing_work_anywhere(self):
+        tid = self._new_task()
+        self.put_in_range()
+        self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json')
+        self.put_in_range(metres=500)
+        r = self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': False, 'recurring': True}, format='json')
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(r.data['is_done'])
 
     def test_validation(self):
         self.assertEqual(self.caretaker_api.post('/api/tasks/', {'title': '  '}, format='json').status_code, 400)
