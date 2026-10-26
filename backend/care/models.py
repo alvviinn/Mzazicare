@@ -105,6 +105,7 @@ class ToneSample(models.Model):
     stressed = models.FloatField(default=0)
     angry = models.FloatField(default=0)
     distress = models.BooleanField(default=False)
+    source = models.CharField(max_length=20, blank=True)  # whose phone heard it: 'caretaker' or 'elderly'
 
     class Meta:
         ordering = ['at']

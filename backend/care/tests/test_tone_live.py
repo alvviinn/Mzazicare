@@ -54,6 +54,7 @@ class LiveToneTests(FamilyTestCase):
         self.assertIn(t['quality'], ('fair', 'needs_attention'))
 
     def test_state_is_live_only_while_in_range_and_hearing_speech(self):
+        self.consent_all()
         s = self.shift_today()
         s.is_demo = False
         s.save()
@@ -76,12 +77,13 @@ class LiveToneTests(FamilyTestCase):
         self.assertEqual(d['today']['usual_tension'], 10)
 
     def test_each_analysed_clip_leaves_a_sample_but_no_audio(self):
+        self.consent_all()
         self.put_in_range()
         self.caretaker_api.get('/api/shift/state/')
         with patch.object(voice_ai, 'get_analyzer', return_value=FakeAnalyzer(distress=True)):
             self.caretaker_api.post('/api/audio/tone/', data=b'RIFFxxxx', content_type='audio/wav')
         sample = ToneSample.objects.get()
-        self.assertEqual((sample.speech_s, sample.angry, sample.distress), (6.0, 0.5, True))
+        self.assertEqual((sample.speech_s, sample.angry, sample.distress, sample.source), (6.0, 0.5, True, 'caretaker'))
         d = self.get().data
         self.assertEqual(d['state'], 'live')
         self.assertEqual(d['today']['raised_voice_clips'], 1)

@@ -6,6 +6,8 @@ import { SharingBanner } from '../components/SharingBanner';
 import { Lang, t } from '../elder/i18n';
 import { SCALES, useElderPrefs } from '../elder/prefs';
 import { fmtTime } from '../format';
+import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
+import { VoiceCard } from '../components/VoiceCard';
 import { useLocationSharing } from '../location/useLocationSharing';
 import { colors, radius, spacing } from '../theme';
 import { ElderHome, Medicine, Mood, Profile } from '../types';
@@ -55,6 +57,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
 
   // This phone is the centre of the 15 m geofence that confirms the caretaker is with you.
   const sharing = useLocationSharing(token);
+  const voice = useVoiceMonitoring(token);
 
   const load = useCallback(async () => {
     try {
@@ -303,6 +306,8 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
             ))}
           </View>
         )}
+
+        <VoiceCard voice={voice} lang={lang} scale={scale} />
 
         {/* ── About ──────────────────────────────── */}
         <Section title={t(lang, 'about')} size={f(19)} />

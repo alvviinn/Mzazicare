@@ -13,6 +13,7 @@ export type Profile = {
   name: string;
   email: string;
   role: Role;
+  voice_consent: boolean; // agreed to voice tone monitoring during visits
   sponsor: { name: string; email: string } | null; // the user who linked this family
   caretakers: Member[];
   elderly: Member[];
@@ -119,6 +120,15 @@ export type Dashboard = {
   medicines: { taken: number; total: number; items: Medicine[] };
 };
 
+// ---- Voice monitoring (caretaker and elderly phones) ----
+
+export type AudioStatus = {
+  record: boolean; // the server says: record a clip now
+  reason: '' | 'no_shift' | 'you_have_not_agreed' | 'other_has_not_agreed' | 'not_a_participant';
+  consent: boolean;
+  chunk_s: number;
+};
+
 // ---- Live tone (family) ----
 
 export type ToneShares = Record<Tone, number>; // percent, adds up to 100
@@ -131,9 +141,15 @@ export type TonePoint = {
   dominant: Tone;
 };
 export type LiveTone = {
-  state: 'live' | 'listening' | 'idle'; // live: speech heard in the last 3 minutes
+  state: 'live' | 'needs_consent' | 'listening' | 'idle'; // live: speech heard in the last 3 minutes
+  waiting_for: string[]; // people who have not yet agreed to voice monitoring
   last_heard: string | null;
-  current: { shares: ToneShares; dominant: Tone; tension: number } | null; // last 5 minutes
+  current: {
+    shares: ToneShares;
+    dominant: Tone;
+    tension: number;
+    by_source: { caretaker?: { dominant: Tone; tension: number }; elderly?: { dominant: Tone; tension: number } };
+  } | null; // last 5 minutes
   series: TonePoint[];
   bucket_minutes: number;
   earlier_days: { date: string; tension: number; positive: number }[];

@@ -93,7 +93,7 @@ scripts\test.ps1
 
 * Secret scan of every tracked file
 * `manage.py check` and a check that no migration is missing
-* 110 backend tests (in-memory SQLite, dummy settings: `--settings=config.settings_test`)
+* 123 backend tests (in-memory SQLite, dummy settings: `--settings=config.settings_test`)
 * 24 ML tests (needs `setup.ps1 -WithML`)
 * `tsc --noEmit` for the mobile app
 

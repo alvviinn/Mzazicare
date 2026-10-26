@@ -38,6 +38,12 @@
           "locationWhenInUsePermission": "MzaziCare uses your location to confirm that the caretaker is with the elderly person during care visits."
         }
       ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "MzaziCare listens to the tone of voice (never the words, and nothing is kept) while your caretaker is with you, if you and they have both agreed."
+        }
+      ],
       "expo-font",
       "expo-status-bar"
     ]

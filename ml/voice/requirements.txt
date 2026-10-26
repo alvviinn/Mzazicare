@@ -6,3 +6,4 @@ soundfile
 scikit-learn
 onnx
 onnxruntime
+av

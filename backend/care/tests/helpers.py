@@ -49,6 +49,12 @@ class FamilyTestCase(TestCase):
         self.caretaker_api = client_for(self.caretaker)
         self.elder_api = client_for(self.elder)
 
+    def consent_all(self):
+        """Both people have agreed to voice tone monitoring."""
+        for u in (self.caretaker, self.elder):
+            u.voice_consent_at = timezone.now()
+            u.save()
+
     def put_in_range(self, metres=5.0):
         """Both phones report now, the caretaker `metres` from the elder."""
         place(self.elder, 0)

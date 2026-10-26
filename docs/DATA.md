@@ -10,12 +10,13 @@ Django migrations (`backend/accounts/migrations`, `backend/care/migrations`). Th
 
 | Table | Holds | Notes |
 |---|---|---|
-| `accounts_user` | everyone: email, name, role (`user` / `caretaker` / `elderly`), `sponsor_id` (the family account that linked them), hashed password | passwords are hashed by Django (PBKDF2), never stored in plain text |
+| `accounts_user` | everyone: email, name, role (`user` / `caretaker` / `elderly`), `sponsor_id` (the family account that linked them), hashed password, and when they agreed to voice tone monitoring (`voice_consent_at`, empty = not agreed) | passwords are hashed by Django (PBKDF2), never stored in plain text |
 | `accounts_invite` | an email a family added before that person registered | removed when the person registers |
 | `care_location` | the **latest** position of each caretaker and elderly phone | one row per user, overwritten; no movement history |
 | `care_shift`, `care_shiftsegment` | visits and the verified in-range time inside them | worked time = sum of segments |
 | `care_task`, `care_chore` | the caretaker's to-do list, and a per-visit record of it | |
 | `care_tonereading` | seconds of speech per tone for a shift, and the percentage | derived numbers only, **no audio** |
+| `care_tonesample` | one row per analysed 10 s clip: time, seconds of speech, the five tone shares, a raised-voice flag, which phone heard it | derived numbers only, **no audio**; feeds the live chart |
 | `care_alert` | flags for the family to confirm or dismiss | emergency, not feeling well, angry voices, fake GPS |
 | `care_message` | chat between a family account and the people it linked | |
 | `care_checkin`, `care_medication`, `care_medicationlog` | the elderly person's mood answers, medicine reminders and "taken" ticks | |
@@ -73,14 +74,16 @@ windowing).
 |---|---|---|
 | Name, email, password | accounts | password hashed; email used only to sign in and to link a family |
 | Phone location (caretaker and elderly) | verify the caretaker is within 15 m of the elderly person | only the latest fix is kept; the caretaker sees a distance, never the elderly person's position; fake-GPS reports are ignored and flagged |
-| Short audio clips (when phone recording is built) | judge the tone of a visit | analysed in memory and dropped: never written to disk or the database; only seconds-per-tone totals are saved; only during a verified shift |
+| Short audio clips (10 s each, from the caretaker's and the elderly person's phones) | judge the tone of a visit | analysed in memory and dropped: never written to disk or the database, and deleted from the phone right after upload; only tone numbers per clip and seconds-per-tone totals are saved; only during a verified shift and only when both people have agreed |
 | Mood answers, medicine reminders and ticks, chat | care and communication | visible only to the family that owns the circle and the person concerned |
 
 ## 6. Access and ethical requirements
 
-* **Consent.** Recording voices in a person's home is sensitive. Before the phone records anything, the elderly person (or their legal
-  representative), the caretaker and the family must each give explicit, informed consent in the app, and be able to withdraw it. This consent flow is **not yet built**,
-  and audio capture stays switched off until it is.
+* **Consent.** Recording voices in a person's home is sensitive. Each of the caretaker and the elderly person agrees on their own phone (a plain explanation, an "I agree" button,
+  and a "Turn off" link at any time; the family account cannot agree for them). Nothing is recorded unless **both** have agreed, and withdrawing stops both phones at once. This is
+  enforced by the server (`care/audio_views.py`), not just by the app. For a real pilot the elderly person's legal representative and written consent are still needed (see Pilot ethics).
+* **Never at home.** The phones ask the server before every clip and the server says yes only while the caretaker is verified within range of the elderly person (an open shift
+  segment). When the caretaker is at their own home, on a break, or the shift is over, the answer is no, the microphone is not opened, and clips that arrive anyway are refused (409).
 * **Kenya Data Protection Act, 2019.** Location and voice can reveal health and behaviour. The design follows data minimisation (latest location only, no stored audio),
   purpose limitation (location is used only to verify visits; audio only for tone), access control by role, and the principle that a person, not the software, decides
   consequences. A data protection impact assessment and registration with the Office of the Data Protection Commissioner are needed before a real pilot.

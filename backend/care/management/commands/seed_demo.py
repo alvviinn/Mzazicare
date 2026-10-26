@@ -105,5 +105,6 @@ class Command(BaseCommand):
                     shift=shift, at=at, speech_s=round(rng.uniform(4, 12), 1),
                     happy=shares[0], calm=shares[1], neutral=shares[2], stressed=shares[3], angry=shares[4],
                     distress=shares[4] > 0.45,
+                    source=rng.choice(['caretaker', 'elderly']),
                 )
             at += timedelta(minutes=rng.randint(8, 14))

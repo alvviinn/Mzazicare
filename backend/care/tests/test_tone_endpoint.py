@@ -44,12 +44,16 @@ class FakeAnalyzer:
 
 
 class ToneEndpointRulesTests(FamilyTestCase):
+    def setUp(self):
+        super().setUp()
+        self.consent_all()
+
     def post(self, api, body=b'RIFFxxxx'):
         return api.post('/api/audio/tone/', data=body, content_type='audio/wav')
 
-    def test_only_caretakers_may_send_audio(self):
-        self.assertEqual(self.post(self.sponsor_api).status_code, 403)
-        self.assertEqual(self.post(self.elder_api).status_code, 403)
+    def test_only_the_two_people_in_the_visit_may_send_audio(self):
+        self.assertEqual(self.post(self.sponsor_api).status_code, 403)  # the family account never records
+        self.assertEqual(self.post(self.elder_api).status_code, 409)  # the elder's phone, but no visit is running
         self.assertEqual(self.post(self.caretaker_api.__class__()).status_code, 401)
 
     def test_audio_is_not_analysed_outside_a_verified_shift(self):
@@ -112,6 +116,10 @@ class _Broken:
 
 @skipUnless(MODEL.exists(), 'trained model not present (ml/voice/artifacts/tone_cnn.onnx)')
 class ToneEndpointWithRealModelTests(FamilyTestCase):
+    def setUp(self):
+        super().setUp()
+        self.consent_all()
+
     def test_real_model_end_to_end_on_a_synthetic_clip(self):
         self.put_in_range()
         self.caretaker_api.get('/api/shift/state/')

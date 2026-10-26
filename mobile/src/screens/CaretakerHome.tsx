@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { getShiftState } from '../api/client';
 import { FamilyCard, HomeShell, SectionTitle } from '../components/HomeShell';
 import { TabBar, TabDef } from '../components/TabBar';
+import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
+import { VoiceCard } from '../components/VoiceCard';
 import { useLocationSharing } from '../location/useLocationSharing';
 import { Profile, ShiftState } from '../types';
 import ChatScreen from './ChatScreen';
@@ -29,6 +31,8 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
 
   // This phone reports its position; the server compares it with the elder's phone.
   const sharing = useLocationSharing(token);
+  // Short voice clips, only during a verified visit and only if both people agreed (the server decides).
+  const voice = useVoiceMonitoring(token);
 
   const load = useCallback(async () => {
     try {
@@ -68,6 +72,7 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
     >
       {tab === 'shift' && (
         <>
+          <VoiceCard voice={voice} />
           <ShiftTab
             token={token}
             state={state}

@@ -34,6 +34,8 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.USER)
     # The family account that linked this caretaker/elderly person (null for family accounts).
     sponsor = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='members')
+    # When this person agreed to their voice tone being analysed during care visits (null = has not agreed).
+    voice_consent_at = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']

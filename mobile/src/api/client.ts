@@ -1,4 +1,5 @@
 import {
+  AudioStatus,
   AuthResult,
   ChatMessage,
   Dashboard,
@@ -92,6 +93,24 @@ export const sendLocation = (
   token: string,
   fix: { latitude: number; longitude: number; accuracy: number | null; mocked: boolean },
 ): Promise<void> => request('/api/location/', { ...post(fix), token });
+
+// ---- Voice monitoring ----
+
+export const getAudioStatus = (token: string): Promise<AudioStatus> => request('/api/audio/status/', { token });
+
+export const setVoiceConsent = (token: string, consent: boolean): Promise<{ consent: boolean }> =>
+  request('/api/audio/consent/', { ...post({ consent }), token });
+
+// One short clip. The server analyses it in memory and keeps only the tone numbers.
+export async function sendAudioClip(token: string, clip: ArrayBuffer): Promise<void> {
+  if (!API_URL) return;
+  const res = await fetch(`${API_URL}/api/audio/tone/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'audio/mp4', Authorization: `Bearer ${token}` },
+    body: clip,
+  });
+  if (res.status === 401) throw new Error(SESSION_EXPIRED);
+}
 
 // ---- Elderly ----
 

@@ -27,7 +27,7 @@ Everyone registers as a normal user. When a family adds an email as a caretaker 
 | Family dashboard, alerts with human confirmation, chat | Done |
 | Elderly home screen, mood check-in, SOS, medicine reminders | Done (added beyond the proposal) |
 | Acoustic tone model (trained, tested, served) | Done: 83.0 % overall, 75.4 % on speech alone |
-| Phone recording of audio for the tone model | Not built: needs a consent flow first |
+| Phone recording for the tone model (both phones, only during a verified visit, only with both people's consent) | Done (foreground only) |
 | Medical triage chatbot (mBERT) | Not started |
 | Behavioural anomaly detection | Not started |
 | Web dashboard for sponsors | Not started (the family uses the mobile app) |
@@ -79,7 +79,7 @@ More detail, including phone networking and firewall rules, is in [`docs/SETUP.m
 scripts\test.ps1
 ```
 
-Runs the secret scan, Django checks, **110 backend tests**, **24 ML tests** and the TypeScript type-check. The backend tests use in-memory
+Runs the secret scan, Django checks, **123 backend tests**, **24 ML tests** and the TypeScript type-check. The backend tests use in-memory
 SQLite with dummy settings, so they need no database and no secrets. (For the ML tests run `scripts\setup.ps1 -WithML` once.)
 
 ## The acoustic tone model
@@ -99,11 +99,11 @@ The trained model (about 1 MB) is already included in `ml/voice/artifacts/`, so 
   `*.env.example` files document every setting.
 * `scripts\check-secrets.ps1` (run by `scripts\test.ps1`) fails if a credential, key or `.env` file is tracked.
 * The app talks only to this project's own backend. There are no third-party API keys.
-* Raw audio is never written to disk or the database: it is analysed in memory and dropped.
+* Raw audio is never written to disk or the database: it is analysed in memory and dropped. The phones delete each clip right after uploading it, record only while the server says a verified visit is running and both the caretaker and the elderly person have agreed, and never at home.
 
 ## Known limitations
 
-* Location sharing works only while the app is open on both phones (background tracking needs a development build).
+* Location sharing and voice capture work only while the app is open on both phones (background tracking and recording need a development build).
 * The tone model was trained on acted English speech; accuracy in real homes, with Kenyan accents or Kiswahili, is untested.
 * Updates reach the screens by polling every 4 to 30 seconds. There are no push notifications yet.
 * The server is a development server. It has not been hardened or deployed.

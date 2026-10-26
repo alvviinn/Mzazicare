@@ -88,6 +88,7 @@ class MeView(APIView):
                 'name': me.name,
                 'email': me.email,
                 'role': me.role,
+                'voice_consent': me.voice_consent_at is not None,
                 'sponsor': {'name': sponsor.name, 'email': sponsor.email} if sponsor and sponsor != me else None,
                 'caretakers': active(Role.CARETAKER) + pending(Role.CARETAKER),
                 'elderly': active(Role.ELDERLY) + pending(Role.ELDERLY),

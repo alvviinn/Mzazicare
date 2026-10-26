@@ -40,10 +40,33 @@ def _hann():
     return np.hanning(N_FFT).astype(np.float32)
 
 
+def _decode_compressed(raw):
+    """Phones record AAC in an .m4a/.3gp container, which soundfile cannot read. PyAV (bundled ffmpeg) can."""
+    import av
+
+    out = []
+    with av.open(io.BytesIO(raw)) as container:
+        resampler = av.AudioResampler(format='flt', layout='mono', rate=SR)
+        for frame in container.decode(audio=0):
+            for piece in resampler.resample(frame):
+                out.append(piece.to_ndarray().reshape(-1))
+        for piece in resampler.resample(None):
+            out.append(piece.to_ndarray().reshape(-1))
+    if not out:
+        raise ValueError('no audio in the clip')
+    return np.concatenate(out).astype(np.float32)
+
+
 def load_audio(src):
     """Read a path or in-memory bytes into 16 kHz mono float32. Nothing is written to disk."""
-    handle = io.BytesIO(src) if isinstance(src, (bytes, bytearray)) else src
-    data, sr = sf.read(handle, dtype='float32', always_2d=True)
+    if isinstance(src, (bytes, bytearray)):
+        raw = bytes(src)
+        try:
+            data, sr = sf.read(io.BytesIO(raw), dtype='float32', always_2d=True)
+        except sf.LibsndfileError:
+            return _decode_compressed(raw)  # not WAV/FLAC/OGG: probably the phone's AAC (m4a / 3gp)
+    else:
+        data, sr = sf.read(src, dtype='float32', always_2d=True)
     y = data.mean(axis=1)
     if sr != SR:
         g = gcd(sr, SR)

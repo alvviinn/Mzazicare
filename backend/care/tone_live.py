@@ -90,26 +90,34 @@ def _earlier_days(sponsor, now, days=7):
 def live_payload(sponsor, now=None):
     now = now or timezone.now()
     caretakers = list(User.objects.filter(sponsor=sponsor, role=Role.CARETAKER))
-    listening, shift_ids = False, []
+    listening, shift_ids, waiting_for = False, [], []
     for c in caretakers:
         shift = presence.evaluate(c, now)  # settle live shifts before reporting them
         if shift and presence.open_segment(shift):
             listening = True
+            waiting_for += [u.name for u in (shift.caretaker, shift.elderly) if u.voice_consent_at is None]
         shift_ids += list(Shift.objects.filter(caretaker=c, start_time__gte=presence.day_start(now)).values_list('pk', flat=True))
 
     samples = list(ToneSample.objects.filter(shift_id__in=shift_ids, at__gte=presence.day_start(now)).order_by('at'))
     last = samples[-1] if samples else None
     live = listening and last is not None and (now - last.at).total_seconds() <= LIVE_S
-    state = 'live' if live else 'listening' if listening else 'idle'
+    state = 'live' if live else 'needs_consent' if waiting_for else 'listening' if listening else 'idle'
 
     recent = [s for s in samples if (now - s.at).total_seconds() <= NOW_WINDOW_MIN * 60]
     current = None
     if recent:
         pct = _shares(recent)
         current = {'shares': pct, 'dominant': max(pct, key=pct.get), 'tension': pct['stressed'] + pct['angry']}
+        current['by_source'] = {}  # what each phone heard: the caretaker's and the elderly person's
+        for who in ('caretaker', 'elderly'):
+            part = [s for s in recent if s.source == who]
+            if part:
+                p = _shares(part)
+                current['by_source'][who] = {'dominant': max(p, key=p.get), 'tension': p['stressed'] + p['angry']}
 
     data = {
         'state': state,
+        'waiting_for': sorted(set(waiting_for)),  # people who have not yet agreed to voice monitoring
         'last_heard': last.at.isoformat() if last else None,
         'current': current,
         'series': series_of(samples),

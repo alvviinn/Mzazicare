@@ -32,13 +32,13 @@ def get_analyzer():
     return _analyzer
 
 
-def add_to_shift(shift, result, at=None):
+def add_to_shift(shift, result, at=None, source=''):
     """Record one analysed clip: a point on the live chart, and part of the shift's running tone totals."""
     secs = result['speech_s']
     if secs <= 0:
         return
     ToneSample.objects.create(
-        shift=shift, at=at or timezone.now(), speech_s=secs, distress=bool(result.get('distress')),
+        shift=shift, at=at or timezone.now(), speech_s=secs, distress=bool(result.get('distress')), source=source,
         **{t: float(result['tones'].get(t, 0)) for t in ('happy', 'calm', 'neutral', 'stressed', 'angry')},
     )
     with transaction.atomic():

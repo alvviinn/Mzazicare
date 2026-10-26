@@ -14,6 +14,7 @@ const REFRESH_MS = 5000; // the chart follows the conversation: new speech shows
 
 const STATE: Record<LiveTone['state'], { text: string; color: string; bg: string }> = {
   live: { text: 'Live', color: colors.success, bg: colors.primarySoft },
+  needs_consent: { text: 'Needs consent', color: colors.warning, bg: colors.warningSoft },
   listening: { text: 'Listening', color: colors.warning, bg: colors.warningSoft },
   idle: { text: 'Not listening', color: colors.textMuted, bg: colors.background },
 };
@@ -78,10 +79,27 @@ export default function ToneTab({ token }: { token: string }) {
             <Text style={[styles.pillText, { color: st.color }]}>{st.text}</Text>
           </View>
         </View>
+        {now && (now.by_source.caretaker || now.by_source.elderly) && (
+          <View style={styles.sources}>
+            {(['caretaker', 'elderly'] as const).map((who) => {
+              const s = now.by_source[who];
+              return s ? (
+                <View key={who} style={styles.source}>
+                  <Icon name={TONE_ICON[s.dominant]} size={22} color={toneColors[s.dominant]} />
+                  <Text style={styles.sourceText}>
+                    {who === 'caretaker' ? 'Caretaker' : 'Elderly'}: {s.dominant}
+                  </Text>
+                </View>
+              ) : null;
+            })}
+          </View>
+        )}
         <Text style={styles.hint}>
-          {data.state === 'idle'
-            ? 'The voice tone is only listened to while the caretaker is with your loved one. Recordings are never kept, only the tone.'
-            : 'Updates every few seconds while they talk. Only the tone is kept, never the recording.'}
+          {data.state === 'needs_consent'
+            ? `Waiting for ${data.waiting_for.join(' and ')} to agree to voice monitoring on their phone. Nothing is listened to until both have agreed.`
+            : data.state === 'idle'
+              ? 'The voice tone is only listened to while the caretaker is with your loved one, never at home. Recordings are never kept, only the tone.'
+              : 'Both phones listen only during the visit, and only the tone is kept, never the recording.'}
         </Text>
       </Card>
 
@@ -171,6 +189,9 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center' },
   title: { fontSize: 18, fontWeight: '700', color: colors.text, textTransform: 'capitalize' },
   small: { color: colors.textMuted, fontSize: 12, marginTop: 2 },
+  sources: { flexDirection: 'row', gap: spacing.md, marginTop: spacing.md },
+  source: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  sourceText: { fontSize: 13, color: colors.text, textTransform: 'capitalize' },
   hint: { color: colors.textMuted, fontSize: 12, marginTop: spacing.md },
   label: { fontSize: 14, fontWeight: '600', color: colors.text, marginTop: spacing.lg, marginBottom: spacing.sm },
   pill: { borderRadius: radius.md, paddingHorizontal: 10, paddingVertical: 4 },
