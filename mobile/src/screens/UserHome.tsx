@@ -9,9 +9,10 @@ import ChatsTab from './user/ChatsTab';
 import Overview from './user/Overview';
 import PeopleTab from './user/PeopleTab';
 import ShiftsTab from './user/ShiftsTab';
+import ToneTab from './user/ToneTab';
 
 type Props = { token: string; profile: Profile; onChanged: () => Promise<void>; onSignOut: () => void };
-type Tab = 'overview' | 'shifts' | 'chats' | 'people';
+type Tab = 'overview' | 'shifts' | 'tone' | 'chats' | 'people';
 
 export default function UserHome({ token, profile, onChanged, onSignOut }: Props) {
   const [tab, setTab] = useState<Tab>('overview');
@@ -55,6 +56,7 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
   const tabs: TabDef<Tab>[] = [
     { key: 'overview', label: 'Overview', icon: 'home-variant-outline' },
     { key: 'shifts', label: 'Shifts', icon: 'calendar-clock' },
+    { key: 'tone', label: 'Tone', icon: 'waveform' },
     { key: 'chats', label: 'Chats', icon: 'message-text-outline', badge: unread },
     { key: 'people', label: 'People', icon: 'account-group-outline' },
   ];
@@ -79,6 +81,7 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
         />
       )}
       {tab === 'shifts' && <ShiftsTab token={token} onOpenShift={setShiftId} />}
+      {tab === 'tone' && <ToneTab token={token} />}
       {tab === 'chats' && <ChatsTab dash={dash} onOpen={setChatPeer} onGoPeople={() => setTab('people')} />}
       {tab === 'people' && (
         <PeopleTab token={token} profile={profile} dash={dash} onChanged={onChanged} onMedicinesChanged={load} />

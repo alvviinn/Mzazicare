@@ -146,7 +146,7 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
         )}
       </Card>
 
-      <SectionTitle>Service quality (voice tone)</SectionTitle>
+      <SectionTitle>Service quality (voice tone, this week)</SectionTitle>
       <ToneCard tones={dash.tones} />
 
       <SectionTitle>Recent shifts</SectionTitle>
@@ -291,11 +291,11 @@ const QUALITY: Record<string, { text: string; color: string; bg: string }> = {
   needs_attention: { text: 'Needs attention', color: colors.danger, bg: colors.dangerSoft },
 };
 
-export function ToneCard({ tones }: { tones: Dashboard['tones'] }) {
+export function ToneCard({ tones, period = 'this week' }: { tones: Dashboard['tones']; period?: string }) {
   if (!tones.items.length || !tones.dominant) {
     return (
       <Card>
-        <Text style={styles.muted}>Tone results appear after a caretaker's first shift with voice monitoring.</Text>
+        <Text style={styles.muted}>Tone results appear once your caretaker and your loved one have been heard talking during a shift.</Text>
       </Card>
     );
   }
@@ -307,7 +307,7 @@ export function ToneCard({ tones }: { tones: Dashboard['tones'] }) {
         <Icon name={TONE_ICON[top.tone]} size={46} color={toneColors[top.tone]} />
         <View style={{ flex: 1, marginLeft: spacing.md }}>
           <Text style={styles.cardTitle}>Mostly {top.label.toLowerCase()}</Text>
-          <Text style={styles.small}>Dominant tone this week · {top.percent}%</Text>
+          <Text style={styles.small}>Dominant tone {period} · {top.percent}%</Text>
         </View>
         {q && (
           <View style={[styles.pill, { backgroundColor: q.bg }]}>

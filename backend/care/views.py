@@ -13,6 +13,7 @@ from .elder_views import medicines_json, mood_today
 from .models import MOOD_EMOJI, POSITIVE_TONES, TONE_EMOJI, Alert, Message, Mood, Shift, Tone, ToneReading
 from .shift_views import shift_card, shift_status
 from .tasks import visible_tasks
+from .tone_live import quality_of
 
 
 def require_family(user):
@@ -47,7 +48,7 @@ def tone_summary(shifts):
     # Rated on how much speech sounds stressed or angry. Everyday conversation is mostly neutral, so
     # "not enough happy" must not count against the caretaker.
     negative = percents['stressed'] + percents['angry']
-    quality = 'good' if negative <= 15 else 'fair' if negative <= 30 else 'needs_attention'
+    quality = quality_of(negative)
     return {'items': items, 'dominant': dominant, 'quality': quality, 'positive_percent': positive,
             'negative_percent': negative}
 

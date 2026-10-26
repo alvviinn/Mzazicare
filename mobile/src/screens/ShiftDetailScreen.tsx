@@ -3,6 +3,7 @@ import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'r
 import { getShift } from '../api/client';
 import { Icon, IconName } from '../components/Icon';
 import { STATUS_LABEL } from '../components/ShiftRow';
+import { ToneChart } from '../components/ToneChart';
 import { Card } from '../components/ui';
 import { fmtDuration, fmtShiftDayLong, fmtTime } from '../format';
 import { colors, radius, spacing } from '../theme';
@@ -197,7 +198,12 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
             {shift.tones && (
               <>
                 <Text style={styles.section}>Voice tone during this visit</Text>
-                <ToneCard tones={shift.tones} />
+                {!!shift.tone_timeline?.length && (
+                  <Card>
+                    <ToneChart points={shift.tone_timeline} bucketMinutes={15} />
+                  </Card>
+                )}
+                <ToneCard tones={shift.tones} period="this visit" />
               </>
             )}
           </>

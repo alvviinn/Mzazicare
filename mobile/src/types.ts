@@ -62,6 +62,7 @@ export type ShiftDetail = ShiftSummary & {
   breaks_list: { start: string; end: string | null; minutes: number }[];
   chores: { description: string; is_done: boolean; done_at: string | null }[];
   tones?: Dashboard['tones']; // family only
+  tone_timeline?: TonePoint[]; // family only
 };
 
 export type AlertItem = {
@@ -116,6 +117,35 @@ export type Dashboard = {
   alerts: AlertItem[];
   wellbeing: { name: string; mood: Mood | null; emoji: string | null; label: string | null; at: string | null }[];
   medicines: { taken: number; total: number; items: Medicine[] };
+};
+
+// ---- Live tone (family) ----
+
+export type ToneShares = Record<Tone, number>; // percent, adds up to 100
+export type TonePoint = {
+  start: string; // the start of the time bucket
+  speech_s: number;
+  shares: ToneShares;
+  tension: number; // stressed + angry, percent
+  positive: number; // happy + calm, percent
+  dominant: Tone;
+};
+export type LiveTone = {
+  state: 'live' | 'listening' | 'idle'; // live: speech heard in the last 3 minutes
+  last_heard: string | null;
+  current: { shares: ToneShares; dominant: Tone; tension: number } | null; // last 5 minutes
+  series: TonePoint[];
+  bucket_minutes: number;
+  earlier_days: { date: string; tension: number; positive: number }[];
+  today: (Dashboard['tones'] & {
+    speech_minutes: number;
+    clips: number;
+    calmest: { start: string; tension: number };
+    tensest: { start: string; tension: number };
+    usual_tension: number | null;
+    raised_voice_clips: number;
+    vocal_alerts: number;
+  }) | null;
 };
 
 // ---- Caretaker ----

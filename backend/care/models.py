@@ -90,6 +90,26 @@ class ToneReading(models.Model):
         unique_together = ('shift', 'tone')
 
 
+class ToneSample(models.Model):
+    """One analysed clip: how the voices sounded at a moment of the shift. Numbers only, never audio.
+
+    Feeds the live tone chart. `ToneReading` keeps the shift's running totals.
+    """
+
+    shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='samples')
+    at = models.DateTimeField(db_index=True)
+    speech_s = models.FloatField()  # seconds of speech in the clip
+    happy = models.FloatField(default=0)  # shares of the five tones, adding up to 1
+    calm = models.FloatField(default=0)
+    neutral = models.FloatField(default=0)
+    stressed = models.FloatField(default=0)
+    angry = models.FloatField(default=0)
+    distress = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['at']
+
+
 class Alert(models.Model):
     """A flag for the family to confirm or dismiss (human in the loop)."""
 

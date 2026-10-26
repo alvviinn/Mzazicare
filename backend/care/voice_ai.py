@@ -9,8 +9,9 @@ from pathlib import Path
 
 from django.conf import settings
 from django.db import transaction
+from django.utils import timezone
 
-from .models import ToneReading
+from .models import ToneReading, ToneSample
 
 _lock = threading.Lock()
 _analyzer = None
@@ -31,11 +32,15 @@ def get_analyzer():
     return _analyzer
 
 
-def add_to_shift(shift, result):
-    """Fold one analysed clip into the shift's running tone totals (seconds-weighted)."""
+def add_to_shift(shift, result, at=None):
+    """Record one analysed clip: a point on the live chart, and part of the shift's running tone totals."""
     secs = result['speech_s']
     if secs <= 0:
         return
+    ToneSample.objects.create(
+        shift=shift, at=at or timezone.now(), speech_s=secs, distress=bool(result.get('distress')),
+        **{t: float(result['tones'].get(t, 0)) for t in ('happy', 'calm', 'neutral', 'stressed', 'angry')},
+    )
     with transaction.atomic():
         rows = {r.tone: r for r in ToneReading.objects.select_for_update().filter(shift=shift)}
         for tone, share in result['tones'].items():

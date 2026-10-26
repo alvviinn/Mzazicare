@@ -79,7 +79,7 @@ More detail, including phone networking and firewall rules, is in [`docs/SETUP.m
 scripts\test.ps1
 ```
 
-Runs the secret scan, Django checks, **103 backend tests**, **24 ML tests** and the TypeScript type-check. The backend tests use in-memory
+Runs the secret scan, Django checks, **110 backend tests**, **24 ML tests** and the TypeScript type-check. The backend tests use in-memory
 SQLite with dummy settings, so they need no database and no secrets. (For the ML tests run `scripts\setup.ps1 -WithML` once.)
 
 ## The acoustic tone model

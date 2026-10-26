@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import caretaker_views, elder_views, shift_views, views
+from . import caretaker_views, elder_views, shift_views, tone_live, views
 
 urlpatterns = [
     # family
@@ -25,6 +25,7 @@ urlpatterns = [
     path('shift/start/', caretaker_views.ShiftStartView.as_view()),
     path('shift/stop/', caretaker_views.ShiftStopView.as_view()),
     path('audio/tone/', caretaker_views.ToneView.as_view()),
+    path('tone/live/', tone_live.LiveToneView.as_view()),
     path('hours/', caretaker_views.HoursView.as_view()),
     path('tasks/', caretaker_views.TaskListView.as_view()),
     path('tasks/<int:pk>/', caretaker_views.TaskDetailView.as_view()),

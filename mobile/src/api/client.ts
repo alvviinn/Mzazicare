@@ -4,6 +4,7 @@ import {
   Dashboard,
   ElderHome,
   Hours,
+  LiveTone,
   Mood,
   Profile,
   ShiftDetail,
@@ -82,6 +83,8 @@ export const getShifts = (token: string, days = 30): Promise<ShiftSummary[]> =>
   request(`/api/shifts/?days=${days}`, { token });
 
 export const getShift = (token: string, id: number): Promise<ShiftDetail> => request(`/api/shifts/${id}/`, { token });
+
+export const getLiveTone = (token: string): Promise<LiveTone> => request('/api/tone/live/', { token });
 
 // ---- Phones (caretaker and elderly) ----
 

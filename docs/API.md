@@ -35,7 +35,8 @@ time counts as hours.
 | Method and path | Who | Purpose |
 |---|---|---|
 | `GET /shifts/?days=30` | caretaker (own days), family (its caretakers' days) | One card per day, newest first (up to 90 days): date, first arrival, last time out, end, active minutes, number of breaks and break minutes, status, chores done. Elderly accounts get 403. |
-| `GET /shifts/<id>/` | caretaker (own), family (own circle) | The detail of one day: `timeline` (arrived, stepped out, came back after N minutes, left), `segments` (active periods), `breaks_list`, `chores`, and for the **family only** the day's `tones`. Anyone else gets 404. |
+| `GET /shifts/<id>/` | caretaker (own), family (own circle) | The detail of one day: `timeline` (arrived, stepped out, came back after N minutes, left), `segments` (active periods), `breaks_list`, `chores`, and for the **family only** the day's `tones` and `tone_timeline` (the tone chart for that visit). Anyone else gets 404. |
+| `GET /tone/live/` | family | The live tone view for today, polled every ~5 s: `state` (`live` = speech heard in the last 3 minutes, `listening` = caretaker in range, `idle`), `last_heard`, `current` (last 5 minutes), `series` (15-minute buckets with tone shares, `tension` = stressed + angry, `positive`, `dominant`), `today` (tone mix, quality, speech minutes, calmest and most tense time, comparison with the usual level, raised-voice clips and vocal alerts) and `earlier_days` (daily tension for the previous week). Caretaker and elderly get 403. |
 
 ## Caretaker
 
@@ -47,7 +48,7 @@ time counts as hours.
 | `POST /shift/stop/` | "Finish for now". 400 if nothing is running. The day's shift is closed, but if the caretaker comes back the same day it continues as the same shift. |
 | `GET /hours/` | Active minutes for today, this week, this month, all time, and one card per recent day worked. |
 | `GET/POST /tasks/`, `PATCH/DELETE /tasks/<id>/` | The caretaker's own to-do list. `POST {title (max 200), recurring}`; `PATCH {is_done?, recurring?}`. Recurring tasks reset on each working day (Mon to Fri). Marking a task done (`is_done: true`) is refused with `403` unless the caretaker's phone is verified within 15 m of an elderly person (same checks as the geofence: fresh, accurate, not mocked). Un-ticking and editing work anywhere. |
-| `POST /audio/tone/` | **Raw audio body** (`Content-Type: audio/wav`, up to 3 MB). Analysed in memory and discarded; only tone totals are kept. Returns `{speech_s, dominant, tones, distress}`. 409 if there is no verified shift running, 413 too large, 400 unreadable, 503 model missing. |
+| `POST /audio/tone/` | **Raw audio body** (`Content-Type: audio/wav`, up to 3 MB). Analysed in memory and discarded; only tone totals are kept. Each clip also leaves one `ToneSample` (time, speech seconds, the five tone shares; no audio) that feeds the live chart. Returns `{speech_s, dominant, tones, distress}`. 409 if there is no verified shift running, 413 too large, 400 unreadable, 503 model missing. |
 
 ## Elderly
 

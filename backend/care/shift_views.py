@@ -98,7 +98,10 @@ def shift_detail(shift, now, with_tone):
     if with_tone:  # the tone of the visit is for the family, not shown on the caretaker's own screen
         from .views import tone_summary  # imported here: views imports this module
 
+        from .tone_live import series_of
+
         data['tones'] = tone_summary([shift])
+        data['tone_timeline'] = series_of(list(shift.samples.all()))
     return data
 
 

@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from accounts.models import Role, User
-from care.models import Alert, Chore, Shift, ShiftSegment, Task, ToneReading
+from care.models import Alert, Chore, Shift, ShiftSegment, Task, ToneReading, ToneSample
 
 CHORES = ['Morning medication', 'Breakfast', 'Bathing assistance', 'Light housekeeping', 'Lunch', 'Afternoon walk']
 # (happy, calm, neutral, stressed, angry) weights; mostly positive so the sample looks realistic.
@@ -75,6 +75,7 @@ class Command(BaseCommand):
             profile = rng.choice(TONE_PROFILES)
             for tone, pct in zip(('happy', 'calm', 'neutral', 'stressed', 'angry'), profile):
                 ToneReading.objects.create(shift=shift, tone=tone, percent=pct)
+            self.add_samples(rng, shift, profile, start, end or now)
             last_shift = shift
 
         Alert.objects.create(
@@ -86,3 +87,23 @@ class Command(BaseCommand):
             message='A visit was shorter than usual (2h 10m).',
         )
         self.stdout.write(self.style.SUCCESS('Sample data created. Remove it any time by re-running or via the admin.'))
+
+    @staticmethod
+    def add_samples(rng, shift, profile, start, end):
+        """A clip about every 10 minutes (when anyone is talking) whose tone drifts around the shift's profile."""
+        weights = list(profile)
+        at = start + timedelta(minutes=5)
+        while at < end:
+            if rng.random() < 0.8:
+                drift = [max(0.5, w * rng.uniform(0.4, 1.8)) for w in weights]
+                if rng.random() < 0.12:  # a tense moment
+                    drift[3] *= 4
+                    drift[4] *= 3
+                total = sum(drift)
+                shares = [d / total for d in drift]
+                ToneSample.objects.create(
+                    shift=shift, at=at, speech_s=round(rng.uniform(4, 12), 1),
+                    happy=shares[0], calm=shares[1], neutral=shares[2], stressed=shares[3], angry=shares[4],
+                    distress=shares[4] > 0.45,
+                )
+            at += timedelta(minutes=rng.randint(8, 14))
