@@ -128,7 +128,7 @@ file loaded through ONNX Runtime, so it can later move to its own service withou
 
 | Layer | Choice | Why |
 |---|---|---|
-| Mobile | React Native + Expo, TypeScript | one codebase for Android and iOS; Expo Go for phone testing; TypeScript catches mistakes early; matches the planned web dashboard |
+| Mobile | React Native + Expo, TypeScript | one codebase for Android and iOS; Expo Go for phone testing; TypeScript catches mistakes early; matches the web dashboard |
 | API | Django + Django REST Framework | mature, secure defaults (password hashing, ORM, migrations); fast to build role-based APIs |
 | Auth | SimpleJWT | stateless, backend-issued tokens as required by NFR-01; 90-day lifetime for "stay signed in" |
 | Database | PostgreSQL | reliable relational store; PostGIS is installed for future spatial queries |
@@ -392,7 +392,7 @@ Not yet done: formal performance benchmark (NFR-02), usability testing with real
 ## 4.4 Implementation status against the proposal
 
 See [proposal-corrections.md](proposal-corrections.md) for the full list. In short: authentication and roles, the geofence, the dashboard, the elderly app and the tone model are built;
-the chatbot, the behavioural anomaly model, the web dashboard, phone audio capture, push notifications and offline sync are not.
+the web dashboard for the family, phone audio capture (with consent) and the live tone view are built too; the chatbot, the behavioural anomaly model, push notifications and offline sync are not.
 
 ## 4.5 Limitations and future work
 
@@ -400,4 +400,4 @@ the chatbot, the behavioural anomaly model, the web dashboard, phone audio captu
 2. Triage chatbot (mBERT) and Kiswahili/English code-switching.
 3. Background location (development build) and push notifications.
 4. Tune the tone model on consented real recordings; review the Kiswahili text with a native speaker.
-5. Behavioural anomaly detection; Celery task queue; web dashboard for sponsors; deployment, hardening and a data protection impact assessment.
+5. Behavioural anomaly detection; Celery task queue; deployment, hardening and a data protection impact assessment.

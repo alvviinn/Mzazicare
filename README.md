@@ -30,7 +30,7 @@ Everyone registers as a normal user. When a family adds an email as a caretaker 
 | Phone recording for the tone model (both phones, only during a verified visit, only with both people's consent) | Done (foreground only) |
 | Medical triage chatbot (mBERT) | Not started |
 | Behavioural anomaly detection | Not started |
-| Web dashboard for sponsors | Not started (the family uses the mobile app) |
+| Web dashboard for the family (Next.js): overview, alerts, shifts and timelines, live tone chart, chats, people and medicines | Done |
 
 Details, decisions and the differences from the original proposal are in [`docs/`](docs/).
 
@@ -38,6 +38,7 @@ Details, decisions and the differences from the original proposal are in [`docs/
 
 ```
 mobile/    React Native (Expo) app in TypeScript: login, register and the three role-based home screens
+web/       Family web dashboard (Next.js + TypeScript): the same API, for a browser on a PC
 backend/   Django + Django REST Framework API, PostgreSQL, JWT authentication, geofence engine
 ml/voice/  Acoustic tone model: data download, features, training, evaluation, inference, tests
 scripts/   PowerShell automation: setup, database, run, data, tests, secret scan
@@ -58,6 +59,7 @@ scripts\setup.ps1            # tools check, Python virtual environment, backend 
 scripts\create-db.ps1        # once: creates the database and role, writes backend\.env, runs migrations
 scripts\run-backend.ps1      # API on http://0.0.0.0:8000   (leave this window open)
 scripts\run-mobile.ps1       # Expo dev server: scan the QR code with Expo Go (same Wi-Fi as the PC)
+scripts\run-web.ps1          # optional: the family web dashboard on http://localhost:3000 (sign in with a family account)
 ```
 
 `create-db.ps1` asks for the PostgreSQL admin password once. It is typed without echo and never stored; the app gets its own

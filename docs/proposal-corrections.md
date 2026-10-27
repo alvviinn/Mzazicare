@@ -11,7 +11,7 @@ outstanding. It is the bridge between the proposal chapters and [Chapter 4](chap
 | FR-01: sponsors have a "read-only monitoring dashboard", yet they manage patients, assign caretakers and validate alerts | Family accounts can **write** their care circle, medicine reminders, chat and alert decisions, and read all monitoring data |
 | The ERD shows a task linked to at most one anomaly, but alerts also come from GPS and audio at shift level | An `ALERT` table replaces `AnomalyLog`; the shift link is optional and many alerts may exist per shift |
 | The ERD has no table for the GPS trail, chat logs or user accounts, although the dashboard needs them | Added: `USER` (with role), `LOCATION`, `SHIFTSEGMENT`, `MESSAGE`, `INVITE`, plus the tables for new features |
-| The dashboard is "React.js and Next.js" | Not yet built; the family currently uses the mobile app. Next.js remains the choice for the web dashboard |
+| The dashboard is "React.js and Next.js" | Built as proposed: a Next.js (App Router, TypeScript) dashboard in `web/` for family accounts, using the same API as the app. The family can also keep using the mobile app |
 | "Implementation Environment / Hardware" section unfinished | Documented in [SETUP.md](SETUP.md): Intel i7-8650U, 15 GB RAM, no GPU |
 
 ## 2. Design changes made during implementation
@@ -42,7 +42,7 @@ the caretaker's own to-do list with daily-repeating tasks; verified hours; manua
 | **Behavioural anomaly detection** (unsupervised, visit-pattern baseline) | Not started. Visit and hours data now exist to build it |
 | Phone recording for the tone model | Consent flow and an Android audio-format decision first |
 | Offline resilience and sync | Not started; the app shows a clear error when the server cannot be reached |
-| Web dashboard (Next.js) | Not started |
+| Web dashboard (Next.js) | Done (family accounts only; caretakers and elderly use the phone app) |
 | NFR-02 performance measured | Not benchmarked |
 
 ## 5. Targets and results

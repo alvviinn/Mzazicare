@@ -58,9 +58,21 @@ cd backend
 ```powershell
 scripts\run-backend.ps1      # window 1: API on port 8000
 scripts\run-mobile.ps1       # window 2: Expo; writes mobile\.env.local with this PC's Wi-Fi address if missing
+scripts\run-web.ps1          # optional window 3: the family web dashboard on http://localhost:3000
 ```
 
 Scan the QR code with Expo Go (Android) or the Camera app (iPhone). The phone must be on the same Wi-Fi as the PC.
+
+### The family web dashboard (optional)
+
+`scripts
+un-web.ps1` starts the Next.js dashboard on <http://localhost:3000>. Sign in with a **family** account (the account you registered in the app);
+caretaker and elderly accounts are told to use the phone app. The first run installs the packages, which takes a few minutes. The backend must be running.
+
+Because OneDrive locks files while npm installs thousands of them, the script runs the dashboard from a copy in `%LOCALAPPDATA%\mzazicare-web` and copies `web\` over it on every start
+(edit `web\`, then restart the script). If the project is outside OneDrive, use `scripts
+un-web.ps1 -InPlace` for hot reload. To point it at another backend: `scripts
+un-web.ps1 -Api http://192.168.1.20:8000`.
 
 ### Making the phone able to reach the backend (Windows)
 
@@ -112,6 +124,7 @@ See [DATA.md](DATA.md) for what is downloaded and why, and [`ml/voice/README.md`
 | Symptom | Cause and fix |
 |---|---|
 | "Unable to resolve module ./index.ts" | OneDrive turned files into placeholders. Move the project out of OneDrive and run `npm install` again. |
+| `npm install` in `web\` fails with ENOTEMPTY / rmdir errors | OneDrive is syncing the folder. Use `scripts\run-web.ps1` (installs outside OneDrive) or move the project out of OneDrive. |
 | App cannot reach the server | Wi-Fi profile is Public, firewall rule missing, PC's address changed (edit `mobile\.env.local`, run `scripts\run-mobile.ps1 -Clear`), or the phone is on mobile data. |
 | `create-db.ps1` says psql was not found | Install PostgreSQL, or add its `bin` folder to PATH. |
 | Backend stops when the laptop sleeps | Keep it plugged in and set sleep to Never while testing. |

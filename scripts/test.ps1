@@ -38,6 +38,14 @@ if (Test-Path (Join-Path $Root 'mobile\node_modules')) {
     try { Check 'Mobile: TypeScript type-check' { & npx tsc --noEmit } } finally { Pop-Location }
 } else { Warn 'mobile\node_modules missing: skipping the type-check.' }
 
+# The web dashboard is checked where run-web.ps1 installs it (outside OneDrive), refreshed from web\ first.
+$webWork = Join-Path $LocalData 'mzazicare-web'
+if (Test-Path (Join-Path $webWork 'node_modules\.bin\tsc.cmd')) {
+    & robocopy (Join-Path $Root 'web') $webWork /E /XD node_modules .next /XF .env.local /NFL /NDL /NJH /NJS /NP | Out-Null
+    Push-Location $webWork
+    try { Check 'Web: TypeScript type-check' { & npx tsc --noEmit } } finally { Pop-Location }
+} else { Warn 'Web dashboard packages not installed (run scripts\run-web.ps1 once): skipping its type-check.' }
+
 Write-Host ''
 if ($failed.Count -gt 0) { Write-Host ("FAILED: " + ($failed -join '; ')) -ForegroundColor Red; exit 1 }
 Write-Host 'All checks passed.' -ForegroundColor Green

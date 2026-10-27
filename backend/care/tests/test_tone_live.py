@@ -1,12 +1,13 @@
 """GET /api/tone/live/ : the family's real-time tone chart, built from per-clip samples."""
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from unittest.mock import patch
 
 from django.utils import timezone
 
 from care import presence, voice_ai
 from care.models import Alert, Shift, ToneReading, ToneSample
+from care.tone_live import live_payload
 
 from .helpers import FamilyTestCase
 from .test_tone_endpoint import FakeAnalyzer
@@ -36,11 +37,17 @@ class LiveToneTests(FamilyTestCase):
         self.assertEqual((d['state'], d['series'], d['today'], d['current']), ('idle', [], None, None))
 
     def test_chart_points_current_tone_and_day_stats(self):
-        s = self.shift_today()
-        self.sample(s, 100, calm=0.8, neutral=0.2)
-        self.sample(s, 60, neutral=0.5, stressed=0.5)
-        self.sample(s, 2, angry=0.9, stressed=0.1, neutral=0)
-        d = self.get().data
+        noon = timezone.make_aware(datetime(2026, 10, 20, 12, 0))  # a fixed time of day, so it also passes just after midnight
+        s = Shift.objects.create(caretaker=self.caretaker, elderly=self.elder, start_time=noon - timedelta(hours=3), is_demo=True)
+
+        def at(minutes_ago, **tones):
+            shares = {'happy': 0, 'calm': 0, 'neutral': 0, 'stressed': 0, 'angry': 0, **tones}
+            ToneSample.objects.create(shift=s, at=noon - timedelta(minutes=minutes_ago), speech_s=10, **shares)
+
+        at(100, calm=0.8, neutral=0.2)
+        at(60, neutral=0.5, stressed=0.5)
+        at(2, angry=0.9, stressed=0.1)
+        d = live_payload(self.sponsor, noon)
         self.assertGreaterEqual(len(d['series']), 2)
         for p in d['series']:
             self.assertEqual(sum(p['shares'].values()), 100)
