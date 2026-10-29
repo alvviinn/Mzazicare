@@ -56,39 +56,64 @@ speech is normal and does not count against anyone.
 
 ## Model comparison and choice
 
-Three further models were trained on exactly the same features and speaker-independent split, tuned on the validation
-speakers only, and scored once on the same 2,048 test windows (`python -m voice.compare`, full table in
-[`artifacts/comparison.md`](artifacts/comparison.md)).
+Three further models were compared with the deployed CNN on the same speaker-independent split and scored once on the
+same 2,048 test windows (`python -m voice.compare`, full table in [`artifacts/comparison.md`](artifacts/comparison.md)).
+To keep the comparison fair, each model was given the conditions that suit it best, under the same rules:
 
-| | CNN (deployed) | BiLSTM + attention | SVM (RBF) | Random forest |
+* **Input that suits the model.** The CNN and BiLSTM read the MFCC frames directly. The SVM and forest cannot read a
+  sequence, so they get the standard classical speech-emotion input: 1,680 *functionals*. These describe the 40 MFCCs and
+  their first and second deltas (how fast and how sharply each one changes) with mean, spread, percentiles, trend, skew and
+  kurtosis, plus separate statistics for the start, middle and end of the window. This lets them see how the voice changes
+  over time.
+* **Settings search on the validation speakers only.**
+  * SVM: PCA size {128, 256} x C {1, 4, 16}.
+  * Forest: features per split {sqrt, 5 %} x leaf size {1, 3}, 500 trees.
+  * BiLSTM: given the same training budget as the CNN (30 epochs, early stop after 7 without gain).
+* **The same calibration** (temperature fitted on validation) for all four.
+* **Each model gets its own anger-alert rule,** chosen on validation as the threshold and window count that catch the
+  most anger with at most 1 % false alarms on calm recordings.
+* **Time per window includes feature extraction,** which the server would have to do.
+
+| | CNN (deployed) | BiLSTM + attention | Random forest | SVM (RBF) |
 |---|---|---|---|---|
-| Input | MFCC image (40 x 149) | MFCC sequence (74 steps) | 240 MFCC statistics | 240 MFCC statistics |
-| Speech-only accuracy (5 tones) | **75.4 %** | 67.6 % | 66.9 % | 65.6 % |
-| Speech-only macro-F1 | **0.706** | 0.631 | 0.577 | 0.597 |
-| Overall accuracy (with noise) | **83.0 %** | 75.8 % | 76.5 % | 75.0 % |
-| Accuracy on RAVDESS / CREMA-D speakers | **65.9 / 70.2 %** | 51.7 / 62.0 % | 45.5 / 62.4 % | 39.2 / 60.9 % |
-| Anger alert: false alarms / mild caught / heated caught | 0.4 / 44.6 / 94.7 % | 0.7 / 47.0 / 95.2 % | 0.6 / 31.4 / 83.5 % | 0.0 / 1.1 / 9.3 % |
-| Calibration error (ECE) | **0.017** | 0.050 | 0.028 | 0.169 |
-| Time per 3 s window (CPU) | **1.2 ms** | 2.4 ms | 6.1 ms | 94 ms |
-| File size | **0.5 MB** | 0.6 MB | 10.6 MB | 53.5 MB |
+| Input | MFCC frames (40 x 149) | MFCC frames (40 x 149) | 1,680 functionals | 1,680 functionals |
+| Speech-only accuracy (5 tones) | **75.4 %** | 68.6 % | 64.3 % | 63.7 % |
+| Speech-only macro-F1 | **0.706** | 0.614 | 0.563 | 0.559 |
+| Overall accuracy (with noise) | **83.0 %** | 75.9 % | 73.6 % | 74.2 % |
+| Accuracy on RAVDESS / CREMA-D speakers | **65.9 / 70.2 %** | 51.1 / 63.3 % | 36.4 / 59.0 % | 36.9 / 59.6 % |
+| Own alert rule | p >= 0.8, 2 windows | p >= 0.8, 2 windows | p >= 0.6, 3 windows | p >= 0.6, 3 windows |
+| Alert: false alarms / mild caught / heated caught | 1.1 / **72.5** / **97.1 %** | 0.8 / 53.9 / 91.7 % | 1.8 / 42.4 / 89.8 % | 0.4 / 23.1 / 69.6 % |
+| Calibration error (ECE) | **0.017** | 0.059 | 0.042 | 0.031 |
+| Time per 3 s window (CPU, incl. features) | **1.4 ms** | 2.0 ms | 147 ms | 12.7 ms |
+| File size | **0.5 MB** | 0.6 MB | 50.2 MB | 7.4 MB |
 
-**Chosen for the product: the CNN (unchanged).** It is the most accurate on every tone and on both acted datasets,
-its probabilities are the most honest (which the precision-first anger alert relies on), and it is the smallest and
-fastest. Ranking and role of the others:
+**Chosen for the product: the CNN (unchanged).** Under fair conditions it still has the highest score on every tone and
+both acted datasets. It gives the most honest probabilities and catches the most anger with its own alert rule. It is
+also the smallest and fastest.
 
-1. **CNN**: deployed model.
-2. **BiLSTM + attention**: the runner-up and the reserve model. It takes the same input and ONNX interface, so it can be
-   swapped in with no backend change, and its anger alert behaves almost the same (catches slightly more, false-alarms
-   slightly more). It is 8 points behind on speech and worse calibrated, so it does not replace the CNN. Worth retrying
-   when real recordings exist, or as a second opinion in an ensemble.
-3. **SVM**: the best classical baseline. Well calibrated and simple, but about 9 points behind, 20 times larger and
-   noticeably weaker on calm and happy. Useful as a reference point only.
-4. **Random forest**: not suitable. Its anger probabilities are so cautious that the alert would catch only 9 % of
-   heated arguments, its probabilities are badly calibrated, and it is the largest and slowest model.
+**Ranking and role of each model:**
 
-Fairness notes: the BiLSTM averages frames in pairs and was capped at 20 epochs (it stopped early at 15) to keep CPU
-training practical, while the CNN had 30; the SVM and forest only see summary statistics, so they cannot use how the
-voice changes over time, which is the likely reason they trail. All four share the same acted-speech limits below.
+1. **CNN: the deployed model.** With its own validated rule (p >= 0.8 on 2 windows) it would catch 72.5 % of mild and
+   97.1 % of heated arguments, at 1.1 % false alarms on calm recordings. The live rule stays at p >= 0.6 on 3 windows
+   because it has fewer false alarms (0.4 %), which suits a precision-first alert. At that rule it still catches 94.7 % of
+   heated arguments.
+2. **BiLSTM + attention: the reserve model.** With the CNN's training budget its speech accuracy is 1 point higher than before (67.6 → 68.6 %), though its macro-F1 is slightly lower (0.631 → 0.614). It is
+   still 7 points behind on speech and worse calibrated. It uses the same input and ONNX interface, so it can replace the
+   CNN with no backend change. It is worth retrying when real recordings exist, or as a second opinion in an ensemble.
+3. **SVM: a classical baseline only.** It has the fewest false alarms but catches only 70 % of heated arguments. It is
+   12 points behind on speech, 9 times slower (mostly feature extraction) and 15 times larger.
+4. **Random forest: not suitable.** With fair calibration it no longer misses almost all anger (90 % of heated arguments
+   caught). But its alert has the most false alarms (1.8 %, over the 1 % target on test). It is the weakest on RAVDESS,
+   by far the slowest (147 ms per window) and the largest (50 MB).
+
+**What the fair setup changed:**
+* **Calibration and alert rules fixed the forest's alert.** Heated arguments caught went from 9 % to 90 %.
+* **The richer features improved the classical models on validation, but not on the unseen test speakers.** Speech-only
+  accuracy was SVM 66.9 → 63.7 % and forest 65.6 → 64.3 %. The extra 1,680 numbers fit the training actors more closely
+  instead of generalising better.
+
+Neither change closed the gap, so the CNN's lead does not come from an unfair setup. Reading the whole MFCC image works
+better on unseen speakers than summary numbers do.
 
 ## Limits you should know about
 - **Acted data.** RAVDESS and CREMA-D are actors reading set sentences in English. Real homes, Kenyan English,

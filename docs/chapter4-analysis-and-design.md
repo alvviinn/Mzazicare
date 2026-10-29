@@ -347,18 +347,30 @@ Limits: two phones can read 10 to 20 m apart indoors; location is shared only wh
 
 * **Task:** classify 3-second windows into happy, calm, neutral, stressed, angry, or *noise* (not a person speaking).
 * **Features:** 40 MFCC x 149 frames at 16 kHz, level-normalised (the same code in training and serving).
-* **Model:** small 2D CNN (about 126 k parameters), trained on CPU, exported to ONNX. Chosen after comparing four models on the same data
-  and unseen speakers (speech-only accuracy / anger-alert detection of heated arguments / time per window / size):
+* **Model:** small 2D CNN (about 126 k parameters), trained on CPU, exported to ONNX. It was chosen after a fair comparison of
+  four models on the same data and unseen speakers. Each model had the conditions that suit it best:
+  * Its natural input: MFCC frames for the neural networks. For the classical models, 1,680 MFCC + delta functionals,
+    which describe how the voice changes across the window.
+  * A settings search on the validation speakers.
+  * The same training budget for both networks.
+  * The same temperature calibration.
+  * Its own anger-alert rule chosen on validation, with at most 1 % false alarms.
 
-  | Model | Speech accuracy | Heated arguments caught (false alarms) | Calibration error | Time per window | Size | Verdict |
-  |---|---|---|---|---|---|---|
-  | **2D CNN on the MFCC image** | **75.4 %** | 94.7 % (0.4 %) | **0.017** | **1.2 ms** | **0.5 MB** | **Deployed** |
-  | BiLSTM + attention on the MFCC sequence | 67.6 % | 95.2 % (0.7 %) | 0.050 | 2.4 ms | 0.6 MB | Reserve: same interface, 8 points behind |
-  | SVM (RBF) on MFCC statistics | 66.9 % | 83.5 % (0.6 %) | 0.028 | 6.1 ms | 10.6 MB | Baseline only |
-  | Random forest on MFCC statistics | 65.6 % | 9.3 % (0.0 %) | 0.169 | 94 ms | 53.5 MB | Not suitable: misses almost all anger |
+  | Model | Speech accuracy | Speech macro-F1 | Heated arguments caught (false alarms), own rule | Calibration error | Time per window | Size | Verdict |
+  |---|---|---|---|---|---|---|---|
+  | **2D CNN on the MFCC image** | **75.4 %** | **0.706** | **97.1 % (1.1 %)** | **0.017** | **1.4 ms** | **0.5 MB** | **Deployed** |
+  | BiLSTM + attention on the MFCC sequence | 68.6 % | 0.614 | 91.7 % (0.8 %) | 0.059 | 2.0 ms | 0.6 MB | Reserve: same interface, 7 points behind |
+  | Random forest on MFCC functionals | 64.3 % | 0.563 | 89.8 % (1.8 %) | 0.042 | 147 ms | 50.2 MB | Not suitable: most false alarms, slowest, largest |
+  | SVM (RBF) on MFCC functionals | 63.7 % | 0.559 | 69.6 % (0.4 %) | 0.031 | 12.7 ms | 7.4 MB | Baseline only |
 
-  The CNN wins because it reads how the voice changes across time and frequency, gives the most trustworthy probabilities for
-  the precision-first alert, and is the smallest and fastest. Full table: [`ml/voice/artifacts/comparison.md`](../ml/voice/artifacts/comparison.md).
+  Under equal conditions the CNN still leads on every tone and on both acted datasets. Its probabilities are the most
+  trustworthy for the precision-first alert, and it is the smallest and fastest model.
+
+  The richer, time-aware features raised the classical models' validation scores but not their test scores on unseen
+  speakers. Calibration fixed the random forest's earlier failure to raise alerts. Neither change closed the gap, so the
+  CNN's lead is not an artefact of the setup.
+
+  Full table: [`ml/voice/artifacts/comparison.md`](../ml/voice/artifacts/comparison.md).
 * **Data:** RAVDESS, CREMA-D, LibriSpeech, ESC-50 ([DATA.md](DATA.md)); splits by speaker.
 * **Evaluation (unseen speakers):** 83.0 % overall, 75.4 % on speech alone; angry precision 71 %, stressed 75 %; the live path scores the same as the offline test.
 * **Alert rule (precision first):** an "angry voices" alert needs at least 3 windows in one clip with at least 60 % angry probability. Simulated on whole recordings: 0.2 % false alarms, 95 % of heated arguments caught, 44 % of mild ones.

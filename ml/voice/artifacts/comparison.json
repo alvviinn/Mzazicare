@@ -3,7 +3,7 @@
     "train_s": 3884,
     "size_bytes": 506182,
     "parameters": "125,750 weights",
-    "latency_ms": 1.25,
+    "latency_ms": 1.39,
     "accuracy": 0.830078125,
     "macro_f1": 0.7540791245851919,
     "speech_accuracy": 0.7542613636363636,
@@ -16,8 +16,6 @@
       "angry": 0.747,
       "noise": 0.998
     },
-    "angry_precision_p60": 0.8029556650246306,
-    "angry_recall_p60": 0.7149122807017544,
     "ece": 0.0173492294270545,
     "per_dataset_accuracy": {
       "cremad": 0.702,
@@ -25,109 +23,149 @@
       "librispeech": 0.993,
       "ravdess": 0.659
     },
+    "alert_rule": {
+      "angry_prob": 0.8,
+      "min_windows": 2
+    },
+    "angry_precision": 0.8780487804878049,
+    "angry_recall": 0.631578947368421,
     "alert": {
+      "false_alarm": 0.0115,
+      "mild_3_of_10": 0.7245,
+      "heated_6_of_10": 0.97125
+    },
+    "alert_with_live_rule": {
       "false_alarm": 0.00375,
       "mild_3_of_10": 0.44575,
       "heated_6_of_10": 0.94725
     }
   },
   "bilstm": {
-    "train_s": 4106,
+    "train_s": 7058,
     "size_bytes": 623362,
     "parameters": "154,503 weights",
-    "temperature": 1.131,
-    "latency_ms": 2.42,
-    "accuracy": 0.7578125,
-    "macro_f1": 0.677863300089713,
-    "speech_accuracy": 0.6761363636363636,
-    "speech_macro_f1": 0.6306094168544372,
+    "temperature": 1.147,
+    "latency_ms": 1.98,
+    "accuracy": 0.75927734375,
+    "macro_f1": 0.6560758510879917,
+    "speech_accuracy": 0.6860795454545454,
+    "speech_macro_f1": 0.6136421273040209,
     "per_class_f1": {
-      "happy": 0.472,
-      "calm": 0.512,
-      "neutral": 0.732,
-      "stressed": 0.694,
-      "angry": 0.697,
-      "noise": 0.96
+      "happy": 0.486,
+      "calm": 0.358,
+      "neutral": 0.761,
+      "stressed": 0.71,
+      "angry": 0.665,
+      "noise": 0.956
     },
-    "angry_precision_p60": 0.7375565610859729,
-    "angry_recall_p60": 0.7149122807017544,
-    "ece": 0.04954770242329687,
+    "ece": 0.05858759934199039,
     "per_dataset_accuracy": {
-      "cremad": 0.62,
-      "esc50": 0.938,
-      "librispeech": 0.968,
-      "ravdess": 0.517
+      "cremad": 0.633,
+      "esc50": 0.92,
+      "librispeech": 0.975,
+      "ravdess": 0.511
     },
+    "alert_rule": {
+      "angry_prob": 0.8,
+      "min_windows": 2
+    },
+    "angry_precision": 0.8666666666666667,
+    "angry_recall": 0.5131578947368421,
     "alert": {
-      "false_alarm": 0.00675,
-      "mild_3_of_10": 0.47,
-      "heated_6_of_10": 0.95225
+      "false_alarm": 0.008,
+      "mild_3_of_10": 0.5395,
+      "heated_6_of_10": 0.91725
+    },
+    "alert_with_live_rule": {
+      "false_alarm": 0.006,
+      "mild_3_of_10": 0.35625,
+      "heated_6_of_10": 0.87775
     }
   },
   "svm": {
-    "chosen": "1.0",
-    "train_s": 2245,
-    "size_bytes": 10615167,
-    "parameters": "10197 support vectors",
-    "latency_ms": 6.1,
-    "accuracy": 0.7646484375,
-    "macro_f1": 0.6423653439668059,
-    "speech_accuracy": 0.6690340909090909,
-    "speech_macro_f1": 0.5768326241401575,
+    "chosen": "(128, 1.0)",
+    "temperature": 1.182,
+    "train_s": 1336,
+    "size_bytes": 7439121,
+    "parameters": "11441 support vectors",
+    "latency_ms": 12.66,
+    "accuracy": 0.74169921875,
+    "macro_f1": 0.6264973878531062,
+    "speech_accuracy": 0.6370738636363636,
+    "speech_macro_f1": 0.5591981953294796,
     "per_class_f1": {
-      "happy": 0.411,
-      "calm": 0.328,
-      "neutral": 0.748,
-      "stressed": 0.693,
-      "angry": 0.688,
-      "noise": 0.986
+      "happy": 0.357,
+      "calm": 0.404,
+      "neutral": 0.746,
+      "stressed": 0.66,
+      "angry": 0.608,
+      "noise": 0.983
     },
-    "angry_precision_p60": 0.7527472527472527,
-    "angry_recall_p60": 0.6008771929824561,
-    "ece": 0.027673057338688533,
+    "ece": 0.030564958433387808,
     "per_dataset_accuracy": {
-      "cremad": 0.624,
-      "esc50": 0.975,
-      "librispeech": 0.957,
-      "ravdess": 0.455
+      "cremad": 0.596,
+      "esc50": 0.972,
+      "librispeech": 0.946,
+      "ravdess": 0.369
     },
+    "alert_rule": {
+      "angry_prob": 0.6,
+      "min_windows": 3
+    },
+    "angry_precision": 0.7090909090909091,
+    "angry_recall": 0.5131578947368421,
     "alert": {
-      "false_alarm": 0.00625,
-      "mild_3_of_10": 0.31425,
-      "heated_6_of_10": 0.83525
+      "false_alarm": 0.0045,
+      "mild_3_of_10": 0.23125,
+      "heated_6_of_10": 0.69575
+    },
+    "alert_with_live_rule": {
+      "false_alarm": 0.0045,
+      "mild_3_of_10": 0.23125,
+      "heated_6_of_10": 0.69575
     }
   },
   "rf": {
-    "chosen": "sqrt",
-    "train_s": 195,
-    "size_bytes": 53500120,
-    "parameters": "400 trees, 1,509,182 nodes",
-    "latency_ms": 94.33,
-    "accuracy": 0.74951171875,
-    "macro_f1": 0.6559900662195018,
-    "speech_accuracy": 0.65625,
-    "speech_macro_f1": 0.5974049306858478,
+    "chosen": "(0.05, 3)",
+    "temperature": 0.487,
+    "train_s": 1520,
+    "size_bytes": 50231775,
+    "parameters": "500 trees, 1,257,874 nodes",
+    "latency_ms": 146.65,
+    "accuracy": 0.736328125,
+    "macro_f1": 0.6251030047530516,
+    "speech_accuracy": 0.6434659090909091,
+    "speech_macro_f1": 0.5628271294620373,
     "per_class_f1": {
-      "happy": 0.401,
-      "calm": 0.513,
-      "neutral": 0.736,
-      "stressed": 0.684,
-      "angry": 0.627,
-      "noise": 0.975
+      "happy": 0.299,
+      "calm": 0.471,
+      "neutral": 0.739,
+      "stressed": 0.67,
+      "angry": 0.604,
+      "noise": 0.968
     },
-    "angry_precision_p60": 0.9347826086956522,
-    "angry_recall_p60": 0.18859649122807018,
-    "ece": 0.16891704523732187,
+    "ece": 0.0420516994636273,
     "per_dataset_accuracy": {
-      "cremad": 0.609,
-      "esc50": 0.955,
-      "librispeech": 0.982,
-      "ravdess": 0.392
+      "cremad": 0.59,
+      "esc50": 0.941,
+      "librispeech": 1.0,
+      "ravdess": 0.364
     },
+    "alert_rule": {
+      "angry_prob": 0.6,
+      "min_windows": 3
+    },
+    "angry_precision": 0.6160337552742616,
+    "angry_recall": 0.6403508771929824,
     "alert": {
-      "false_alarm": 0.0,
-      "mild_3_of_10": 0.011,
-      "heated_6_of_10": 0.09275
+      "false_alarm": 0.018,
+      "mild_3_of_10": 0.4245,
+      "heated_6_of_10": 0.8985
+    },
+    "alert_with_live_rule": {
+      "false_alarm": 0.018,
+      "mild_3_of_10": 0.4245,
+      "heated_6_of_10": 0.8985
     }
   }
 }
