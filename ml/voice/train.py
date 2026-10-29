@@ -63,6 +63,45 @@ def fit_temperature(logits, y):
     return float(t.clamp(min=0.05))
 
 
+def fit(model, Xtr, ytr, Xva, yva, weights, epochs, batch, gen, patience=7, clip=None):
+    """Train with augmentation and keep the weights with the best validation macro-F1. Returns that state."""
+    opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-2)
+    steps = epochs * int(np.ceil(len(ytr) / batch))
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps)
+    loss_fn = nn.CrossEntropyLoss(weight=weights, label_smoothing=0.05)
+
+    best_f1, best_state, bad = -1.0, None, 0
+    for epoch in range(1, epochs + 1):
+        model.train()
+        t0 = time.time()
+        order = torch.randperm(len(ytr), generator=gen)
+        total = 0.0
+        for i in range(0, len(order), batch):
+            idx = order[i:i + batch]
+            xb = augment_batch(Xtr[idx].clone(), gen)
+            opt.zero_grad()
+            loss = loss_fn(model(xb), ytr[idx])
+            loss.backward()
+            if clip:
+                nn.utils.clip_grad_norm_(model.parameters(), clip)  # recurrent models need this
+            opt.step()
+            sched.step()
+            total += float(loss) * len(idx)
+        pred = logits_for(model, Xva).argmax(1).numpy()
+        f1 = f1_score(yva.numpy(), pred, average='macro')
+        acc = float((pred == yva.numpy()).mean())
+        print(f'epoch {epoch:2d} loss {total / len(ytr):.3f} | val acc {acc:.3f} macro-F1 {f1:.3f} | {time.time() - t0:.0f}s', flush=True)
+        if f1 > best_f1:
+            best_f1, bad = f1, 0
+            best_state = {k: v.clone() for k, v in model.state_dict().items()}
+        else:
+            bad += 1
+            if bad >= patience:
+                print('early stop', flush=True)
+                break
+    return best_state
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--epochs', type=int, default=30)
@@ -92,38 +131,7 @@ def main():
 
     model = ToneCNN()
     print('parameters', sum(p.numel() for p in model.parameters()), flush=True)
-    opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-2)
-    steps = args.epochs * int(np.ceil(len(ytr) / args.batch))
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps)
-    loss_fn = nn.CrossEntropyLoss(weight=weights, label_smoothing=0.05)
-
-    best_f1, best_state, bad = -1.0, None, 0
-    for epoch in range(1, args.epochs + 1):
-        model.train()
-        t0 = time.time()
-        order = torch.randperm(len(ytr), generator=gen)
-        total = 0.0
-        for i in range(0, len(order), args.batch):
-            idx = order[i:i + args.batch]
-            xb = augment_batch(Xtr[idx].clone(), gen)
-            opt.zero_grad()
-            loss = loss_fn(model(xb), ytr[idx])
-            loss.backward()
-            opt.step()
-            sched.step()
-            total += float(loss) * len(idx)
-        pred = logits_for(model, Xva).argmax(1).numpy()
-        f1 = f1_score(yva.numpy(), pred, average='macro')
-        acc = float((pred == yva.numpy()).mean())
-        print(f'epoch {epoch:2d} loss {total / len(ytr):.3f} | val acc {acc:.3f} macro-F1 {f1:.3f} | {time.time() - t0:.0f}s', flush=True)
-        if f1 > best_f1:
-            best_f1, bad = f1, 0
-            best_state = {k: v.clone() for k, v in model.state_dict().items()}
-        else:
-            bad += 1
-            if bad >= 7:
-                print('early stop', flush=True)
-                break
+    best_state = fit(model, Xtr, ytr, Xva, yva, weights, args.epochs, args.batch, gen)
 
     model.load_state_dict(best_state)
     temperature = fit_temperature(logits_for(model, Xva), yva)

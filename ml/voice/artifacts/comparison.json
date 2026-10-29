@@ -1,0 +1,133 @@
+{
+  "cnn": {
+    "train_s": 3884,
+    "size_bytes": 506182,
+    "parameters": "125,750 weights",
+    "latency_ms": 1.25,
+    "accuracy": 0.830078125,
+    "macro_f1": 0.7540791245851919,
+    "speech_accuracy": 0.7542613636363636,
+    "speech_macro_f1": 0.7057049859343507,
+    "per_class_f1": {
+      "happy": 0.56,
+      "calm": 0.618,
+      "neutral": 0.831,
+      "stressed": 0.771,
+      "angry": 0.747,
+      "noise": 0.998
+    },
+    "angry_precision_p60": 0.8029556650246306,
+    "angry_recall_p60": 0.7149122807017544,
+    "ece": 0.0173492294270545,
+    "per_dataset_accuracy": {
+      "cremad": 0.702,
+      "esc50": 0.997,
+      "librispeech": 0.993,
+      "ravdess": 0.659
+    },
+    "alert": {
+      "false_alarm": 0.00375,
+      "mild_3_of_10": 0.44575,
+      "heated_6_of_10": 0.94725
+    }
+  },
+  "bilstm": {
+    "train_s": 4106,
+    "size_bytes": 623362,
+    "parameters": "154,503 weights",
+    "temperature": 1.131,
+    "latency_ms": 2.42,
+    "accuracy": 0.7578125,
+    "macro_f1": 0.677863300089713,
+    "speech_accuracy": 0.6761363636363636,
+    "speech_macro_f1": 0.6306094168544372,
+    "per_class_f1": {
+      "happy": 0.472,
+      "calm": 0.512,
+      "neutral": 0.732,
+      "stressed": 0.694,
+      "angry": 0.697,
+      "noise": 0.96
+    },
+    "angry_precision_p60": 0.7375565610859729,
+    "angry_recall_p60": 0.7149122807017544,
+    "ece": 0.04954770242329687,
+    "per_dataset_accuracy": {
+      "cremad": 0.62,
+      "esc50": 0.938,
+      "librispeech": 0.968,
+      "ravdess": 0.517
+    },
+    "alert": {
+      "false_alarm": 0.00675,
+      "mild_3_of_10": 0.47,
+      "heated_6_of_10": 0.95225
+    }
+  },
+  "svm": {
+    "chosen": "1.0",
+    "train_s": 2245,
+    "size_bytes": 10615167,
+    "parameters": "10197 support vectors",
+    "latency_ms": 6.1,
+    "accuracy": 0.7646484375,
+    "macro_f1": 0.6423653439668059,
+    "speech_accuracy": 0.6690340909090909,
+    "speech_macro_f1": 0.5768326241401575,
+    "per_class_f1": {
+      "happy": 0.411,
+      "calm": 0.328,
+      "neutral": 0.748,
+      "stressed": 0.693,
+      "angry": 0.688,
+      "noise": 0.986
+    },
+    "angry_precision_p60": 0.7527472527472527,
+    "angry_recall_p60": 0.6008771929824561,
+    "ece": 0.027673057338688533,
+    "per_dataset_accuracy": {
+      "cremad": 0.624,
+      "esc50": 0.975,
+      "librispeech": 0.957,
+      "ravdess": 0.455
+    },
+    "alert": {
+      "false_alarm": 0.00625,
+      "mild_3_of_10": 0.31425,
+      "heated_6_of_10": 0.83525
+    }
+  },
+  "rf": {
+    "chosen": "sqrt",
+    "train_s": 195,
+    "size_bytes": 53500120,
+    "parameters": "400 trees, 1,509,182 nodes",
+    "latency_ms": 94.33,
+    "accuracy": 0.74951171875,
+    "macro_f1": 0.6559900662195018,
+    "speech_accuracy": 0.65625,
+    "speech_macro_f1": 0.5974049306858478,
+    "per_class_f1": {
+      "happy": 0.401,
+      "calm": 0.513,
+      "neutral": 0.736,
+      "stressed": 0.684,
+      "angry": 0.627,
+      "noise": 0.975
+    },
+    "angry_precision_p60": 0.9347826086956522,
+    "angry_recall_p60": 0.18859649122807018,
+    "ece": 0.16891704523732187,
+    "per_dataset_accuracy": {
+      "cremad": 0.609,
+      "esc50": 0.955,
+      "librispeech": 0.982,
+      "ravdess": 0.392
+    },
+    "alert": {
+      "false_alarm": 0.0,
+      "mild_3_of_10": 0.011,
+      "heated_6_of_10": 0.09275
+    }
+  }
+}

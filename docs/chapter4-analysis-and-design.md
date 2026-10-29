@@ -347,7 +347,18 @@ Limits: two phones can read 10 to 20 m apart indoors; location is shared only wh
 
 * **Task:** classify 3-second windows into happy, calm, neutral, stressed, angry, or *noise* (not a person speaking).
 * **Features:** 40 MFCC x 149 frames at 16 kHz, level-normalised (the same code in training and serving).
-* **Model:** small 2D CNN (about 126 k parameters), trained on CPU, exported to ONNX.
+* **Model:** small 2D CNN (about 126 k parameters), trained on CPU, exported to ONNX. Chosen after comparing four models on the same data
+  and unseen speakers (speech-only accuracy / anger-alert detection of heated arguments / time per window / size):
+
+  | Model | Speech accuracy | Heated arguments caught (false alarms) | Calibration error | Time per window | Size | Verdict |
+  |---|---|---|---|---|---|---|
+  | **2D CNN on the MFCC image** | **75.4 %** | 94.7 % (0.4 %) | **0.017** | **1.2 ms** | **0.5 MB** | **Deployed** |
+  | BiLSTM + attention on the MFCC sequence | 67.6 % | 95.2 % (0.7 %) | 0.050 | 2.4 ms | 0.6 MB | Reserve: same interface, 8 points behind |
+  | SVM (RBF) on MFCC statistics | 66.9 % | 83.5 % (0.6 %) | 0.028 | 6.1 ms | 10.6 MB | Baseline only |
+  | Random forest on MFCC statistics | 65.6 % | 9.3 % (0.0 %) | 0.169 | 94 ms | 53.5 MB | Not suitable: misses almost all anger |
+
+  The CNN wins because it reads how the voice changes across time and frequency, gives the most trustworthy probabilities for
+  the precision-first alert, and is the smallest and fastest. Full table: [`ml/voice/artifacts/comparison.md`](../ml/voice/artifacts/comparison.md).
 * **Data:** RAVDESS, CREMA-D, LibriSpeech, ESC-50 ([DATA.md](DATA.md)); splits by speaker.
 * **Evaluation (unseen speakers):** 83.0 % overall, 75.4 % on speech alone; angry precision 71 %, stressed 75 %; the live path scores the same as the offline test.
 * **Alert rule (precision first):** an "angry voices" alert needs at least 3 windows in one clip with at least 60 % angry probability. Simulated on whole recordings: 0.2 % false alarms, 95 % of heated arguments caught, 44 % of mild ones.
