@@ -1,7 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { resolveAlert } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
 import { Icon, IconName, MOOD_ICON, TONE_ICON } from '../../components/Icon';
+import { ProofPhoto } from '../../components/ProofPhoto';
+import { TaskHistory } from '../../components/TaskHistory';
 import { ShiftRow } from '../../components/ShiftRow';
 import { Button, Card } from '../../components/ui';
 import { fmtDuration, fmtTime, timeAgo } from '../../format';
@@ -17,6 +20,32 @@ type Props = {
   onGoPeople: () => void;
   onOpenShift: (id: number) => void;
 };
+
+// Opens every task done in the past days, with the caretaker's proof photos.
+function TaskHistoryButton({ token }: { token: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Pressable onPress={() => setOpen(true)} style={styles.historyLink} hitSlop={6}>
+        <Icon name="history" size={18} color={colors.primary} />
+        <Text style={styles.historyText}> Task history and photos</Text>
+      </Pressable>
+      <Modal visible={open} animationType="slide" onRequestClose={() => setOpen(false)}>
+        <View style={styles.sheet}>
+          <View style={styles.sheetHead}>
+            <Text style={styles.sheetTitle}>Task history</Text>
+            <Pressable onPress={() => setOpen(false)} hitSlop={10} accessibilityLabel="Close">
+              <Icon name="close" size={24} color={colors.text} />
+            </Pressable>
+          </View>
+          <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: spacing.xl }}>
+            <TaskHistory token={token} showCaretaker />
+          </ScrollView>
+        </View>
+      </Modal>
+    </>
+  );
+}
 
 export default function Overview({ token, profile, dash, error, onChanged, onGoPeople, onOpenShift }: Props) {
   if (!dash) {
@@ -143,10 +172,16 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
                   {c.assigned_by && <Text style={styles.small}>{c.assigned_by_me ? '  · set by you' : `  · set by ${c.assigned_by}`}</Text>}
                 </Text>
                 {c.done_at && <Text style={styles.small}>{fmtTime(c.done_at)}</Text>}
+                {c.completion_id !== null && (
+                  <View style={{ marginLeft: spacing.sm }}>
+                    <ProofPhoto token={token} completionId={c.completion_id} caption={`${c.description} · ${c.caretaker}`} size={40} />
+                  </View>
+                )}
               </View>
             ))}
           </>
         )}
+        <TaskHistoryButton token={token} />
       </Card>
 
       <SectionTitle>Service quality (voice tone, this week)</SectionTitle>
@@ -401,6 +436,19 @@ const styles = StyleSheet.create({
   rowBorder: { borderTopWidth: 1, borderTopColor: colors.border },
   visitTitle: { fontSize: 15, fontWeight: '600', color: colors.text },
   checkBox: { width: 30 },
+  historyLink: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md },
+  historyText: { color: colors.primary, fontWeight: '700', fontSize: 15 },
+  sheet: { flex: 1, backgroundColor: colors.background, paddingTop: spacing.xl },
+  sheetHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  sheetTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
   link: { color: colors.primary, fontWeight: '600', fontSize: 13, marginTop: spacing.sm },
   hint: { color: colors.textMuted, fontSize: 12, marginTop: spacing.sm },
   iconBox: { width: 36 },

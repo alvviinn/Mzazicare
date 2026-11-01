@@ -77,6 +77,29 @@ class Task(models.Model):
     is_demo = models.BooleanField(default=False)
 
 
+class TaskCompletion(models.Model):
+    """One time a task was done, with the photo the caretaker took as proof. This is the task history.
+
+    Copies the title and who assigned it, so the record survives the task being edited or deleted.
+    The photo is kept in the database and only served to the caretaker and their family.
+    """
+
+    task = models.ForeignKey(Task, null=True, blank=True, on_delete=models.SET_NULL, related_name='completions')
+    caretaker = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='task_completions')
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+    )
+    shift = models.ForeignKey(Shift, null=True, blank=True, on_delete=models.SET_NULL, related_name='completions')
+    title = models.CharField(max_length=200)
+    recurring = models.BooleanField(default=False)
+    done_at = models.DateTimeField(db_index=True)
+    photo = models.BinaryField()
+    photo_type = models.CharField(max_length=20)  # image/jpeg, image/png or image/webp
+
+    class Meta:
+        ordering = ['-done_at']
+
+
 class Chore(models.Model):
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='chores')
     task = models.ForeignKey(Task, null=True, blank=True, on_delete=models.SET_NULL, related_name='chores')

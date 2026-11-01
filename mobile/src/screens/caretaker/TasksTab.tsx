@@ -1,8 +1,12 @@
+import { File } from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
-import { addTask, deleteTask, getTasks, updateTask } from '../../api/client';
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { addTask, completeTask, deleteTask, getTasks, updateTask } from '../../api/client';
 import { SectionTitle } from '../../components/HomeShell';
 import { Icon } from '../../components/Icon';
+import { ProofPhoto } from '../../components/ProofPhoto';
+import { TaskHistory } from '../../components/TaskHistory';
 import { Button, Card, ErrorText } from '../../components/ui';
 import { fmtTime } from '../../format';
 import { colors, radius, spacing } from '../../theme';
@@ -14,6 +18,8 @@ export default function TasksTab({ token }: { token: string }) {
   const [recurring, setRecurring] = useState(false);
   const [error, setError] = useState('');
   const [adding, setAdding] = useState(false);
+  const [view, setView] = useState<'today' | 'history'>('today');
+  const [sending, setSending] = useState<number | null>(null); // the task whose proof photo is uploading
 
   const load = useCallback(async () => {
     try {
@@ -42,22 +48,59 @@ export default function TasksTab({ token }: { token: string }) {
     }
   }
 
-  async function change(task: TaskItem, changes: { is_done?: boolean; recurring?: boolean }) {
+  // Ticking a task off needs a photo taken there and then (the camera only, not old photos from the gallery).
+  async function markDone(task: TaskItem) {
+    if (sending !== null) return;
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert('Camera needed', 'Allow MzaziCare to use the camera so you can take a photo showing the task is done.');
+      return;
+    }
+    const shot = await ImagePicker.launchCameraAsync({ mediaTypes: ['images'], quality: 0.5, exif: false });
+    if (shot.canceled || !shot.assets?.length) return;
+    const asset = shot.assets[0];
+    const file = new File(asset.uri);
+    setSending(task.id);
+    try {
+      const updated = await completeTask(token, task.id, await file.arrayBuffer(), asset.mimeType ?? 'image/jpeg');
+      setTasks((prev) => (prev ?? []).map((t) => (t.id === task.id ? updated : t)));
+    } catch (e) {
+      Alert.alert('Not marked as done', e instanceof Error ? e.message : 'Could not send the photo.');
+    } finally {
+      setSending(null);
+      try {
+        file.delete(); // the server has its copy; nothing is left on the phone
+      } catch {
+        /* already gone */
+      }
+    }
+  }
+
+  function change(task: TaskItem, changes: { is_done?: boolean; recurring?: boolean }) {
+    if (changes.is_done === true) return markDone(task);
+    if (changes.is_done === false) {
+      Alert.alert('Mark as not done?', 'The photo you took for this task will be removed.', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Mark not done', style: 'destructive', onPress: () => save(task, changes) },
+      ]);
+      return;
+    }
+    return save(task, changes);
+  }
+
+  async function save(task: TaskItem, changes: { is_done?: boolean; recurring?: boolean }) {
     // update the screen straight away, then confirm with the server
     setTasks((prev) =>
       (prev ?? []).map((t) =>
         t.id === task.id
-          ? { ...t, ...changes, done_at: changes.is_done === undefined ? t.done_at : changes.is_done ? new Date().toISOString() : null }
+          ? { ...t, ...changes, ...(changes.is_done === false ? { done_at: null, completion_id: null } : {}) }
           : t,
       ),
     );
     try {
       await updateTask(token, task.id, changes);
-    } catch (e) {
-      load(); // put the tick back the way the server has it
-      if (changes.is_done) {
-        Alert.alert('Not marked as done', e instanceof Error ? e.message : 'Could not update the task.');
-      }
+    } catch {
+      load(); // put it back the way the server has it
     }
   }
 
@@ -82,8 +125,28 @@ export default function TasksTab({ token }: { token: string }) {
   const todo = (tasks ?? []).filter((t) => !t.is_done);
   const done = (tasks ?? []).filter((t) => t.is_done);
 
+  const tabs = (
+    <View style={styles.tabs}>
+      {(['today', 'history'] as const).map((v) => (
+        <Pressable key={v} onPress={() => setView(v)} style={[styles.tab, view === v && styles.tabOn]}>
+          <Text style={[styles.tabText, view === v && { color: colors.onPrimary }]}>{v === 'today' ? 'Today' : 'History'}</Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+
+  if (view === 'history') {
+    return (
+      <>
+        {tabs}
+        <TaskHistory token={token} />
+      </>
+    );
+  }
+
   return (
     <>
+      {tabs}
       <Card>
         <Text style={styles.cardTitle}>Add a task</Text>
         <TextInput
@@ -99,7 +162,7 @@ export default function TasksTab({ token }: { token: string }) {
         <View style={styles.switchRow}>
           <View style={{ flex: 1 }}>
             <Text style={styles.switchLabel}>Repeat every working day</Text>
-            <Text style={styles.small}>Resets each morning, Monday to Friday. No need to write it again.</Text>
+            <Text style={styles.small}>Resets each morning, Monday to Friday. No need to write it again. Tick a task to take a photo showing it is done.</Text>
           </View>
           <Switch
             value={recurring}
@@ -125,7 +188,9 @@ export default function TasksTab({ token }: { token: string }) {
             {todo.length === 0 ? (
               <Text style={styles.small}>All done for today. Well done.</Text>
             ) : (
-              todo.map((t, i) => <Row key={t.id} task={t} first={i === 0} onChange={change} onRemove={remove} />)
+              todo.map((t, i) => (
+                <Row key={t.id} token={token} task={t} first={i === 0} sending={sending === t.id} onChange={change} onRemove={remove} />
+              ))
             )}
           </Card>
 
@@ -134,7 +199,7 @@ export default function TasksTab({ token }: { token: string }) {
               <SectionTitle>{`Done (${done.length})`}</SectionTitle>
               <Card>
                 {done.map((t, i) => (
-                  <Row key={t.id} task={t} first={i === 0} onChange={change} onRemove={remove} />
+                  <Row key={t.id} token={token} task={t} first={i === 0} sending={false} onChange={change} onRemove={remove} />
                 ))}
               </Card>
             </>
@@ -146,22 +211,38 @@ export default function TasksTab({ token }: { token: string }) {
 }
 
 function Row({
+  token,
   task,
   first,
+  sending,
   onChange,
   onRemove,
 }: {
+  token: string;
   task: TaskItem;
   first: boolean;
+  sending: boolean;
   onChange: (t: TaskItem, c: { is_done?: boolean; recurring?: boolean }) => void;
   onRemove: (t: TaskItem) => void;
 }) {
   const fromFamily = !!task.assigned_by;
   return (
     <View style={[styles.row, !first && styles.rowBorder]}>
-      <Pressable onPress={() => onChange(task, { is_done: !task.is_done })} hitSlop={8} style={styles.checkHit}>
+      <Pressable
+        onPress={() => onChange(task, { is_done: !task.is_done })}
+        hitSlop={8}
+        style={styles.checkHit}
+        disabled={sending}
+        accessibilityLabel={task.is_done ? 'Mark as not done' : 'Take a photo and mark as done'}
+      >
         <View style={[styles.box, task.is_done && styles.boxDone]}>
-          {task.is_done && <Icon name="check" size={18} color={colors.onPrimary} />}
+          {sending ? (
+            <ActivityIndicator size="small" color={colors.primary} />
+          ) : task.is_done ? (
+            <Icon name="check" size={18} color={colors.onPrimary} />
+          ) : (
+            <Icon name="camera-outline" size={16} color={colors.textMuted} />
+          )}
         </View>
       </Pressable>
       <View style={{ flex: 1 }}>
@@ -180,6 +261,11 @@ function Row({
           {task.done_at && <Text style={styles.small}> · done {fmtTime(task.done_at)}</Text>}
         </View>
       </View>
+      {task.completion_id !== null && (
+        <View style={{ marginRight: spacing.sm }}>
+          <ProofPhoto token={token} completionId={task.completion_id} caption={task.title} size={40} />
+        </View>
+      )}
       {!fromFamily && (
         <Pressable onPress={() => onRemove(task)} hitSlop={10}>
           <Icon name="close" size={20} color={colors.textMuted} />
@@ -191,6 +277,18 @@ function Row({
 
 const styles = StyleSheet.create({
   cardTitle: { fontSize: 17, fontWeight: '700', color: colors.text, marginBottom: spacing.md },
+  tabs: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
+  tab: {
+    flex: 1,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    paddingVertical: 8,
+    backgroundColor: colors.surface,
+  },
+  tabOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  tabText: { color: colors.primary, fontWeight: '700' },
   input: {
     borderWidth: 1,
     borderColor: colors.border,

@@ -47,7 +47,10 @@ time counts as hours.
 | `POST /shift/start/` | Manual start of today's shift (or continue it after "finish for now"). Only in-range time is counted. 400 if today's shift is already open (it started by itself, or the caretaker is on a break). |
 | `POST /shift/stop/` | "Finish for now". 400 if nothing is running. The day's shift is closed, but if the caretaker comes back the same day it continues as the same shift. |
 | `GET /hours/` | Active minutes for today, this week, this month, all time, and one card per recent day worked. |
-| `GET/POST /tasks/`, `PATCH/DELETE /tasks/<id>/` | The caretaker's own to-do list. `POST {title (max 200), recurring}`; `PATCH {is_done?, recurring?}`. Recurring tasks reset on each working day (Mon to Fri). Marking a task done (`is_done: true`) is refused with `403` unless the caretaker's phone is verified within 15 m of an elderly person (same checks as the geofence: fresh, accurate, not mocked). Un-ticking and editing work anywhere. |
+| `GET/POST /tasks/`, `PATCH/DELETE /tasks/<id>/` | Task lists. **Caretaker:** their own list; `POST {title (max 200), recurring}`. **Family:** `GET` lists all their caretakers' tasks for today; `POST {caretaker_email, title, recurring}` assigns a task to one of their own caretakers. Each task has `assigned_by` (family name, or null when the caretaker wrote it) and `completion_id` (the proof record while ticked). `PATCH {is_done: false?, title?, recurring?}`: only whoever created a task can rename, re-time or delete it (a caretaker gets `403` on a family task; the family can only touch tasks they assigned). `is_done: true` is refused with `400`: ticking needs a photo (below). Un-ticking removes that tick's photo. Recurring tasks reset on each working day (Mon to Fri). |
+| `POST /tasks/<id>/done/` | Caretaker ticks a task off with proof. Body: the photo itself (`Content-Type: image/jpeg`, `image/png` or `image/webp`; checked from its first bytes; at most 6 MB, else `413`). Refused with `403` unless the phone is verified within 15 m of the elderly person (fresh, accurate, not mocked); nothing is stored then. Returns the task (`201`), or `200` if it was already ticked. |
+| `GET /tasks/history/?days=30` | Task history, newest first (1 to 365 days, at most 500): `{days, items: [{id, task_id, title, recurring, caretaker, assigned_by, done_at, shift_id}]}`. The caretaker sees their own; the family sees their caretakers'. Kept when a task is deleted. |
+| `GET /tasks/completions/<id>/photo/` | The proof photo (image bytes), only for the caretaker who took it and their family; no public link. |
 | `GET /audio/status/` | caretaker, elderly | Should this phone record now? `{record, reason, consent, chunk_s}`. `record` is true only during a verified shift (caretaker in range) when both people have agreed; `reason` is `no_shift`, `you_have_not_agreed` or `other_has_not_agreed` otherwise. The phones ask before every 10 s clip. |
 | `POST /audio/consent/` | caretaker, elderly | `{consent: true|false}`: each person agrees (or withdraws) for themselves. The family account gets 403. `GET /me/` returns `voice_consent`. |
 | `POST /audio/tone/` | caretaker or elderly phone, **raw audio body** (WAV, FLAC, OGG, or the phones' AAC `.m4a`/`3gp`; up to 3 MB). Analysed in memory and discarded; only tone totals are kept. Each clip also leaves one `ToneSample` (time, speech seconds, the five tone shares; no audio) that feeds the live chart. Returns `{speech_s, dominant, tones, distress}`. 409 if there is no verified shift running, 403 if both people have not agreed, 413 too large, 400 unreadable, 503 model missing. |
@@ -67,7 +70,8 @@ time counts as hours.
 |---|---|---|---|
 | Register, login, `/me/` | yes | yes | yes |
 | Add people, medicines, view dashboard, resolve alerts | yes | no | no |
-| Shift, hours, tasks, audio | no | yes | no |
+| Shift, hours, audio; ticking tasks off (with a photo) | no | yes | no |
+| Task lists and history, proof photos | yes (their caretakers'; assign and remove their own tasks) | yes (their own) | no |
 | Mood check-in, SOS, medicine ticks, elder home | no | no | yes |
 | Location | no | yes | yes |
 | Chat | with their circle | with the family only | with the family only |

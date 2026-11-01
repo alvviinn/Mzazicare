@@ -37,7 +37,7 @@ IDs FR-01 to FR-05 come from the proposal; FR-06 onward were identified during d
 | ID | Requirement | Status |
 |---|---|---|
 | FR-01 | Register, sign in, and role-based access; a family links its caretaker and elderly person | **Implemented** |
-| FR-02 | Caretaker starts and ends shifts and keeps a task list; a record of the visit exists | **Implemented**: shifts start automatically (geofence) or manually; to-do list with daily-repeating tasks, written by the caretaker or assigned by the family (the caretaker ticks family tasks off only inside the geofence and cannot change or delete them) |
+| FR-02 | Caretaker starts and ends shifts and keeps a task list; a record of the visit exists | **Implemented**: shifts start automatically (geofence) or manually; to-do list with daily-repeating tasks, written by the caretaker or assigned by the family (the caretaker ticks family tasks off only inside the geofence and cannot change or delete them); every tick needs a photo taken with the camera as proof, which the family can see; a task history (7, 30 or 90 days, with photos) for both the caretaker and the family |
 | FR-03 | Triage chatbot answering mixed English and Kiswahili first-aid queries | **Not started** |
 | FR-04 | Listen to the visit, extract features, delete raw audio, flag vocal distress | **Model and endpoint implemented** (tone model, in-memory analysis, alert for the family). Recording from the phone is **pending** (consent flow first) |
 | FR-05 | Monitor GPS against a geofence; flag manipulated coordinates | **Implemented** (15 m around the elderly person's phone; fake-GPS reports ignored and flagged) |
@@ -151,6 +151,8 @@ erDiagram
   USER ||--o{ TASK : "caretaker writes"
   USER ||--o{ TASK : "family assigns"
   TASK ||--o{ CHORE : "snapshot"
+  TASK ||--o{ TASKCOMPLETION : "each time done, with proof photo"
+  SHIFT ||--o{ TASKCOMPLETION : "done during"
   USER ||--o{ ALERT : "family receives"
   SHIFT ||--o{ ALERT : "may cause"
   USER ||--o{ MESSAGE : "sends and receives"
@@ -201,6 +203,15 @@ erDiagram
     bool recurring
     bool is_done
     datetime done_at
+  }
+  TASKCOMPLETION {
+    bigint task_id FK "null once the task is deleted"
+    bigint caretaker_id FK
+    bigint shift_id FK
+    string title "copied, so history survives edits"
+    datetime done_at
+    bytes photo
+    string photo_type
   }
   CHORE {
     bigint shift_id FK
@@ -389,6 +400,7 @@ Full model card: [`ml/voice/README.md`](../ml/voice/README.md).
 | Authentication | Backend-issued JWT; passwords hashed (PBKDF2); 90-day sessions. Limitation: logging out clears the token on the phone but there is no server-side revocation yet |
 | Spoofed location | Mock-location fixes ignored and reported; accuracy and freshness checks; the elderly phone is the reference, so the caretaker cannot move the circle |
 | Audio | Raw body, in-memory upload handler only, analysed and dropped; only seconds-per-tone saved; analysed only during a verified shift; size limit; capture switched off until a consent flow exists |
+| Task proof photos | Taken with the camera only (no gallery, so no old photos); the type is checked from the file's first bytes (JPEG, PNG or WebP) and the size is capped at 6 MB; stored in the database, never as a public file or link; served only to the caretaker who took it and their family through a signed-in endpoint; refused unless the caretaker is inside the geofence; removed if the caretaker unticks the task; the phone deletes its copy after upload. Limitation: photos are kept with no expiry yet, and may show the elderly person or their home |
 | Location privacy | latest fix only; the caretaker sees a distance (up to 500 m), never the elderly person's position |
 | False alarms | cautious alert rule, rate limits (one alert per kind per period), and a human decides |
 | Secrets | none in Git; `.env` files ignored; secret scan in the test script |
@@ -407,7 +419,7 @@ Full model card: [`ml/voice/README.md`](../ml/voice/README.md).
 | Level | What | Result |
 |---|---|---|
 | Unit | geofence engine with controlled time; recurring-task rules; MFCC and windowing; label mapping and speaker-disjoint splits | passing |
-| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **130 backend tests**, passing |
+| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **140 backend tests**, passing |
 | ML | held-out speakers; live-path check; alert-rule simulation; end-to-end check of the audio endpoint | figures in 4.3.6 |
 | Static | TypeScript type-check; migration consistency; secret scan | passing (`scripts/test.ps1`) |
 | Manual | app on a physical phone with Expo Go | role flows, chat, elderly screen |

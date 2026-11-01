@@ -11,6 +11,7 @@ from accounts.models import Role, User
 from care.models import Location
 
 PASSWORD = 'pw12345'
+JPEG = bytes([0xFF, 0xD8, 0xFF, 0xE0]) + b'proof photo'  # starts like a real JPEG
 
 
 def make_user(email, name, role=Role.USER, sponsor=None):
@@ -54,6 +55,12 @@ class FamilyTestCase(TestCase):
         for u in (self.caretaker, self.elder):
             u.voice_consent_at = timezone.now()
             u.save()
+
+    def tick(self, task_id, photo=JPEG, api=None):
+        """Mark a task done the way the app does: with a proof photo as the body."""
+        return (api or self.caretaker_api).generic(
+            'POST', f'/api/tasks/{task_id}/done/', photo, content_type='image/jpeg'
+        )
 
     def put_in_range(self, metres=5.0):
         """Both phones report now, the caretaker `metres` from the elder."""

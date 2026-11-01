@@ -12,7 +12,7 @@ from . import presence
 from .elder_views import medicines_json, mood_today
 from .models import MOOD_EMOJI, POSITIVE_TONES, TONE_EMOJI, Alert, Message, Mood, Shift, Tone, ToneReading
 from .shift_views import shift_card, shift_status
-from .tasks import visible_tasks
+from .tasks import latest_completion_id, visible_tasks
 from .tone_live import quality_of
 
 
@@ -133,7 +133,8 @@ class DashboardView(APIView):
                          'done_at': t.done_at.isoformat() if t.done_at else None,
                          'recurring': t.recurring, 'caretaker': t.caretaker.name,
                          'assigned_by': t.assigned_by.name if t.assigned_by_id else None,
-                         'assigned_by_me': t.assigned_by_id == me.pk}
+                         'assigned_by_me': t.assigned_by_id == me.pk,
+                         'completion_id': latest_completion_id(t)}  # its proof photo
                         for t in today_tasks
                     ],
                 },

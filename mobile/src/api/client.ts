@@ -11,6 +11,7 @@ import {
   ShiftDetail,
   ShiftState,
   ShiftSummary,
+  TaskHistory,
   TaskItem,
 } from '../types';
 
@@ -152,3 +153,31 @@ export const updateTask = (
 
 export const deleteTask = (token: string, id: number): Promise<void> =>
   request(`/api/tasks/${id}/`, { method: 'DELETE', token });
+
+// Ticks a task off with the proof photo as the request body (same idea as the voice clips).
+export async function completeTask(token: string, id: number, photo: ArrayBuffer, type = 'image/jpeg'): Promise<TaskItem> {
+  if (!API_URL) throw new Error('The app does not know where the server is. Set EXPO_PUBLIC_API_URL in mobile/.env.local.');
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/api/tasks/${id}/done/`, {
+      method: 'POST',
+      headers: { 'Content-Type': type, Authorization: `Bearer ${token}` },
+      body: photo,
+    });
+  } catch {
+    throw new Error("Can't reach the server. Check your internet connection and try again.");
+  }
+  if (res.status === 401) throw new Error(SESSION_EXPIRED);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.detail ?? 'Could not send the photo. Please try again.');
+  return data as TaskItem;
+}
+
+export const getTaskHistory = (token: string, days = 30): Promise<TaskHistory> =>
+  request(`/api/tasks/history/?days=${days}`, { token });
+
+// Image source for a proof photo: it is only served to a signed-in caretaker or family member.
+export const proofPhotoSource = (token: string, completionId: number) => ({
+  uri: `${API_URL}/api/tasks/completions/${completionId}/photo/`,
+  headers: { Authorization: `Bearer ${token}` },
+});

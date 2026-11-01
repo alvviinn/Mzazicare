@@ -193,7 +193,21 @@ export type TaskItem = {
   done_at: string | null;
   caretaker: string;
   assigned_by: string | null; // the family member who assigned it; null when the caretaker wrote it
+  completion_id: number | null; // while ticked: the record holding the proof photo
 };
+
+// One time a task was done, with its proof photo (task history, kept even if the task is deleted).
+export type TaskRecord = {
+  id: number;
+  task_id: number | null;
+  title: string;
+  recurring: boolean;
+  caretaker: string;
+  assigned_by: string | null;
+  done_at: string;
+  shift_id: number | null;
+};
+export type TaskHistory = { days: number; items: TaskRecord[] };
 
 export type Hours = {
   today: number;
@@ -215,4 +229,5 @@ export type TodayTask = {
   caretaker: string;
   assigned_by: string | null; // null: the caretaker wrote it themselves
   assigned_by_me: boolean;
+  completion_id: number | null; // its proof photo, once done
 };

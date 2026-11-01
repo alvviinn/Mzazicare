@@ -3,6 +3,7 @@ import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 import { addMedicine, addMember, assignTask, deleteMedicine, deleteTask } from '../../api/client';
 import { FamilyCard, SectionTitle } from '../../components/HomeShell';
 import { Icon } from '../../components/Icon';
+import { ProofPhoto } from '../../components/ProofPhoto';
 import { Button, Card, ErrorText, Field } from '../../components/ui';
 import { fmtTime } from '../../format';
 import { colors, radius, spacing } from '../../theme';
@@ -252,6 +253,11 @@ function TaskSection({ token, dash, onChanged }: { token: string; dash: Dashboar
                   {t.done_at ? ` · done ${fmtTime(t.done_at)}` : ''}
                 </Text>
               </View>
+              {t.completion_id !== null && (
+                <View style={{ marginRight: spacing.sm }}>
+                  <ProofPhoto token={token} completionId={t.completion_id} caption={`${t.description} · ${t.caretaker}`} size={40} />
+                </View>
+              )}
               <Pressable onPress={() => remove(t)} hitSlop={10}>
                 <Icon name="close" size={20} color={colors.textMuted} />
               </Pressable>
@@ -263,7 +269,7 @@ function TaskSection({ token, dash, onChanged }: { token: string; dash: Dashboar
       <Card>
         <Text style={styles.cardTitle}>Give the caretaker a task</Text>
         <Text style={styles.hint}>
-          It appears on their task list. They can only tick it off while they are with the elderly person, and you see when it was done.
+          It appears on their task list. To tick it off they must be with the elderly person and take a photo, which you can see here.
         </Text>
         {carers.length > 1 && (
           <View style={styles.chips}>

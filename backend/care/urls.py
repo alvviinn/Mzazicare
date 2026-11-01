@@ -31,4 +31,7 @@ urlpatterns = [
     path('hours/', caretaker_views.HoursView.as_view()),
     path('tasks/', caretaker_views.TaskListView.as_view()),
     path('tasks/<int:pk>/', caretaker_views.TaskDetailView.as_view()),
+    path('tasks/<int:pk>/done/', caretaker_views.TaskDoneView.as_view()),  # caretaker, with a proof photo
+    path('tasks/history/', caretaker_views.TaskHistoryView.as_view()),
+    path('tasks/completions/<int:pk>/photo/', caretaker_views.CompletionPhotoView.as_view()),
 ]

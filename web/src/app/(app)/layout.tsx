@@ -16,6 +16,7 @@ const icon = (d: string) => (
 const NAV = [
   { href: '/', label: 'Overview', icon: icon('M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10') },
   { href: '/shifts', label: 'Shifts', icon: icon('M12 7v5l3 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z') },
+  { href: '/tasks', label: 'Task history', icon: icon('M9 11l3 3 8-8M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9') },
   { href: '/tone', label: 'Voice tone', icon: icon('M4 12h2M8 8v8M12 4v16M16 8v8M20 12h-2') },
   { href: '/chats', label: 'Chats', icon: icon('M21 12a8 8 0 01-11.5 7.2L4 20l1-4.5A8 8 0 1121 12z') },
   { href: '/people', label: 'People', icon: icon('M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21a8 8 0 0116 0') },

@@ -1,17 +1,20 @@
 from datetime import datetime, time, timedelta
 
+from django.db import transaction
 from django.db.models import Q
+from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.parsers import BaseParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Role, User
 
 from . import presence
-from .models import Alert, Chore, Location, Shift, ShiftSegment, Task
+from .models import Alert, Chore, Location, Shift, ShiftSegment, Task, TaskCompletion
 from .shift_views import shift_card
-from .tasks import MAX_TASKS, task_json, visible_tasks
+from .tasks import MAX_PHOTO_BYTES, MAX_TASKS, completion_json, photo_type, task_json, visible_tasks
 
 
 def require_caretaker(user):
@@ -258,10 +261,12 @@ class TaskDetailView(APIView):
         if 'is_done' in request.data:
             if request.user.role != Role.CARETAKER:
                 raise PermissionDenied('Only the caretaker can mark a task done.')
-            task.is_done = bool(request.data['is_done'])
-            if task.is_done and not task.done_at:
-                require_in_range(request.user)  # a task can only be ticked off at the elderly person's side
-            task.done_at = timezone.now() if task.is_done else None
+            if bool(request.data['is_done']):
+                if not task.is_done:
+                    raise ValidationError({'detail': 'Take a photo to show the task is done.'})  # see TaskDoneView
+            elif task.is_done:  # untick: the proof for this tick is removed with it
+                TaskCompletion.objects.filter(task=task, done_at=task.done_at).delete()
+                task.is_done, task.done_at = False, None
         if 'title' in request.data:
             self._require_owner(request, task)
             task.title = clean_title(request.data)
@@ -277,3 +282,91 @@ class TaskDetailView(APIView):
         self._require_owner(request, task)
         task.delete()
         return Response(status=204)
+
+
+class RawImageParser(BaseParser):
+    """Accepts the proof photo as the raw request body (Content-Type: image/...)."""
+
+    media_type = 'image/*'
+
+    def parse(self, stream, media_type=None, parser_context=None):
+        return stream.read(MAX_PHOTO_BYTES + 1)
+
+
+class TaskDoneView(APIView):
+    """POST /api/tasks/<id>/done/ with a photo as the body: the caretaker ticks a task off, with proof."""
+
+    parser_classes = [RawImageParser]
+
+    def post(self, request, pk):
+        user = request.user
+        require_caretaker(user)
+        task = Task.objects.filter(pk=pk, caretaker=user).select_related('caretaker', 'assigned_by').first()
+        if not task:
+            raise ValidationError({'detail': 'Task not found.'})
+        photo = request.data
+        if not isinstance(photo, (bytes, bytearray)) or not photo:
+            raise ValidationError({'detail': 'Take a photo to show the task is done.'})
+        if len(photo) > MAX_PHOTO_BYTES:
+            return Response({'detail': 'The photo is too large. Try again.'}, status=413)
+        kind = photo_type(photo)
+        if not kind:
+            raise ValidationError({'detail': 'That is not a photo the app can use (JPEG, PNG or WebP).'})
+        if task.is_done:
+            return Response(task_json(task))  # already ticked: a double tap must not add a second record
+        require_in_range(user)  # a task can only be ticked off at the elderly person's side
+
+        now = timezone.now()
+        with transaction.atomic():
+            task.is_done, task.done_at = True, now
+            task.save()
+            TaskCompletion.objects.create(
+                task=task,
+                caretaker=user,
+                assigned_by=task.assigned_by,
+                shift=next(iter(presence.todays_shifts(user, now)), None),
+                title=task.title,
+                recurring=task.recurring,
+                done_at=now,
+                photo=bytes(photo),
+                photo_type=kind,
+            )
+            sync_chore(user, task)
+        return Response(task_json(task), status=201)
+
+
+def completions_for(user):
+    """The task records this person may see: a caretaker their own, a family account their caretakers'."""
+    require_task_access(user)
+    if user.role == Role.CARETAKER:
+        return TaskCompletion.objects.filter(caretaker=user)
+    return TaskCompletion.objects.filter(caretaker__sponsor=user)
+
+
+class TaskHistoryView(APIView):
+    """GET /api/tasks/history/?days=30 : every task done in that time, newest first."""
+
+    def get(self, request):
+        try:
+            days = min(max(int(request.query_params.get('days', 30)), 1), 365)
+        except ValueError:
+            raise ValidationError({'detail': 'days must be a number.'})
+        rows = (
+            completions_for(request.user)
+            .filter(done_at__gte=timezone.now() - timedelta(days=days))
+            .select_related('caretaker', 'assigned_by')
+            .defer('photo')[:500]
+        )
+        return Response({'days': days, 'items': [completion_json(c) for c in rows]})
+
+
+class CompletionPhotoView(APIView):
+    """GET /api/tasks/completions/<id>/photo/ : the proof photo itself (never a public link)."""
+
+    def get(self, request, pk):
+        c = completions_for(request.user).filter(pk=pk).only('photo', 'photo_type').first()
+        if not c:
+            raise ValidationError({'detail': 'Photo not found.'})
+        res = HttpResponse(bytes(c.photo), content_type=c.photo_type)
+        res['Cache-Control'] = 'private, max-age=86400'
+        return res

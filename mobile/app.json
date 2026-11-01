@@ -44,6 +44,14 @@
           "microphonePermission": "MzaziCare listens to the tone of voice (never the words, and nothing is kept) while your caretaker is with you, if you and they have both agreed."
         }
       ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "MzaziCare uses the camera so the caretaker can take a photo showing a task is done. Only the caretaker and the family can see it.",
+          "photosPermission": false,
+          "microphonePermission": false
+        }
+      ],
       "expo-font",
       "expo-status-bar"
     ]

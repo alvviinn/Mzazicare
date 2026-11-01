@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { ProofPhoto } from '@/components/ProofPhoto';
 import { PageHead, ShiftTable, Tile, ToneBars, ErrorNote } from '@/components/ui';
 import { resolveAlert } from '@/lib/api';
 import { useAuth, useToken } from '@/lib/auth';
@@ -229,10 +230,14 @@ export default function OverviewPage() {
                           )}
                         </span>
                         {c.done_at && <span className="muted small">{fmtTime(c.done_at)}</span>}
+                        {c.completion_id !== null && (
+                          <ProofPhoto completionId={c.completion_id} caption={`${c.description} · ${c.caretaker}`} size={40} />
+                        )}
                       </div>
                     ))}
                   </>
                 )}
+                <Link href="/tasks">Task history and photos →</Link>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import { ProofPhoto } from '@/components/ProofPhoto';
 import { ErrorNote, PageHead, Pill } from '@/components/ui';
 import { addMedicine, addMember, assignTask, deleteMedicine, deleteTask } from '@/lib/api';
 import { useAuth, useToken } from '@/lib/auth';
@@ -225,6 +226,7 @@ function Tasks({ dash, onChanged }: { dash: Dashboard; onChanged: () => Promise<
                 {t.done_at ? ` · done ${fmtTime(t.done_at)}` : ''}
               </div>
             </div>
+            {t.completion_id !== null && <ProofPhoto completionId={t.completion_id} caption={`${t.description} · ${t.caretaker}`} size={40} />}
             <button className="danger" onClick={() => remove(t.id, t.description)}>
               Remove
             </button>
@@ -234,7 +236,7 @@ function Tasks({ dash, onChanged }: { dash: Dashboard; onChanged: () => Promise<
       <form className="card" onSubmit={add}>
         <h3>Give the caretaker a task</h3>
         <p className="muted small" style={{ margin: '4px 0 0' }}>
-          It appears on their task list. They can only tick it off while they are with the elderly person, and you see when it was done.
+          It appears on their task list. To tick it off they must be with the elderly person and take a photo, which you can see here and in Task history.
         </p>
         {carers.length > 1 && (
           <>

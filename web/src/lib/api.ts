@@ -1,4 +1,4 @@
-import { ChatMessage, Dashboard, LiveTone, Profile, ShiftDetail, ShiftSummary } from './types';
+import { ChatMessage, Dashboard, LiveTone, Profile, ShiftDetail, ShiftSummary, TaskHistory } from './types';
 
 // Address of the Django backend, set in web/.env.local (see web/.env.example).
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
@@ -61,6 +61,19 @@ export const assignTask = (
 
 export const deleteTask = (token: string, id: number): Promise<void> =>
   request(`/api/tasks/${id}/`, { method: 'DELETE', token });
+
+export const getTaskHistory = (token: string, days = 30): Promise<TaskHistory> =>
+  request(`/api/tasks/history/?days=${days}`, { token });
+
+// A caretaker's proof photo. It has no public link, so it is fetched with the token and shown from a blob URL.
+export async function fetchProofPhoto(token: string, completionId: number): Promise<Blob> {
+  const res = await fetch(`${API_URL}/api/tasks/completions/${completionId}/photo/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (res.status === 401) throw new Error(SESSION_EXPIRED);
+  if (!res.ok) throw new Error('Photo unavailable.');
+  return res.blob();
+}
 
 export const getShifts = (token: string, days = 30): Promise<ShiftSummary[]> =>
   request(`/api/shifts/?days=${days}`, { token });
