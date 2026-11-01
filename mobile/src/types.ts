@@ -104,7 +104,7 @@ export type Dashboard = {
   today: {
     status: 'on_shift' | 'paused' | 'away' | 'waiting' | 'completed' | 'none';
     shifts: ShiftSummary[];
-    chores: { description: string; is_done: boolean; done_at: string | null }[];
+    chores: TodayTask[];
   };
   stats: { avg_visit_minutes: number | null; visits_7d: number; chore_rate_7d: number | null };
   tones: {
@@ -191,6 +191,8 @@ export type TaskItem = {
   recurring: boolean;
   is_done: boolean;
   done_at: string | null;
+  caretaker: string;
+  assigned_by: string | null; // the family member who assigned it; null when the caretaker wrote it
 };
 
 export type Hours = {
@@ -202,3 +204,15 @@ export type Hours = {
 };
 
 export type ChatMessage = { id: number; mine: boolean; body: string; created_at: string };
+
+// One entry on a caretaker's list today, as the family sees it.
+export type TodayTask = {
+  id: number;
+  description: string;
+  is_done: boolean;
+  done_at: string | null;
+  recurring: boolean;
+  caretaker: string;
+  assigned_by: string | null; // null: the caretaker wrote it themselves
+  assigned_by_me: boolean;
+};

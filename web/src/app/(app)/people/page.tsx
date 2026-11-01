@@ -2,9 +2,10 @@
 
 import { FormEvent, useState } from 'react';
 import { ErrorNote, PageHead, Pill } from '@/components/ui';
-import { addMedicine, addMember, deleteMedicine } from '@/lib/api';
+import { addMedicine, addMember, assignTask, deleteMedicine, deleteTask } from '@/lib/api';
 import { useAuth, useToken } from '@/lib/auth';
 import { useDashboard } from '@/lib/dashboard';
+import { fmtTime } from '@/lib/format';
 import { Dashboard, Member } from '@/lib/types';
 
 function MemberList({ title, list }: { title: string; list: Member[] }) {
@@ -169,6 +170,100 @@ function Medicines({ dash, onChanged }: { dash: Dashboard; onChanged: () => Prom
   );
 }
 
+function Tasks({ dash, onChanged }: { dash: Dashboard; onChanged: () => Promise<void> }) {
+  const token = useToken();
+  const carers = dash.caretakers;
+  const [who, setWho] = useState(carers[0]?.email ?? '');
+  const [title, setTitle] = useState('');
+  const [recurring, setRecurring] = useState(false);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const mine = dash.today.chores.filter((t) => t.assigned_by_me);
+
+  if (!carers.length) {
+    return <div className="card muted">Once a caretaker is linked to you, you can give them tasks here.</div>;
+  }
+
+  async function add(e: FormEvent) {
+    e.preventDefault();
+    if (!title.trim()) return setError('Write the task first.');
+    setError('');
+    setBusy(true);
+    try {
+      await assignTask(token, { caretaker_email: who || carers[0].email, title: title.trim(), recurring });
+      setTitle('');
+      setRecurring(false);
+      await onChanged();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function remove(id: number, label: string) {
+    if (!window.confirm(`Remove the task "${label}"?`)) return;
+    try {
+      await deleteTask(token, id);
+    } finally {
+      await onChanged();
+    }
+  }
+
+  return (
+    <div className="grid two">
+      <div className="card divided">
+        <h3>Tasks you assigned (today)</h3>
+        {mine.length === 0 && <span className="muted">No tasks assigned yet.</span>}
+        {mine.map((t) => (
+          <div className="row" key={t.id}>
+            <span style={{ color: t.is_done ? 'var(--success)' : 'var(--muted)' }}>{t.is_done ? '✓' : '○'}</span>
+            <div className="grow">
+              <b>{t.description}</b>
+              <div className="muted small">
+                {t.caretaker} · {t.recurring ? 'every working day' : 'once'}
+                {t.done_at ? ` · done ${fmtTime(t.done_at)}` : ''}
+              </div>
+            </div>
+            <button className="danger" onClick={() => remove(t.id, t.description)}>
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
+      <form className="card" onSubmit={add}>
+        <h3>Give the caretaker a task</h3>
+        <p className="muted small" style={{ margin: '4px 0 0' }}>
+          It appears on their task list. They can only tick it off while they are with the elderly person, and you see when it was done.
+        </p>
+        {carers.length > 1 && (
+          <>
+            <label htmlFor="carer">For</label>
+            <select id="carer" value={who} onChange={(e) => setWho(e.target.value)}>
+              {carers.map((c) => (
+                <option key={c.email} value={c.email}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+        <label htmlFor="task">Task</label>
+        <input id="task" value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Take her for a short walk" />
+        <label className="check">
+          <input type="checkbox" checked={recurring} onChange={(e) => setRecurring(e.target.checked)} /> Repeat every working day (Monday to Friday)
+        </label>
+        <ErrorNote message={error} />
+        <p style={{ marginBottom: 0 }}>
+          <button type="submit" disabled={busy}>
+            {busy ? 'Assigning…' : 'Assign task'}
+          </button>
+        </p>
+      </form>
+    </div>
+  );
+}
+
 export default function PeoplePage() {
   const { profile } = useAuth();
   const { dash, reload } = useDashboard();
@@ -176,7 +271,7 @@ export default function PeoplePage() {
 
   return (
     <>
-      <PageHead title="People" sub="Your care circle and the medicine reminders for your loved one." />
+      <PageHead title="People" sub="Your care circle, the medicine reminders for your loved one and the caretaker's tasks." />
 
       <h2>Your care circle</h2>
       <div className="grid two">
@@ -186,6 +281,9 @@ export default function PeoplePage() {
 
       <h2>Medicine reminders</h2>
       {dash ? <Medicines dash={dash} onChanged={reload} /> : <p className="muted">Loading…</p>}
+
+      <h2>Tasks for the caretaker</h2>
+      {dash ? <Tasks dash={dash} onChanged={reload} /> : <p className="muted">Loading…</p>}
 
       <h2>Add people</h2>
       <div className="grid two">

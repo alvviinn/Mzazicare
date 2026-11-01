@@ -59,9 +59,16 @@ class ShiftSegment(models.Model):
 
 
 class Task(models.Model):
-    """A to-do item the caretaker writes for themselves. Recurring ones reset on each working day."""
+    """A to-do item on a caretaker's list. Recurring ones reset on each working day.
+
+    The caretaker writes their own; the family can also assign one (`assigned_by` is then the family account),
+    which the caretaker can tick off but not change or delete.
+    """
 
     caretaker = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tasks')
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='assigned_tasks'
+    )
     title = models.CharField(max_length=200)
     recurring = models.BooleanField(default=False)
     is_done = models.BooleanField(default=False)

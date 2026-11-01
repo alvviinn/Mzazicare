@@ -116,7 +116,7 @@ export default function TasksTab({ token }: { token: string }) {
         <Text style={[styles.small, { marginTop: spacing.md }]}>Loading…</Text>
       ) : tasks.length === 0 ? (
         <Text style={[styles.small, { marginTop: spacing.lg, textAlign: 'center' }]}>
-          Your list is empty. Add what you need to do today.
+          Your list is empty. Add what you need to do today. Tasks the family assigns to you also appear here.
         </Text>
       ) : (
         <>
@@ -156,6 +156,7 @@ function Row({
   onChange: (t: TaskItem, c: { is_done?: boolean; recurring?: boolean }) => void;
   onRemove: (t: TaskItem) => void;
 }) {
+  const fromFamily = !!task.assigned_by;
   return (
     <View style={[styles.row, !first && styles.rowBorder]}>
       <Pressable onPress={() => onChange(task, { is_done: !task.is_done })} hitSlop={8} style={styles.checkHit}>
@@ -166,7 +167,8 @@ function Row({
       <View style={{ flex: 1 }}>
         <Text style={[styles.taskText, task.is_done && styles.taskDone]}>{task.title}</Text>
         <View style={styles.meta}>
-          <Pressable onPress={() => onChange(task, { recurring: !task.recurring })} hitSlop={6}>
+          {/* a task the family assigned can be ticked off, but only they can change or remove it */}
+          <Pressable onPress={() => onChange(task, { recurring: !task.recurring })} hitSlop={6} disabled={fromFamily}>
             <View style={styles.chipRow}>
               {task.recurring && <Icon name="repeat" size={14} color={colors.primary} />}
               <Text style={[styles.chip, task.recurring && styles.chipOn]}>
@@ -174,12 +176,15 @@ function Row({
               </Text>
             </View>
           </Pressable>
+          {fromFamily && <Text style={styles.from}> · from {task.assigned_by}</Text>}
           {task.done_at && <Text style={styles.small}> · done {fmtTime(task.done_at)}</Text>}
         </View>
       </View>
-      <Pressable onPress={() => onRemove(task)} hitSlop={10}>
-        <Icon name="close" size={20} color={colors.textMuted} />
-      </Pressable>
+      {!fromFamily && (
+        <Pressable onPress={() => onRemove(task)} hitSlop={10}>
+          <Icon name="close" size={20} color={colors.textMuted} />
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -219,5 +224,6 @@ const styles = StyleSheet.create({
   chipRow: { flexDirection: 'row', alignItems: 'center' },
   chip: { fontSize: 12, color: colors.textMuted },
   chipOn: { color: colors.primary, fontWeight: '600' },
+  from: { fontSize: 12, color: colors.primary, fontWeight: '600' },
   remove: { color: colors.textMuted, fontSize: 18, paddingLeft: spacing.md },
 });

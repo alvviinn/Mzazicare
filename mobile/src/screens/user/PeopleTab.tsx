@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-import { addMedicine, addMember, deleteMedicine } from '../../api/client';
+import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { addMedicine, addMember, assignTask, deleteMedicine, deleteTask } from '../../api/client';
 import { FamilyCard, SectionTitle } from '../../components/HomeShell';
 import { Icon } from '../../components/Icon';
 import { Button, Card, ErrorText, Field } from '../../components/ui';
+import { fmtTime } from '../../format';
 import { colors, radius, spacing } from '../../theme';
-import { Dashboard, Medicine, Profile } from '../../types';
+import { Dashboard, Medicine, Profile, TodayTask } from '../../types';
 
 type Props = {
   token: string;
@@ -183,6 +184,125 @@ function MedicineSection({
   );
 }
 
+function TaskSection({ token, dash, onChanged }: { token: string; dash: Dashboard; onChanged: () => void }) {
+  const carers = dash.caretakers;
+  const [who, setWho] = useState(carers[0]?.email ?? '');
+  const [title, setTitle] = useState('');
+  const [recurring, setRecurring] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const mine = dash.today.chores.filter((t) => t.assigned_by_me);
+
+  async function add() {
+    if (!title.trim()) return setError('Write the task first.');
+    setError('');
+    setLoading(true);
+    try {
+      await assignTask(token, { caretaker_email: who || carers[0].email, title: title.trim(), recurring });
+      setTitle('');
+      setRecurring(false);
+      onChanged();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Something went wrong.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function remove(t: TodayTask) {
+    Alert.alert('Remove task?', `"${t.description}" for ${t.caretaker}`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteTask(token, t.id);
+          } finally {
+            onChanged();
+          }
+        },
+      },
+    ]);
+  }
+
+  if (!carers.length) {
+    return (
+      <Card>
+        <Text style={styles.hint}>Once a caretaker is linked to you, you can give them tasks here.</Text>
+      </Card>
+    );
+  }
+
+  return (
+    <>
+      {mine.length > 0 && (
+        <Card>
+          {mine.map((t, i) => (
+            <View key={t.id} style={[styles.medRow, i > 0 && styles.medBorder]}>
+              <Icon
+                name={t.is_done ? 'check-circle' : 'circle-outline'}
+                size={22}
+                color={t.is_done ? colors.success : colors.border}
+              />
+              <View style={{ flex: 1, marginLeft: spacing.sm }}>
+                <Text style={styles.medName}>{t.description}</Text>
+                <Text style={styles.hintSmall}>
+                  {t.caretaker} · {t.recurring ? 'every working day' : 'once'}
+                  {t.done_at ? ` · done ${fmtTime(t.done_at)}` : ''}
+                </Text>
+              </View>
+              <Pressable onPress={() => remove(t)} hitSlop={10}>
+                <Icon name="close" size={20} color={colors.textMuted} />
+              </Pressable>
+            </View>
+          ))}
+        </Card>
+      )}
+      <View style={{ height: spacing.md }} />
+      <Card>
+        <Text style={styles.cardTitle}>Give the caretaker a task</Text>
+        <Text style={styles.hint}>
+          It appears on their task list. They can only tick it off while they are with the elderly person, and you see when it was done.
+        </Text>
+        {carers.length > 1 && (
+          <View style={styles.chips}>
+            {carers.map((c) => (
+              <Pressable key={c.email} onPress={() => setWho(c.email)} style={[styles.chip, who === c.email && styles.chipOn]}>
+                <Text style={[styles.chipText, who === c.email && { color: colors.onPrimary }]}>{c.name}</Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
+        <Field
+          label="Task"
+          value={title}
+          onChangeText={setTitle}
+          placeholder="e.g. Take her for a short walk"
+          autoCapitalize="sentences"
+          maxLength={200}
+          returnKeyType="done"
+          onSubmitEditing={add}
+        />
+        <View style={styles.switchRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.switchLabel}>Repeat every working day</Text>
+            <Text style={styles.hintSmall}>Resets each morning, Monday to Friday.</Text>
+          </View>
+          <Switch
+            value={recurring}
+            onValueChange={setRecurring}
+            trackColor={{ true: colors.primary, false: colors.border }}
+            thumbColor={colors.surface}
+          />
+        </View>
+        <ErrorText>{error}</ErrorText>
+        <Button title="Assign task" onPress={add} loading={loading} />
+      </Card>
+    </>
+  );
+}
+
 export default function PeopleTab({ token, profile, dash, onChanged, onMedicinesChanged }: Props) {
   return (
     <>
@@ -195,6 +315,9 @@ export default function PeopleTab({ token, profile, dash, onChanged, onMedicines
       ) : (
         <Text style={styles.hint}>Loading…</Text>
       )}
+
+      <SectionTitle>Tasks for the caretaker</SectionTitle>
+      {dash ? <TaskSection token={token} dash={dash} onChanged={onMedicinesChanged} /> : <Text style={styles.hint}>Loading…</Text>}
 
       <SectionTitle>Add people</SectionTitle>
       <AddPerson
@@ -236,4 +359,6 @@ const styles = StyleSheet.create({
   chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { color: colors.primary, fontWeight: '600' },
   success: { color: colors.primary, marginBottom: spacing.md, fontSize: 14 },
+  switchRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
+  switchLabel: { fontSize: 15, fontWeight: '600', color: colors.text },
 });

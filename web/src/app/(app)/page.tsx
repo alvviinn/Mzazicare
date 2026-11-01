@@ -224,6 +224,9 @@ export default function OverviewPage() {
                         <span style={{ color: c.is_done ? 'var(--success)' : 'var(--muted)' }}>{c.is_done ? '✓' : '○'}</span>
                         <span className="grow" style={{ color: c.is_done ? undefined : 'var(--muted)' }}>
                           {c.description}
+                          {c.assigned_by && (
+                            <span className="muted small">{c.assigned_by_me ? ' · set by you' : ` · set by ${c.assigned_by}`}</span>
+                          )}
                         </span>
                         {c.done_at && <span className="muted small">{fmtTime(c.done_at)}</span>}
                       </div>

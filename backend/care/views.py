@@ -127,10 +127,13 @@ class DashboardView(APIView):
                 'today': {
                     'status': status,
                     'shifts': [shift_json(s) for s in today],
-                    # the caretaker's own to-do list for today
+                    # today's to-do lists: the caretakers' own tasks and the ones the family assigned
                     'chores': [
-                        {'description': t.title, 'is_done': t.is_done,
-                         'done_at': t.done_at.isoformat() if t.done_at else None}
+                        {'id': t.pk, 'description': t.title, 'is_done': t.is_done,
+                         'done_at': t.done_at.isoformat() if t.done_at else None,
+                         'recurring': t.recurring, 'caretaker': t.caretaker.name,
+                         'assigned_by': t.assigned_by.name if t.assigned_by_id else None,
+                         'assigned_by_me': t.assigned_by_id == me.pk}
                         for t in today_tasks
                     ],
                 },

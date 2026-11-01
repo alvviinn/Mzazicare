@@ -190,47 +190,90 @@ def require_in_range(user):
     )
 
 
+def require_task_access(user):
+    if user.role not in (Role.CARETAKER, Role.USER):
+        raise PermissionDenied('Task lists are for caretakers and family accounts.')
+
+
+def clean_title(data):
+    title = (data.get('title') or '').strip()
+    if not title:
+        raise ValidationError({'detail': 'Write the task first.'})
+    if len(title) > 200:
+        raise ValidationError({'detail': 'Task is too long (200 characters max).'})
+    return title
+
+
 class TaskListView(APIView):
+    """Caretakers: their own list. Family: the lists of their caretakers, and assigning tasks to them."""
+
     def get(self, request):
-        require_caretaker(request.user)
-        return Response([task_json(t) for t in visible_tasks(request.user)])
+        user = request.user
+        require_task_access(user)
+        if user.role == Role.CARETAKER:
+            return Response([task_json(t) for t in visible_tasks(user)])
+        caretakers = User.objects.filter(sponsor=user, role=Role.CARETAKER).order_by('date_joined')
+        return Response([task_json(t) for c in caretakers for t in visible_tasks(c)])
 
     def post(self, request):
         user = request.user
-        require_caretaker(user)
-        title = (request.data.get('title') or '').strip()
-        if not title:
-            raise ValidationError({'detail': 'Write the task first.'})
-        if len(title) > 200:
-            raise ValidationError({'detail': 'Task is too long (200 characters max).'})
-        if Task.objects.filter(caretaker=user).count() >= MAX_TASKS:
+        require_task_access(user)
+        title = clean_title(request.data)
+        if user.role == Role.CARETAKER:
+            caretaker, assigned_by = user, None
+        else:
+            caretaker = User.objects.filter(
+                email=(request.data.get('caretaker_email') or '').strip().lower(), sponsor=user, role=Role.CARETAKER
+            ).first()
+            if not caretaker:
+                raise ValidationError({'detail': 'Choose one of your caretakers.'})
+            assigned_by = user
+        if Task.objects.filter(caretaker=caretaker).count() >= MAX_TASKS:
             raise ValidationError({'detail': 'Too many tasks. Delete some you no longer need.'})
-        task = Task.objects.create(caretaker=user, title=title, recurring=bool(request.data.get('recurring')))
-        sync_chore(user, task)
+        task = Task.objects.create(
+            caretaker=caretaker, assigned_by=assigned_by, title=title, recurring=bool(request.data.get('recurring'))
+        )
+        sync_chore(caretaker, task)
         return Response(task_json(task), status=201)
 
 
 class TaskDetailView(APIView):
     def _task(self, request, pk):
-        require_caretaker(request.user)
-        task = Task.objects.filter(pk=pk, caretaker=request.user).first()
+        user = request.user
+        require_task_access(user)
+        if user.role == Role.CARETAKER:
+            task = Task.objects.filter(pk=pk, caretaker=user).first()
+        else:  # family may only change the tasks they assigned
+            task = Task.objects.filter(pk=pk, assigned_by=user, caretaker__sponsor=user).first()
         if not task:
             raise ValidationError({'detail': 'Task not found.'})
         return task
 
+    def _require_owner(self, request, task):
+        if request.user.role == Role.CARETAKER and task.assigned_by_id:
+            raise PermissionDenied('The family assigned this task, so only they can change or remove it.')
+
     def patch(self, request, pk):
         task = self._task(request, pk)
         if 'is_done' in request.data:
+            if request.user.role != Role.CARETAKER:
+                raise PermissionDenied('Only the caretaker can mark a task done.')
             task.is_done = bool(request.data['is_done'])
             if task.is_done and not task.done_at:
                 require_in_range(request.user)  # a task can only be ticked off at the elderly person's side
             task.done_at = timezone.now() if task.is_done else None
+        if 'title' in request.data:
+            self._require_owner(request, task)
+            task.title = clean_title(request.data)
         if 'recurring' in request.data:
+            self._require_owner(request, task)
             task.recurring = bool(request.data['recurring'])
         task.save()
-        sync_chore(request.user, task)
+        sync_chore(task.caretaker, task)
         return Response(task_json(task))
 
     def delete(self, request, pk):
-        self._task(request, pk).delete()
+        task = self._task(request, pk)
+        self._require_owner(request, task)
+        task.delete()
         return Response(status=204)

@@ -78,6 +78,11 @@ export const addMedicine = (
 export const deleteMedicine = (token: string, id: number): Promise<void> =>
   request(`/api/medicines/${id}/`, { method: 'DELETE', token });
 
+export const assignTask = (
+  token: string,
+  t: { caretaker_email: string; title: string; recurring: boolean },
+): Promise<TaskItem> => request('/api/tasks/', { ...post(t), token });
+
 // ---- Shifts (one per day): caretaker and family ----
 
 export const getShifts = (token: string, days = 30): Promise<ShiftSummary[]> =>

@@ -19,6 +19,7 @@ def visible_tasks(caretaker, now=None):
         )
     return list(
         Task.objects.filter(caretaker=caretaker)
+        .select_related('caretaker', 'assigned_by')
         .filter(Q(recurring=True) | Q(is_done=False) | Q(done_at__date=today))
         .order_by('is_done', 'created_at')
     )
@@ -31,4 +32,6 @@ def task_json(t):
         'recurring': t.recurring,
         'is_done': t.is_done,
         'done_at': t.done_at.isoformat() if t.done_at else None,
+        'caretaker': t.caretaker.name,
+        'assigned_by': t.assigned_by.name if t.assigned_by_id else None,  # null: the caretaker wrote it
     }

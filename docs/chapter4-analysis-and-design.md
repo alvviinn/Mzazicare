@@ -21,7 +21,7 @@ Development followed Agile Scrum as a solo developer, in short increments, each 
 
 | Actor | Who | Goals | Interacts through |
 |---|---|---|---|
-| **Family sponsor** (role `user`) | an adult child, often abroad | know the parent is cared for; be alerted early; keep control | mobile app (Overview, Chats, People) |
+| **Family sponsor** (role `user`) | an adult child, often abroad | know the parent is cared for; be alerted early; keep control; set medicines and caretaker tasks | mobile app (Overview, Chats, People) |
 | **Caretaker** (role `caretaker`) | the hired helper | have hours counted fairly; manage the day's tasks; reach the family | mobile app (Shift, Tasks, Hours) |
 | **Elderly person** (role `elderly`) | the parent | feel safe; call for help easily; understand the screen | mobile app (large-text, bilingual home) |
 | **Tone model** | software | classify the tone of a recording clip | called by the backend, not an actor with a screen |
@@ -37,7 +37,7 @@ IDs FR-01 to FR-05 come from the proposal; FR-06 onward were identified during d
 | ID | Requirement | Status |
 |---|---|---|
 | FR-01 | Register, sign in, and role-based access; a family links its caretaker and elderly person | **Implemented** |
-| FR-02 | Caretaker starts and ends shifts and keeps a task list; a record of the visit exists | **Implemented**: shifts start automatically (geofence) or manually; own to-do list with daily-repeating tasks |
+| FR-02 | Caretaker starts and ends shifts and keeps a task list; a record of the visit exists | **Implemented**: shifts start automatically (geofence) or manually; to-do list with daily-repeating tasks, written by the caretaker or assigned by the family (the caretaker ticks family tasks off only inside the geofence and cannot change or delete them) |
 | FR-03 | Triage chatbot answering mixed English and Kiswahili first-aid queries | **Not started** |
 | FR-04 | Listen to the visit, extract features, delete raw audio, flag vocal distress | **Model and endpoint implemented** (tone model, in-memory analysis, alert for the family). Recording from the phone is **pending** (consent flow first) |
 | FR-05 | Monitor GPS against a geofence; flag manipulated coordinates | **Implemented** (15 m around the elderly person's phone; fake-GPS reports ignored and flagged) |
@@ -149,6 +149,7 @@ erDiagram
   SHIFT ||--o{ CHORE : "per-visit record"
   SHIFT ||--o{ TONEREADING : "seconds per tone"
   USER ||--o{ TASK : "caretaker writes"
+  USER ||--o{ TASK : "family assigns"
   TASK ||--o{ CHORE : "snapshot"
   USER ||--o{ ALERT : "family receives"
   SHIFT ||--o{ ALERT : "may cause"
@@ -195,6 +196,7 @@ erDiagram
   }
   TASK {
     bigint caretaker_id FK
+    bigint assigned_by_id FK "family, or null"
     string title
     bool recurring
     bool is_done
@@ -405,7 +407,7 @@ Full model card: [`ml/voice/README.md`](../ml/voice/README.md).
 | Level | What | Result |
 |---|---|---|
 | Unit | geofence engine with controlled time; recurring-task rules; MFCC and windowing; label mapping and speaker-disjoint splits | passing |
-| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **123 backend tests**, passing |
+| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **130 backend tests**, passing |
 | ML | held-out speakers; live-path check; alert-rule simulation; end-to-end check of the audio endpoint | figures in 4.3.6 |
 | Static | TypeScript type-check; migration consistency; secret scan | passing (`scripts/test.ps1`) |
 | Manual | app on a physical phone with Expo Go | role flows, chat, elderly screen |

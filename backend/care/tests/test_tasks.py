@@ -92,9 +92,9 @@ class TaskApiTests(FamilyTestCase):
         self.assertEqual(self.caretaker_api.post('/api/tasks/', {'title': '  '}, format='json').status_code, 400)
         self.assertEqual(self.caretaker_api.post('/api/tasks/', {'title': 'x' * 201}, format='json').status_code, 400)
 
-    def test_only_caretakers_have_a_task_list(self):
+    def test_the_elderly_have_no_task_list(self):
         self.assertEqual(self.elder_api.get('/api/tasks/').status_code, 403)
-        self.assertEqual(self.sponsor_api.get('/api/tasks/').status_code, 403)
+        self.assertEqual(self.elder_api.post('/api/tasks/', {'title': 'x'}, format='json').status_code, 403)
 
     def test_a_caretaker_cannot_touch_someone_elses_task(self):
         other = Task.objects.create(caretaker=self.sponsor, title='Not yours')  # any task owned by another user
@@ -110,3 +110,71 @@ class TaskApiTests(FamilyTestCase):
         self.caretaker_api.patch(f"/api/tasks/{r.data['id']}/", {'is_done': True}, format='json')
         chore = self.caretaker.shifts.get().chores.get(description='Bathing')
         self.assertTrue(chore.is_done)
+
+
+class FamilyAssignedTaskTests(FamilyTestCase):
+    def _assign(self, title='Take her for a short walk', **extra):
+        return self.sponsor_api.post(
+            '/api/tasks/', {'title': title, 'caretaker_email': self.caretaker.email, **extra}, format='json'
+        )
+
+    def test_family_assigns_a_task_and_the_caretaker_sees_who_set_it(self):
+        r = self._assign(recurring=True)
+        self.assertEqual(r.status_code, 201)
+        self.assertEqual(r.data['assigned_by'], 'Pat Parent')
+        self.assertEqual(r.data['caretaker'], 'Cara Care')
+        [t] = self.caretaker_api.get('/api/tasks/').data
+        self.assertEqual((t['title'], t['assigned_by'], t['recurring']), ('Take her for a short walk', 'Pat Parent', True))
+        own = self.caretaker_api.post('/api/tasks/', {'title': 'Tidy kitchen'}, format='json').data
+        self.assertIsNone(own['assigned_by'])
+
+    def test_family_sees_all_their_caretakers_tasks(self):
+        self._assign()
+        self.caretaker_api.post('/api/tasks/', {'title': 'Tidy kitchen'}, format='json')
+        titles = {t['title'] for t in self.sponsor_api.get('/api/tasks/').data}
+        self.assertEqual(titles, {'Take her for a short walk', 'Tidy kitchen'})
+
+    def test_caretaker_ticks_it_off_only_inside_the_area(self):
+        tid = self._assign().data['id']
+        self.put_in_range(metres=60)
+        self.assertEqual(self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json').status_code, 403)
+        self.put_in_range()
+        r = self.caretaker_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json')
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.data['is_done'])
+        [chore] = [c for c in self.sponsor_api.get('/api/dashboard/').data['today']['chores'] if c['id'] == tid]
+        self.assertTrue(chore['is_done'])
+        self.assertTrue(chore['assigned_by_me'])
+
+    def test_caretaker_cannot_change_or_delete_a_family_task(self):
+        tid = self._assign().data['id']
+        self.assertEqual(self.caretaker_api.delete(f'/api/tasks/{tid}/').status_code, 403)
+        self.assertEqual(self.caretaker_api.patch(f'/api/tasks/{tid}/', {'recurring': True}, format='json').status_code, 403)
+        self.assertEqual(self.caretaker_api.patch(f'/api/tasks/{tid}/', {'title': 'Skip'}, format='json').status_code, 403)
+        self.assertTrue(Task.objects.filter(pk=tid, recurring=False, title='Take her for a short walk').exists())
+
+    def test_family_can_edit_and_remove_their_task_but_not_tick_it(self):
+        tid = self._assign().data['id']
+        self.assertEqual(self.sponsor_api.patch(f'/api/tasks/{tid}/', {'is_done': True}, format='json').status_code, 403)
+        r = self.sponsor_api.patch(f'/api/tasks/{tid}/', {'recurring': True}, format='json')
+        self.assertTrue(r.data['recurring'])
+        self.assertEqual(self.sponsor_api.delete(f'/api/tasks/{tid}/').status_code, 204)
+        self.assertFalse(Task.objects.filter(pk=tid).exists())
+
+    def test_family_cannot_touch_the_caretakers_own_tasks(self):
+        tid = self.caretaker_api.post('/api/tasks/', {'title': 'Tidy kitchen'}, format='json').data['id']
+        self.assertEqual(self.sponsor_api.delete(f'/api/tasks/{tid}/').status_code, 400)
+        self.assertTrue(Task.objects.filter(pk=tid).exists())
+
+    def test_family_can_only_assign_to_their_own_caretakers(self):
+        from accounts.models import Role
+        from .helpers import client_for, make_user
+
+        other_family = make_user('other@example.com', 'Olu Other')
+        make_user('care2@example.com', 'Cal Care', Role.CARETAKER, other_family)
+        r = self.sponsor_api.post('/api/tasks/', {'title': 'x', 'caretaker_email': 'care2@example.com'}, format='json')
+        self.assertEqual(r.status_code, 400)
+        self.assertEqual(self.sponsor_api.post('/api/tasks/', {'title': 'x'}, format='json').status_code, 400)
+        tid = self._assign().data['id']
+        self.assertEqual(client_for(other_family).delete(f'/api/tasks/{tid}/').status_code, 400)
+        self.assertEqual(self._assign(title=' ').status_code, 400)

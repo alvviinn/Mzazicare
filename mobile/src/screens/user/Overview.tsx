@@ -138,7 +138,10 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
                 <View style={styles.checkBox}>
                   <Icon name={c.is_done ? 'check-circle' : 'circle-outline'} size={22} color={c.is_done ? colors.success : colors.border} />
                 </View>
-                <Text style={[styles.choreText, !c.is_done && { color: colors.textMuted }]}>{c.description}</Text>
+                <Text style={[styles.choreText, !c.is_done && { color: colors.textMuted }]}>
+                  {c.description}
+                  {c.assigned_by && <Text style={styles.small}>{c.assigned_by_me ? '  · set by you' : `  · set by ${c.assigned_by}`}</Text>}
+                </Text>
                 {c.done_at && <Text style={styles.small}>{fmtTime(c.done_at)}</Text>}
               </View>
             ))}
