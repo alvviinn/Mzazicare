@@ -78,14 +78,27 @@ def check(name, ok):
         sys.exit(1)
 
 
+def sign_in(email, password='secret1'):
+    """Password sign-in, entering the emailed code when the account needs one.
+
+    Start the backend with MZAZI_2FA_ECHO_CODE=1 (development only) and the code comes back in the response;
+    otherwise type the code printed in the backend console.
+    """
+    _, r = call('POST', '/auth/login/', {'email': email, 'password': password})
+    if r.get('two_factor'):
+        code = r.get('dev_code') or input(f'Code emailed to {email} (see the backend console): ')
+        _, r = call('POST', '/auth/verify/', {'challenge': r['challenge'], 'code': code})
+    return r
+
+
 def main():
     for who in ('pat', 'cara', 'ella'):
         call('POST', '/auth/register/', {'name': who.title(), 'email': f'{who}.tone@x.com', 'password': 'secret1'})
-    _, p = call('POST', '/auth/login/', {'email': 'pat.tone@x.com', 'password': 'secret1'})
+    p = sign_in('pat.tone@x.com')
     call('POST', '/team/', {'email': 'cara.tone@x.com', 'role': 'caretaker'}, p['token'])
     call('POST', '/team/', {'email': 'ella.tone@x.com', 'role': 'elderly'}, p['token'])
-    _, c = call('POST', '/auth/login/', {'email': 'cara.tone@x.com', 'password': 'secret1'})
-    _, e = call('POST', '/auth/login/', {'email': 'ella.tone@x.com', 'password': 'secret1'})
+    c = sign_in('cara.tone@x.com')
+    e = sign_in('ella.tone@x.com')
 
     angry = clip('angry')
     s, r = call('POST', '/audio/tone/', raw=angry, token=c['token'], ctype='audio/wav')

@@ -313,6 +313,23 @@ label {
   font-weight: 600;
   margin: 12px 0 4px;
 }
+/* ---------- sign-in ---------- */
+.or {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  margin: 4px 0 12px;
+}
+.or::before,
+.or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
 /* ---------- proof photos ---------- */
 .proof {
   flex: none;

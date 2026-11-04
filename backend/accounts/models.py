@@ -36,6 +36,11 @@ class User(AbstractUser):
     sponsor = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='members')
     # When this person agreed to their voice tone being analysed during care visits (null = has not agreed).
     voice_consent_at = models.DateTimeField(null=True, blank=True)
+    # Accounts created from now on confirm a password sign-in with an emailed code. Accounts that existed before
+    # this was added keep False and sign in as they always did (see accounts/two_factor.py).
+    two_factor_required = models.BooleanField(default=False)
+    # The Google account linked to this one (its stable "sub" id), once they have signed in with Google.
+    google_sub = models.CharField(max_length=255, unique=True, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
@@ -55,3 +60,16 @@ class Invite(models.Model):
 
     def __str__(self):
         return f'{self.email} -> {self.role} (by {self.sponsor.email})'
+
+
+class LoginChallenge(models.Model):
+    """A password sign-in waiting for its emailed code. Only hashes are stored; it is deleted once used."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='login_challenges')
+    token_hash = models.CharField(max_length=64, unique=True)
+    code_hash = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    attempts = models.PositiveSmallIntegerField(default=0)  # wrong codes so far
+    sends = models.PositiveSmallIntegerField(default=0)  # codes emailed so far
+    last_sent_at = models.DateTimeField()

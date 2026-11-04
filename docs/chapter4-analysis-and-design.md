@@ -36,7 +36,7 @@ IDs FR-01 to FR-05 come from the proposal; FR-06 onward were identified during d
 
 | ID | Requirement | Status |
 |---|---|---|
-| FR-01 | Register, sign in, and role-based access; a family links its caretaker and elderly person | **Implemented** |
+| FR-01 | Register, sign in, and role-based access; a family links its caretaker and elderly person | **Implemented**, plus Google sign-in and a two-step emailed code for new accounts |
 | FR-02 | Caretaker starts and ends shifts and keeps a task list; a record of the visit exists | **Implemented**: shifts start automatically (geofence) or manually; to-do list with daily-repeating tasks, written by the caretaker or assigned by the family (the caretaker ticks family tasks off only inside the geofence and cannot change or delete them); every tick needs a photo taken with the camera as proof, which the family can see; a task history (7, 30 or 90 days, with photos) for both the caretaker and the family |
 | FR-03 | Triage chatbot answering mixed English and Kiswahili first-aid queries | **Not started** |
 | FR-04 | Listen to the visit, extract features, delete raw audio, flag vocal distress | **Model and endpoint implemented** (tone model, in-memory analysis, alert for the family). Recording from the phone is **pending** (consent flow first) |
@@ -52,7 +52,7 @@ IDs FR-01 to FR-05 come from the proposal; FR-06 onward were identified during d
 
 | ID | Requirement | How it is met, and evidence |
 |---|---|---|
-| NFR-01 Security | Backend-issued JWT, role-scoped access, no third-party login | JWT (90 days) from the Django backend; every endpoint checks the role (tested: 123 backend tests including 403/401 cases); passwords hashed; no third-party login or API keys |
+| NFR-01 Security | Backend-issued JWT, role-scoped access, no third-party login (revised: Google sign-in added at the client's request) | JWT (90 days) from the Django backend, also after Google sign-in (Google's ID token is verified on the server and never used as the session); every endpoint checks the role (tested, including 403/401 cases); passwords hashed; two-step sign-in with an emailed code for accounts created after it was added |
 | NFR-02 Performance | Heavy AI asynchronous, normal interactions within 2 s | **Partly.** The tone model is small (about 0.5 MB, runs on a CPU) and runs inside the request; there is no task queue yet. A formal latency benchmark has **not** been done |
 | NFR-03 Usability | Understands conversational Kenyan phrasing | The chatbot is not built. The elderly screen is bilingual with plain-language wording |
 | NFR-04 Accuracy | Each model at least 80 % before deployment, precision prioritised | Tone model: **83.0 %** overall on unseen speakers, **75.4 %** on speech alone (below 80 %); alert rule tuned for precision. Other models not built |
@@ -397,7 +397,7 @@ Full model card: [`ml/voice/README.md`](../ml/voice/README.md).
 | Concern | Design |
 |---|---|
 | Who may do what | Role checked on every endpoint (matrix in [API.md](API.md)); chat only between a family and the people it linked; a person can only read their own data |
-| Authentication | Backend-issued JWT; passwords hashed (PBKDF2); 90-day sessions. Limitation: logging out clears the token on the phone but there is no server-side revocation yet |
+| Authentication | Backend-issued JWT; passwords hashed (PBKDF2); 90-day sessions. **Two-step sign-in:** accounts created from November 2026 confirm each password sign-in (and their registration) with a 6-digit code emailed to them: 10-minute life, single use, tied to a random challenge, 5 tries, resend limits, only hashes stored. Accounts that existed before keep password-only sign-in, as agreed with the client. **Google sign-in:** the ID token's signature, issuer, audience (our client IDs) and verified email are checked on the server; it then counts as verified, so no emailed code. Limitation: logging out clears the token on the phone but there is no server-side revocation yet; older accounts cannot yet opt in to the code |
 | Spoofed location | Mock-location fixes ignored and reported; accuracy and freshness checks; the elderly phone is the reference, so the caretaker cannot move the circle |
 | Audio | Raw body, in-memory upload handler only, analysed and dropped; only seconds-per-tone saved; analysed only during a verified shift; size limit; capture switched off until a consent flow exists |
 | Task proof photos | Taken with the camera only (no gallery, so no old photos); the type is checked from the file's first bytes (JPEG, PNG or WebP) and the size is capped at 6 MB; stored in the database, never as a public file or link; served only to the caretaker who took it and their family through a signed-in endpoint; refused unless the caretaker is inside the geofence; removed if the caretaker unticks the task; the phone deletes its copy after upload. Limitation: photos are kept with no expiry yet, and may show the elderly person or their home |
@@ -419,7 +419,7 @@ Full model card: [`ml/voice/README.md`](../ml/voice/README.md).
 | Level | What | Result |
 |---|---|---|
 | Unit | geofence engine with controlled time; recurring-task rules; MFCC and windowing; label mapping and speaker-disjoint splits | passing |
-| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **140 backend tests**, passing |
+| API / integration | registration, role linking, access control, shift, tasks, chat, elderly features, dashboard, tone endpoint | **159 backend tests**, passing |
 | ML | held-out speakers; live-path check; alert-rule simulation; end-to-end check of the audio endpoint | figures in 4.3.6 |
 | Static | TypeScript type-check; migration consistency; secret scan | passing (`scripts/test.ps1`) |
 | Manual | app on a physical phone with Expo Go | role flows, chat, elderly screen |

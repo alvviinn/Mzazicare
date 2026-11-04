@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken
 
+from . import google, two_factor
 from .models import Invite, Role, User
 
 
@@ -36,18 +37,26 @@ class RegisterView(APIView):
         if User.objects.filter(email=email).exists():
             raise ValidationError({'detail': 'An account with this email already exists.'})
 
-        # If a family already added this email, the account starts with that role.
-        invite = Invite.objects.filter(email=email).select_related('sponsor').first()
-        user = User.objects.create_user(
-            email,
-            password,
-            name=name,
-            role=invite.role if invite else Role.USER,
-            sponsor=invite.sponsor if invite else None,
-        )
-        if invite:
-            invite.delete()
-        return Response(auth_payload(user), status=201)
+        user = create_account(email, name, password)
+        # New accounts use the emailed code; registering also proves the email address is theirs.
+        return Response(two_factor.start(user), status=201)
+
+
+def create_account(email, name, password=None, **extra):
+    """A new account. If a family already added this email, it starts with that role and family."""
+    invite = Invite.objects.filter(email=email).select_related('sponsor').first()
+    user = User.objects.create_user(
+        email,
+        password,  # None: no password (a Google-only account)
+        name=name,
+        role=invite.role if invite else Role.USER,
+        sponsor=invite.sponsor if invite else None,
+        two_factor_required=True,
+        **extra,
+    )
+    if invite:
+        invite.delete()
+    return user
 
 
 class LoginView(APIView):
@@ -58,7 +67,58 @@ class LoginView(APIView):
         user = authenticate(request, username=email, password=request.data.get('password') or '')
         if not user:
             raise ValidationError({'detail': 'Incorrect email or password.'})
+        if user.two_factor_required:
+            return Response(two_factor.start(user))  # no token yet: the emailed code comes first
+        return Response(auth_payload(user))  # accounts from before two-step sign-in, unchanged
+
+
+class VerifyCodeView(APIView):
+    """POST /api/auth/verify/ {challenge, code}: the second step of a password sign-in."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        user = two_factor.verify(request.data.get('challenge'), request.data.get('code'))
         return Response(auth_payload(user))
+
+
+class ResendCodeView(APIView):
+    """POST /api/auth/resend/ {challenge}: email a fresh code."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        return Response(two_factor.resend(request.data.get('challenge')))
+
+
+class GoogleSignInView(APIView):
+    """POST /api/auth/google/ {id_token}: sign in, or create an account, with a Google account.
+
+    Google has already verified the person, so there is no emailed code. An existing account with the same
+    (Google-verified) email is linked to the Google account; otherwise a new account is made, taking the role of
+    any invite for that email, just like registering.
+    """
+
+    permission_classes = [AllowAny]
+
+    @transaction.atomic
+    def post(self, request):
+        claims = google.verify_id_token(request.data.get('id_token'))
+        user = User.objects.select_for_update().filter(google_sub=claims['sub']).first()
+        created = False
+        if not user:
+            user = User.objects.select_for_update().filter(email=claims['email']).first()
+            if user:
+                if user.google_sub:  # this email is already linked to a different Google account
+                    raise ValidationError({'detail': 'This email is linked to another Google account.'})
+                user.google_sub = claims['sub']
+                user.save(update_fields=['google_sub'])
+            else:
+                user = create_account(claims['email'], claims['name'], google_sub=claims['sub'])
+                created = True
+        if not user.is_active:
+            raise ValidationError({'detail': 'This account is switched off.'})
+        return Response(auth_payload(user), status=201 if created else 200)
 
 
 class MeView(APIView):

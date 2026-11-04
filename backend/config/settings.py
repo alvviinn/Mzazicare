@@ -90,6 +90,26 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+# ---- Sign-in: Google and the emailed code ----
+# Client IDs from Google Cloud (OAuth): web, Android and iOS, comma-separated. Empty = Google sign-in is off.
+GOOGLE_CLIENT_IDS = [c.strip() for c in os.environ.get('GOOGLE_CLIENT_IDS', '').split(',') if c.strip()]
+
+# Email for the 6-digit sign-in codes. Without EMAIL_HOST the codes are printed in the backend console instead.
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
+if EMAIL_HOST:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', '1') == '1'
+    EMAIL_TIMEOUT = 15
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_FROM', 'MzaziCare <no-reply@mzazicare.local>')
+# Development aid for scripts such as ml/voice/test_endpoint.py: also return the code in the API response.
+# Only ever honoured while DEBUG is on and no real email server is configured.
+TWO_FACTOR_ECHO_CODE = DEBUG and not EMAIL_HOST and os.environ.get('MZAZI_2FA_ECHO_CODE', '0') == '1'
+
 # ---- Acoustic tone AI ----
 # The model code lives in <repo>/ml/voice. Audio sent for analysis is held in memory only: never saved.
 VOICE_AI_ROOT = BASE_DIR.parent / 'ml'

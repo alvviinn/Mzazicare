@@ -194,3 +194,6 @@ export type TaskRecord = {
   shift_id: number | null;
 };
 export type TaskHistory = { days: number; items: TaskRecord[] };
+
+// Accounts created after two-step sign-in was added get this instead of a token: enter the emailed code next.
+export type CodeChallenge = { two_factor: true; challenge: string; sent_to: string; expires_in: number };

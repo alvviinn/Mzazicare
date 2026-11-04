@@ -2,6 +2,7 @@ import {
   AudioStatus,
   AuthResult,
   ChatMessage,
+  CodeChallenge,
   Dashboard,
   ElderHome,
   Hours,
@@ -11,6 +12,7 @@ import {
   ShiftDetail,
   ShiftState,
   ShiftSummary,
+  SignInResult,
   TaskHistory,
   TaskItem,
 } from '../types';
@@ -47,11 +49,20 @@ const post = (body?: unknown) => ({ method: 'POST', ...(body === undefined ? {} 
 
 // ---- Account ----
 
-export const login = (email: string, password: string): Promise<AuthResult> =>
+export const login = (email: string, password: string): Promise<SignInResult> =>
   request('/api/auth/login/', post({ email, password }));
 
-export const register = (name: string, email: string, password: string): Promise<AuthResult> =>
+export const register = (name: string, email: string, password: string): Promise<SignInResult> =>
   request('/api/auth/register/', post({ name, email, password }));
+
+// The second step for accounts that need it: the 6-digit code that was emailed.
+export const verifyCode = (challenge: string, code: string): Promise<AuthResult> =>
+  request('/api/auth/verify/', post({ challenge, code }));
+
+export const resendCode = (challenge: string): Promise<CodeChallenge> => request('/api/auth/resend/', post({ challenge }));
+
+// Google has verified the person, so there is no emailed code.
+export const googleSignIn = (idToken: string): Promise<AuthResult> => request('/api/auth/google/', post({ id_token: idToken }));
 
 export const getProfile = (token: string): Promise<Profile> => request('/api/me/', { token });
 

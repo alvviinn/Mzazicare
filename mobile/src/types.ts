@@ -20,6 +20,9 @@ export type Profile = {
 };
 
 export type AuthResult = { token: string; name: string; role: Role };
+// Accounts created after two-step sign-in was added get this instead of a token: enter the emailed code next.
+export type CodeChallenge = { two_factor: true; challenge: string; sent_to: string; expires_in: number };
+export type SignInResult = AuthResult | CodeChallenge;
 
 // ---- Family dashboard ----
 

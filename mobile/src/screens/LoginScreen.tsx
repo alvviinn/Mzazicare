@@ -2,8 +2,11 @@ import { useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInputInstance } from 'react-native';
 import { login } from '../api/client';
 import { saveSession, Session } from '../auth/session';
+import { CodeStep } from '../components/CodeStep';
+import { GoogleButton } from '../components/GoogleButton';
 import { Button, Card, ErrorText, Field, Logo } from '../components/ui';
 import { colors, spacing } from '../theme';
+import { AuthResult, CodeChallenge } from '../types';
 
 type Props = { onLoggedIn: (s: Session) => void; onRegister: () => void };
 
@@ -12,6 +15,7 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [pending, setPending] = useState<CodeChallenge | null>(null); // waiting for the emailed code
   const passwordRef = useRef<TextInputInstance>(null);
 
   async function submit() {
@@ -21,11 +25,32 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
     setError('');
     setLoading(true);
     try {
-      onLoggedIn(await saveSession(await login(email.trim(), password)));
+      const result = await login(email.trim(), password);
+      if ('two_factor' in result) {
+        setPending(result);
+        setLoading(false);
+      } else {
+        await finish(result);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong.');
       setLoading(false);
     }
+  }
+
+  async function finish(auth: AuthResult) {
+    onLoggedIn(await saveSession(auth));
+  }
+
+  if (pending) {
+    return (
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+          <Logo />
+          <CodeStep start={pending} onDone={finish} onCancel={() => setPending(null)} />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    );
   }
 
   return (
@@ -56,6 +81,7 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
           />
           <ErrorText>{error}</ErrorText>
           <Button title="Sign in" onPress={submit} loading={loading} />
+          <GoogleButton onDone={finish} onError={setError} />
         </Card>
 
         <Pressable onPress={onRegister} style={styles.switch}>

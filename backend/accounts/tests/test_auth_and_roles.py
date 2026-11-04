@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.core import mail
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import AccessToken
@@ -7,8 +8,29 @@ from rest_framework_simplejwt.tokens import AccessToken
 from accounts.models import Invite, Role, User
 
 
+def last_code():
+    """The 6-digit code from the newest sign-in email (tests use Django's in-memory mailbox)."""
+    return mail.outbox[-1].subject.rsplit(' ', 1)[-1]
+
+
+def finish(api, response):
+    """Complete the emailed-code step if the server asked for it."""
+    if response.status_code in (200, 201) and response.data.get('two_factor'):
+        return api.post('/api/auth/verify/', {'challenge': response.data['challenge'], 'code': last_code()}, format='json')
+    return response
+
+
 def register(api, email='pat@example.com', name='Pat Parent', password='secret1'):
+    """Register and enter the emailed code, as a new person does."""
+    return finish(api, register_only(api, email, name, password))
+
+
+def register_only(api, email='pat@example.com', name='Pat Parent', password='secret1'):
     return api.post('/api/auth/register/', {'name': name, 'email': email, 'password': password}, format='json')
+
+
+def login(api, email, password='secret1'):
+    return finish(api, api.post('/api/auth/login/', {'email': email, 'password': password}, format='json'))
 
 
 class RegistrationAndLoginTests(TestCase):
@@ -16,8 +38,9 @@ class RegistrationAndLoginTests(TestCase):
         self.api = APIClient()
 
     def test_everyone_starts_as_a_normal_family_user(self):
-        r = register(self.api)
-        self.assertEqual(r.status_code, 201)
+        self.assertEqual(register_only(self.api).status_code, 201)
+        r = finish(self.api, login(self.api, 'pat@example.com'))
+        self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data['role'], Role.USER)
         self.assertIn('token', r.data)
 
@@ -39,8 +62,9 @@ class RegistrationAndLoginTests(TestCase):
 
     def test_login_success_and_failure(self):
         register(self.api)
-        ok = self.api.post('/api/auth/login/', {'email': 'pat@example.com', 'password': 'secret1'}, format='json')
+        ok = login(self.api, 'pat@example.com')
         self.assertEqual(ok.status_code, 200)
+        self.assertIn('token', ok.data)
         bad = self.api.post('/api/auth/login/', {'email': 'pat@example.com', 'password': 'wrong'}, format='json')
         self.assertEqual(bad.status_code, 400)
         self.assertEqual(bad.data['detail'], 'Incorrect email or password.')
@@ -102,7 +126,7 @@ class RoleLinkingTests(TestCase):
         register(self.api, email='cara@example.com', name='Cara Care')
         self.add('cara@example.com', 'caretaker')
         cara_api = APIClient()
-        token = self.api.post('/api/auth/login/', {'email': 'cara@example.com', 'password': 'secret1'}, format='json').data['token']
+        token = login(self.api, 'cara@example.com').data['token']
         cara_api.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
         self.assertEqual(self.add('z@example.com', 'elderly', api=cara_api).status_code, 400)
 
@@ -111,10 +135,9 @@ class RoleLinkingTests(TestCase):
         register(self.api, email='ella@example.com', name='Ella Elder')
         self.add('cara@example.com', 'caretaker')
         self.add('ella@example.com', 'elderly')
-        login = lambda e: self.api.post('/api/auth/login/', {'email': e, 'password': 'secret1'}, format='json').data['token']
         for email, role in (('cara@example.com', 'caretaker'), ('ella@example.com', 'elderly')):
             c = APIClient()
-            c.credentials(HTTP_AUTHORIZATION=f'Bearer {login(email)}')
+            c.credentials(HTTP_AUTHORIZATION=f"Bearer {login(self.api, email).data['token']}")
             me = c.get('/api/me/').data
             self.assertEqual(me['role'], role)
             self.assertEqual(me['sponsor']['email'], 'pat@example.com')

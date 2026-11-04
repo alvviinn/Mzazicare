@@ -10,8 +10,11 @@ Roles: **family** (`user`), **caretaker**, **elderly**.
 
 | Method and path | Who | Purpose |
 |---|---|---|
-| `POST /auth/register/` | anyone | `{name, email, password}` (password 6+ characters). Starts as **family**, unless the email was already added as a caretaker or elderly person, in which case the account gets that role. Returns `{token, name, role}`. |
-| `POST /auth/login/` | anyone | `{email, password}`. Returns `{token, name, role}`. |
+| `POST /auth/register/` | anyone | `{name, email, password}` (password 6+ characters). Starts as **family**, unless the email was already added as a caretaker or elderly person, in which case the account gets that role. Returns a code challenge (below), not a token: the emailed code also proves the email is theirs. |
+| `POST /auth/login/` | anyone | `{email, password}`. Accounts that existed before two-step sign-in was added get `{token, name, role}` as before. Accounts created since get `{two_factor: true, challenge, sent_to, expires_in}` and a 6-digit code by email (no token yet). |
+| `POST /auth/verify/` | anyone | `{challenge, code}`. Returns `{token, name, role}`. The code lasts 10 minutes, works once, and only with its own challenge; 5 wrong codes spend the challenge; a new sign-in replaces an older challenge. Only hashes of the code and challenge are stored. |
+| `POST /auth/resend/` | anyone | `{challenge}`. Emails a new code (the old one stops working); at most every 30 s and 5 times per sign-in. |
+| `POST /auth/google/` | anyone | `{id_token}` from Google Sign-In. The backend checks Google's signature, expiry, issuer, that it was issued for one of `GOOGLE_CLIENT_IDS`, and that the email is verified. Signs in the linked account, links an existing account with the same email, or creates one (taking any invite for that email, like registering; no password). No emailed code: Google has verified the person. Returns `{token, name, role}` (`201` when the account is new). |
 | `GET /me/` | any | The caller's profile: role, the family account that linked them, and the family's caretakers and elderly people (with `pending` invites shown to the family only). |
 | `POST /team/` | family | `{email, role: "caretaker" \| "elderly"}`. Converts an existing account, or records an invite for an unregistered email. Rejects your own email, someone already in your circle, and accounts that belong to another family. |
 

@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { getProfile, login as apiLogin, SESSION_EXPIRED } from './api';
-import { Profile } from './types';
+import { getProfile, googleSignIn, login as apiLogin, SESSION_EXPIRED, verifyCode } from './api';
+import { AuthResult, CodeChallenge, Profile } from './types';
 
 const KEY = 'mzazicare.token';
 
@@ -11,7 +11,10 @@ type Auth = {
   token: string | null;
   profile: Profile | null;
   loading: boolean; // true until we know whether a saved session is still valid
-  signIn: (email: string, password: string) => Promise<void>;
+  // Resolves to a code challenge when the account must confirm with an emailed code, otherwise null (signed in).
+  signIn: (email: string, password: string) => Promise<CodeChallenge | null>;
+  confirmCode: (challenge: string, code: string) => Promise<void>;
+  signInWithGoogle: (idToken: string) => Promise<void>;
   signOut: () => void;
   refreshProfile: () => Promise<void>;
 };
@@ -55,8 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false));
   }, [signOut]);
 
-  const signIn = useCallback(async (email: string, password: string) => {
-    const result = await apiLogin(email, password);
+  const accept = useCallback(async (result: AuthResult) => {
     if (result.role !== 'user') {
       throw new Error(
         'This dashboard is for family accounts. Caretakers and elderly people use the MzaziCare phone app.',
@@ -72,6 +74,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setProfile(p);
   }, []);
 
+  const signIn = useCallback(
+    async (email: string, password: string) => {
+      const result = await apiLogin(email, password);
+      if ('two_factor' in result) return result;
+      await accept(result);
+      return null;
+    },
+    [accept],
+  );
+
+  const confirmCode = useCallback(
+    async (challenge: string, code: string) => accept(await verifyCode(challenge, code)),
+    [accept],
+  );
+
+  const signInWithGoogle = useCallback(async (idToken: string) => accept(await googleSignIn(idToken)), [accept]);
+
   const refreshProfile = useCallback(async () => {
     if (!token) return;
     try {
@@ -81,7 +100,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [token, signOut]);
 
-  return <Ctx.Provider value={{ token, profile, loading, signIn, signOut, refreshProfile }}>{children}</Ctx.Provider>;
+  return (
+    <Ctx.Provider value={{ token, profile, loading, signIn, confirmCode, signInWithGoogle, signOut, refreshProfile }}>
+      {children}
+    </Ctx.Provider>
+  );
 }
 
 export function useAuth(): Auth {
