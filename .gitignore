@@ -40,3 +40,6 @@ desktop.ini
 .idea/
 .vscode/
 *.swp
+
+# Django collectstatic output (production)
+backend/staticfiles/

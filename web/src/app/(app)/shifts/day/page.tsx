@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { PageHead, Pill, Tile, ToneBars } from '@/components/ui';
 import { ToneChart } from '@/components/ToneChart';
 import { getShift } from '@/lib/api';
@@ -17,9 +18,22 @@ const EVENT: Record<TimelineEvent['kind'], { text: string; dot: '' | 'out' | 'en
   left: { text: 'Left', dot: 'end' },
 };
 
+// One day's shift: /shifts/day?id=<shift id> (a query string, so the dashboard can be served as static files).
 export default function ShiftDetailPage() {
-  const params = useParams<{ id: string }>();
-  const id = Number(params.id);
+  return (
+    <Suspense fallback={<p className="muted">Loading…</p>}>
+      <ShiftFromQuery />
+    </Suspense>
+  );
+}
+
+function ShiftFromQuery() {
+  const id = Number(useSearchParams().get('id'));
+  if (!id) return <p className="muted">This shift could not be found.</p>;
+  return <ShiftDetail key={id} id={id} />;
+}
+
+function ShiftDetail({ id }: { id: number }) {
   const { data: shift, error } = usePolling((t) => getShift(t, id), 15000);
 
   if (!shift) return <p className="muted">{error || 'Loading…'}</p>;

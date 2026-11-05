@@ -88,7 +88,7 @@ export function ShiftTable({ shifts, showCaretaker = true }: { shifts: ShiftSumm
             return (
               <tr key={s.id} className="click">
                 <td>
-                  <Link href={`/shifts/${s.id}`}>{fmtShiftDay(s.date)}</Link>
+                  <Link href={`/shifts/day?id=${s.id}`}>{fmtShiftDay(s.date)}</Link>
                 </td>
                 {showCaretaker && <td>{s.caretaker}</td>}
                 <td>{times}</td>

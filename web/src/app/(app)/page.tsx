@@ -86,7 +86,7 @@ function TodayCard({ dash }: { dash: Dashboard }) {
             {detail}
           </p>
         </div>
-        {s && <Link href={`/shifts/${s.id}`}>See today&apos;s timeline →</Link>}
+        {s && <Link href={`/shifts/day?id=${s.id}`}>See today&apos;s timeline →</Link>}
       </div>
     </div>
   );

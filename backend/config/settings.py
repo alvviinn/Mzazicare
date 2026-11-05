@@ -62,6 +62,9 @@ DATABASES = {
         'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
+        # Azure Database for PostgreSQL only accepts encrypted connections: DB_SSLMODE=require there.
+        'OPTIONS': {'sslmode': os.environ['DB_SSLMODE']} if os.environ.get('DB_SSLMODE') else {},
+        'CONN_MAX_AGE': 60,
     }
 }
 
@@ -112,10 +115,25 @@ TWO_FACTOR_ECHO_CODE = DEBUG and not EMAIL_HOST and os.environ.get('MZAZI_2FA_EC
 
 # ---- Acoustic tone AI ----
 # The model code lives in <repo>/ml/voice. Audio sent for analysis is held in memory only: never saved.
-VOICE_AI_ROOT = BASE_DIR.parent / 'ml'
+VOICE_AI_ROOT = Path(os.environ.get('VOICE_AI_ROOT', BASE_DIR.parent / 'ml'))
 VOICE_AUDIO_MAX_BYTES = 3_000_000  # ~90 s of 16 kHz mono; clips from the app are far shorter
 FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.MemoryFileUploadHandler']  # never spool uploads to disk
 
 # The sponsor web dashboard will call this API from the browser.
 CORS_ALLOW_ALL_ORIGINS = DEBUG
+# In production, the dashboard's address(es), e.g. https://<name>.azurestaticapps.net (comma-separated).
+CORS_ALLOWED_ORIGINS = [o.strip() for o in os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',') if o.strip()]
+
+# ---- Production (Azure App Service) ----
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Azure ends HTTPS in front of the app
+    CSRF_TRUSTED_ORIGINS = [f'https://{h}' for h in ALLOWED_HOSTS if h and h != '*']
+    SESSION_COOKIE_SECURE = CSRF_COOKIE_SECURE = True
+LOGGING = {  # errors (and, without EMAIL_HOST, the sign-in codes) appear in the App Service log stream
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {'console': {'class': 'logging.StreamHandler'}},
+    'root': {'handlers': ['console'], 'level': 'WARNING'},
+}
 
