@@ -12,7 +12,7 @@
     },
     "android": {
       "package": "com.mzazicare.app",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -51,8 +51,7 @@
         "expo-image-picker",
         {
           "cameraPermission": "MzaziCare uses the camera so the caretaker can take a photo showing a task is done. Only the caretaker and the family can see it.",
-          "photosPermission": false,
-          "microphonePermission": false
+          "photosPermission": false
         }
       ],
       "expo-font",
