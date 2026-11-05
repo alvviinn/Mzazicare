@@ -6,6 +6,7 @@ import { ShiftRow } from '../../components/ShiftRow';
 import { Card } from '../../components/ui';
 import { colors, spacing } from '../../theme';
 import { ShiftSummary } from '../../types';
+import { fmtDuration } from '../../format';
 
 type Props = { token: string; onOpenShift: (id: number) => void };
 
@@ -45,7 +46,7 @@ export default function ShiftsTab({ token, onOpenShift }: Props) {
             ))}
             <Text style={styles.hint}>
               One shift per day. Stepping out is a break and the same shift continues when they return. Tap a day for the
-              full timeline. {shifts.length} day{shifts.length === 1 ? '' : 's'}, {Math.floor(total / 60)}h {total % 60}m active in total.
+              full timeline. {shifts.length} day{shifts.length === 1 ? '' : 's'}, {fmtDuration(total)} active in total.
             </Text>
           </>
         )}
