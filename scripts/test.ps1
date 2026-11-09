@@ -30,7 +30,10 @@ if (Test-Path $Py) {
 
 if (Test-Path $MlPy) {
     Push-Location (Join-Path $Root 'ml')
-    try { Check 'ML: unit tests' { & $MlPy -m unittest discover -s voice/tests -t . -v } } finally { Pop-Location }
+    try {
+        Check 'ML: tone model unit tests' { & $MlPy -m unittest discover -s voice/tests -t . -v }
+        Check 'ML: first-aid assistant unit tests' { & $MlPy -m unittest discover -s firstaid/tests -t . -v }
+    } finally { Pop-Location }
 } else { Warn 'ML venv missing (scripts\setup.ps1 -WithML). Skipping ML tests.' }
 
 if (Test-Path (Join-Path $Root 'mobile\node_modules')) {

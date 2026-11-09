@@ -1,0 +1,3420 @@
+{
+ "call_for_help": {
+  "id": "call_for_help",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "ambulance",
+   "emergency number",
+   "call 999",
+   "call 112",
+   "who do i call",
+   "which number",
+   "gari la wagonjwa",
+   "ambulensi",
+   "nambari ya dharura",
+   "nipige simu wapi",
+   "piga 999"
+  ],
+  "examples": [
+   "what number do i call for an ambulance",
+   "how do i call an ambulance in kenya",
+   "emergency number please",
+   "who should i call in an emergency",
+   "is 999 free to call",
+   "what do i tell the ambulance people",
+   "how do i get emergency help fast",
+   "the ambulance number",
+   "i need an ambulance number",
+   "nambari ya ambulensi ni gani",
+   "nipige simu wapi kuita gari la wagonjwa",
+   "nambari ya dharura kenya",
+   "naitaje ambulance",
+   "niseme nini nikipiga simu ya dharura",
+   "nikiita ambulance nipige namba gani",
+   "red cross number ni gani"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Stay calm and speak clearly.",
+     "Say exactly where you are: the area, road, building and a landmark the driver can find.",
+     "Say what happened, how old the person is, and whether they are awake and breathing.",
+     "Give your phone number and keep the phone on, they may call back.",
+     "Do not hang up until they tell you to. They can guide you through first aid on the phone.",
+     "Send someone to the gate or road to show the ambulance the way, and unlock the door."
+    ],
+    "avoid": [],
+    "intro": "In Kenya you can call 999 or 112 for an ambulance, free from any phone, even without airtime. The Kenya Red Cross emergency line is 1199.",
+    "after": "Keep the person's medicine list and ID ready for the paramedics, and tell the family."
+   },
+   "sw": {
+    "steps": [
+     "Tulia na uongee waziwazi.",
+     "Eleza mahali hasa ulipo: eneo, barabara, jengo na alama ambayo dereva anaweza kuipata.",
+     "Eleza kilichotokea, umri wa mtu, na kama yuko macho na anapumua.",
+     "Toa nambari yako ya simu na uiache ikiwa wazi, wanaweza kukupigia tena.",
+     "Usikate simu mpaka wakuambie. Wanaweza kukuelekeza jinsi ya kutoa huduma ya kwanza kwenye simu.",
+     "Mtume mtu asimame langoni au barabarani kuonyesha gari la wagonjwa njia, na ufungue mlango."
+    ],
+    "avoid": [],
+    "intro": "Nchini Kenya unaweza kupiga 999 au 112 kuita gari la wagonjwa, bure kutoka simu yoyote, hata bila salio. Nambari ya dharura ya Kenya Red Cross ni 1199.",
+    "after": "Weka tayari orodha ya dawa za mgonjwa na kitambulisho chake kwa wahudumu wa afya, na uijulishe familia."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Calling for emergency help",
+   "sw": "Kuita msaada wa dharura"
+  }
+ },
+ "unresponsive_breathing": {
+  "id": "unresponsive_breathing",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "unconscious",
+   "unresponsive",
+   "passed out",
+   "not waking",
+   "won't wake up",
+   "collapsed",
+   "knocked out",
+   "recovery position",
+   "breathing but not responding",
+   "hajitambui",
+   "amepoteza fahamu",
+   "hazinduki",
+   "ameanguka hajitambui",
+   "ana pumua lakini hajibu",
+   "mkao wa kupona"
+  ],
+  "examples": [
+   "my patient is unconscious what do i do",
+   "she collapsed and is not responding",
+   "he passed out but he is breathing",
+   "grandma won't wake up but she is breathing",
+   "how do i put someone in the recovery position",
+   "the old man fainted and is not waking up",
+   "he is breathing but not answering me",
+   "what to do if someone is unconscious",
+   "she is knocked out after falling",
+   "mzee amezimia hajitambui",
+   "bibi hajitambui lakini anapumua",
+   "amepoteza fahamu nifanye nini",
+   "hazinduki na anapumua",
+   "mgonjwa ameanguka na hajibu",
+   "mkao wa kupona unafanywaje",
+   "ameanguka hajitambui please help",
+   "my mum is unresponsive but breathing"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Check for danger first, then shout their name and tap their shoulders.",
+     "If they do not respond, tilt their head back gently and lift the chin to open the airway.",
+     "Look, listen and feel for normal breathing for up to 10 seconds.",
+     "If they are breathing normally, roll them onto their side into the recovery position: the top leg bent at the knee to stop them rolling, the top hand under the cheek, head tilted back so the mouth points down.",
+     "Keep checking that they are still breathing normally until help arrives.",
+     "If they stop breathing normally or only gasp, start CPR straight away."
+    ],
+    "avoid": [
+     "Do not give them anything to eat or drink.",
+     "Do not leave them alone.",
+     "Do not put a pillow under their head while they lie on their back, it can block the airway."
+    ],
+    "intro": "Someone who does not respond but is breathing needs their airway kept open.",
+    "urgent": "Call 999 or 112 now, or ask someone else to call while you help.",
+    "after": "Keep them warm with a blanket and tell the paramedics how long they were unresponsive."
+   },
+   "sw": {
+    "steps": [
+     "Kwanza hakikisha hakuna hatari, kisha mwite kwa jina kwa sauti na umguse mabegani.",
+     "Asipojibu, rudisha kichwa chake nyuma polepole na uinue kidevu ili kufungua njia ya hewa.",
+     "Tazama, sikiliza na uhisi kama anapumua kawaida kwa hadi sekunde 10.",
+     "Kama anapumua kawaida, mlaze kwa ubavu katika mkao wa kupona (recovery position): mguu wa juu ukunje gotini asibingirike, mkono wa juu chini ya shavu, kichwa nyuma kidogo ili mdomo uelekee chini.",
+     "Endelea kuhakikisha bado anapumua kawaida mpaka msaada ufike.",
+     "Akiacha kupumua kawaida au anatweta tu, anza CPR mara moja."
+    ],
+    "avoid": [
+     "Usimpe chakula wala kinywaji.",
+     "Usimwache peke yake.",
+     "Usiweke mto chini ya kichwa chake akiwa amelala chali, unaweza kuziba njia ya hewa."
+    ],
+    "intro": "Mtu asiyejibu lakini anapumua anahitaji njia yake ya hewa iwe wazi.",
+    "urgent": "Piga 999 au 112 sasa hivi, au mwombe mtu mwingine apige wakati wewe unasaidia.",
+    "after": "Mfunike kwa blanketi apate joto na uwaambie wahudumu wa afya muda gani hakujitambua."
+   }
+  },
+  "followup": {
+   "ask": {
+    "en": "Is the person breathing normally?",
+    "sw": "Je, mtu huyo anapumua kawaida?"
+   },
+   "options": [
+    {
+     "label": {
+      "en": "Yes, breathing normally",
+      "sw": "Ndiyo, anapumua kawaida"
+     },
+     "goto": "unresponsive_breathing"
+    },
+    {
+     "label": {
+      "en": "No, or only gasping",
+      "sw": "Hapana, au anatweta tu"
+     },
+     "goto": "cpr"
+    }
+   ]
+  },
+  "title": {
+   "en": "Unresponsive but breathing",
+   "sw": "Hajitambui lakini anapumua"
+  }
+ },
+ "cpr": {
+  "id": "cpr",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "not breathing",
+   "stopped breathing",
+   "no pulse",
+   "heart stopped",
+   "cardiac arrest",
+   "cpr",
+   "chest compressions",
+   "gasping",
+   "resuscitate",
+   "hapumui",
+   "ameacha kupumua",
+   "moyo umesimama",
+   "mapigo ya moyo hayapo",
+   "kufufua",
+   "kubonyeza kifua",
+   "anatweta"
+  ],
+  "examples": [
+   "he is not breathing",
+   "she stopped breathing what do i do",
+   "how do i do cpr",
+   "how to give chest compressions",
+   "my patient has no pulse",
+   "i think his heart stopped",
+   "she is gasping and not responding",
+   "how many compressions per minute",
+   "how to use a defibrillator",
+   "he is not breathing and not responding help",
+   "grandpa collapsed and is not breathing",
+   "hapumui nifanye nini",
+   "ameacha kupumua",
+   "moyo wake umesimama",
+   "jinsi ya kufanya cpr",
+   "mzee hapumui saidia haraka",
+   "bibi haupumui na hajibu",
+   "namna ya kubonyeza kifua",
+   "not breathing tafadhali help"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Kneel beside them on a firm surface, on the floor rather than a bed.",
+     "Put the heel of one hand in the centre of the chest, on the lower half of the breastbone, and your other hand on top.",
+     "Keep your arms straight and push straight down hard and fast, 5 to 6 cm deep, about 2 pushes every second (100 to 120 a minute).",
+     "Let the chest come all the way back up after each push.",
+     "If you are trained and willing, give 2 rescue breaths after every 30 pushes. If not, just keep pushing without stopping.",
+     "When the AED arrives, switch it on and follow its spoken instructions. Nobody touches the person while it checks or shocks.",
+     "Keep going until help takes over, the person starts breathing normally, or you are too exhausted to continue. If someone else can help, swap every 2 minutes."
+    ],
+    "avoid": [
+     "Do not stop pushing to check for a pulse.",
+     "Do not be afraid of hurting them. Ribs can crack in older people, keep going anyway: without CPR they will not survive."
+    ],
+    "intro": "If someone is unresponsive and not breathing normally, their heart has probably stopped. CPR keeps blood flowing to the brain until help arrives.",
+    "urgent": "Call 999 or 112 now and put the phone on speaker. If there is a defibrillator (AED) nearby, send someone to get it.",
+    "after": "If they start breathing normally, put them in the recovery position and keep watching their breathing."
+   },
+   "sw": {
+    "steps": [
+     "Piga magoti kando yake akiwa juu ya sehemu ngumu, sakafuni badala ya kitandani.",
+     "Weka kisigino cha kiganja kimoja katikati ya kifua, nusu ya chini ya mfupa wa kifua, na kiganja kingine juu yake.",
+     "Nyoosha mikono na ubonyeze moja kwa moja chini kwa nguvu na haraka, kina cha sentimita 5 hadi 6, kama mara 2 kila sekunde (100 hadi 120 kwa dakika).",
+     "Acha kifua kirudi juu kabisa baada ya kila kubonyeza.",
+     "Kama umefunzwa na uko tayari, mpe pumzi 2 baada ya kila mabonyezo 30. Kama sivyo, endelea tu kubonyeza bila kusimama.",
+     "AED ikifika, iwashe na ufuate maelekezo yake ya sauti. Mtu yeyote asimguse mgonjwa wakati inapima au inashtua.",
+     "Endelea mpaka wahudumu wachukue nafasi, mtu aanze kupumua kawaida, au umechoka kabisa. Kama kuna mtu mwingine, badilishaneni kila dakika 2."
+    ],
+    "avoid": [
+     "Usisimame kubonyeza ili kupima mapigo ya moyo.",
+     "Usiogope kumuumiza. Mbavu zinaweza kuvunjika kwa wazee, endelea tu: bila CPR hataishi."
+    ],
+    "intro": "Mtu asiyejibu na asiyepumua kawaida, huenda moyo wake umesimama. CPR husaidia damu kuendelea kufika kwenye ubongo mpaka msaada ufike.",
+    "urgent": "Piga 999 au 112 sasa hivi na uweke simu kwenye spika. Kama kuna mashine ya kushtua moyo (AED) karibu, mtume mtu akaileta.",
+    "after": "Akianza kupumua kawaida, mlaze katika mkao wa kupona na uendelee kuangalia anavyopumua."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Not breathing: CPR",
+   "sw": "Hapumui: CPR"
+  }
+ },
+ "choking_severe": {
+  "id": "choking_severe",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "choking",
+   "choke",
+   "food stuck in throat",
+   "can't breathe after eating",
+   "something stuck in throat",
+   "swallowed something stuck",
+   "abdominal thrusts",
+   "heimlich",
+   "back blows",
+   "anakabwa",
+   "amekabwa",
+   "chakula kimekwama kooni",
+   "kimekwama kooni",
+   "hawezi kupumua akila",
+   "mfupa umekwama"
+  ],
+  "examples": [
+   "she is choking on food",
+   "he is choking what do i do",
+   "food is stuck in his throat",
+   "grandma choked on a piece of meat",
+   "he cannot breathe after eating",
+   "how to do the heimlich manoeuvre",
+   "how do i help someone who is choking",
+   "something is stuck in her throat and she can't talk",
+   "the patient choked while drinking tea",
+   "anakabwa na chakula",
+   "mzee amekabwa nifanye nini",
+   "chakula kimekwama kooni",
+   "mfupa wa samaki umekwama kooni",
+   "hawezi kupumua baada ya kula",
+   "bibi amekabwa na ugali",
+   "anakabwa hawezi kuongea",
+   "choking haraka msaada"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Ask \"Are you choking?\" If they can cough, encourage them to keep coughing.",
+     "If they cannot cough, speak or breathe, stand to the side and slightly behind them and lean them forward.",
+     "Give up to 5 firm back blows between the shoulder blades with the heel of your hand. Check after each one whether the object has come out.",
+     "If it has not cleared, give up to 5 abdominal thrusts: stand behind them, put your fist just above the belly button, hold it with your other hand, and pull sharply inwards and upwards.",
+     "Keep repeating 5 back blows and 5 abdominal thrusts until the object comes out or help arrives.",
+     "If they become unresponsive, lower them carefully to the floor, call 999 or 112 if nobody has, and start CPR."
+    ],
+    "avoid": [
+     "Do not put your fingers in their mouth to feel for the object, you can push it deeper. Only remove something you can clearly see.",
+     "Do not give water while they are choking."
+    ],
+    "intro": "Choking happens when something blocks the airway. If the person cannot cough, speak or breathe, act straight away.",
+    "urgent": "Ask someone to call 999 or 112 while you start.",
+    "after": "Anyone who has had abdominal thrusts must see a doctor the same day, as they can cause internal injury."
+   },
+   "sw": {
+    "steps": [
+     "Muulize \"Umekabwa?\" Kama anaweza kukohoa, mhimize aendelee kukohoa.",
+     "Kama hawezi kukohoa, kuongea wala kupumua, simama kando yake na nyuma kidogo, kisha umwinamishe mbele.",
+     "Mpige makofi hadi 5 kwa nguvu katikati ya mabega kwa kisigino cha kiganja. Angalia baada ya kila kofi kama kitu kimetoka.",
+     "Kisipotoka, fanya mibano ya tumbo hadi 5: simama nyuma yake, weka ngumi juu kidogo ya kitovu, ishike kwa mkono mwingine, na uvute kwa nguvu ndani na juu.",
+     "Endelea kurudia makofi 5 na mibano ya tumbo 5 mpaka kitu kitoke au msaada ufike.",
+     "Akiacha kujitambua, mlaze sakafuni kwa uangalifu, piga 999 au 112 kama hakuna aliyepiga, na uanze CPR."
+    ],
+    "avoid": [
+     "Usiingize vidole mdomoni kutafuta kitu, unaweza kukisukuma ndani zaidi. Toa tu kitu unachokiona waziwazi.",
+     "Usimpe maji wakati amekabwa."
+    ],
+    "intro": "Kukabwa hutokea kitu kinapoziba njia ya hewa. Kama mtu hawezi kukohoa, kuongea wala kupumua, chukua hatua mara moja.",
+    "urgent": "Mwombe mtu apige 999 au 112 wakati wewe unaanza.",
+    "after": "Mtu yeyote aliyefanyiwa mibano ya tumbo lazima amwone daktari siku hiyo hiyo, kwani inaweza kusababisha jeraha la ndani."
+   }
+  },
+  "followup": {
+   "ask": {
+    "en": "Can the person cough or speak?",
+    "sw": "Je, mtu huyo anaweza kukohoa au kuongea?"
+   },
+   "options": [
+    {
+     "label": {
+      "en": "Yes, coughing or speaking",
+      "sw": "Ndiyo, anakohoa au anaongea"
+     },
+     "goto": "choking_mild"
+    },
+    {
+     "label": {
+      "en": "No, cannot breathe",
+      "sw": "Hapana, hawezi kupumua"
+     },
+     "goto": "choking_severe"
+    },
+    {
+     "label": {
+      "en": "They became unresponsive",
+      "sw": "Amepoteza fahamu"
+     },
+     "goto": "cpr"
+    }
+   ]
+  },
+  "title": {
+   "en": "Choking",
+   "sw": "Kukabwa (chakula kukwama kooni)"
+  }
+ },
+ "choking_mild": {
+  "id": "choking_mild",
+  "critical": false,
+  "classify": false,
+  "keywords": [
+   "coughing after choking",
+   "still coughing"
+  ],
+  "examples": [],
+  "answer": {
+   "en": {
+    "steps": [
+     "Encourage them to keep coughing hard.",
+     "Stay with them and keep watching.",
+     "If they stop coughing, cannot speak or breathe, or start turning blue, start back blows and abdominal thrusts straight away."
+    ],
+    "avoid": [
+     "Do not slap their back while they are coughing well.",
+     "Do not give water or food until it has cleared."
+    ],
+    "intro": "If they can cough, speak or breathe, their airway is only partly blocked and coughing is the best way to clear it.",
+    "after": "If they still feel something stuck, have pain, or keep coughing afterwards, take them to a doctor."
+   },
+   "sw": {
+    "steps": [
+     "Mhimize aendelee kukohoa kwa nguvu.",
+     "Kaa naye na uendelee kumwangalia.",
+     "Akiacha kukohoa, hawezi kuongea wala kupumua, au anaanza kubadilika rangi kuwa bluu, anza makofi ya mgongo na mibano ya tumbo mara moja."
+    ],
+    "avoid": [
+     "Usimpige mgongoni wakati anakohoa vizuri.",
+     "Usimpe maji wala chakula mpaka kitoke."
+    ],
+    "intro": "Kama anaweza kukohoa, kuongea au kupumua, njia ya hewa imeziba kidogo tu na kukohoa ndiyo njia bora ya kukitoa.",
+    "after": "Kama bado anahisi kitu kimekwama, ana maumivu, au anaendelea kukohoa baadaye, mpeleke kwa daktari."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Choking, still coughing",
+   "sw": "Amekabwa lakini anakohoa"
+  }
+ },
+ "heart_attack": {
+  "id": "heart_attack",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "chest pain",
+   "heart attack",
+   "chest pressure",
+   "chest tightness",
+   "pain spreading to arm",
+   "pain in left arm",
+   "jaw pain",
+   "angina",
+   "crushing chest",
+   "maumivu ya kifua",
+   "kifua kinauma",
+   "mshtuko wa moyo",
+   "moyo unauma",
+   "kifua kimebana",
+   "maumivu mkono wa kushoto",
+   "shambulio la moyo"
+  ],
+  "examples": [
+   "he has chest pain",
+   "she says her chest is tight and painful",
+   "i think he is having a heart attack",
+   "pain in his chest going to the left arm",
+   "crushing chest pain and sweating",
+   "my patient complains of chest pressure",
+   "grandpa has chest pain and can't breathe well",
+   "should i give aspirin for chest pain",
+   "her jaw and arm hurt and she is sweating",
+   "signs of a heart attack",
+   "kifua kinamuuma sana",
+   "ana maumivu ya kifua",
+   "nadhani amepata mshtuko wa moyo",
+   "mzee analalamika kifua kimebana",
+   "maumivu ya kifua hadi mkono wa kushoto",
+   "moyo unauma na anatokwa jasho",
+   "bibi ana chest pain",
+   "chest pain mbaya sana nifanye nini"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Help them sit down in a comfortable half-sitting position, for example on the floor leaning against a wall with knees bent.",
+     "Loosen tight clothing and keep them calm and still.",
+     "If they are an adult, not allergic to aspirin, have no bleeding problem, and a doctor has not told them to avoid it, give one 300 mg aspirin to chew slowly.",
+     "If they have their own heart spray or tablets (GTN) prescribed for chest pain, help them take it as the doctor directed.",
+     "Stay with them and watch their breathing and how alert they are.",
+     "If they become unresponsive and stop breathing normally, start CPR."
+    ],
+    "avoid": [
+     "Do not let them walk around, climb stairs or drive themselves to hospital.",
+     "Do not give food or drinks.",
+     "Do not wait to see if the pain goes away."
+    ],
+    "intro": "Chest pain, pressure or tightness that may spread to the arm, jaw, neck or back, often with breathlessness, sweating or feeling sick, can be a heart attack. Older people, women and people with diabetes may only feel tired, breathless or unwell.",
+    "urgent": "Call 999 or 112 now. Treat it as a heart attack until a doctor says otherwise.",
+    "after": "Write down when the pain started and what medicine they took, and give this to the paramedics."
+   },
+   "sw": {
+    "steps": [
+     "Msaidie akae katika mkao wa nusu kukaa, kwa mfano sakafuni ameegemea ukuta na magoti yamekunjwa.",
+     "Legeza nguo zinazobana na umtulize asisogee.",
+     "Kama ni mtu mzima, hana mzio wa aspirini, hana tatizo la kutokwa damu, na daktari hajamkataza, mpe aspirini moja ya miligramu 300 aitafune polepole.",
+     "Kama ana dawa yake ya kupuliza au vidonge vya moyo (GTN) alivyoandikiwa kwa maumivu ya kifua, msaidie atumie kama daktari alivyoelekeza.",
+     "Kaa naye na uangalie anavyopumua na kama yuko macho.",
+     "Akiacha kujitambua na kuacha kupumua kawaida, anza CPR."
+    ],
+    "avoid": [
+     "Usimwache atembee, apande ngazi wala ajiendeshe hospitalini.",
+     "Usimpe chakula wala vinywaji.",
+     "Usisubiri kuona kama maumivu yataisha."
+    ],
+    "intro": "Maumivu, mgandamizo au kubana kifuani kunakoweza kuenea mkononi, tayani, shingoni au mgongoni, mara nyingi pamoja na kukosa pumzi, kutokwa jasho au kichefuchefu, kunaweza kuwa mshtuko wa moyo. Wazee, wanawake na watu wenye kisukari wanaweza kuhisi uchovu tu, kukosa pumzi au kujisikia vibaya.",
+    "urgent": "Piga 999 au 112 sasa hivi. Lichukulie kama mshtuko wa moyo mpaka daktari aseme vinginevyo.",
+    "after": "Andika saa ambayo maumivu yalianza na dawa alizotumia, uwape wahudumu wa afya."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Chest pain or heart attack",
+   "sw": "Maumivu ya kifua au mshtuko wa moyo"
+  }
+ },
+ "stroke": {
+  "id": "stroke",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "stroke",
+   "face drooping",
+   "face droop",
+   "slurred speech",
+   "can't speak properly",
+   "one side weak",
+   "arm weakness",
+   "numb on one side",
+   "sudden confusion",
+   "sudden severe headache",
+   "lost balance suddenly",
+   "mouth twisted",
+   "fast test",
+   "kiharusi",
+   "uso umepinda",
+   "mdomo umepinda",
+   "upande mmoja umelegea",
+   "hawezi kuongea vizuri",
+   "maneno hayatoki",
+   "mkono hauinuki",
+   "stroke imempata",
+   "amepooza upande mmoja"
+  ],
+  "examples": [
+   "i think she is having a stroke",
+   "his face is drooping on one side",
+   "he suddenly can't speak properly",
+   "her speech is slurred and her arm is weak",
+   "one side of his body is weak",
+   "signs of a stroke",
+   "grandma's mouth is twisted and she is confused",
+   "he can't lift his right arm suddenly",
+   "sudden numbness on one side of the face",
+   "what is the fast test",
+   "nadhani amepata kiharusi",
+   "uso wake umepinda upande mmoja",
+   "mdomo umepinda na hawezi kuongea",
+   "mkono mmoja hauinuki ghafla",
+   "upande mmoja wa mwili umelegea",
+   "maneno hayatoki vizuri ghafla",
+   "mzee amepooza upande mmoja",
+   "dalili za kiharusi ni zipi",
+   "bibi ame-stroke nifanye nini"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Face: ask them to smile. Does one side of the face droop?",
+     "Arms: ask them to lift both arms. Does one drift down or feel weak?",
+     "Speech: is their speech slurred, strange or are they unable to speak or understand?",
+     "Time: call 999 or 112 straight away and note the exact time the signs started, doctors need this.",
+     "Also watch for sudden loss of balance, sudden loss of vision, a sudden very bad headache or sudden confusion.",
+     "Keep them comfortable, sitting or lying with head and shoulders slightly raised, and reassure them.",
+     "If they become unresponsive but are breathing, put them in the recovery position."
+    ],
+    "avoid": [
+     "Do not give anything by mouth: no food, drink or medicine, including aspirin. Swallowing may be affected and they could choke.",
+     "Do not let them sleep it off or wait to see if it improves."
+    ],
+    "intro": "A stroke is when blood stops reaching part of the brain. Every minute counts. Use the FAST check.",
+    "urgent": "Call 999 or 112 now if you see any of these signs, even if they go away.",
+    "after": "If the signs disappeared within minutes, it may have been a mini-stroke (TIA). They still need to see a doctor urgently today."
+   },
+   "sw": {
+    "steps": [
+     "Uso: mwambie atabasamu. Je, upande mmoja wa uso umeshuka?",
+     "Mikono: mwambie ainue mikono yote miwili. Je, mmoja unashuka au ni dhaifu?",
+     "Kuongea: je, maneno yake hayatoki vizuri, ni ya ajabu, au hawezi kuongea wala kuelewa?",
+     "Muda: piga 999 au 112 mara moja na uandike saa hasa dalili zilipoanza, madaktari wanahitaji hili.",
+     "Pia angalia kupoteza usawa ghafla, kupoteza uwezo wa kuona ghafla, maumivu makali sana ya kichwa ghafla au kuchanganyikiwa ghafla.",
+     "Mtulize akiwa amekaa au amelala na kichwa na mabega yameinuliwa kidogo.",
+     "Akiacha kujitambua lakini anapumua, mlaze katika mkao wa kupona."
+    ],
+    "avoid": [
+     "Usimpe chochote kwa mdomo: chakula, kinywaji wala dawa, hata aspirini. Huenda hawezi kumeza vizuri na akakabwa.",
+     "Usimwache alale ili ipite wala usisubiri kuona kama itaboreka."
+    ],
+    "intro": "Kiharusi ni pale damu inapoacha kufika sehemu ya ubongo. Kila dakika ni muhimu. Tumia kipimo cha FAST.",
+    "urgent": "Piga 999 au 112 sasa hivi ukiona dalili yoyote kati ya hizi, hata kama zitaisha.",
+    "after": "Kama dalili ziliisha ndani ya dakika chache, huenda ilikuwa kiharusi kidogo (TIA). Bado anahitaji kumwona daktari haraka leo."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Stroke",
+   "sw": "Kiharusi"
+  }
+ },
+ "severe_bleeding": {
+  "id": "severe_bleeding",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "bleeding heavily",
+   "heavy bleeding",
+   "lots of blood",
+   "blood won't stop",
+   "bleeding badly",
+   "spurting blood",
+   "deep cut bleeding",
+   "blood everywhere",
+   "tourniquet",
+   "haemorrhage",
+   "hemorrhage",
+   "anatokwa damu nyingi",
+   "damu nyingi",
+   "damu haikomi",
+   "damu inatoka sana",
+   "damu inaruka",
+   "jeraha kubwa linavuja damu"
+  ],
+  "examples": [
+   "he is bleeding a lot",
+   "the bleeding won't stop",
+   "she cut her leg and there is so much blood",
+   "blood is spurting from his arm",
+   "how do i stop heavy bleeding",
+   "deep cut on the hand bleeding badly",
+   "how to use a tourniquet",
+   "blood is soaking through the bandage",
+   "he fell and is bleeding heavily from the head",
+   "anatokwa na damu nyingi",
+   "damu haikomi kutoka",
+   "amejikata na damu inatoka sana",
+   "damu inaruka kutoka kwenye jeraha",
+   "jinsi ya kusimamisha damu nyingi",
+   "jeraha kubwa mguuni damu inavuja",
+   "mzee anavuja damu nyingi help"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Put on gloves or use a plastic bag over your hand if you can, but do not delay.",
+     "Press firmly and directly on the wound with a clean cloth, pad or your hand.",
+     "Keep pressing hard without letting go for at least 10 minutes. Do not lift it to look.",
+     "If blood soaks through, put more cloth on top and keep pressing.",
+     "Once bleeding slows, tie a bandage or cloth firmly over the pad, not so tight that fingers or toes go cold or blue.",
+     "If it is an arm or leg, the bleeding is life-threatening and pressure is not stopping it, a tourniquet can be used by someone trained: 5 to 7 cm above the wound, tightened until bleeding stops, with the time written down.",
+     "Help them lie down. If they look pale, cold or sweaty, raise their legs and keep them warm."
+    ],
+    "avoid": [
+     "Do not remove something stuck in the wound. Press around it instead.",
+     "Do not remove soaked pads, add more on top."
+    ],
+    "intro": "Heavy bleeding must be stopped quickly. Firm, direct pressure is the most important thing you can do.",
+    "urgent": "Call 999 or 112 now, or ask someone else to call.",
+    "after": "Tell the paramedics if the person takes blood thinners, such as warfarin or aspirin, as they will bleed more."
+   },
+   "sw": {
+    "steps": [
+     "Vaa glavu au funika mkono na mfuko wa plastiki kama unaweza, lakini usichelewe.",
+     "Bonyeza kwa nguvu moja kwa moja juu ya jeraha kwa kitambaa safi, pedi au mkono wako.",
+     "Endelea kubonyeza kwa nguvu bila kuachia kwa angalau dakika 10. Usiinue kuangalia.",
+     "Damu ikilowa, weka kitambaa kingine juu na uendelee kubonyeza.",
+     "Damu ikipungua, funga bendeji au kitambaa kwa nguvu juu ya pedi, lakini si kwa kubana sana hadi vidole viwe baridi au bluu.",
+     "Kama ni mkono au mguu, damu ni hatari kwa maisha na kubonyeza hakuisimamishi, mtu aliyefunzwa anaweza kufunga tourniquet: sentimita 5 hadi 7 juu ya jeraha, kaza mpaka damu isimame, na uandike saa.",
+     "Msaidie alale chini. Akionekana mweupe, baridi au anatokwa jasho, inua miguu yake na umpe joto."
+    ],
+    "avoid": [
+     "Usitoe kitu kilichokwama ndani ya jeraha. Bonyeza kuzunguka kitu hicho.",
+     "Usiondoe vitambaa vilivyolowa damu, ongeza vingine juu."
+    ],
+    "intro": "Damu nyingi lazima isimamishwe haraka. Kubonyeza kwa nguvu moja kwa moja kwenye jeraha ndiyo jambo muhimu zaidi unaloweza kufanya.",
+    "urgent": "Piga 999 au 112 sasa hivi, au mwombe mtu mwingine apige.",
+    "after": "Waambie wahudumu wa afya kama mtu anatumia dawa za kupunguza kuganda kwa damu, kama warfarin au aspirini, kwani atatokwa na damu zaidi."
+   }
+  },
+  "followup": {
+   "ask": {
+    "en": "Is the blood spurting or soaking through cloth quickly?",
+    "sw": "Je, damu inaruka au inalowanisha kitambaa haraka?"
+   },
+   "options": [
+    {
+     "label": {
+      "en": "Yes, it is heavy",
+      "sw": "Ndiyo, ni nyingi"
+     },
+     "goto": "severe_bleeding"
+    },
+    {
+     "label": {
+      "en": "No, it is a small cut",
+      "sw": "Hapana, ni jeraha dogo"
+     },
+     "goto": "minor_wound"
+    }
+   ]
+  },
+  "title": {
+   "en": "Heavy bleeding",
+   "sw": "Kutokwa na damu nyingi"
+  }
+ },
+ "anaphylaxis": {
+  "id": "anaphylaxis",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "anaphylaxis",
+   "severe allergic reaction",
+   "throat swelling",
+   "tongue swelling",
+   "lips swelling",
+   "face swelling",
+   "epipen",
+   "adrenaline",
+   "allergic and can't breathe",
+   "swollen throat",
+   "mzio mkali",
+   "koo limevimba",
+   "ulimi umevimba",
+   "midomo imevimba",
+   "uso umevimba",
+   "mzio na hawezi kupumua",
+   "sindano ya adrenaline"
+  ],
+  "examples": [
+   "her lips and tongue are swelling",
+   "his throat is swelling after eating peanuts",
+   "severe allergic reaction what do i do",
+   "she was stung by a bee and can't breathe",
+   "how to use an epipen",
+   "face swelling and wheezing after taking a new medicine",
+   "allergic reaction with difficulty breathing",
+   "anaphylaxis first aid",
+   "koo limevimba baada ya kula",
+   "midomo na ulimi vimevimba",
+   "ameumwa na nyuki na anapumua kwa shida",
+   "mzio mkali nifanye nini",
+   "uso umevimba baada ya kumeza dawa",
+   "jinsi ya kutumia epipen"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "If they have an adrenaline auto-injector (such as an EpiPen), help them use it straight away into the outer thigh. It can go through clothing.",
+     "Hold it in place for as long as the device instructions say, then note the time.",
+     "If breathing is difficult, let them sit up. If they feel faint, lie them down with legs raised.",
+     "If there is no improvement after 5 minutes and they have a second injector, give the second dose.",
+     "Stay with them. If they become unresponsive and stop breathing normally, start CPR."
+    ],
+    "avoid": [
+     "Do not wait to see if it gets better.",
+     "Do not let them stand up or walk suddenly, even if they feel better."
+    ],
+    "intro": "A severe allergic reaction (anaphylaxis) can follow a sting, food or medicine. Signs include swelling of the lips, tongue or throat, wheezing or difficulty breathing, a hoarse voice, feeling faint, and often a rash.",
+    "urgent": "Call 999 or 112 now.",
+    "after": "They must go to hospital even if the adrenaline works, because the reaction can come back."
+   },
+   "sw": {
+    "steps": [
+     "Kama ana sindano ya adrenaline (kama EpiPen), msaidie aitumie mara moja kwenye upande wa nje wa paja. Inaweza kupita kwenye nguo.",
+     "Ishikilie kwa muda ambao maelekezo ya kifaa yanasema, kisha andika saa.",
+     "Kama anapumua kwa shida, mwache akae. Akihisi kuzimia, mlaze na uinue miguu yake.",
+     "Kama hakuna nafuu baada ya dakika 5 na ana sindano ya pili, mpe dozi ya pili.",
+     "Kaa naye. Akiacha kujitambua na kuacha kupumua kawaida, anza CPR."
+    ],
+    "avoid": [
+     "Usisubiri kuona kama itapona.",
+     "Usimwache asimame wala atembee ghafla, hata akijisikia vizuri."
+    ],
+    "intro": "Mzio mkali (anaphylaxis) unaweza kufuata kuumwa na mdudu, chakula au dawa. Dalili ni kuvimba midomo, ulimi au koo, kupumua kwa shida au kwa mluzi, sauti kukwaruza, kuhisi kuzimia, na mara nyingi vipele.",
+    "urgent": "Piga 999 au 112 sasa hivi.",
+    "after": "Lazima aende hospitali hata kama adrenaline imesaidia, kwa sababu mzio unaweza kurudi."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Severe allergic reaction",
+   "sw": "Mzio mkali (anaphylaxis)"
+  }
+ },
+ "seizure": {
+  "id": "seizure",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "seizure",
+   "fit",
+   "fitting",
+   "convulsions",
+   "convulsing",
+   "shaking uncontrollably",
+   "epilepsy",
+   "epileptic",
+   "jerking",
+   "kifafa",
+   "degedege",
+   "anatetemeka bila kujizuia",
+   "anarusha mikono na miguu",
+   "amepata kifafa",
+   "mwili unatetemeka"
+  ],
+  "examples": [
+   "she is having a seizure",
+   "he is shaking and jerking on the floor",
+   "what do i do during a fit",
+   "my patient is convulsing",
+   "he had an epileptic fit",
+   "the old man is fitting and foaming at the mouth",
+   "should i put something in his mouth during a seizure",
+   "how long can a seizure last before i call",
+   "anapata kifafa nifanye nini",
+   "ana degedege",
+   "mzee anatetemeka sakafuni hajitambui",
+   "mwili wake unatetemeka bila kujizuia",
+   "amepata kifafa sasa hivi",
+   "bibi ana convulsions"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Stay calm and note the time the seizure started.",
+     "Move hard or sharp objects away and put something soft under their head.",
+     "Loosen anything tight around the neck, and remove glasses.",
+     "When the jerking stops, roll them onto their side into the recovery position and check their breathing.",
+     "Stay with them, talk calmly and reassure them until they are fully awake. They may be confused or sleepy for a while."
+    ],
+    "avoid": [
+     "Do not hold them down or try to stop the movements.",
+     "Do not put anything in their mouth, they will not swallow their tongue.",
+     "Do not give food or drink until they are fully alert."
+    ],
+    "intro": "During a seizure a person may fall, go stiff and jerk. Most seizures stop on their own within a few minutes. Your job is to keep them safe.",
+    "urgent": "Call 999 or 112 if it lasts more than 5 minutes, it is their first seizure, another one follows, they are injured, they have trouble breathing afterwards, it happened in water, or they do not wake up.",
+    "after": "Write down how long it lasted and what happened, and tell their doctor and the family."
+   },
+   "sw": {
+    "steps": [
+     "Tulia na uandike saa kifafa kilipoanza.",
+     "Ondoa vitu vigumu au vyenye ncha karibu naye na uweke kitu laini chini ya kichwa chake.",
+     "Legeza kitu chochote kinachobana shingoni, na umvue miwani.",
+     "Kutetemeka kukiisha, mlaze kwa ubavu katika mkao wa kupona na uangalie anavyopumua.",
+     "Kaa naye, ongea kwa utulivu na umtulize mpaka azinduke kabisa. Anaweza kuchanganyikiwa au kusinzia kwa muda."
+    ],
+    "avoid": [
+     "Usimshike kwa nguvu wala kujaribu kusimamisha mitikisiko.",
+     "Usiweke chochote mdomoni mwake, hatameza ulimi wake.",
+     "Usimpe chakula wala kinywaji mpaka azinduke kabisa."
+    ],
+    "intro": "Wakati wa kifafa mtu anaweza kuanguka, kukakamaa na kurusha viungo. Vifafa vingi huisha vyenyewe ndani ya dakika chache. Kazi yako ni kumweka salama.",
+    "urgent": "Piga 999 au 112 kama kinachukua zaidi ya dakika 5, ni mara yake ya kwanza, kingine kinafuata, ameumia, anapumua kwa shida baadaye, kilitokea majini, au hazinduki.",
+    "after": "Andika muda kilichodumu na kilichotokea, uwaambie daktari wake na familia."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Seizure (fit)",
+   "sw": "Kifafa au degedege"
+  }
+ },
+ "shock": {
+  "id": "shock",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "shock",
+   "pale cold clammy",
+   "cold and clammy",
+   "weak fast pulse",
+   "going into shock",
+   "pale and sweaty after injury",
+   "mshtuko",
+   "baridi na jasho",
+   "amepauka na baridi",
+   "mapigo dhaifu ya haraka"
+  ],
+  "examples": [
+   "he is pale cold and sweaty after the accident",
+   "signs of shock",
+   "she looks grey and clammy and her pulse is fast",
+   "how to treat someone in shock",
+   "he is going into shock after losing blood",
+   "amepauka na ana baridi na jasho",
+   "dalili za mshtuko wa mwili",
+   "mapigo yake ni ya haraka na dhaifu na ana jasho baridi"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Treat the cause if you can, for example press on a bleeding wound.",
+     "Help them lie down. Raise their legs if this does not hurt them and there is no injury to the legs, hips, back or head.",
+     "Loosen tight clothing and cover them with a blanket to keep them warm.",
+     "Reassure them and keep checking their breathing and how alert they are.",
+     "If they become unresponsive but are breathing, put them in the recovery position. If they stop breathing normally, start CPR."
+    ],
+    "avoid": [
+     "Do not give food or drink. You can wet their lips if they are thirsty.",
+     "Do not leave them alone."
+    ],
+    "intro": "Shock means not enough blood is reaching the organs, for example after heavy bleeding, burns, severe vomiting or diarrhoea, a serious infection or an allergic reaction. Signs are pale, cold, clammy skin, a fast weak pulse, fast breathing, dizziness and confusion.",
+    "urgent": "Call 999 or 112 now.",
+    "after": "Tell the paramedics what caused it and any changes you noticed."
+   },
+   "sw": {
+    "steps": [
+     "Tibu chanzo kama unaweza, kwa mfano bonyeza jeraha linalovuja damu.",
+     "Msaidie alale chini. Inua miguu yake kama haimuumizi na hakuna jeraha miguuni, kiunoni, mgongoni au kichwani.",
+     "Legeza nguo zinazobana na umfunike kwa blanketi apate joto.",
+     "Mtulize na uendelee kuangalia anavyopumua na kama yuko macho.",
+     "Akiacha kujitambua lakini anapumua, mlaze katika mkao wa kupona. Akiacha kupumua kawaida, anza CPR."
+    ],
+    "avoid": [
+     "Usimpe chakula wala kinywaji. Unaweza kulowesha midomo yake akiwa na kiu.",
+     "Usimwache peke yake."
+    ],
+    "intro": "Mshtuko (shock) maana yake damu haitoshi kufika kwenye viungo, kwa mfano baada ya kutokwa damu nyingi, kuungua, kutapika au kuhara sana, maambukizi makali au mzio. Dalili ni ngozi nyeupe, baridi na yenye jasho, mapigo ya haraka na dhaifu, kupumua haraka, kizunguzungu na kuchanganyikiwa.",
+    "urgent": "Piga 999 au 112 sasa hivi.",
+    "after": "Waambie wahudumu wa afya kilichosababisha na mabadiliko uliyoyaona."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Shock (circulation failing)",
+   "sw": "Mshtuko wa mwili (shock)"
+  }
+ },
+ "drowning": {
+  "id": "drowning",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "drowning",
+   "drowned",
+   "pulled from water",
+   "nearly drowned",
+   "fell in the water",
+   "swimming pool accident",
+   "river",
+   "water in lungs",
+   "kuzama",
+   "amezama",
+   "ametolewa majini",
+   "ameangukia majini",
+   "amezama kisimani"
+  ],
+  "examples": [
+   "someone is drowning",
+   "we pulled him out of the water and he is not breathing",
+   "she nearly drowned in the pool",
+   "what to do for a drowning person",
+   "he fell into the river",
+   "amezama majini",
+   "tumemtoa majini hapumui",
+   "ameangukia kisimani",
+   "mtoto amezama kwenye bwawa"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Do not go into the water yourself unless trained. Reach with a stick or throw something that floats.",
+     "Once they are out, check if they are breathing normally.",
+     "If they are not breathing normally, give 5 rescue breaths if you can, then start CPR with 30 pushes and 2 breaths.",
+     "If they are breathing, put them in the recovery position so water can drain from the mouth.",
+     "Remove wet clothes if you can and cover them to keep them warm."
+    ],
+    "avoid": [
+     "Do not press on the belly to push water out, it wastes time and can cause vomiting."
+    ],
+    "intro": "A person pulled from water may have stopped breathing. Your safety comes first.",
+    "urgent": "Call 999 or 112 now.",
+    "after": "Anyone who was under water must go to hospital, even if they seem fine, as breathing problems can start hours later."
+   },
+   "sw": {
+    "steps": [
+     "Usiingie majini mwenyewe kama hujafunzwa. Mfikie kwa fimbo au mrushie kitu kinachoelea.",
+     "Akishatoka, angalia kama anapumua kawaida.",
+     "Kama hapumui kawaida, mpe pumzi 5 kama unaweza, kisha anza CPR kwa mabonyezo 30 na pumzi 2.",
+     "Kama anapumua, mlaze katika mkao wa kupona ili maji yatoke mdomoni.",
+     "Mvue nguo zilizolowa kama unaweza na umfunike apate joto."
+    ],
+    "avoid": [
+     "Usibonyeze tumbo kutoa maji, inapoteza muda na inaweza kusababisha kutapika."
+    ],
+    "intro": "Mtu aliyetolewa majini huenda ameacha kupumua. Usalama wako ni wa kwanza.",
+    "urgent": "Piga 999 au 112 sasa hivi.",
+    "after": "Mtu yeyote aliyekuwa chini ya maji lazima aende hospitali, hata kama anaonekana mzima, kwani matatizo ya kupumua yanaweza kuanza saa kadhaa baadaye."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Drowning",
+   "sw": "Kuzama majini"
+  }
+ },
+ "electric_shock": {
+  "id": "electric_shock",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "electric shock",
+   "electrocuted",
+   "electrocution",
+   "touched a live wire",
+   "shocked by electricity",
+   "power line",
+   "socket shock",
+   "kushtuliwa na umeme",
+   "amepigwa na umeme",
+   "ameshika waya wa umeme",
+   "umeme umemshika",
+   "stima imemshika"
+  ],
+  "examples": [
+   "he got an electric shock",
+   "she touched a live wire",
+   "someone has been electrocuted",
+   "what to do after an electric shock from a socket",
+   "amepigwa na umeme",
+   "ameshika waya wa umeme",
+   "stima imemshika nifanye nini",
+   "umeme umemshtua jikoni"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Switch off the power at the main switch or pull out the plug. Do not touch the person until the power is off.",
+     "If you cannot switch it off, stand on something dry like a wooden board or folded newspaper and push them away from the source with a dry wooden broom or chair.",
+     "For high-voltage power lines, stay at least 18 metres away and wait for the power company or emergency services.",
+     "Once safe, check if they are breathing normally. If not, start CPR.",
+     "Cool any burns under cool running water for 20 minutes and cover them loosely with cling film or a clean cloth."
+    ],
+    "avoid": [
+     "Do not touch them with bare hands while they are still in contact with electricity.",
+     "Do not use anything metal or wet to move them."
+    ],
+    "intro": "Electricity can stop the heart and cause deep burns. Make it safe before you touch them.",
+    "urgent": "Call 999 or 112 now.",
+    "after": "Everyone who has had an electric shock should see a doctor, because it can affect the heart rhythm."
+   },
+   "sw": {
+    "steps": [
+     "Zima umeme kwenye swichi kuu au chomoa plagi. Usimguse mtu mpaka umeme uzimwe.",
+     "Kama huwezi kuzima, simama juu ya kitu kikavu kama ubao au gazeti lililokunjwa na umsukume mbali na chanzo kwa ufagio au kiti kikavu cha mbao.",
+     "Kwa nyaya za umeme mkubwa, kaa angalau mita 18 mbali na usubiri kampuni ya umeme au huduma za dharura.",
+     "Ikiwa salama, angalia kama anapumua kawaida. Kama hapumui, anza CPR.",
+     "Poza majeraha ya moto chini ya maji baridi yanayotiririka kwa dakika 20 na uyafunike kwa ulegevu kwa karatasi ya plastiki au kitambaa safi."
+    ],
+    "avoid": [
+     "Usimguse kwa mikono mitupu akiwa bado anagusa umeme.",
+     "Usitumie kitu cha chuma au chenye unyevu kumsogeza."
+    ],
+    "intro": "Umeme unaweza kusimamisha moyo na kusababisha kuungua kwa ndani. Hakikisha ni salama kabla ya kumgusa.",
+    "urgent": "Piga 999 au 112 sasa hivi.",
+    "after": "Kila aliyeshtuliwa na umeme amwone daktari, kwa sababu unaweza kuathiri mapigo ya moyo."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Electric shock",
+   "sw": "Kushtuliwa na umeme"
+  }
+ },
+ "fall": {
+  "id": "fall",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "fell",
+   "fall",
+   "fallen",
+   "found on the floor",
+   "slipped",
+   "tripped",
+   "fell down",
+   "fell out of bed",
+   "can't get up",
+   "fell in the bathroom",
+   "fell on the stairs",
+   "ameanguka",
+   "ameteleza",
+   "ameanguka bafuni",
+   "ameanguka kitandani",
+   "hawezi kuinuka",
+   "nimemkuta sakafuni",
+   "ameanguka chooni",
+   "ameanguka ngazini"
+  ],
+  "examples": [
+   "my patient fell down",
+   "grandma fell in the bathroom",
+   "he slipped and fell and can't get up",
+   "i found her on the floor",
+   "the old man fell out of bed",
+   "what to do when an elderly person falls",
+   "she tripped on the carpet",
+   "he fell on the stairs",
+   "how do i help someone up after a fall",
+   "should i lift him after a fall",
+   "mzee ameanguka",
+   "bibi ameanguka bafuni",
+   "ameteleza na hawezi kuinuka",
+   "nimemkuta sakafuni",
+   "ameanguka kutoka kitandani",
+   "mgonjwa ameanguka nifanye nini",
+   "ameanguka chooni",
+   "babu amedondoka"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Stay calm, check the area is safe, and talk to them. Ask what happened and where it hurts.",
+     "Check they are awake and breathing normally. If not, follow the unresponsive or CPR steps.",
+     "Look for injuries: bleeding, a head bump, pain in the hip or groin, or a leg that looks shorter or turned outwards, which can mean a broken hip.",
+     "If they are hurt or cannot get up, keep them still, put a pillow under the head only if there is no neck pain, cover them with a blanket and wait for help.",
+     "If they are not hurt and want to get up: help them roll onto their side, then onto hands and knees, crawl to a sturdy chair, put their hands on the seat, bring one foot forward and push up to turn and sit.",
+     "Let them rest, then check for dizziness, new pain or confusion over the next hours."
+    ],
+    "avoid": [
+     "Do not lift them by yourself, you can injure both of you.",
+     "Do not give food or drink if they might have a broken bone, in case they need surgery."
+    ],
+    "intro": "After a fall, an older person can be badly hurt without it being obvious. Do not rush to lift them.",
+    "urgent": "Call 999 or 112 if they hit their head, were knocked out even briefly, take blood thinners, cannot move a leg, have severe pain in the hip, back or neck, are confused, or cannot get up.",
+    "after": "Tell the family and their doctor about every fall, even if they seem fine. Falls can be a sign of illness, low blood pressure or medicine side effects."
+   },
+   "sw": {
+    "steps": [
+     "Tulia, hakikisha mahali ni salama, na uongee naye. Muulize kilichotokea na wapi panauma.",
+     "Hakikisha yuko macho na anapumua kawaida. Kama sivyo, fuata hatua za asiyejitambua au CPR.",
+     "Angalia majeraha: damu, uvimbe kichwani, maumivu kiunoni au kinena, au mguu unaoonekana mfupi au umegeukia nje, ambayo inaweza kumaanisha nyonga imevunjika.",
+     "Kama ameumia au hawezi kuinuka, mwache atulie, weka mto chini ya kichwa tu kama hana maumivu ya shingo, mfunike kwa blanketi na usubiri msaada.",
+     "Kama hajaumia na anataka kuinuka: msaidie ageuke kwa ubavu, kisha apige magoti na mikono chini, atambae hadi kiti imara, aweke mikono kwenye kiti, alete mguu mmoja mbele na ajisukume juu kugeuka na kukaa.",
+     "Mwache apumzike, kisha angalia kizunguzungu, maumivu mapya au kuchanganyikiwa kwa saa zinazofuata."
+    ],
+    "avoid": [
+     "Usimwinue peke yako, mnaweza kuumia wote wawili.",
+     "Usimpe chakula wala kinywaji kama huenda amevunjika mfupa, kwa kuwa anaweza kuhitaji upasuaji."
+    ],
+    "intro": "Baada ya kuanguka, mzee anaweza kuwa ameumia vibaya bila kuonekana wazi. Usikimbilie kumwinua.",
+    "urgent": "Piga 999 au 112 kama aligonga kichwa, alipoteza fahamu hata kwa muda mfupi, anatumia dawa za kupunguza kuganda kwa damu, hawezi kusogeza mguu, ana maumivu makali kiunoni, mgongoni au shingoni, amechanganyikiwa, au hawezi kuinuka.",
+    "after": "Iambie familia na daktari wake kuhusu kila anguko, hata kama anaonekana mzima. Kuanguka kunaweza kuwa ishara ya ugonjwa, shinikizo la chini la damu au madhara ya dawa."
+   }
+  },
+  "followup": {
+   "ask": {
+    "en": "Did they hit their head, or are they in severe pain?",
+    "sw": "Je, aligonga kichwa, au ana maumivu makali?"
+   },
+   "options": [
+    {
+     "label": {
+      "en": "Hit their head",
+      "sw": "Aligonga kichwa"
+     },
+     "goto": "head_injury"
+    },
+    {
+     "label": {
+      "en": "Pain in hip or leg, can't stand",
+      "sw": "Maumivu ya nyonga au mguu, hawezi kusimama"
+     },
+     "goto": "fracture"
+    },
+    {
+     "label": {
+      "en": "Not hurt, wants to get up",
+      "sw": "Hajaumia, anataka kuinuka"
+     },
+     "goto": "fall"
+    }
+   ]
+  },
+  "title": {
+   "en": "A fall",
+   "sw": "Kuanguka"
+  }
+ },
+ "fracture": {
+  "id": "fracture",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "broken bone",
+   "fracture",
+   "broken arm",
+   "broken leg",
+   "broken wrist",
+   "broken hip",
+   "hip fracture",
+   "bone sticking out",
+   "leg is bent wrong",
+   "swollen and deformed",
+   "cracked bone",
+   "kuvunjika mfupa",
+   "amevunjika mguu",
+   "amevunjika mkono",
+   "nyonga imevunjika",
+   "mfupa umetoka nje",
+   "mguu umepinda",
+   "kifundo kimevunjika"
+  ],
+  "examples": [
+   "i think she broke her arm",
+   "his leg looks bent after the fall",
+   "broken hip signs",
+   "the bone is sticking out of the skin",
+   "how to make a sling",
+   "she can't put weight on her leg and it's swollen",
+   "possible fracture of the wrist",
+   "his leg is turned outwards and shorter",
+   "nadhani amevunjika mkono",
+   "mguu wake umepinda baada ya kuanguka",
+   "mfupa umetoka nje ya ngozi",
+   "nyonga imevunjika nifanye nini",
+   "hawezi kukanyaga na mguu umevimba",
+   "amevunjika kifundo cha mkono"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Keep them still and support the injured part in the position you found it, using pillows, rolled blankets or clothing.",
+     "For an arm, if they can bend it, support it in a sling made from a scarf or cloth.",
+     "If the bone has broken the skin, cover the wound with a clean dressing and press around it, not on the bone.",
+     "Put an ice pack wrapped in a cloth on the area for up to 20 minutes to reduce swelling.",
+     "Watch for signs of shock: pale, cold, sweaty skin or confusion."
+    ],
+    "avoid": [
+     "Do not try to straighten the limb or push a bone back in.",
+     "Do not give food or drink, they may need surgery.",
+     "Do not move them if you suspect a hip, back or neck injury, unless they are in danger."
+    ],
+    "intro": "Signs of a broken bone are pain, swelling, bruising, a limb at a strange angle, or not being able to move or put weight on it.",
+    "urgent": "Call 999 or 112 for a suspected broken hip, thigh, pelvis, neck or back, a bone poking through the skin, or a limb that is cold, pale or numb below the injury. For other breaks, take them to hospital.",
+    "after": "Older people often break a hip or wrist in a fall. Even if they can still walk, persistent pain needs an X-ray."
+   },
+   "sw": {
+    "steps": [
+     "Mwache atulie na usaidie sehemu iliyoumia ilivyo, kwa mito, blanketi zilizoviringishwa au nguo.",
+     "Kwa mkono, kama anaweza kuukunja, ushikilie kwa kombeo lililotengenezwa kwa skafu au kitambaa.",
+     "Kama mfupa umetoboa ngozi, funika jeraha kwa kitambaa safi na ubonyeze kuzunguka, si juu ya mfupa.",
+     "Weka barafu iliyofungwa kwenye kitambaa kwa hadi dakika 20 kupunguza uvimbe.",
+     "Angalia dalili za mshtuko: ngozi nyeupe, baridi, yenye jasho au kuchanganyikiwa."
+    ],
+    "avoid": [
+     "Usijaribu kunyoosha kiungo wala kurudisha mfupa ndani.",
+     "Usimpe chakula wala kinywaji, anaweza kuhitaji upasuaji.",
+     "Usimsogeze ukishuku nyonga, mgongo au shingo imeumia, isipokuwa yuko hatarini."
+    ],
+    "intro": "Dalili za kuvunjika mfupa ni maumivu, uvimbe, michubuko, kiungo kilichopinda isivyo kawaida, au kushindwa kukisogeza au kukiwekea uzito.",
+    "urgent": "Piga 999 au 112 ukishuku nyonga, paja, fupanyonga, shingo au mgongo umevunjika, mfupa umetoboa ngozi, au kiungo ni baridi, cheupe au hakihisi chini ya jeraha. Kwa mivunjiko mingine, mpeleke hospitali.",
+    "after": "Wazee mara nyingi huvunjika nyonga au kifundo cha mkono wanapoanguka. Hata kama bado anatembea, maumivu yanayoendelea yanahitaji X-ray."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Broken bone",
+   "sw": "Kuvunjika mfupa"
+  }
+ },
+ "sprain": {
+  "id": "sprain",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "sprain",
+   "sprained ankle",
+   "twisted ankle",
+   "muscle strain",
+   "strained a muscle",
+   "strained his",
+   "strained her",
+   "pulled muscle",
+   "swollen ankle",
+   "bruise",
+   "bruised",
+   "twisted knee",
+   "kuteguka",
+   "ameteguka",
+   "kifundo kimeteguka",
+   "msuli umevutika",
+   "uvimbe wa kifundo",
+   "mchubuko",
+   "amejigonga"
+  ],
+  "examples": [
+   "she twisted her ankle",
+   "his ankle is swollen after slipping",
+   "how to treat a sprain",
+   "pulled a muscle in his back",
+   "big bruise on her leg after bumping the table",
+   "what is rice for injuries",
+   "his knee is swollen and painful after twisting it",
+   "ameteguka kifundo cha mguu",
+   "kifundo kimevimba baada ya kuteleza",
+   "msuli umevutika mgongoni",
+   "amejigonga na ana mchubuko mkubwa",
+   "jinsi ya kutibu kuteguka"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Rest: stop using the injured part and help them sit or lie down.",
+     "Ice: put an ice pack or cold wet cloth wrapped in a towel on it for 15 to 20 minutes, every 2 to 3 hours for the first 2 days.",
+     "Compression: wrap it with an elastic bandage, firm but not tight. Loosen it if toes or fingers go cold, blue or numb.",
+     "Elevation: raise the injured part on pillows, above the level of the heart if possible.",
+     "Paracetamol can help with pain if it is safe with their other medicines."
+    ],
+    "avoid": [
+     "Do not put ice directly on the skin.",
+     "Do not use heat, massage or rub the area for the first 2 days."
+    ],
+    "intro": "Twisting a joint or pulling a muscle causes pain, swelling and bruising. Most improve with simple care.",
+    "after": "See a doctor if they cannot put weight on it, the pain is severe, it looks deformed, there is numbness, or it is not better in a few days. In older people after a fall, it may be a fracture."
+   },
+   "sw": {
+    "steps": [
+     "Pumzika: acha kutumia sehemu iliyoumia na umsaidie akae au alale.",
+     "Barafu: weka barafu au kitambaa baridi chenye maji kilichofungwa kwenye taulo kwa dakika 15 hadi 20, kila saa 2 hadi 3 kwa siku 2 za kwanza.",
+     "Kubana: zungushia bendeji ya kunyooka, ikaze lakini isibane sana. Ilegeze vidole vikiwa baridi, bluu au havihisi.",
+     "Kuinua: inua sehemu iliyoumia juu ya mito, juu ya usawa wa moyo kama inawezekana.",
+     "Paracetamol inaweza kusaidia maumivu kama ni salama pamoja na dawa zake nyingine."
+    ],
+    "avoid": [
+     "Usiweke barafu moja kwa moja kwenye ngozi.",
+     "Usitumie joto, kukanda wala kusugua sehemu hiyo kwa siku 2 za kwanza."
+    ],
+    "intro": "Kuteguka kiungo au kuvuta msuli husababisha maumivu, uvimbe na michubuko. Mingi hupona kwa huduma rahisi.",
+    "after": "Mwone daktari kama hawezi kukanyaga, maumivu ni makali, kiungo kimepinda, hakihisi, au hakijapona kwa siku chache. Kwa wazee baada ya kuanguka, huenda ni kuvunjika."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Sprain, strain or bruise",
+   "sw": "Kuteguka, mshtuko wa msuli au mchubuko"
+  }
+ },
+ "head_injury": {
+  "id": "head_injury",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "head injury",
+   "hit his head",
+   "hit her head",
+   "bumped head",
+   "knock on the head",
+   "banged head",
+   "head wound",
+   "concussion",
+   "lump on head",
+   "fell and hit head",
+   "ameumia kichwa",
+   "amegonga kichwa",
+   "amejigonga kichwani",
+   "uvimbe kichwani",
+   "kichwa kimepasuka",
+   "jeraha la kichwa"
+  ],
+  "examples": [
+   "he hit his head when he fell",
+   "she banged her head on the door",
+   "bump on the head what to watch for",
+   "signs of concussion",
+   "he hit his head and is vomiting",
+   "grandma fell and hit her head and takes warfarin",
+   "there is a lump on his head after the fall",
+   "should i let him sleep after a head injury",
+   "amegonga kichwa alipoanguka",
+   "amejigonga kichwani mlangoni",
+   "ana uvimbe kichwani baada ya kuanguka",
+   "amegonga kichwa na anatapika",
+   "kichwa kimepasuka kidogo na kinavuja damu",
+   "dalili za hatari baada ya kugonga kichwa"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Help them sit down and rest.",
+     "Hold a cold pack wrapped in a cloth on the bump for 10 to 20 minutes.",
+     "If there is a cut, press on it with a clean cloth to stop the bleeding.",
+     "Make sure someone stays with them for the next 24 hours and checks on them regularly, including waking them gently if they sleep.",
+     "Watch for any of the danger signs above and call for help straight away if they appear."
+    ],
+    "avoid": [
+     "Do not leave them alone for the first 24 hours.",
+     "Do not give alcohol or sleeping tablets.",
+     "If you suspect a neck injury, do not move them."
+    ],
+    "intro": "Most bumps to the head are minor, but older people and anyone on blood thinners can bleed inside the skull, sometimes hours later.",
+    "urgent": "Call 999 or 112 if they were knocked out even briefly, are confused or very drowsy, vomit more than once, have a severe or worsening headache, have a seizure, have blood or clear fluid from the ears or nose, have weakness, slurred speech or vision problems. Anyone on blood thinners who hits their head must go to hospital today.",
+    "after": "Tell the family and the doctor about the head injury, even if it seemed small."
+   },
+   "sw": {
+    "steps": [
+     "Msaidie akae na apumzike.",
+     "Shikilia barafu iliyofungwa kwenye kitambaa juu ya uvimbe kwa dakika 10 hadi 20.",
+     "Kama kuna jeraha, libonyeze kwa kitambaa safi kusimamisha damu.",
+     "Hakikisha mtu anakaa naye kwa saa 24 zijazo na anamwangalia mara kwa mara, hata kumwamsha polepole akilala.",
+     "Angalia dalili zozote za hatari hapo juu na uite msaada mara moja zikitokea."
+    ],
+    "avoid": [
+     "Usimwache peke yake kwa saa 24 za kwanza.",
+     "Usimpe pombe wala vidonge vya usingizi.",
+     "Ukishuku shingo imeumia, usimsogeze."
+    ],
+    "intro": "Michubuko mingi ya kichwa ni midogo, lakini wazee na yeyote anayetumia dawa za kupunguza kuganda kwa damu wanaweza kuvuja damu ndani ya fuvu, wakati mwingine saa kadhaa baadaye.",
+    "urgent": "Piga 999 au 112 kama alipoteza fahamu hata kwa muda mfupi, amechanganyikiwa au anasinzia sana, anatapika zaidi ya mara moja, ana maumivu makali ya kichwa au yanayozidi, anapata kifafa, anatokwa damu au maji meupe masikioni au puani, ana udhaifu, maneno hayatoki vizuri au matatizo ya kuona. Yeyote anayetumia dawa za kupunguza kuganda kwa damu akigonga kichwa lazima aende hospitali leo.",
+    "after": "Iambie familia na daktari kuhusu jeraha la kichwa, hata kama lilionekana dogo."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Head injury",
+   "sw": "Jeraha la kichwa"
+  }
+ },
+ "spinal_injury": {
+  "id": "spinal_injury",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "neck injury",
+   "back injury",
+   "spine injury",
+   "spinal injury",
+   "can't feel legs",
+   "can't move legs",
+   "tingling after fall",
+   "neck pain after fall",
+   "fell from height",
+   "broke his back",
+   "jeraha la shingo",
+   "uti wa mgongo",
+   "hawezi kuhisi miguu",
+   "hawezi kusogeza miguu",
+   "shingo inauma baada ya kuanguka",
+   "ameanguka kutoka juu"
+  ],
+  "examples": [
+   "he fell from a ladder and his neck hurts",
+   "she can't feel her legs after the fall",
+   "possible spinal injury what to do",
+   "should i move someone with a back injury",
+   "he fell off the roof",
+   "tingling in his arms after hitting his head",
+   "ameanguka kutoka kwenye ngazi na shingo inauma",
+   "hawezi kuhisi miguu baada ya kuanguka",
+   "jeraha la uti wa mgongo nifanye nini",
+   "nimsogeze mtu aliyeumia mgongo"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Tell them not to move.",
+     "Kneel behind their head and hold it still with your hands on both sides, keeping the head, neck and body in a straight line.",
+     "Keep holding until the paramedics take over. Ask someone else to keep them warm.",
+     "Keep checking their breathing. If they stop breathing normally, start CPR.",
+     "If you must turn them, for example because they are vomiting, roll them with helpers, keeping the head, neck and body in line."
+    ],
+    "avoid": [
+     "Do not move them unless they are in danger.",
+     "Do not let them sit up or turn their head."
+    ],
+    "intro": "Suspect a neck or back injury after a fall from a height, a hard blow to the head, a road accident, or if they have neck or back pain, tingling, numbness or weakness in the arms or legs.",
+    "urgent": "Call 999 or 112 now.",
+    "after": "Tell the paramedics how the injury happened and whether they could move their arms and legs."
+   },
+   "sw": {
+    "steps": [
+     "Mwambie asisogee.",
+     "Piga magoti nyuma ya kichwa chake na ukishike kimya kwa mikono pande zote mbili, ukiweka kichwa, shingo na mwili katika mstari mmoja.",
+     "Endelea kushika mpaka wahudumu wa afya wachukue nafasi. Mwombe mtu mwingine amfunike apate joto.",
+     "Endelea kuangalia anavyopumua. Akiacha kupumua kawaida, anza CPR.",
+     "Kama lazima umgeuze, kwa mfano kwa sababu anatapika, mgeuze pamoja na wasaidizi, ukiweka kichwa, shingo na mwili katika mstari mmoja."
+    ],
+    "avoid": [
+     "Usimsogeze isipokuwa yuko hatarini.",
+     "Usimwache akae wala ageuze kichwa."
+    ],
+    "intro": "Shuku jeraha la shingo au mgongo baada ya kuanguka kutoka juu, pigo kubwa kichwani, ajali ya barabarani, au kama ana maumivu ya shingo au mgongo, kuwashwa, kufa ganzi au udhaifu mikononi au miguuni.",
+    "urgent": "Piga 999 au 112 sasa hivi.",
+    "after": "Waambie wahudumu wa afya jinsi jeraha lilivyotokea na kama aliweza kusogeza mikono na miguu."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Neck or back injury",
+   "sw": "Jeraha la shingo au mgongo"
+  }
+ },
+ "minor_wound": {
+  "id": "minor_wound",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "small cut",
+   "cut finger",
+   "graze",
+   "scrape",
+   "scratch",
+   "minor cut",
+   "cut himself",
+   "knife cut",
+   "wound cleaning",
+   "how to clean a wound",
+   "plaster",
+   "infected wound",
+   "kidonda",
+   "amejikata kidogo",
+   "amejikata kidole",
+   "mchubuko wa ngozi",
+   "amekwaruzwa",
+   "kusafisha jeraha",
+   "jeraha limeoza"
+  ],
+  "examples": [
+   "he cut his finger while cooking",
+   "how to clean a small cut",
+   "she scraped her knee",
+   "small graze on his arm",
+   "does this cut need stitches",
+   "the wound looks red and has pus",
+   "how do i dress a wound",
+   "amejikata kidole akipika",
+   "jinsi ya kusafisha kidonda",
+   "amejikwaruza goti",
+   "kidonda kina usaha na kimekuwa chekundu",
+   "jeraha dogo mkononi"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Wash your hands, and wear gloves if you have them.",
+     "Stop any bleeding by pressing on it with a clean cloth for a few minutes.",
+     "Rinse the wound under clean running water to wash out dirt.",
+     "Gently clean around it and pat dry with something clean.",
+     "Cover it with a sterile plaster or dressing.",
+     "Change the dressing every day or when it gets wet or dirty, and check for infection."
+    ],
+    "avoid": [
+     "Do not put cotton wool directly on the wound, fibres stick.",
+     "Do not pour spirit, bleach or other harsh chemicals into the wound."
+    ],
+    "intro": "Small cuts and grazes usually heal well if they are cleaned and covered.",
+    "after": "See a nurse or doctor if the cut is deep or gaping, keeps bleeding after 10 minutes of pressure, was made by something dirty or rusty or a bite, or shows infection: spreading redness, heat, swelling, pus or fever. People with diabetes should have any foot wound checked."
+   },
+   "sw": {
+    "steps": [
+     "Nawa mikono, na uvae glavu kama unazo.",
+     "Simamisha damu kwa kubonyeza kwa kitambaa safi kwa dakika chache.",
+     "Suuza jeraha chini ya maji safi yanayotiririka kuondoa uchafu.",
+     "Safisha kuzunguka kwa upole na ukaushe kwa kitu safi.",
+     "Lifunike kwa plasta au bendeji safi.",
+     "Badilisha bendeji kila siku au ikilowa au kuchafuka, na uangalie dalili za maambukizi."
+    ],
+    "avoid": [
+     "Usiweke pamba moja kwa moja kwenye jeraha, nyuzi hushikamana.",
+     "Usimwage spiriti, jiki wala kemikali kali nyingine ndani ya jeraha."
+    ],
+    "intro": "Majeraha madogo na michubuko kwa kawaida hupona vizuri yakisafishwa na kufunikwa.",
+    "after": "Mwone muuguzi au daktari kama jeraha ni refu au liko wazi, linaendelea kuvuja damu baada ya dakika 10 za kubonyeza, lilisababishwa na kitu kichafu au chenye kutu au kuumwa, au lina dalili za maambukizi: wekundu unaoenea, joto, uvimbe, usaha au homa. Watu wenye kisukari wakaguliwe jeraha lolote la mguu."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Small cut or graze",
+   "sw": "Jeraha dogo au mchubuko wa ngozi"
+  }
+ },
+ "skin_tear": {
+  "id": "skin_tear",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "skin tear",
+   "torn skin",
+   "skin flap",
+   "thin skin tore",
+   "skin peeled off",
+   "fragile skin",
+   "ngozi imechanika",
+   "ngozi imebanduka",
+   "ngozi nyembamba imechanika",
+   "kipande cha ngozi"
+  ],
+  "examples": [
+   "her skin tore when i moved her arm",
+   "he has a skin flap on his shin",
+   "thin skin tear on the arm what do i do",
+   "the skin peeled off when she bumped the bed",
+   "ngozi yake imechanika nilipomsogeza",
+   "ngozi imebanduka mkononi",
+   "ngozi nyembamba ya bibi imechanika"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Stop the bleeding with gentle pressure using a clean cloth.",
+     "Rinse with clean water or saline and let it air dry or pat very gently.",
+     "If there is a flap of skin, ease it gently back into place with a damp cotton bud or gloved finger.",
+     "Cover it with a non-stick dressing and hold it with a bandage, not tape on the skin.",
+     "Draw an arrow on the dressing showing which way to peel it off, in the direction of the flap, so it is not torn again."
+    ],
+    "avoid": [
+     "Do not stick tape or plasters directly on fragile skin.",
+     "Do not rub or pull at the skin."
+    ],
+    "intro": "Older people's skin is thin and can tear with a small knock. A skin tear heals best if the flap is saved.",
+    "after": "Ask a nurse to check it, and pad furniture edges and keep the skin moisturised to prevent more tears."
+   },
+   "sw": {
+    "steps": [
+     "Simamisha damu kwa kubonyeza polepole kwa kitambaa safi.",
+     "Suuza kwa maji safi au maji ya chumvi (saline) na uache ikauke au uifute polepole sana.",
+     "Kama kuna kipande cha ngozi, kirudishe mahali pake polepole kwa pamba yenye unyevu au kidole chenye glavu.",
+     "Kifunike kwa bendeji isiyoshika jeraha na uishikilie kwa bendeji ya kuzungusha, si plasta kwenye ngozi.",
+     "Chora mshale kwenye bendeji kuonyesha upande wa kuiondoa, kufuata kipande cha ngozi, ili isichanike tena."
+    ],
+    "avoid": [
+     "Usibandike plasta moja kwa moja kwenye ngozi nyembamba.",
+     "Usisugue wala kuvuta ngozi."
+    ],
+    "intro": "Ngozi ya wazee ni nyembamba na inaweza kuchanika kwa mgongano mdogo. Ngozi iliyochanika hupona vizuri kipande kikihifadhiwa.",
+    "after": "Mwombe muuguzi aikague, na ufunike kingo za samani na upake mafuta ngozi ili kuzuia kuchanika tena."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Skin tear (fragile skin)",
+   "sw": "Ngozi kuchanika (ngozi nyembamba)"
+  }
+ },
+ "nosebleed": {
+  "id": "nosebleed",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "nosebleed",
+   "nose bleed",
+   "nose bleeding",
+   "blood from the nose",
+   "bleeding nose",
+   "damu puani",
+   "anatokwa damu puani",
+   "pua inatoa damu",
+   "damu inatoka puani"
+  ],
+  "examples": [
+   "his nose is bleeding",
+   "how to stop a nosebleed",
+   "she has had a nosebleed for 10 minutes",
+   "should i tilt the head back for a nose bleed",
+   "blood coming from grandpa's nose",
+   "anatokwa damu puani",
+   "jinsi ya kusimamisha damu puani",
+   "pua ya bibi inatoa damu"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Sit them down and lean them forward, not back.",
+     "Pinch the soft part of the nose, just below the bony bridge, firmly for 10 to 15 minutes without letting go.",
+     "Ask them to breathe through the mouth and spit out any blood.",
+     "A cold cloth on the bridge of the nose can help.",
+     "When it stops, they should rest and avoid blowing the nose, bending down or lifting heavy things for 24 hours."
+    ],
+    "avoid": [
+     "Do not tilt the head back, blood runs down the throat and can cause vomiting or choking.",
+     "Do not let them lie down."
+    ],
+    "intro": "Most nosebleeds can be stopped at home.",
+    "after": "Get medical help if it lasts more than 20 minutes, is very heavy, followed a head injury, or they take blood thinners and it will not stop."
+   },
+   "sw": {
+    "steps": [
+     "Mkalishe na umwinamishe mbele, si nyuma.",
+     "Bana sehemu laini ya pua, chini kidogo ya mfupa, kwa nguvu kwa dakika 10 hadi 15 bila kuachia.",
+     "Mwambie apumue kwa mdomo na ateme damu yoyote.",
+     "Kitambaa baridi juu ya pua kinaweza kusaidia.",
+     "Ikisimama, apumzike na asipenge pua, kuinama au kubeba vitu vizito kwa saa 24."
+    ],
+    "avoid": [
+     "Usimrudishe kichwa nyuma, damu huingia kooni na inaweza kusababisha kutapika au kukabwa.",
+     "Usimwache alale chini."
+    ],
+    "intro": "Damu nyingi za puani zinaweza kusimamishwa nyumbani.",
+    "after": "Tafuta msaada wa matibabu kama inachukua zaidi ya dakika 20, ni nyingi sana, ilitokea baada ya kuumia kichwa, au anatumia dawa za kupunguza kuganda kwa damu na haisimami."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Nosebleed",
+   "sw": "Kutokwa damu puani"
+  }
+ },
+ "burns": {
+  "id": "burns",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "burn",
+   "burnt",
+   "burned",
+   "scald",
+   "scalded",
+   "hot water burn",
+   "boiling water",
+   "fire burn",
+   "steam burn",
+   "chemical burn",
+   "blister from burn",
+   "burnt by stove",
+   "burnt by jiko",
+   "ameungua",
+   "ameungua na moto",
+   "ameungua na maji ya moto",
+   "ameungua na chai",
+   "jiko limemchoma",
+   "malengelenge ya moto",
+   "ameungua na mafuta"
+  ],
+  "examples": [
+   "she burnt her hand on the stove",
+   "he spilled boiling water on his leg",
+   "hot tea scalded her arm",
+   "what to do for a burn",
+   "should i put toothpaste on a burn",
+   "there is a blister after the burn",
+   "grandma burned herself on the jiko",
+   "chemical burn from cleaning liquid",
+   "how long should i cool a burn",
+   "ameungua mkono kwenye jiko",
+   "ameungua na maji ya moto mguuni",
+   "chai ya moto imemwagika mkononi",
+   "nifanye nini mtu akiungua",
+   "nipake dawa ya meno kwenye jeraha la moto",
+   "ameungua na mafuta ya kupikia",
+   "jiko la makaa limemchoma"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Move them away from the heat source.",
+     "Cool the burn under cool running water for 20 minutes. This still helps up to 3 hours after the burn.",
+     "Take off rings, watches and clothing near the burn, unless they are stuck to the skin.",
+     "After cooling, cover it loosely with cling film or a clean non-fluffy cloth.",
+     "Keep the rest of the body warm with a blanket, older people get cold quickly.",
+     "For chemical burns, brush off any dry powder, then rinse with lots of water for at least 20 minutes.",
+     "Paracetamol can help with pain if it is safe for them."
+    ],
+    "avoid": [
+     "Do not use ice, butter, oil, toothpaste, flour, eggs or creams.",
+     "Do not burst blisters.",
+     "Do not remove clothing stuck to the burn."
+    ],
+    "intro": "Cooling a burn quickly with water reduces the damage. Older people's skin burns more deeply.",
+    "urgent": "Call 999 or 112 or go to hospital if the burn is bigger than the person's hand, is on the face, hands, feet, genitals or a joint, looks white, leathery or charred, was caused by electricity or chemicals, or they breathed in smoke.",
+    "after": "See a nurse or doctor if the burn blisters, is larger than a coin, or shows infection later."
+   },
+   "sw": {
+    "steps": [
+     "Mwondoe karibu na chanzo cha joto.",
+     "Poza jeraha chini ya maji baridi yanayotiririka kwa dakika 20. Hii bado inasaidia hadi saa 3 baada ya kuungua.",
+     "Vua pete, saa na nguo karibu na jeraha, isipokuwa kama zimeshikamana na ngozi.",
+     "Baada ya kupoza, lifunike kwa ulegevu kwa karatasi ya plastiki ya jikoni au kitambaa safi kisicho na manyoya.",
+     "Mfunike mwili uliobaki kwa blanketi apate joto, wazee hupata baridi haraka.",
+     "Kwa kuungua na kemikali, futa unga wowote mkavu, kisha suuza kwa maji mengi kwa angalau dakika 20.",
+     "Paracetamol inaweza kusaidia maumivu kama ni salama kwake."
+    ],
+    "avoid": [
+     "Usitumie barafu, siagi, mafuta, dawa ya meno, unga, mayai wala krimu.",
+     "Usipasue malengelenge.",
+     "Usiondoe nguo zilizoshikamana na jeraha."
+    ],
+    "intro": "Kupoza jeraha la moto haraka kwa maji kunapunguza madhara. Ngozi ya wazee huungua kwa kina zaidi.",
+    "urgent": "Piga 999 au 112 au nenda hospitali kama jeraha ni kubwa kuliko kiganja cha mtu, liko usoni, mikononi, miguuni, sehemu za siri au kwenye kiungo, linaonekana jeupe, gumu kama ngozi kavu au limeungua kuwa jeusi, lilisababishwa na umeme au kemikali, au alivuta moshi.",
+    "after": "Mwone muuguzi au daktari kama jeraha lina malengelenge, ni kubwa kuliko sarafu, au linaonyesha maambukizi baadaye."
+   }
+  },
+  "followup": {
+   "ask": {
+    "en": "Is the burn bigger than their hand, deep, or on the face, hands, feet or genitals?",
+    "sw": "Je, jeraha ni kubwa kuliko kiganja chake, lina kina, au liko usoni, mikononi, miguuni au sehemu za siri?"
+   },
+   "options": [
+    {
+     "label": {
+      "en": "Yes",
+      "sw": "Ndiyo"
+     },
+     "goto": "call_for_help"
+    },
+    {
+     "label": {
+      "en": "No, it is small",
+      "sw": "Hapana, ni dogo"
+     },
+     "goto": "burns"
+    }
+   ]
+  },
+  "title": {
+   "en": "Burns and scalds",
+   "sw": "Kuungua na moto au maji ya moto"
+  }
+ },
+ "eye_injury": {
+  "id": "eye_injury",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "eye injury",
+   "something in the eye",
+   "chemical in eye",
+   "splash in eye",
+   "dust in eye",
+   "eye is red and painful",
+   "hit in the eye",
+   "poked eye",
+   "jicho",
+   "kitu kimeingia jichoni",
+   "kemikali jichoni",
+   "vumbi jichoni",
+   "jicho limeumia",
+   "jicho linauma",
+   "amegongwa jichoni"
+  ],
+  "examples": [
+   "something got into her eye",
+   "bleach splashed in his eye",
+   "dust in the eye how to remove",
+   "he got hit in the eye",
+   "her eye is red and painful after cleaning",
+   "kitu kimeingia jichoni",
+   "kemikali imemrukia jichoni",
+   "vumbi limeingia jichoni",
+   "amegongwa jichoni na linauma"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "For a chemical splash: hold the eye open under gently running lukewarm water for at least 20 minutes, with the injured eye lower so water runs away from the other eye. Remove contact lenses if they come out easily.",
+     "For dust or grit: ask them to blink, then rinse the eye with clean water.",
+     "If something is stuck in the eye, do not remove it. Cover the eye with a clean paper cup or pad without pressing, and go to hospital.",
+     "For a blow to the eye, hold a cold cloth gently on it for 15 minutes."
+    ],
+    "avoid": [
+     "Do not let them rub the eye.",
+     "Do not try to remove anything stuck in the eye."
+    ],
+    "intro": "Eyes are delicate. Rinse anything chemical out straight away and do not rub.",
+    "urgent": "Call 999 or 112 or go to hospital for chemicals in the eye, anything stuck in the eye, a cut to the eye, or sudden loss of vision.",
+    "after": "See a doctor if pain, redness, blurred vision or light sensitivity continues."
+   },
+   "sw": {
+    "steps": [
+     "Kwa kemikali iliyorukia jichoni: shikilia jicho wazi chini ya maji ya uvuguvugu yanayotiririka polepole kwa angalau dakika 20, jicho lililoumia likiwa chini ili maji yasiingie jicho jingine. Toa lenzi za macho kama zinatoka kwa urahisi.",
+     "Kwa vumbi au mchanga: mwambie apepese, kisha suuza jicho kwa maji safi.",
+     "Kama kitu kimekwama jichoni, usikitoe. Funika jicho kwa kikombe safi cha karatasi au pedi bila kubonyeza, na uende hospitali.",
+     "Kwa pigo jichoni, shikilia kitambaa baridi juu yake polepole kwa dakika 15."
+    ],
+    "avoid": [
+     "Usimwache asugue jicho.",
+     "Usijaribu kutoa kitu kilichokwama jichoni."
+    ],
+    "intro": "Macho ni dhaifu. Suuza kemikali yoyote mara moja na usisugue.",
+    "urgent": "Piga 999 au 112 au nenda hospitali kwa kemikali jichoni, kitu kilichokwama jichoni, jeraha la jicho, au kupoteza uwezo wa kuona ghafla.",
+    "after": "Mwone daktari kama maumivu, wekundu, kuona ukungu au kuumizwa na mwanga kunaendelea."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Eye injury",
+   "sw": "Jeraha la jicho"
+  }
+ },
+ "animal_bite": {
+  "id": "animal_bite",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "dog bite",
+   "bitten by a dog",
+   "cat bite",
+   "cat scratch",
+   "animal bite",
+   "monkey bite",
+   "human bite",
+   "rabies",
+   "dog bit",
+   "ameumwa na mbwa",
+   "mbwa amemuuma",
+   "ameumwa na paka",
+   "paka amemkwaruza",
+   "kichaa cha mbwa",
+   "ameumwa na nyani"
+  ],
+  "examples": [
+   "he was bitten by a dog",
+   "the neighbour's dog bit grandma",
+   "cat scratched her and it is bleeding",
+   "do i need a rabies injection after a dog bite",
+   "a monkey bit him",
+   "ameumwa na mbwa",
+   "mbwa wa jirani amemuuma bibi",
+   "paka amemkwaruza na anavuja damu",
+   "chanjo ya kichaa cha mbwa",
+   "ameumwa na nyani"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Wash the wound straight away with soap and plenty of running water for 15 minutes. This greatly lowers the rabies risk.",
+     "If you have an antiseptic such as povidone-iodine, apply it after washing.",
+     "Cover it with a clean dressing.",
+     "Go to a hospital or clinic the same day for rabies vaccine and a tetanus check, even if the wound is small.",
+     "Find out whose animal it was and whether it is vaccinated, and tell the clinic."
+    ],
+    "avoid": [
+     "Do not close the wound tightly or stitch it at home.",
+     "Do not wait to see if the animal gets sick before getting the vaccine."
+    ],
+    "intro": "Animal bites can carry infection and, in Kenya, rabies, which is deadly once symptoms start but can be prevented with vaccine.",
+    "urgent": "If the bleeding is heavy, press on it and call 999 or 112.",
+    "after": "Watch for redness, swelling, pus or fever over the next days and return to the clinic if you see them."
+   },
+   "sw": {
+    "steps": [
+     "Osha jeraha mara moja kwa sabuni na maji mengi yanayotiririka kwa dakika 15. Hii inapunguza sana hatari ya kichaa cha mbwa.",
+     "Kama una dawa ya kuua vijidudu kama povidone-iodine, ipake baada ya kuosha.",
+     "Lifunike kwa kitambaa safi.",
+     "Nenda hospitali au kliniki siku hiyo hiyo kwa chanjo ya kichaa cha mbwa na kuangaliwa pepopunda, hata kama jeraha ni dogo.",
+     "Tafuta mnyama ni wa nani na kama amechanjwa, uiambie kliniki."
+    ],
+    "avoid": [
+     "Usifunge jeraha kwa nguvu wala kulishona nyumbani.",
+     "Usisubiri kuona kama mnyama ataugua kabla ya kupata chanjo."
+    ],
+    "intro": "Kuumwa na wanyama kunaweza kuleta maambukizi na, nchini Kenya, kichaa cha mbwa, ambacho huua dalili zikianza lakini kinaweza kuzuiwa kwa chanjo.",
+    "urgent": "Kama damu ni nyingi, bonyeza jeraha na upige 999 au 112.",
+    "after": "Angalia wekundu, uvimbe, usaha au homa kwa siku zinazofuata na urudi kliniki ukiziona."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Dog, cat or other animal bite",
+   "sw": "Kuumwa na mbwa, paka au mnyama mwingine"
+  }
+ },
+ "snake_bite": {
+  "id": "snake_bite",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "snake bite",
+   "bitten by a snake",
+   "snakebite",
+   "snake bit",
+   "cobra",
+   "puff adder",
+   "black mamba",
+   "green mamba",
+   "snake venom",
+   "spitting cobra in eye",
+   "kuumwa na nyoka",
+   "ameumwa na nyoka",
+   "nyoka amemuuma",
+   "sumu ya nyoka",
+   "swila",
+   "kifutu",
+   "koboko",
+   "nyoka amemtemea mate"
+  ],
+  "examples": [
+   "he was bitten by a snake",
+   "a snake bit her on the leg in the garden",
+   "what to do for a snake bite",
+   "should i suck out the snake venom",
+   "spitting cobra spat in his eyes",
+   "ameumwa na nyoka",
+   "nyoka amemuuma mguuni shambani",
+   "nifanye nini mtu akiumwa na nyoka",
+   "swila amemtemea mate machoni",
+   "nifunge kamba juu ya jeraha la nyoka"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Move away from the snake.",
+     "Keep the person calm, lying down and as still as possible, movement spreads venom.",
+     "Remove rings, watches, bangles and tight clothing near the bite before swelling starts.",
+     "Keep the bitten limb still, for example with a splint, and at or slightly below heart level.",
+     "Note the time of the bite and what the snake looked like. Take a photo only from a safe distance.",
+     "If a spitting cobra sprayed venom in the eyes, rinse them with lots of clean water.",
+     "If they stop breathing normally, start CPR."
+    ],
+    "avoid": [
+     "Do not cut the bite, suck out venom, tie a tight tourniquet, put ice on it or use traditional remedies or black stones.",
+     "Do not give alcohol.",
+     "Do not try to catch or kill the snake."
+    ],
+    "intro": "Snake bites in Kenya can be dangerous. Stay calm, keep still, and get to hospital fast, antivenom is given there.",
+    "urgent": "Call 999 or 112 or take them to the nearest hospital now.",
+    "after": "Even if the person feels fine, they must be seen at hospital, because some venoms act hours later."
+   },
+   "sw": {
+    "steps": [
+     "Ondokeni mbali na nyoka.",
+     "Mtulize mtu, alale chini na atulie kadri inavyowezekana, kusogea husambaza sumu.",
+     "Vua pete, saa, bangili na nguo zinazobana karibu na jeraha kabla uvimbe haujaanza.",
+     "Mwache kiungo kilichoumwa kitulie, kwa mfano kwa banzi, na kiwe usawa wa moyo au chini kidogo.",
+     "Andika saa aliyoumwa na jinsi nyoka alivyoonekana. Piga picha tu ukiwa mbali salama.",
+     "Kama swila amemtemea sumu machoni, yasuuze kwa maji mengi safi.",
+     "Akiacha kupumua kawaida, anza CPR."
+    ],
+    "avoid": [
+     "Usikate jeraha, kunyonya sumu, kufunga kamba kwa nguvu, kuweka barafu wala kutumia dawa za kienyeji au jiwe jeusi.",
+     "Usimpe pombe.",
+     "Usijaribu kumkamata wala kumuua nyoka."
+    ],
+    "intro": "Kuumwa na nyoka nchini Kenya kunaweza kuwa hatari. Tulia, mwache atulie, na mfike hospitali haraka, dawa ya sumu (antivenom) hutolewa huko.",
+    "urgent": "Piga 999 au 112 au mpeleke hospitali iliyo karibu sasa hivi.",
+    "after": "Hata kama anajisikia mzima, lazima aonekane hospitali, kwa sababu sumu nyingine hufanya kazi saa kadhaa baadaye."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Snake bite",
+   "sw": "Kuumwa na nyoka"
+  }
+ },
+ "insect_sting": {
+  "id": "insect_sting",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "bee sting",
+   "stung by a bee",
+   "wasp sting",
+   "insect bite",
+   "insect sting",
+   "scorpion sting",
+   "hornet",
+   "ant bite",
+   "ameumwa na nyuki",
+   "nyuki wamemuuma",
+   "ameumwa na mdudu",
+   "nge amemuuma",
+   "nyigu",
+   "siafu"
+  ],
+  "examples": [
+   "she was stung by a bee",
+   "how to remove a bee sting",
+   "wasp sting on his arm is swollen",
+   "he was stung by a scorpion",
+   "many bees attacked him",
+   "ameumwa na nyuki",
+   "jinsi ya kutoa mwiba wa nyuki",
+   "nge amemuuma mguuni",
+   "nyuki wengi wamemvamia"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "If a bee sting is left in the skin, scrape it out sideways with a fingernail or a card as soon as possible.",
+     "Wash the area with soap and water.",
+     "Hold a cold pack wrapped in cloth on it for 10 to 20 minutes.",
+     "Raise the area if it is a hand, arm or leg.",
+     "An antihistamine tablet or paracetamol can help if they are safe for the person.",
+     "Watch them for an hour for signs of a severe allergic reaction."
+    ],
+    "avoid": [
+     "Do not squeeze the sting with tweezers, it can push in more venom.",
+     "Do not scratch the area."
+    ],
+    "intro": "Most stings cause pain, redness and swelling that settle in a day or two.",
+    "urgent": "Call 999 or 112 if they have swelling of the face, lips or throat, difficulty breathing, feel faint, were stung in the mouth or throat, or were stung many times.",
+    "after": "See a doctor if swelling keeps spreading after 2 days or there are signs of infection."
+   },
+   "sw": {
+    "steps": [
+     "Kama mwiba wa nyuki umebaki kwenye ngozi, ukwangue kwa pembeni kwa kucha au kadi haraka iwezekanavyo.",
+     "Osha sehemu hiyo kwa sabuni na maji.",
+     "Shikilia barafu iliyofungwa kwenye kitambaa juu yake kwa dakika 10 hadi 20.",
+     "Inua sehemu hiyo kama ni mkono au mguu.",
+     "Kidonge cha mzio (antihistamine) au paracetamol vinaweza kusaidia kama ni salama kwake.",
+     "Mwangalie kwa saa moja kwa dalili za mzio mkali."
+    ],
+    "avoid": [
+     "Usiubane mwiba kwa koleo, inaweza kusukuma sumu zaidi.",
+     "Usikune sehemu hiyo."
+    ],
+    "intro": "Miuma mingi husababisha maumivu, wekundu na uvimbe ambao hupungua kwa siku moja au mbili.",
+    "urgent": "Piga 999 au 112 kama ana uvimbe usoni, midomoni au kooni, anapumua kwa shida, anahisi kuzimia, aliumwa mdomoni au kooni, au aliumwa mara nyingi.",
+    "after": "Mwone daktari kama uvimbe unaendelea kuenea baada ya siku 2 au kuna dalili za maambukizi."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Bee or insect sting",
+   "sw": "Kuumwa na nyuki au mdudu"
+  }
+ },
+ "low_blood_sugar": {
+  "id": "low_blood_sugar",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "low blood sugar",
+   "low sugar",
+   "hypo",
+   "hypoglycaemia",
+   "hypoglycemia",
+   "sugar dropped",
+   "diabetic shaking sweating",
+   "diabetic confused",
+   "sugar is low",
+   "glucose low",
+   "sukari imeshuka",
+   "sukari iko chini",
+   "sukari imepungua",
+   "mgonjwa wa kisukari anatetemeka",
+   "kisukari anatokwa jasho"
+  ],
+  "examples": [
+   "his sugar is low",
+   "my diabetic patient is shaking and sweating",
+   "she is diabetic and suddenly confused",
+   "what do i give for low blood sugar",
+   "hypo symptoms what to do",
+   "her glucose reading is 3.2",
+   "he took insulin and did not eat and now feels weak",
+   "sugar dropped to 50",
+   "sukari imeshuka",
+   "sukari yake iko chini sana",
+   "mgonjwa wa kisukari anatetemeka na kutokwa jasho",
+   "nimpe nini sukari ikishuka",
+   "bibi ana kisukari na amechanganyikiwa ghafla",
+   "amechoma insulini hajala na anajisikia dhaifu"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "If they are awake and can swallow, sit them down.",
+     "Give fast sugar straight away: half a glass (150 ml) of fruit juice or a non-diet soda, or 3 to 4 teaspoons of sugar stirred into water, or glucose tablets.",
+     "Wait 10 to 15 minutes and check their sugar with their meter if they have one.",
+     "If they are not better, give fast sugar again. You can repeat up to 3 times.",
+     "Once they feel better, give a starchy snack or their next meal, such as bread, biscuits or ugali.",
+     "If they do not improve after 3 rounds, or get worse, call 999 or 112."
+    ],
+    "avoid": [
+     "Do not give anything by mouth if they are drowsy or cannot swallow safely.",
+     "Do not give chocolate or fatty food as the first treatment, it works too slowly.",
+     "Do not leave them alone until they have recovered."
+    ],
+    "intro": "People with diabetes who take insulin or diabetes tablets can have low blood sugar. Signs are shaking, sweating, paleness, hunger, a fast heartbeat, confusion, irritability, unusual behaviour or drowsiness.",
+    "urgent": "If they are very drowsy, unconscious or cannot swallow safely, call 999 or 112, put them in the recovery position and give nothing by mouth.",
+    "after": "Tell the family and their doctor, as their diabetes medicine or meals may need changing."
+   },
+   "sw": {
+    "steps": [
+     "Kama yuko macho na anaweza kumeza, mkalishe chini.",
+     "Mpe sukari ya haraka mara moja: nusu glasi (ml 150) ya juisi ya matunda au soda isiyo ya diet, au vijiko 3 hadi 4 vya sukari vilivyokorogwa kwenye maji, au vidonge vya glukosi.",
+     "Subiri dakika 10 hadi 15 na upime sukari kwa mashine yake kama anayo.",
+     "Kama hajapata nafuu, mpe sukari ya haraka tena. Unaweza kurudia hadi mara 3.",
+     "Akijisikia vizuri, mpe chakula cha wanga au mlo wake unaofuata, kama mkate, biskuti au ugali.",
+     "Kama hapati nafuu baada ya mara 3, au anazidi kuwa mbaya, piga 999 au 112."
+    ],
+    "avoid": [
+     "Usimpe chochote kwa mdomo kama anasinzia au hawezi kumeza salama.",
+     "Usimpe chokoleti au vyakula vya mafuta kama tiba ya kwanza, vinafanya kazi polepole sana.",
+     "Usimwache peke yake mpaka apone."
+    ],
+    "intro": "Watu wenye kisukari wanaotumia insulini au vidonge vya kisukari wanaweza kushukiwa na sukari. Dalili ni kutetemeka, kutokwa jasho, kupauka, njaa, moyo kwenda mbio, kuchanganyikiwa, hasira, tabia isiyo ya kawaida au kusinzia.",
+    "urgent": "Kama anasinzia sana, hajitambui au hawezi kumeza salama, piga 999 au 112, mlaze katika mkao wa kupona na usimpe chochote kwa mdomo.",
+    "after": "Iambie familia na daktari wake, kwani dawa zake za kisukari au milo inaweza kuhitaji kubadilishwa."
+   }
+  },
+  "followup": {
+   "ask": {
+    "en": "Is the person awake and able to swallow?",
+    "sw": "Je, mtu huyo yuko macho na anaweza kumeza?"
+   },
+   "options": [
+    {
+     "label": {
+      "en": "Yes",
+      "sw": "Ndiyo"
+     },
+     "goto": "low_blood_sugar"
+    },
+    {
+     "label": {
+      "en": "No, drowsy or unconscious",
+      "sw": "Hapana, anasinzia au hajitambui"
+     },
+     "goto": "unresponsive_breathing"
+    }
+   ]
+  },
+  "title": {
+   "en": "Low blood sugar (diabetes)",
+   "sw": "Sukari kushuka (kisukari)"
+  }
+ },
+ "high_blood_sugar": {
+  "id": "high_blood_sugar",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "high blood sugar",
+   "high sugar",
+   "hyperglycaemia",
+   "hyperglycemia",
+   "sugar is high",
+   "glucose high",
+   "meter says hi",
+   "very thirsty diabetic",
+   "sugar reading 20",
+   "ketones",
+   "sukari iko juu",
+   "sukari imepanda",
+   "sukari nyingi mwilini",
+   "kiu sana na kukojoa sana"
+  ],
+  "examples": [
+   "his sugar is very high",
+   "the glucometer says HI",
+   "her blood sugar reading is 22",
+   "diabetic very thirsty and urinating a lot",
+   "what to do when blood sugar is high",
+   "his breath smells fruity and he is vomiting",
+   "sukari yake iko juu sana",
+   "mashine ya sukari inasoma HI",
+   "sukari imepanda hadi 20",
+   "ana kiu sana na anakojoa mara kwa mara"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Check their sugar with their meter if they have one, and write down the reading and time.",
+     "Give plenty of water or other sugar-free drinks.",
+     "Help them follow their diabetes plan and take their usual medicine as prescribed.",
+     "Contact their doctor or clinic today for advice if the sugar stays high.",
+     "Recheck the sugar in 2 hours and watch for the danger signs above."
+    ],
+    "avoid": [
+     "Do not give sugary drinks or sweets.",
+     "Do not skip or change their insulin or tablets unless the doctor says so."
+    ],
+    "intro": "High blood sugar causes thirst, passing a lot of urine, tiredness, blurred vision and headaches. Very high sugar can become dangerous.",
+    "urgent": "Call 999 or 112 or go to hospital if the meter reads \"HI\" or above about 16.7 mmol/L (300 mg/dL) and they are vomiting, very drowsy, confused, breathing fast and deep, or their breath smells fruity.",
+    "after": "Share the readings with the family and the doctor so treatment can be adjusted."
+   },
+   "sw": {
+    "steps": [
+     "Pima sukari yake kwa mashine kama anayo, na uandike kipimo na saa.",
+     "Mpe maji mengi au vinywaji vingine visivyo na sukari.",
+     "Msaidie kufuata mpango wake wa kisukari na kutumia dawa zake za kawaida kama alivyoandikiwa.",
+     "Wasiliana na daktari au kliniki yake leo kwa ushauri kama sukari inabaki juu.",
+     "Pima tena sukari baada ya saa 2 na uangalie dalili za hatari hapo juu."
+    ],
+    "avoid": [
+     "Usimpe vinywaji vyenye sukari wala peremende.",
+     "Usiruke wala kubadilisha insulini au vidonge vyake isipokuwa daktari akisema."
+    ],
+    "intro": "Sukari ikipanda husababisha kiu, kukojoa sana, uchovu, kuona ukungu na maumivu ya kichwa. Sukari iliyo juu sana inaweza kuwa hatari.",
+    "urgent": "Piga 999 au 112 au nenda hospitali kama mashine inasoma \"HI\" au juu ya takriban 16.7 mmol/L (300 mg/dL) na anatapika, anasinzia sana, amechanganyikiwa, anapumua haraka na kwa kina, au pumzi yake inanuka kama matunda.",
+    "after": "Shiriki vipimo na familia na daktari ili matibabu yarekebishwe."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "High blood sugar (diabetes)",
+   "sw": "Sukari kupanda sana (kisukari)"
+  }
+ },
+ "asthma": {
+  "id": "asthma",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "asthma",
+   "asthma attack",
+   "wheezing",
+   "inhaler",
+   "blue inhaler",
+   "salbutamol",
+   "tight chest wheeze",
+   "pumu",
+   "shambulio la pumu",
+   "anapumua kwa mluzi",
+   "kifaa cha kupuliza",
+   "inhaler yake"
+  ],
+  "examples": [
+   "she is having an asthma attack",
+   "he is wheezing and can't catch his breath",
+   "how many puffs of the inhaler should i give",
+   "asthma attack without inhaler",
+   "his chest is tight and he is wheezing",
+   "ana shambulio la pumu",
+   "anapumua kwa mluzi",
+   "nimpe inhaler mara ngapi",
+   "pumu imemshika na hana inhaler"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Help them sit upright, leaning slightly forward. Keep calm and reassure them.",
+     "Help them use their reliever inhaler, usually blue (salbutamol): 1 puff every 30 to 60 seconds, up to 10 puffs. Use a spacer if they have one.",
+     "If they are not better after 10 puffs, or are getting worse, call 999 or 112.",
+     "If help has not arrived after 10 minutes, repeat up to 10 puffs."
+    ],
+    "avoid": [
+     "Do not lie them down.",
+     "Do not leave them alone."
+    ],
+    "intro": "In an asthma attack the airways tighten, causing wheezing, coughing, a tight chest and breathlessness.",
+    "urgent": "Call 999 or 112 if they are too breathless to speak, their lips are turning blue, they are exhausted or drowsy, or the inhaler is not helping.",
+    "after": "Even if the attack settles, they should see their doctor within 2 days to review their asthma treatment."
+   },
+   "sw": {
+    "steps": [
+     "Msaidie akae wima, ameinama mbele kidogo. Tulia na umtulize.",
+     "Msaidie atumie inhaler yake ya kupunguza pumu, kwa kawaida ya bluu (salbutamol): pafu 1 kila sekunde 30 hadi 60, hadi pafu 10. Tumia spacer kama anayo.",
+     "Kama hajapata nafuu baada ya pafu 10, au anazidi kuwa mbaya, piga 999 au 112.",
+     "Kama msaada haujafika baada ya dakika 10, rudia hadi pafu 10."
+    ],
+    "avoid": [
+     "Usimlaze chini.",
+     "Usimwache peke yake."
+    ],
+    "intro": "Wakati wa shambulio la pumu njia za hewa hubana, na kusababisha mluzi, kikohozi, kifua kubana na kukosa pumzi.",
+    "urgent": "Piga 999 au 112 kama anakosa pumzi kiasi cha kushindwa kuongea, midomo inakuwa bluu, amechoka sana au anasinzia, au inhaler haisaidii.",
+    "after": "Hata shambulio likitulia, amwone daktari wake ndani ya siku 2 kukagua matibabu ya pumu."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Asthma attack",
+   "sw": "Shambulio la pumu"
+  }
+ },
+ "breathing_difficulty": {
+  "id": "breathing_difficulty",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "shortness of breath",
+   "short of breath",
+   "breathless",
+   "difficulty breathing",
+   "can't catch breath",
+   "struggling to breathe",
+   "copd",
+   "breathing fast",
+   "oxygen",
+   "anapumua kwa shida",
+   "anakosa pumzi",
+   "hapati hewa",
+   "pumzi inakata",
+   "anahema sana",
+   "kupumua kwa shida"
+  ],
+  "examples": [
+   "he is short of breath",
+   "she can't catch her breath",
+   "grandpa is struggling to breathe",
+   "breathing very fast and tired",
+   "he has copd and is more breathless today",
+   "breathless when lying down",
+   "anapumua kwa shida",
+   "anakosa pumzi",
+   "mzee hapati hewa vizuri",
+   "pumzi inamkata",
+   "anahema sana leo"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Help them sit upright, leaning forward with arms resting on a table or their knees.",
+     "Loosen tight clothing and open a window for fresh air.",
+     "If they have a prescribed inhaler or home oxygen, help them use it as directed.",
+     "Encourage slow breathing: in through the nose, out slowly through pursed lips.",
+     "Stay with them and keep checking how they are breathing and how alert they are."
+    ],
+    "avoid": [
+     "Do not lie them flat.",
+     "Do not allow smoking or open flames near home oxygen."
+    ],
+    "intro": "Breathlessness in an older person can come from the lungs, the heart, an infection or anxiety. Sudden or severe breathlessness is an emergency.",
+    "urgent": "Call 999 or 112 if it came on suddenly, is severe, they have chest pain, blue or grey lips, cannot finish a sentence, are confused or drowsy, or cannot lie flat when they normally can.",
+    "after": "Tell their doctor today about any new or worsening breathlessness, even if it settles."
+   },
+   "sw": {
+    "steps": [
+     "Msaidie akae wima, ameinama mbele na mikono imeegemea meza au magoti.",
+     "Legeza nguo zinazobana na ufungue dirisha apate hewa safi.",
+     "Kama ana inhaler aliyoandikiwa au oksijeni ya nyumbani, msaidie aitumie kama alivyoelekezwa.",
+     "Mhimize apumue polepole: ndani kwa pua, nje polepole kwa midomo iliyobanwa.",
+     "Kaa naye na uendelee kuangalia anavyopumua na kama yuko macho."
+    ],
+    "avoid": [
+     "Usimlaze chali.",
+     "Usiruhusu uvutaji sigara wala moto karibu na oksijeni ya nyumbani."
+    ],
+    "intro": "Kukosa pumzi kwa mzee kunaweza kutokana na mapafu, moyo, maambukizi au wasiwasi. Kukosa pumzi ghafla au kwa kiasi kikubwa ni dharura.",
+    "urgent": "Piga 999 au 112 kama kulianza ghafla, ni kukubwa, ana maumivu ya kifua, midomo ya bluu au kijivu, hawezi kumaliza sentensi, amechanganyikiwa au anasinzia, au hawezi kulala chali wakati kwa kawaida anaweza.",
+    "after": "Mwambie daktari wake leo kuhusu kukosa pumzi kupya au kunakozidi, hata kama kutatulia."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Difficulty breathing",
+   "sw": "Kupumua kwa shida"
+  }
+ },
+ "fainting": {
+  "id": "fainting",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "fainted",
+   "faint",
+   "fainting",
+   "feeling faint",
+   "dizzy and passed out",
+   "blacked out",
+   "collapsed briefly",
+   "light headed",
+   "amezirai",
+   "anazirai",
+   "kuzirai",
+   "anahisi kuzirai",
+   "kizunguzungu na kuanguka",
+   "giza machoni"
+  ],
+  "examples": [
+   "she fainted in the kitchen",
+   "he feels faint and dizzy",
+   "grandma blacked out for a few seconds",
+   "what to do when someone faints",
+   "he passed out when he stood up",
+   "amezirai jikoni",
+   "anahisi kuzirai na kizunguzungu",
+   "bibi amepoteza fahamu kwa sekunde chache",
+   "amezirai aliposimama"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "If they feel faint, help them lie down, or sit with the head between the knees.",
+     "If they have fainted, lay them on their back and raise their legs about 30 cm on a chair or pillows.",
+     "Loosen tight clothing and let fresh air in.",
+     "When they wake, keep them lying down for a few minutes, then help them sit up slowly.",
+     "Give sips of water once they are fully awake.",
+     "If they stay unresponsive but are breathing, put them in the recovery position."
+    ],
+    "avoid": [
+     "Do not sit them up or stand them up quickly.",
+     "Do not splash water on their face or give drinks while drowsy."
+    ],
+    "intro": "Fainting is a short loss of consciousness when blood flow to the brain drops. People usually wake within a minute.",
+    "urgent": "Call 999 or 112 if they do not wake within a minute, are injured, have chest pain, a racing or irregular heartbeat or breathlessness, fainted during activity, or it is the first time in an older person.",
+    "after": "In older people fainting can be a sign of a heart problem, low blood pressure or a medicine side effect, so tell their doctor."
+   },
+   "sw": {
+    "steps": [
+     "Akihisi kuzirai, msaidie alale chini, au akae na kichwa kati ya magoti.",
+     "Kama amezirai, mlaze chali na uinue miguu yake kama sentimita 30 juu ya kiti au mito.",
+     "Legeza nguo zinazobana na uruhusu hewa safi.",
+     "Akizinduka, mwache alale kwa dakika chache, kisha msaidie akae polepole.",
+     "Mpe maji kidogo kidogo akishazinduka kabisa.",
+     "Kama anabaki bila kujitambua lakini anapumua, mlaze katika mkao wa kupona."
+    ],
+    "avoid": [
+     "Usimkalishe wala kumsimamisha haraka.",
+     "Usimmwagie maji usoni wala kumpa vinywaji akiwa bado anasinzia."
+    ],
+    "intro": "Kuzirai ni kupoteza fahamu kwa muda mfupi mtiririko wa damu kwenye ubongo ukipungua. Kwa kawaida watu huzinduka ndani ya dakika moja.",
+    "urgent": "Piga 999 au 112 kama hazinduki ndani ya dakika moja, ameumia, ana maumivu ya kifua, moyo unakwenda mbio au bila mpangilio au anakosa pumzi, alizirai akifanya kazi, au ni mara ya kwanza kwa mzee.",
+    "after": "Kwa wazee kuzirai kunaweza kuwa ishara ya tatizo la moyo, shinikizo la chini la damu au madhara ya dawa, kwa hiyo mwambie daktari wake."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Fainting",
+   "sw": "Kuzirai"
+  }
+ },
+ "poisoning": {
+  "id": "poisoning",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "poisoning",
+   "poisoned",
+   "swallowed poison",
+   "drank paraffin",
+   "drank bleach",
+   "swallowed chemicals",
+   "pesticide",
+   "rat poison",
+   "ate something poisonous",
+   "mushroom poisoning",
+   "charcoal fumes",
+   "carbon monoxide",
+   "jiko fumes",
+   "smoke inhalation",
+   "sumu",
+   "amekunywa sumu",
+   "amekunywa mafuta ya taa",
+   "amekunywa jiki",
+   "dawa ya panya",
+   "dawa ya wadudu",
+   "moshi wa jiko",
+   "amevuta moshi wa makaa"
+  ],
+  "examples": [
+   "he drank paraffin by mistake",
+   "she swallowed bleach",
+   "he ate rat poison",
+   "what to do if someone swallowed poison",
+   "should i make him vomit after poisoning",
+   "they slept with a charcoal jiko in the room and feel dizzy",
+   "smell of fumes and grandma has a headache and is confused",
+   "he sprayed pesticide and is now vomiting",
+   "amekunywa mafuta ya taa kwa makosa",
+   "amekunywa jiki",
+   "amekula dawa ya panya",
+   "nimfanye atapike akinywa sumu",
+   "walilala na jiko la makaa chumbani",
+   "amevuta moshi wa makaa na ana kizunguzungu"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "For fumes or smoke: get them into fresh air straight away, open doors and windows, and turn off or remove the jiko or heater, without putting yourself at risk.",
+     "Find out what they took or touched, how much and when. Keep the container, packet or plant to show the medics.",
+     "If they are unresponsive but breathing, put them in the recovery position. If they are not breathing normally, start CPR, using a face shield if the poison is on their mouth.",
+     "If a chemical is on the skin or in the eyes, rinse with lots of running water for 20 minutes and remove contaminated clothing.",
+     "If chemicals burned the lips, they can rinse their mouth and spit, without swallowing."
+    ],
+    "avoid": [
+     "Do not make them vomit.",
+     "Do not give salt water, milk or oil. Only give drinks if a doctor or poison expert tells you to.",
+     "Never use a charcoal jiko indoors with doors and windows closed."
+    ],
+    "intro": "Poisoning can come from swallowing chemicals, pesticides, too much medicine, poisonous plants, or breathing in fumes, such as from a charcoal jiko in a closed room.",
+    "urgent": "Call 999 or 112 now.",
+    "after": "Take the container or a photo of the label to hospital."
+   },
+   "sw": {
+    "steps": [
+     "Kwa moshi au gesi: mtoe nje kwenye hewa safi mara moja, fungua milango na madirisha, na uzime au uondoe jiko au hita, bila kujiweka hatarini.",
+     "Tafuta alichokunywa au kugusa, kiasi gani na lini. Hifadhi chombo, pakiti au mmea uwaonyeshe wahudumu wa afya.",
+     "Kama hajitambui lakini anapumua, mlaze katika mkao wa kupona. Kama hapumui kawaida, anza CPR, ukitumia kinga ya uso kama sumu iko mdomoni mwake.",
+     "Kama kemikali iko kwenye ngozi au machoni, suuza kwa maji mengi yanayotiririka kwa dakika 20 na uvue nguo zilizochafuka.",
+     "Kama kemikali ilichoma midomo, anaweza kusukutua mdomo na kutema, bila kumeza."
+    ],
+    "avoid": [
+     "Usimfanye atapike.",
+     "Usimpe maji ya chumvi, maziwa wala mafuta. Mpe vinywaji tu daktari au mtaalamu wa sumu akisema.",
+     "Kamwe usitumie jiko la makaa ndani ya nyumba milango na madirisha yakiwa yamefungwa."
+    ],
+    "intro": "Sumu inaweza kutokana na kumeza kemikali, dawa za wadudu, dawa nyingi kupita kiasi, mimea yenye sumu, au kuvuta moshi, kama wa jiko la makaa ndani ya chumba kilichofungwa.",
+    "urgent": "Piga 999 au 112 sasa hivi.",
+    "after": "Peleka chombo au picha ya lebo hospitalini."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Poisoning",
+   "sw": "Sumu"
+  }
+ },
+ "medication_mistake": {
+  "id": "medication_mistake",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "overdose",
+   "took too many tablets",
+   "double dose",
+   "wrong medicine",
+   "someone else's medicine",
+   "took pills twice",
+   "extra dose",
+   "missed dose",
+   "medication error",
+   "ate the tablets",
+   "amekunywa dawa nyingi",
+   "amemeza vidonge vingi",
+   "dozi mara mbili",
+   "dawa isiyo yake",
+   "amekunywa dawa mara mbili",
+   "amesahau dawa",
+   "amekosa dozi"
+  ],
+  "examples": [
+   "she took her tablets twice today",
+   "he took someone else's medicine",
+   "i gave him the wrong pills",
+   "grandma swallowed the whole packet of tablets",
+   "what to do about a double dose of blood pressure medicine",
+   "he forgot his morning medicine should he take two now",
+   "possible overdose of paracetamol",
+   "amekunywa dawa zake mara mbili leo",
+   "amemeza vidonge vingi",
+   "nimempa dawa isiyo sahihi",
+   "amesahau dawa ya asubuhi anywe mbili sasa",
+   "amekunywa dawa za mtu mwingine"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Stay calm and find out exactly which medicine, how much and when. Keep the packets and the medicine list.",
+     "Call their doctor, the clinic or a pharmacist now for advice, or 999 or 112 if you cannot reach them.",
+     "Watch them closely for the next hours for drowsiness, confusion, vomiting or changes in breathing.",
+     "If they become unresponsive but are breathing, put them in the recovery position.",
+     "For a missed dose: check the leaflet or ask the pharmacist. Usually you take it when remembered unless it is nearly time for the next dose."
+    ],
+    "avoid": [
+     "Do not make them vomit.",
+     "Never give a double dose to make up for a missed one, unless a doctor tells you to."
+    ],
+    "intro": "Taking a double dose, the wrong medicine or someone else's medicine is common with older people. Many mistakes are harmless, but some medicines are dangerous in extra doses.",
+    "urgent": "Call 999 or 112 straight away if they are drowsy, confused, breathing slowly, have chest pain, a very slow or fast heartbeat, a seizure, or are unresponsive, or if they took a large amount on purpose.",
+    "after": "A weekly pill organiser and a written medicine chart help prevent repeat mistakes. Tell the family about the mistake."
+   },
+   "sw": {
+    "steps": [
+     "Tulia na ujue hasa ni dawa gani, kiasi gani na lini. Hifadhi pakiti na orodha ya dawa.",
+     "Mpigie daktari wake, kliniki au mfamasia sasa kwa ushauri, au 999 au 112 kama huwapati.",
+     "Mwangalie kwa karibu kwa saa zinazofuata kwa kusinzia, kuchanganyikiwa, kutapika au mabadiliko ya kupumua.",
+     "Akiacha kujitambua lakini anapumua, mlaze katika mkao wa kupona.",
+     "Kwa dozi iliyosahaulika: angalia karatasi ya maelekezo au muulize mfamasia. Kwa kawaida inatumika ukikumbuka isipokuwa kama ni karibu na wakati wa dozi inayofuata."
+    ],
+    "avoid": [
+     "Usimfanye atapike.",
+     "Kamwe usimpe dozi mara mbili kufidia iliyosahaulika, isipokuwa daktari akisema."
+    ],
+    "intro": "Kumeza dozi mara mbili, dawa isiyo sahihi au dawa ya mtu mwingine ni kawaida kwa wazee. Makosa mengi hayana madhara, lakini dawa nyingine ni hatari kwa dozi za ziada.",
+    "urgent": "Piga 999 au 112 mara moja kama anasinzia, amechanganyikiwa, anapumua polepole, ana maumivu ya kifua, mapigo ya moyo ni polepole sana au haraka sana, anapata kifafa, au hajitambui, au kama alimeza kiasi kikubwa kwa makusudi.",
+    "after": "Kisanduku cha vidonge cha wiki na chati ya dawa iliyoandikwa husaidia kuzuia makosa kujirudia. Iambie familia kuhusu kosa hilo."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Too much or wrong medicine",
+   "sw": "Dawa nyingi au dawa isiyo sahihi"
+  }
+ },
+ "heat_illness": {
+  "id": "heat_illness",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "heat exhaustion",
+   "heatstroke",
+   "heat stroke",
+   "overheated",
+   "too hot",
+   "very hot and confused",
+   "sunstroke",
+   "hot day collapse",
+   "joto kali",
+   "amepigwa na jua",
+   "joto limemzidi",
+   "amechoka kwa joto",
+   "kiharusi cha joto"
+  ],
+  "examples": [
+   "she is very hot and dizzy after sitting in the sun",
+   "signs of heatstroke",
+   "he is overheated and confused",
+   "heat exhaustion treatment",
+   "amepigwa na jua na ana kizunguzungu",
+   "joto limemzidi na amechanganyikiwa",
+   "dalili za kiharusi cha joto"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Move them to a cool, shady place and help them lie down with legs slightly raised.",
+     "Remove extra clothing.",
+     "Cool the skin: spray or sponge with cool water and fan them. Cold packs wrapped in cloth in the armpits and neck help.",
+     "If they are alert, give sips of cool water or oral rehydration solution (ORS).",
+     "Keep cooling and watch them closely."
+    ],
+    "avoid": [
+     "Do not give alcohol, coffee or very sugary drinks.",
+     "Do not give anything to drink if they are confused or drowsy."
+    ],
+    "intro": "Older people overheat easily. Heat exhaustion causes headache, dizziness, heavy sweating, cramps, nausea and a fast pulse. Heatstroke is an emergency: hot skin, confusion, fits or unconsciousness.",
+    "urgent": "Call 999 or 112 if they are confused, have a seizure, are unresponsive, have a very high temperature (40 °C or more), or do not improve within 30 minutes.",
+    "after": "Keep them cool and drinking regularly on hot days, and check on them often."
+   },
+   "sw": {
+    "steps": [
+     "Mpeleke mahali penye baridi na kivuli na umsaidie alale na miguu imeinuliwa kidogo.",
+     "Mvue nguo za ziada.",
+     "Poza ngozi: mnyunyizie au mpanguse kwa maji baridi na umpepee. Barafu iliyofungwa kwenye kitambaa makwapani na shingoni husaidia.",
+     "Kama yuko macho, mpe maji baridi kidogo kidogo au mchanganyiko wa ORS.",
+     "Endelea kumpoza na umwangalie kwa karibu."
+    ],
+    "avoid": [
+     "Usimpe pombe, kahawa wala vinywaji vyenye sukari nyingi.",
+     "Usimpe kinywaji chochote kama amechanganyikiwa au anasinzia."
+    ],
+    "intro": "Wazee hupata joto kupita kiasi kwa urahisi. Uchovu wa joto husababisha maumivu ya kichwa, kizunguzungu, jasho jingi, kukakamaa kwa misuli, kichefuchefu na mapigo ya haraka. Kiharusi cha joto ni dharura: ngozi ya moto, kuchanganyikiwa, kifafa au kupoteza fahamu.",
+    "urgent": "Piga 999 au 112 kama amechanganyikiwa, anapata kifafa, hajitambui, ana joto la juu sana (nyuzi 40 au zaidi), au hapati nafuu ndani ya dakika 30.",
+    "after": "Mweke mahali pa baridi na anywe maji mara kwa mara siku za joto, na umwangalie mara nyingi."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Heat exhaustion and heatstroke",
+   "sw": "Uchovu wa joto na kiharusi cha joto"
+  }
+ },
+ "hypothermia": {
+  "id": "hypothermia",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "hypothermia",
+   "very cold",
+   "freezing",
+   "shivering a lot",
+   "cold and confused",
+   "body is cold",
+   "cold night",
+   "baridi kali",
+   "anatetemeka kwa baridi",
+   "mwili ni baridi sana",
+   "amepigwa na baridi",
+   "baridi usiku"
+  ],
+  "examples": [
+   "she is very cold and shivering",
+   "his hands and body are ice cold and he is confused",
+   "signs of hypothermia in the elderly",
+   "grandpa was outside in the cold night",
+   "anatetemeka kwa baridi kali",
+   "mwili wake ni baridi sana na amechanganyikiwa",
+   "bibi amepigwa na baridi usiku"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Move them to a warm room, out of the wind.",
+     "Replace wet clothing with dry clothing.",
+     "Wrap them in blankets, including the head, and put a blanket underneath if they are on the floor.",
+     "If they are alert and can swallow, give warm sweet drinks and some food.",
+     "Warm the room, and stay with them until their temperature and alertness are back to normal."
+    ],
+    "avoid": [
+     "Do not put them in a hot bath, or put hot water bottles or heaters directly against the skin.",
+     "Do not rub their arms and legs.",
+     "Do not give alcohol."
+    ],
+    "intro": "Older people can get dangerously cold, even indoors on cold nights in the highlands. Signs are shivering, cold pale skin, slurred speech, confusion, clumsiness and drowsiness.",
+    "urgent": "Call 999 or 112 if they are drowsy, confused, have stopped shivering while still cold, or are breathing slowly.",
+    "after": "Make sure their room stays warm at night and they have enough bedding."
+   },
+   "sw": {
+    "steps": [
+     "Mpeleke kwenye chumba chenye joto, mbali na upepo.",
+     "Mbadilishe nguo zilizolowa kwa nguo kavu.",
+     "Mfunike kwa blanketi, pamoja na kichwa, na umwekee blanketi chini kama yuko sakafuni.",
+     "Kama yuko macho na anaweza kumeza, mpe vinywaji vya moto vyenye sukari na chakula kidogo.",
+     "Pasha chumba joto, na ukae naye mpaka joto lake na umakini wake urudi kawaida."
+    ],
+    "avoid": [
+     "Usimweke kwenye maji ya moto ya kuoga, wala kuweka chupa za maji ya moto au hita moja kwa moja kwenye ngozi.",
+     "Usisugue mikono na miguu yake.",
+     "Usimpe pombe."
+    ],
+    "intro": "Wazee wanaweza kupata baridi hatari, hata ndani ya nyumba usiku wa baridi maeneo ya juu. Dalili ni kutetemeka, ngozi baridi nyeupe, maneno kutotoka vizuri, kuchanganyikiwa, kutokuwa makini na kusinzia.",
+    "urgent": "Piga 999 au 112 kama anasinzia, amechanganyikiwa, ameacha kutetemeka ingawa bado ni baridi, au anapumua polepole.",
+    "after": "Hakikisha chumba chake kinabaki na joto usiku na ana matandiko ya kutosha."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Too cold (hypothermia)",
+   "sw": "Baridi kali mwilini (hypothermia)"
+  }
+ },
+ "dehydration": {
+  "id": "dehydration",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "dehydration",
+   "dehydrated",
+   "diarrhoea",
+   "diarrhea",
+   "vomiting",
+   "throwing up",
+   "loose stools",
+   "running stomach",
+   "not drinking enough",
+   "dark urine",
+   "ors",
+   "oral rehydration",
+   "upungufu wa maji",
+   "kuhara",
+   "anahara",
+   "anatapika",
+   "kutapika",
+   "tumbo la kuhara",
+   "mkojo mweusi",
+   "hanywi maji"
+  ],
+  "examples": [
+   "he has diarrhoea since morning",
+   "she keeps vomiting and can't keep water down",
+   "signs of dehydration in the elderly",
+   "how to make ors at home",
+   "his urine is very dark and he is dizzy",
+   "grandma is not drinking water and is weak",
+   "running stomach and vomiting",
+   "anahara tangu asubuhi",
+   "anatapika na hawezi kubaki na maji",
+   "jinsi ya kutengeneza ors nyumbani",
+   "mkojo wake ni mweusi na ana kizunguzungu",
+   "bibi hanywi maji na amedhoofika",
+   "dalili za upungufu wa maji mwilini"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Give oral rehydration solution (ORS): mix a sachet with clean water exactly as the packet says.",
+     "Give small sips often, for example a few sips every few minutes, even if they are vomiting.",
+     "If you have no ORS, mix 1 litre of clean, boiled and cooled water with 6 level teaspoons of sugar and half a level teaspoon of salt.",
+     "Keep offering light food once they can eat, such as porridge, rice or bananas.",
+     "Wash hands well with soap after helping them or changing them, to stop the infection spreading."
+    ],
+    "avoid": [
+     "Do not use sodas or fruit juice as the main drink, they can make diarrhoea worse.",
+     "Do not give anti-diarrhoea medicine if there is blood in the stool or a fever, unless a doctor says so."
+    ],
+    "intro": "Vomiting, diarrhoea, heat or not drinking enough can quickly dry out an older person. Signs are thirst, a dry mouth, dark or little urine, dizziness, tiredness and new confusion.",
+    "urgent": "Get medical help today, or call 999 or 112, if they cannot keep fluids down, there is blood in the vomit or stool, no urine for 8 hours, they are very drowsy or confused, have severe belly pain, or the diarrhoea lasts more than 2 days.",
+    "after": "Keep a note of how much they drink and pass urine, and tell the doctor if they take water tablets (diuretics) or diabetes medicine, which may need pausing."
+   },
+   "sw": {
+    "steps": [
+     "Mpe mchanganyiko wa ORS: changanya pakiti moja na maji safi kama pakiti inavyosema.",
+     "Mpe kidogo kidogo mara kwa mara, kwa mfano mafunda machache kila baada ya dakika chache, hata kama anatapika.",
+     "Kama huna ORS, changanya lita 1 ya maji safi yaliyochemshwa na kupozwa na vijiko 6 vya chai vya sukari visivyojaa na nusu kijiko cha chai cha chumvi.",
+     "Endelea kumpa chakula chepesi akiweza kula, kama uji, wali au ndizi.",
+     "Nawa mikono vizuri kwa sabuni baada ya kumsaidia au kumbadilisha, kuzuia maambukizi kuenea."
+    ],
+    "avoid": [
+     "Usitumie soda wala juisi kama kinywaji kikuu, vinaweza kuzidisha kuhara.",
+     "Usimpe dawa ya kuzuia kuhara kama kuna damu kwenye kinyesi au homa, isipokuwa daktari akisema."
+    ],
+    "intro": "Kutapika, kuhara, joto au kutokunywa maji ya kutosha kunaweza kumkausha mzee haraka. Dalili ni kiu, mdomo mkavu, mkojo mweusi au kidogo, kizunguzungu, uchovu na kuchanganyikiwa kupya.",
+    "urgent": "Tafuta msaada wa matibabu leo, au piga 999 au 112, kama hawezi kubaki na vinywaji tumboni, kuna damu kwenye matapishi au kinyesi, hajakojoa kwa saa 8, anasinzia sana au amechanganyikiwa, ana maumivu makali ya tumbo, au kuhara kunaendelea zaidi ya siku 2.",
+    "after": "Andika kiasi anachokunywa na kukojoa, na umwambie daktari kama anatumia dawa za kukojoa au za kisukari, ambazo zinaweza kuhitaji kusimamishwa."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Vomiting, diarrhoea and dehydration",
+   "sw": "Kutapika, kuhara na upungufu wa maji"
+  }
+ },
+ "fever": {
+  "id": "fever",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "fever",
+   "high temperature",
+   "temperature is high",
+   "hot body",
+   "chills",
+   "feverish",
+   "malaria",
+   "rigors",
+   "shivering with fever",
+   "homa",
+   "homa kali",
+   "joto la mwili liko juu",
+   "mwili una joto",
+   "anatetemeka na homa",
+   "malaria",
+   "baridi yabisi"
+  ],
+  "examples": [
+   "she has a fever of 39",
+   "his body is very hot",
+   "high temperature and chills",
+   "what to do for a fever in an old person",
+   "could it be malaria he has fever and headache",
+   "shivering and hot at night",
+   "ana homa kali",
+   "mwili wake una joto sana",
+   "homa na baridi usiku",
+   "nadhani ni malaria ana homa na kichwa kinauma",
+   "joto lake ni 39"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Measure the temperature with a thermometer and write it down with the time.",
+     "Keep them comfortable in light clothing in a cool, airy room.",
+     "Give plenty of fluids, little and often.",
+     "Paracetamol can bring the temperature down. Give the dose on the packet, only if it is safe with their other medicines, and do not exceed the daily maximum.",
+     "In Kenya, any fever should be tested for malaria within 24 hours at a clinic."
+    ],
+    "avoid": [
+     "Do not use cold baths or ice to cool them.",
+     "Do not wrap them in heavy blankets.",
+     "Do not give more than one medicine that contains paracetamol at the same time."
+    ],
+    "intro": "A temperature of 38 °C or more is a fever, usually caused by an infection. In older people an infection may show as confusion, weakness or falls instead of a high temperature.",
+    "urgent": "Call 999 or 112 or go to hospital now if the fever comes with confusion or drowsiness, a stiff neck, a rash that does not fade when pressed with a glass, difficulty breathing, a seizure, very fast breathing or heartbeat, or a temperature of 40 °C or more.",
+    "after": "Tell the family and get them seen at a clinic if the fever lasts more than 2 days or they seem more unwell."
+   },
+   "sw": {
+    "steps": [
+     "Pima joto kwa kipimajoto na uliandike pamoja na saa.",
+     "Mweke vizuri akiwa na nguo nyepesi katika chumba chenye hewa na baridi.",
+     "Mpe vinywaji vingi, kidogo kidogo mara kwa mara.",
+     "Paracetamol inaweza kushusha joto. Mpe dozi iliyoandikwa kwenye pakiti, kama tu ni salama pamoja na dawa zake nyingine, na usizidi kiasi cha juu cha siku.",
+     "Nchini Kenya, homa yoyote ipimwe malaria ndani ya saa 24 kliniki."
+    ],
+    "avoid": [
+     "Usitumie maji baridi ya kuoga wala barafu kumpoza.",
+     "Usimfunike kwa blanketi nzito.",
+     "Usimpe dawa zaidi ya moja zenye paracetamol kwa wakati mmoja."
+    ],
+    "intro": "Joto la nyuzi 38 au zaidi ni homa, kwa kawaida husababishwa na maambukizi. Kwa wazee maambukizi yanaweza kuonekana kama kuchanganyikiwa, udhaifu au kuanguka badala ya joto la juu.",
+    "urgent": "Piga 999 au 112 au nenda hospitali sasa kama homa inakuja na kuchanganyikiwa au kusinzia, shingo kukakamaa, vipele visivyofifia vikibonyezwa na glasi, kupumua kwa shida, kifafa, kupumua au mapigo ya moyo ya haraka sana, au joto la nyuzi 40 au zaidi.",
+    "after": "Iambie familia na umpeleke kliniki kama homa inaendelea zaidi ya siku 2 au anaonekana kuzidiwa."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Fever",
+   "sw": "Homa"
+  }
+ },
+ "confusion": {
+  "id": "confusion",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "confused",
+   "sudden confusion",
+   "not making sense",
+   "disoriented",
+   "delirium",
+   "acting strange",
+   "doesn't recognise me",
+   "talking nonsense",
+   "agitated suddenly",
+   "amechanganyikiwa",
+   "anaongea ovyo",
+   "hanitambui",
+   "amepoteza kumbukumbu ghafla",
+   "tabia imebadilika ghafla",
+   "anaweweseka"
+  ],
+  "examples": [
+   "grandma is suddenly confused",
+   "he doesn't recognise me today",
+   "she is talking nonsense since morning",
+   "my patient is disoriented and agitated",
+   "sudden change in behaviour in an old man",
+   "bibi amechanganyikiwa ghafla",
+   "leo hanitambui",
+   "anaongea ovyo tangu asubuhi",
+   "tabia ya mzee imebadilika ghafla",
+   "anaweweseka na hajui yuko wapi"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Do the FAST stroke check first: face, arms, speech.",
+     "If they have diabetes, check their blood sugar if you can, and treat low sugar if it is low.",
+     "Check for fever, signs of dehydration, a recent fall, pain, or a new or missed medicine.",
+     "Keep them safe and calm: speak slowly and simply, keep the room quiet and well lit, and keep glasses and hearing aids on.",
+     "Call their doctor or clinic today and tell them what you found."
+    ],
+    "avoid": [
+     "Do not argue with them or leave them alone.",
+     "Do not give sleeping tablets or sedatives."
+    ],
+    "intro": "Sudden confusion in an older person (delirium) is a warning sign of illness, such as an infection, low blood sugar, dehydration, a stroke, a medicine problem or a head injury. It needs checking the same day.",
+    "urgent": "Call 999 or 112 if there are stroke signs (face drooping, arm weakness, slurred speech), they are very drowsy or hard to wake, have a high fever, breathing problems, or hit their head.",
+    "after": "Tell the family when the confusion started and how it changed. This is very useful for the doctor."
+   },
+   "sw": {
+    "steps": [
+     "Fanya kwanza kipimo cha kiharusi cha FAST: uso, mikono, kuongea.",
+     "Kama ana kisukari, pima sukari yake ukiweza, na utibu sukari iliyoshuka kama iko chini.",
+     "Angalia homa, dalili za upungufu wa maji, kuanguka hivi karibuni, maumivu, au dawa mpya au iliyosahaulika.",
+     "Mweke salama na mtulivu: ongea polepole na kwa urahisi, chumba kiwe kimya na chenye mwanga, na avae miwani na vifaa vya kusikia.",
+     "Mpigie daktari au kliniki yake leo na uwaambie ulichokiona."
+    ],
+    "avoid": [
+     "Usibishane naye wala kumwacha peke yake.",
+     "Usimpe vidonge vya usingizi wala vya kutuliza."
+    ],
+    "intro": "Kuchanganyikiwa ghafla kwa mzee (delirium) ni ishara ya onyo ya ugonjwa, kama maambukizi, sukari kushuka, upungufu wa maji, kiharusi, tatizo la dawa au jeraha la kichwa. Inahitaji kuangaliwa siku hiyo hiyo.",
+    "urgent": "Piga 999 au 112 kama kuna dalili za kiharusi (uso kupinda, mkono kulegea, maneno kutotoka vizuri), anasinzia sana au ni vigumu kumwamsha, ana homa kali, matatizo ya kupumua, au aligonga kichwa.",
+    "after": "Iambie familia kuchanganyikiwa kulianza lini na kulivyobadilika. Hii inamsaidia sana daktari."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Sudden confusion",
+   "sw": "Kuchanganyikiwa ghafla"
+  }
+ },
+ "high_blood_pressure": {
+  "id": "high_blood_pressure",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "high blood pressure",
+   "blood pressure is high",
+   "bp is high",
+   "pressure reading 180",
+   "hypertension",
+   "bp 200",
+   "pressure ya damu iko juu",
+   "presha iko juu",
+   "presha imepanda",
+   "shinikizo la damu",
+   "bp iko juu sana"
+  ],
+  "examples": [
+   "her blood pressure is 190 over 110",
+   "his bp is very high today",
+   "what to do when blood pressure is high",
+   "pressure reading 200/120 and headache",
+   "should i give an extra blood pressure tablet",
+   "presha yake iko juu sana",
+   "bp ni 190 kwa 110",
+   "shinikizo la damu limepanda na kichwa kinauma",
+   "nimpe dawa ya ziada ya presha"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Have them sit quietly for 5 minutes with the back supported and feet flat.",
+     "Measure again with the arm resting at heart level, without talking. Write down both readings.",
+     "If it is still 180/120 or higher without symptoms, call their doctor or clinic today.",
+     "Make sure they took their usual blood pressure medicine as prescribed.",
+     "Keep them calm and recheck in 30 minutes."
+    ],
+    "avoid": [
+     "Do not give extra doses of their medicine or someone else's medicine.",
+     "Do not let them do heavy activity until it is checked."
+    ],
+    "intro": "One high reading is not always an emergency. What matters is how high it is and whether they have symptoms.",
+    "urgent": "Call 999 or 112 if the reading is 180/120 or higher and they have chest pain, a severe headache, breathlessness, confusion, blurred vision, weakness or numbness, or trouble speaking.",
+    "after": "Keep a record of readings to show their doctor."
+   },
+   "sw": {
+    "steps": [
+     "Mwache akae kimya kwa dakika 5 mgongo ukiwa umeegemea na nyayo sakafuni.",
+     "Pima tena mkono ukiwa umeegemea usawa wa moyo, bila kuongea. Andika vipimo vyote viwili.",
+     "Kama bado ni 180/120 au zaidi bila dalili, mpigie daktari au kliniki yake leo.",
+     "Hakikisha alitumia dawa zake za kawaida za shinikizo kama alivyoandikiwa.",
+     "Mtulize na upime tena baada ya dakika 30."
+    ],
+    "avoid": [
+     "Usimpe dozi za ziada za dawa yake wala dawa ya mtu mwingine.",
+     "Usimwache afanye kazi nzito mpaka ikaguliwe."
+    ],
+    "intro": "Kipimo kimoja cha juu si dharura kila mara. Muhimu ni kiko juu kiasi gani na kama ana dalili.",
+    "urgent": "Piga 999 au 112 kama kipimo ni 180/120 au zaidi na ana maumivu ya kifua, maumivu makali ya kichwa, kukosa pumzi, kuchanganyikiwa, kuona ukungu, udhaifu au ganzi, au shida ya kuongea.",
+    "after": "Weka kumbukumbu ya vipimo umwonyeshe daktari wake."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Very high blood pressure reading",
+   "sw": "Shinikizo la damu liko juu sana"
+  }
+ },
+ "abdominal_pain": {
+  "id": "abdominal_pain",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "stomach pain",
+   "abdominal pain",
+   "belly pain",
+   "tummy ache",
+   "severe stomach ache",
+   "vomiting blood",
+   "black stool",
+   "swollen belly",
+   "tumbo linauma",
+   "maumivu ya tumbo",
+   "tumbo linauma sana",
+   "anatapika damu",
+   "kinyesi cheusi",
+   "tumbo limevimba"
+  ],
+  "examples": [
+   "she has severe stomach pain",
+   "his belly is swollen and hard",
+   "he vomited blood",
+   "black stool and weakness",
+   "what to do for a bad tummy ache",
+   "tumbo linamuuma sana",
+   "tumbo limevimba na ni gumu",
+   "anatapika damu",
+   "kinyesi chake ni cheusi",
+   "maumivu makali ya tumbo ghafla"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Help them into a comfortable position, often lying with knees bent.",
+     "Give small sips of water only.",
+     "Note where the pain is, when it started, whether it comes and goes, and any vomiting, diarrhoea, fever or urine problems.",
+     "Contact their doctor or clinic today if the pain lasts more than a few hours or keeps coming back."
+    ],
+    "avoid": [
+     "Do not give food until a doctor has seen them if the pain is severe.",
+     "Do not give painkillers such as ibuprofen or aspirin, or laxatives, unless a doctor advises."
+    ],
+    "intro": "Stomach pain has many causes. In older people serious problems can show few signs, so take strong or unusual pain seriously.",
+    "urgent": "Call 999 or 112 if the pain is sudden and severe, they vomit blood or something like coffee grounds, pass black or bloody stools, the belly is hard and swollen, they faint, or the pain spreads to the chest.",
+    "after": "Share your notes with the doctor and the family."
+   },
+   "sw": {
+    "steps": [
+     "Msaidie akae katika mkao mzuri, mara nyingi akiwa amelala na magoti yamekunjwa.",
+     "Mpe mafunda madogo ya maji tu.",
+     "Andika wapi panauma, yalianza lini, kama yanakuja na kwenda, na kama kuna kutapika, kuhara, homa au matatizo ya mkojo.",
+     "Wasiliana na daktari au kliniki yake leo kama maumivu yanadumu zaidi ya saa chache au yanarudi."
+    ],
+    "avoid": [
+     "Usimpe chakula mpaka daktari amwone kama maumivu ni makali.",
+     "Usimpe dawa za maumivu kama ibuprofen au aspirini, wala dawa za kuharisha, isipokuwa daktari akishauri."
+    ],
+    "intro": "Maumivu ya tumbo yana sababu nyingi. Kwa wazee matatizo makubwa yanaweza kuonyesha dalili chache, kwa hiyo chukulia maumivu makali au yasiyo ya kawaida kwa uzito.",
+    "urgent": "Piga 999 au 112 kama maumivu ni ya ghafla na makali, anatapika damu au kitu kama mashapo ya kahawa, kinyesi ni cheusi au chenye damu, tumbo ni gumu na limevimba, anazirai, au maumivu yanaenea kifuani.",
+    "after": "Shiriki maelezo yako na daktari na familia."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Severe stomach pain",
+   "sw": "Maumivu makali ya tumbo"
+  }
+ },
+ "allergic_reaction": {
+  "id": "allergic_reaction",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "allergic reaction",
+   "allergy",
+   "rash",
+   "hives",
+   "itchy rash",
+   "itching all over",
+   "skin reaction to medicine",
+   "sneezing allergy",
+   "mzio",
+   "vipele vinawasha",
+   "mwili unawasha",
+   "upele baada ya dawa",
+   "mzio wa ngozi"
+  ],
+  "examples": [
+   "she has an itchy rash after a new medicine",
+   "hives all over his body",
+   "mild allergic reaction what to do",
+   "itchy skin after eating fish",
+   "ana vipele vinavyowasha baada ya dawa mpya",
+   "mwili wote unawasha",
+   "mzio wa ngozi nifanye nini"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Remove or stop the trigger if you know it, for example wash off a cream or move away from a plant.",
+     "An antihistamine tablet can help if they have taken it safely before.",
+     "A cool damp cloth on itchy skin can ease it.",
+     "Watch them closely for the next 1 to 2 hours for signs of a severe reaction."
+    ],
+    "avoid": [
+     "Do not give the next dose of a medicine that may have caused it until a doctor advises."
+    ],
+    "intro": "A mild allergy causes an itchy rash or hives, sneezing, a runny nose or itchy eyes, without breathing problems or swelling of the face or throat.",
+    "urgent": "If they get swelling of the lips, tongue or throat, wheezing, difficulty breathing or feel faint, it is a severe reaction: call 999 or 112 and use their adrenaline injector if they have one.",
+    "after": "Tell the family and the doctor, and write the new allergy on their medicine list."
+   },
+   "sw": {
+    "steps": [
+     "Ondoa au simamisha chanzo kama unakijua, kwa mfano osha krimu au ondoka karibu na mmea.",
+     "Kidonge cha mzio (antihistamine) kinaweza kusaidia kama amekitumia salama hapo awali.",
+     "Kitambaa baridi chenye unyevu kwenye ngozi inayowasha kinaweza kupunguza.",
+     "Mwangalie kwa karibu kwa saa 1 hadi 2 zinazofuata kwa dalili za mzio mkali."
+    ],
+    "avoid": [
+     "Usimpe dozi inayofuata ya dawa inayoweza kuwa imesababisha mpaka daktari ashauri."
+    ],
+    "intro": "Mzio mdogo husababisha vipele vinavyowasha, kupiga chafya, mafua au macho kuwasha, bila matatizo ya kupumua wala uvimbe usoni au kooni.",
+    "urgent": "Akipata uvimbe wa midomo, ulimi au koo, mluzi, kupumua kwa shida au kuhisi kuzimia, ni mzio mkali: piga 999 au 112 na utumie sindano yake ya adrenaline kama anayo.",
+    "after": "Iambie familia na daktari, na uandike mzio huo mpya kwenye orodha ya dawa zake."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Mild allergic reaction",
+   "sw": "Mzio mdogo"
+  }
+ },
+ "panic_attack": {
+  "id": "panic_attack",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "panic attack",
+   "anxiety attack",
+   "very anxious",
+   "hyperventilating",
+   "breathing fast from fear",
+   "scared and shaking",
+   "can't calm down",
+   "wasiwasi mkubwa",
+   "hofu kali",
+   "ana hofu na anatetemeka",
+   "anapumua haraka kwa hofu"
+  ],
+  "examples": [
+   "she is having a panic attack",
+   "he is very anxious and breathing fast",
+   "how to calm someone having an anxiety attack",
+   "she is shaking and scared and can't calm down",
+   "ana hofu kali na anatetemeka",
+   "anapumua haraka kwa wasiwasi",
+   "jinsi ya kumtuliza mtu mwenye panic attack"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Move to a quiet place and stay with them.",
+     "Speak calmly and reassure them that it will pass.",
+     "Breathe slowly with them: in through the nose for 4 counts, out through the mouth for 6 counts.",
+     "Help them notice their surroundings, for example name 5 things they can see.",
+     "Stay until they feel calm."
+    ],
+    "avoid": [
+     "Do not ask them to breathe into a paper bag.",
+     "Do not tell them to just calm down or that it is nothing."
+    ],
+    "intro": "A panic attack causes a racing heart, fast breathing, shaking, sweating and intense fear. It feels frightening but passes, usually within 20 minutes.",
+    "urgent": "In an older person, chest pain, breathlessness or feeling faint can be a heart problem. Unless they have had panic attacks before and this feels the same, treat it as a medical emergency and call 999 or 112.",
+    "after": "If attacks keep happening, suggest they talk to their doctor."
+   },
+   "sw": {
+    "steps": [
+     "Nendeni mahali penye utulivu na ukae naye.",
+     "Ongea kwa utulivu na umhakikishie kwamba itapita.",
+     "Pumueni polepole pamoja: ndani kwa pua kwa hesabu 4, nje kwa mdomo kwa hesabu 6.",
+     "Msaidie aangalie mazingira yake, kwa mfano ataje vitu 5 anavyoviona.",
+     "Kaa naye mpaka atulie."
+    ],
+    "avoid": [
+     "Usimwambie apumue ndani ya mfuko wa karatasi.",
+     "Usimwambie atulie tu au kwamba si kitu."
+    ],
+    "intro": "Hofu kali (panic attack) husababisha moyo kwenda mbio, kupumua haraka, kutetemeka, jasho na hofu kubwa. Inatisha lakini huisha, kwa kawaida ndani ya dakika 20.",
+    "urgent": "Kwa mzee, maumivu ya kifua, kukosa pumzi au kuhisi kuzimia kunaweza kuwa tatizo la moyo. Isipokuwa amewahi kupata hofu kali hapo awali na hii inafanana, ichukulie kama dharura na upige 999 au 112.",
+    "after": "Kama hofu kali zinaendelea kutokea, mshauri azungumze na daktari wake."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Panic or anxiety attack",
+   "sw": "Hofu kali (panic attack)"
+  }
+ },
+ "pressure_sore": {
+  "id": "pressure_sore",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "bed sore",
+   "bedsore",
+   "pressure sore",
+   "pressure ulcer",
+   "red patch on the bottom",
+   "sore on the heel",
+   "wound from lying in bed",
+   "skin breaking on hips",
+   "vidonda vya kitanda",
+   "vidonda vya kulala",
+   "kidonda makalioni",
+   "kidonda kisiginoni",
+   "ngozi imechubuka kwa kulala"
+  ],
+  "examples": [
+   "she has a red patch on her bottom that won't go away",
+   "how to prevent bed sores",
+   "sore on his heel from lying in bed",
+   "pressure ulcer care for a bedridden patient",
+   "how often should i turn him in bed",
+   "ana kidonda makalioni kwa kulala sana",
+   "jinsi ya kuzuia vidonda vya kitanda",
+   "kidonda kisiginoni kwa kulala",
+   "nimgeuze mara ngapi kitandani"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Change their position at least every 2 hours in bed, and help them shift their weight every 15 to 30 minutes in a chair.",
+     "Use pillows between the knees and ankles, and keep the heels off the mattress with a pillow under the calves.",
+     "Keep the skin clean and dry, especially after incontinence, and apply moisturiser.",
+     "Lift rather than drag when moving them, to avoid rubbing the skin.",
+     "Encourage good food and plenty of fluids, which help the skin heal.",
+     "Tell the nurse or doctor about any broken skin, blister or new sore."
+    ],
+    "avoid": [
+     "Do not massage or rub red areas.",
+     "Do not use ring or doughnut cushions."
+    ],
+    "intro": "People who sit or lie for long periods can get sores over bony areas such as the tailbone, hips, heels and elbows. Early signs are red, purple or darker patches that do not fade when pressed, or skin that feels hot, hard or spongy.",
+    "after": "Check their skin every day, and tell the family about any new marks."
+   },
+   "sw": {
+    "steps": [
+     "Mbadilishe mkao angalau kila saa 2 akiwa kitandani, na umsaidie kuhamisha uzito kila dakika 15 hadi 30 akiwa kitini.",
+     "Tumia mito kati ya magoti na vifundo, na uinue visigino visiguse godoro kwa mto chini ya miguu.",
+     "Weka ngozi safi na kavu, hasa baada ya kujisaidia bila kujizuia, na upake mafuta.",
+     "Mwinue badala ya kumvuta unapomsogeza, ili kuepuka kusugua ngozi.",
+     "Mhimize ale chakula bora na anywe maji mengi, vinavyosaidia ngozi kupona.",
+     "Mwambie muuguzi au daktari kuhusu ngozi yoyote iliyochubuka, lengelenge au kidonda kipya."
+    ],
+    "avoid": [
+     "Usikande wala kusugua sehemu nyekundu.",
+     "Usitumie mito yenye tundu katikati."
+    ],
+    "intro": "Watu wanaokaa au kulala kwa muda mrefu wanaweza kupata vidonda juu ya sehemu zenye mifupa kama tako, nyonga, visigino na viwiko. Dalili za mwanzo ni madoa mekundu, ya zambarau au meusi zaidi yasiyofifia yakibonyezwa, au ngozi yenye joto, ngumu au laini kama sifongo.",
+    "after": "Kagua ngozi yake kila siku, na uiambie familia kuhusu alama yoyote mpya."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Bed sores (pressure sores)",
+   "sw": "Vidonda vya kulala kitandani"
+  }
+ },
+ "first_aid_kit": {
+  "id": "first_aid_kit",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "first aid kit",
+   "what should be in a first aid box",
+   "first aid supplies",
+   "emergency kit",
+   "sanduku la huduma ya kwanza",
+   "vifaa vya huduma ya kwanza",
+   "nini kiwe kwenye first aid kit"
+  ],
+  "examples": [
+   "what should be in a first aid kit",
+   "what do i need in a home first aid box",
+   "first aid supplies for elderly care",
+   "nini kiwe kwenye sanduku la huduma ya kwanza",
+   "vifaa vya huduma ya kwanza nyumbani"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Disposable gloves, sterile gauze pads and dressings of different sizes, and plasters.",
+     "Crepe or elastic bandages, a triangular bandage for a sling, and adhesive tape.",
+     "Clean scissors, tweezers and safety pins.",
+     "Saline or clean water for rinsing, and an antiseptic such as povidone-iodine.",
+     "A thermometer, and the person's blood sugar meter and blood pressure machine if they use them.",
+     "ORS sachets, paracetamol, and any emergency medicines they are prescribed, such as an inhaler or adrenaline injector.",
+     "A torch, a foil blanket, and a card with emergency numbers (999, 112, Red Cross 1199), the family's numbers, the person's medicines, allergies and conditions."
+    ],
+    "avoid": [
+     "Do not keep expired medicines. Check the kit every 3 months."
+    ],
+    "intro": "A well-stocked kit, kept where everyone can find it, saves time in an emergency.",
+    "after": "Show everyone in the home where the kit is."
+   },
+   "sw": {
+    "steps": [
+     "Glavu za kutupa, pedi za gozi safi na bendeji za saizi tofauti, na plasta.",
+     "Bendeji za kunyooka, bendeji ya pembetatu kwa kombeo, na tepu ya kunata.",
+     "Mkasi safi, koleo dogo na pini za usalama.",
+     "Maji ya chumvi (saline) au maji safi ya kusuuza, na dawa ya kuua vijidudu kama povidone-iodine.",
+     "Kipimajoto, na mashine ya sukari na ya shinikizo la damu kama mgonjwa anazitumia.",
+     "Pakiti za ORS, paracetamol, na dawa zozote za dharura alizoandikiwa, kama inhaler au sindano ya adrenaline.",
+     "Tochi, blanketi ya foil, na kadi yenye nambari za dharura (999, 112, Red Cross 1199), nambari za familia, dawa za mgonjwa, mizio na magonjwa yake."
+    ],
+    "avoid": [
+     "Usiweke dawa zilizopitwa na muda. Kagua sanduku kila miezi 3."
+    ],
+    "intro": "Sanduku lenye vifaa vya kutosha, lililowekwa mahali kila mtu anapoweza kulipata, huokoa muda wakati wa dharura.",
+    "after": "Waonyeshe wote nyumbani mahali sanduku lilipo."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Home first aid kit",
+   "sw": "Sanduku la huduma ya kwanza nyumbani"
+  }
+ }
+}

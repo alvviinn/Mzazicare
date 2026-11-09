@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import audio_views, caretaker_views, elder_views, shift_views, tone_live, views
+from . import audio_views, caretaker_views, elder_views, firstaid_views, shift_views, tone_live, views
 
 urlpatterns = [
     # family
@@ -29,6 +29,7 @@ urlpatterns = [
     path('audio/consent/', audio_views.ConsentView.as_view()),
     path('tone/live/', tone_live.LiveToneView.as_view()),
     path('hours/', caretaker_views.HoursView.as_view()),
+    path('firstaid/chat/', firstaid_views.FirstAidChatView.as_view()),  # caretaker: first-aid assistant
     path('tasks/', caretaker_views.TaskListView.as_view()),
     path('tasks/<int:pk>/', caretaker_views.TaskDetailView.as_view()),
     path('tasks/<int:pk>/done/', caretaker_views.TaskDoneView.as_view()),  # caretaker, with a proof photo

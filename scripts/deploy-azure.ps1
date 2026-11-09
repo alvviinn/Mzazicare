@@ -152,6 +152,15 @@ if ($Only -in 'all', 'api') {
     New-Item -ItemType Directory -Force (Join-Path $voice 'artifacts') | Out-Null
     foreach ($f in '__init__.py', 'config.py', 'features.py', 'infer.py') { Copy-Item (Join-Path $Root "ml\voice\$f") $voice }
     foreach ($f in 'tone_cnn.onnx', 'labels.json') { Copy-Item (Join-Path $Root "ml\voice\artifacts\$f") (Join-Path $voice 'artifacts') }
+    # First-aid assistant: its runtime code, the vetted guide and the fine-tuned question model (8-bit ONNX).
+    $firstaid = Join-Path $pkg 'ml\firstaid'
+    New-Item -ItemType Directory -Force (Join-Path $firstaid 'artifacts') | Out-Null
+    Set-Content -Path (Join-Path $firstaid '__init__.py') -Value '' -Encoding ascii
+    Copy-Item (Join-Path $Root 'ml\firstaid\assistant.py') $firstaid
+    foreach ($f in 'guide.json', 'intent.onnx', 'intent.json', 'tokenizer.json') {
+        $src = Join-Path $Root "ml\firstaid\artifacts\$f"
+        if (Test-Path $src) { Copy-Item $src (Join-Path $firstaid 'artifacts') } else { Warn "First-aid file missing: $f (run python -m firstaid.export in ml)" }
+    }
     $zip = Join-Path $stateDir 'api.zip'
     if (Test-Path $zip) { Remove-Item $zip -Force }
     # Zipped with Python: Windows PowerShell's Compress-Archive writes backslashes, which Linux unpacks wrongly.

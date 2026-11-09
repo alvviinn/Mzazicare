@@ -8,17 +8,19 @@ import { useLocationSharing } from '../location/useLocationSharing';
 import { Profile, ShiftState } from '../types';
 import ChatScreen from './ChatScreen';
 import ShiftDetailScreen from './ShiftDetailScreen';
+import FirstAidTab, { FirstAidChat } from './caretaker/FirstAidTab';
 import HoursTab from './caretaker/HoursTab';
 import ShiftTab from './caretaker/ShiftTab';
 import TasksTab from './caretaker/TasksTab';
 
 type Props = { token: string; profile: Profile; onSignOut: () => void };
-type Tab = 'shift' | 'tasks' | 'hours';
+type Tab = 'shift' | 'tasks' | 'hours' | 'firstaid';
 
 const TABS: TabDef<Tab>[] = [
   { key: 'shift', label: 'Shift', icon: 'clock-outline' },
   { key: 'tasks', label: 'Tasks', icon: 'format-list-checks' },
   { key: 'hours', label: 'Hours', icon: 'chart-box-outline' },
+  { key: 'firstaid', label: 'First aid', icon: 'medical-bag' },
 ];
 
 export default function CaretakerHome({ token, profile, onSignOut }: Props) {
@@ -28,6 +30,7 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
   const [refreshing, setRefreshing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [shiftId, setShiftId] = useState<number | null>(null); // the day's shift being looked at
+  const [firstAid, setFirstAid] = useState<FirstAidChat>({ entries: [], lang: 'en' }); // kept while switching tabs
 
   // This phone reports its position; the server compares it with the elder's phone.
   const sharing = useLocationSharing(token);
@@ -62,11 +65,16 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
     return <ShiftDetailScreen token={token} shiftId={shiftId} onBack={() => setShiftId(null)} />;
   }
 
+  const tabBar = <TabBar tabs={TABS} active={tab} onChange={setTab} />;
+  if (tab === 'firstaid') {
+    return <FirstAidTab token={token} chat={firstAid} onChange={setFirstAid} footer={tabBar} />;
+  }
+
   return (
     <HomeShell
       profile={profile}
       onSignOut={onSignOut}
-      footer={<TabBar tabs={TABS} active={tab} onChange={setTab} />}
+      footer={tabBar}
       refreshing={refreshing}
       onRefresh={refresh}
     >

@@ -90,6 +90,9 @@ try {
     if ($gradle -notmatch 'signingConfig signingConfigs\.release') { Fail 'Could not set up release signing in android/app/build.gradle.' }
     [IO.File]::WriteAllText($gradleFile, $gradle, (New-Object Text.UTF8Encoding($false)))
 
+    # Real phones only: 64-bit and 32-bit ARM (budget phones often run 32-bit Android). Skipping the emulator
+    # types (x86, x86_64) makes the build faster and the APK about half the size.
+    if (-not $env:ORG_GRADLE_PROJECT_reactNativeArchitectures) { $env:ORG_GRADLE_PROJECT_reactNativeArchitectures = 'armeabi-v7a,arm64-v8a' }
     Step 'Building the release APK (the first build downloads Gradle and takes a while)'
     Push-Location (Join-Path $app 'android')
     try { Run '.\gradlew.bat' @('assembleRelease', '--no-daemon') } finally { Pop-Location }

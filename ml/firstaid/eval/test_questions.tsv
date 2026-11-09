@@ -1,0 +1,200 @@
+# Held-out test set: written separately from the training examples, in the style of real caretaker messages
+# (longer, with context, typos, Kiswahili and mixed language). Never used for training or for choosing settings.
+# label<TAB>question
+call_for_help	whats the number to call when someone is very sick here in kenya
+call_for_help	if i call the emergency line do i need airtime
+call_for_help	how do i reach an ambulance quickly from nairobi
+call_for_help	nambari gani naweza kupiga kupata ambulensi haraka
+call_for_help	nikipiga 999 nitaongea nini na wao
+unresponsive_breathing	mzee is lying on the floor, eyes closed, breathing but not answering me at all
+unresponsive_breathing	she is breathing but i can't wake her up no matter how much i shake her
+unresponsive_breathing	which side should i turn him if he is breathing but out cold
+unresponsive_breathing	bibi amelala hajibu chochote ila kifua kinapanda na kushuka
+unresponsive_breathing	amezimia lakini bado anapumua nimlaze aje
+cpr	his chest is not moving at all and his lips are blue
+cpr	how hard do i push on the chest when doing cpr on an old lady
+cpr	she collapsed, no breathing, i dont know how to do cpr please guide me
+cpr	kifua hakipandi wala hashuki na hajitambui
+cpr	nifanyeje cpr kwa mzee aliyeacha kupumua
+choking_severe	he was eating meat and now he is holding his throat and can't make a sound
+choking_severe	my client is choking on a groundnut and turning blue
+choking_severe	how do i do abdominal thrusts on someone in a wheelchair
+choking_severe	ugali umemkwama kooni hawezi kupumua
+choking_severe	anashika koo baada ya kumeza nyama hawezi kuongea
+heart_attack	he says there is a heavy weight on his chest and he is sweating a lot
+heart_attack	pain behind the breastbone for 20 minutes and feeling sick
+heart_attack	is it ok to give her aspirin she says her chest is squeezing
+heart_attack	kifua kinambana kama kuna kitu kizito juu yake na anatoka jasho
+heart_attack	maumivu yameanzia kifuani yakaenda kwa taya na mkono
+stroke	her smile is crooked all of a sudden and her words are mixed up
+stroke	he woke up and cant move his left hand and the left side of his face has dropped
+stroke	what is be fast for stroke
+stroke	ghafla hawezi kuinua mkono wa kulia na mdomo umeenda upande
+stroke	sauti yake imebadilika ghafla na upande mmoja wa uso hausogei
+severe_bleeding	he slashed his wrist on broken glass and blood is pumping out
+severe_bleeding	the wound on her leg is gushing blood and the cloth is soaked
+severe_bleeding	how long do i press on a bleeding wound before i check it
+severe_bleeding	damu inatoka kwa nguvu kwenye mguu na kitambaa kimeloa
+severe_bleeding	amejikata na panga damu nyingi sana inamwagika
+anaphylaxis	after the injection at the clinic her face blew up and she is wheezing
+anaphylaxis	he ate something with nuts and his voice is hoarse and lips are big
+anaphylaxis	where do i inject the epipen
+anaphylaxis	baada ya kumeza dawa uso umevimba na anapumua kwa shida
+anaphylaxis	ulimi wake umevimba na anasema koo linabana
+seizure	he is on the floor stiff and jerking his arms and legs and drooling
+seizure	her eyes rolled back and her whole body started shaking
+seizure	is it true i should put a spoon in the mouth during a fit
+seizure	amepata degedege na anatoa povu mdomoni
+seizure	mwili wote unarusha rusha na hajibu
+shock	after losing all that blood his skin is grey and cold and he is very weak
+shock	she looks pale and clammy and her pulse is racing after the burn
+shock	ngozi yake ni baridi na ya jasho na mapigo ni ya haraka baada ya ajali
+drowning	we found him face down in the water tank
+drowning	she slipped into the river and swallowed a lot of water but she is talking now
+drowning	ametolewa kwenye tanki la maji hajitambui
+electric_shock	he was fixing the socket and got thrown back by the current
+electric_shock	the kettle cable is broken and she got a shock
+electric_shock	ameguswa na stima akichomeka pasi
+fall	she slid off the chair and is sitting on the floor saying her bottom hurts
+fall	i came in and grandpa was lying next to the bed, he says he has been there since night
+fall	what is the safest way to get a fallen old person back up
+fall	mzee ameanguka akienda chooni usiku
+fall	bibi ameteleza kwenye sakafu yenye maji
+fracture	her wrist is bent in a weird shape after she put her hand out to stop the fall
+fracture	he can't stand and his right leg is rolled outwards after slipping
+fracture	how do i support a broken arm until we reach hospital
+fracture	mkono umevimba na umepinda baada ya kuanguka
+fracture	mguu umegeuka nje na hawezi kusimama kabisa
+sprain	she rolled her ankle on the step and it's puffy but she can walk
+sprain	he strained his shoulder lifting the bucket
+sprain	ameteguka mguu kwenye ngazi na umevimba kidogo
+head_injury	he knocked his forehead on the cupboard and has a big egg on it
+head_injury	she fell and hit the back of her head, now she keeps asking the same question
+head_injury	how many hours should i watch him after he hit his head
+head_injury	amejigonga kichwa ukutani na sasa anasinzia sana
+head_injury	ameanguka akagonga kichwa na anatumia dawa za kupunguza damu
+spinal_injury	he fell off the mango tree and says he can't feel his feet
+spinal_injury	she landed on her back from the stairs and her neck is very painful
+spinal_injury	ameanguka kutoka mtini na hawezi kusogeza miguu
+minor_wound	she nicked her thumb with the knife peeling potatoes
+minor_wound	he grazed his elbow on the wall, it's just a scratch
+minor_wound	the cut on his foot is red and swollen and has yellow stuff
+minor_wound	amejikata kidogo kwa kisu akimenya viazi
+minor_wound	kidonda cha mguu kina usaha na kinauma
+skin_tear	when i pulled her up by the arm her skin just ripped and there's a flap
+skin_tear	thin skin on his forearm tore against the wheelchair
+skin_tear	ngozi ya mkono imechanika nilipomwinua
+nosebleed	blood is dripping from his nose for no reason
+nosebleed	how do i stop bleeding from the nostrils
+nosebleed	damu inatiririka kutoka puani tangu asubuhi
+burns	she poured hot porridge on her thigh
+burns	he touched the hot sufuria and his palm is red and blistering
+burns	can i apply honey or egg white on a burn
+burns	ameungua na uji wa moto pajani
+burns	mkono umeungua kwenye sufuria na una malengelenge
+eye_injury	some jik splashed into her eyes while cleaning
+eye_injury	a piece of metal flew into his eye and it's stuck there
+eye_injury	jik imemrukia machoni akisafisha
+animal_bite	a stray dog bit his leg on the way to the shop
+animal_bite	the cat bit her finger and it's swelling up
+animal_bite	mbwa wa mtaani amemuuma mguu
+snake_bite	a snake bit him while he was in the shamba and the foot is swelling
+snake_bite	should i tie a rope above the snake bite
+snake_bite	nyoka amemuuma akiwa shambani na mguu unavimba
+insect_sting	a swarm of bees stung him many times
+insect_sting	she was stung by something on her neck and it's red and painful
+insect_sting	ameumwa na nyuki shingoni na pamevimba
+low_blood_sugar	he injected insulin, didn't eat breakfast and now he is shaky and sweating
+low_blood_sugar	her glucometer shows 2.8 and she is confused
+low_blood_sugar	what quick sugar can i give a diabetic who is getting weak and sweaty
+low_blood_sugar	sukari imeshuka hadi 3 na anatokwa jasho jingi
+low_blood_sugar	mgonjwa wa sukari anatetemeka na kuongea ovyo
+high_blood_sugar	her sugar reading is 25 and she is vomiting
+high_blood_sugar	the machine reads hi and he is very thirsty
+high_blood_sugar	sukari imefika 24 na ana kiu sana
+asthma	she is wheezing badly and the blue pump is not helping much
+asthma	how many puffs of salbutamol in an attack
+asthma	pumu imembana na anapiga mluzi akipumua
+breathing_difficulty	he gets out of breath just walking to the toilet today
+breathing_difficulty	she is panting and can't finish her words
+breathing_difficulty	anapumua kwa haraka sana na hawezi kumaliza sentensi
+fainting	she went pale and dropped to the floor but woke up after a few seconds
+fainting	he feels like he is going to pass out when he stands
+fainting	alizirai kwa muda mfupi akasimama tena
+poisoning	he mistook a soda bottle with paraffin for water and drank
+poisoning	they closed the windows with the jiko burning and now she has a headache and is vomiting
+poisoning	she swallowed some cockroach spray
+poisoning	amekunywa dawa ya mende kwa makosa
+poisoning	moshi wa jiko umejaa chumbani na mzee ana kizunguzungu
+medication_mistake	i think i gave her the evening tablets in the morning as well
+medication_mistake	he swallowed all his blood pressure pills for the week at once
+medication_mistake	nimempa dawa za jioni asubuhi pia kwa makosa
+medication_mistake	ameruka dozi ya jana nimpe mbili leo
+heat_illness	we sat outside in the sun and now he is dizzy, red and sweating
+heat_illness	she is burning hot, not sweating and confused after the hot afternoon
+heat_illness	jua limemzidi na ana kizunguzungu na jasho
+hypothermia	her hands and feet are icy and she is shaking after the cold night
+hypothermia	he was rained on and is cold and mumbling
+hypothermia	ana baridi kali usiku mikono na miguu ni kama barafu
+dehydration	he has had a running stomach three times today and looks weak
+dehydration	she vomits everything she drinks
+dehydration	how do i mix ors
+dehydration	anaharisha tangu jana na mdomo umekauka
+dehydration	anatapika kila kitu anachokunywa
+fever	he is shivering under the blanket and his temperature is 38.9
+fever	she has had a fever for two days with joint pains
+fever	ana joto jingi mwilini na anatetemeka
+fever	homa imepanda jioni hii hadi 39
+confusion	since yesterday she doesn't know where she is and keeps trying to go home
+confusion	he is suddenly mixing up names and seeing things that are not there
+confusion	tangu jana hajui yuko wapi na anaona vitu visivyokuwepo
+high_blood_pressure	the bp machine says 185/115 but she feels fine
+high_blood_pressure	his pressure is 200 over 120 and he has a pounding headache
+high_blood_pressure	presha imefika 190 na kichwa kinamgonga
+abdominal_pain	he is holding his tummy and crying with pain
+abdominal_pain	her stool is black like tar
+abdominal_pain	tumbo linamkata sana na limevimba
+allergic_reaction	she has itchy bumps all over after taking the new tablets
+allergic_reaction	he is sneezing and his skin is itchy after the cream
+allergic_reaction	amepata upele unaowasha baada ya kutumia sabuni mpya
+panic_attack	she suddenly feels terrified, heart pounding, says she is going to die, it happened before
+panic_attack	he gets attacks of fear and fast breathing at night
+panic_attack	anapata hofu ghafla na kupumua haraka
+pressure_sore	there is a dark red spot on his tailbone that doesn't fade
+pressure_sore	how often should i turn a bedridden patient to stop sores
+pressure_sore	ana kidonda kwenye kisigino kwa kulala muda mrefu
+first_aid_kit	what items should i keep in a first aid box at home
+first_aid_kit	list of things for a first aid kit
+first_aid_kit	vitu gani viwe kwenye kisanduku cha huduma ya kwanza
+greeting	hello there
+greeting	good morning
+greeting	thank you so much for the help
+greeting	what can you help me with
+greeting	habari yako
+greeting	asante sana
+greeting	sasa
+greeting	are you a robot
+general_medical	what causes high cholesterol
+general_medical	is it safe to take metformin with food
+general_medical	what is the treatment for arthritis
+general_medical	how is glaucoma diagnosed
+general_medical	what are the long term effects of diabetes on the kidneys
+general_medical	can dementia be cured
+general_medical	how much vitamin d should an old person take
+general_medical	ugonjwa wa kisukari husababishwa na nini
+general_medical	dawa ya presha inatumika kwa muda gani
+out_of_scope	what will the weather be like tomorrow in nakuru
+out_of_scope	play some music
+out_of_scope	how much is a bag of unga today
+out_of_scope	remind me to pay rent on friday
+out_of_scope	who won the football match yesterday
+out_of_scope	what time is it in london
+out_of_scope	tell me a joke
+out_of_scope	how do i send money with mpesa
+out_of_scope	book me a taxi to the airport
+out_of_scope	what is the capital of uganda
+out_of_scope	kesho kutakuwa na mvua
+out_of_scope	niwekee kengele saa kumi na mbili
+out_of_scope	cheza muziki wa bongo
+out_of_scope	bei ya mafuta ni ngapi leo
+out_of_scope	nieleze habari za leo

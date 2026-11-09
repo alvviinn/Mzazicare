@@ -1,0 +1,32 @@
+[
+ {
+  "model": "TF-IDF + logistic regression",
+  "test_accuracy_all": 0.7055837563451777,
+  "test_topic_accuracy": 0.6787878787878788,
+  "test_topic_top3": 0.9090909090909091,
+  "test_macro_f1": 0.7141306899325433,
+  "topic_accuracy_en": 0.6226415094339622,
+  "topic_accuracy_sw": 0.7317073170731707,
+  "topic_accuracy_mixed": 0.8888888888888888,
+  "threshold": 0.95,
+  "answered_share": 0.3696969696969697,
+  "answered_correct": 0.9180327868852459,
+  "wrong_advice_share": 0.030303030303030304,
+  "clarified_share": 0.6303030303030303,
+  "clarify_contains_right_topic": 0.875,
+  "critical_flagged_as_emergency": 0.9833333333333333,
+  "non_topic_handled_right": 1.0,
+  "non_topic_given_advice": 0.0,
+  "val_accuracy": 0.9145231846019247,
+  "val_macro_f1": 0.6510620424440596,
+  "ms_per_message": 0.332540666996525,
+  "size_mb": 33.820341,
+  "mistakes": [
+   "cpr -> answer:unresponsive_breathing",
+   "shock -> answer:burns",
+   "drowning -> answer:unresponsive_breathing",
+   "electric_shock -> answer:shock",
+   "nosebleed -> answer:severe_bleeding"
+  ]
+ }
+]

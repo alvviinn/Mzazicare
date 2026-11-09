@@ -5,6 +5,7 @@ import {
   CodeChallenge,
   Dashboard,
   ElderHome,
+  FirstAidReply,
   Hours,
   LiveTone,
   Mood,
@@ -192,3 +193,9 @@ export const proofPhotoSource = (token: string, completionId: number) => ({
   uri: `${API_URL}/api/tasks/completions/${completionId}/photo/`,
   headers: { Authorization: `Bearer ${token}` },
 });
+
+// ---- First-aid assistant (caretakers). Messages are answered and not stored. ----
+export const askFirstAid = (
+  token: string,
+  body: { message?: string; topic?: string; awaiting?: string | null; lang?: 'en' | 'sw' },
+): Promise<FirstAidReply> => request('/api/firstaid/chat/', { ...post(body), token });

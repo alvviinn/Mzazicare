@@ -234,3 +234,25 @@ export type TodayTask = {
   assigned_by_me: boolean;
   completion_id: number | null; // its proof photo, once done
 };
+
+// ---- First-aid assistant (caretakers) ----
+export type FirstAidOption = { label: string; topic: string };
+
+export type FirstAidReply = {
+  kind: 'answer' | 'clarify' | 'greeting' | 'out_of_scope' | 'general_medical';
+  topic: string | null;
+  title?: string;
+  lang: 'en' | 'sw';
+  emergency: boolean; // show "call 999 or 112" first
+  confidence: number | null;
+  opener?: string;
+  urgent?: string | null;
+  intro?: string;
+  steps?: string[];
+  avoid?: string[];
+  after?: string | null;
+  followup: { question: string; options: FirstAidOption[] } | null;
+  hint?: string;
+  note: string;
+  text: string;
+};
