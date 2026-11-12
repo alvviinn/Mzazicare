@@ -1,27 +1,33 @@
-import { useCallback, useEffect, useState } from 'react';
-import { getShiftState } from '../api/client';
-import { FamilyCard, HomeShell, SectionTitle } from '../components/HomeShell';
-import { TabBar, TabDef } from '../components/TabBar';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { View } from 'react-native';
+import { getHours, getShiftState, getTasks } from '../api/client';
 import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
+import { HomeShell } from '../components/HomeShell';
+import { TabBar, TabDef } from '../components/TabBar';
+import { Toast } from '../components/ui';
 import { VoiceCard } from '../components/VoiceCard';
 import { useLocationSharing } from '../location/useLocationSharing';
+import { flush, loadQueue, startAutoSync } from '../offline/taskQueue';
+import { t } from '../strings';
 import { Profile, ShiftState } from '../types';
 import ChatScreen from './ChatScreen';
 import ShiftDetailScreen from './ShiftDetailScreen';
 import FirstAidTab, { FirstAidChat } from './caretaker/FirstAidTab';
 import HoursTab from './caretaker/HoursTab';
-import ShiftTab from './caretaker/ShiftTab';
+import ShiftTab, { ShiftActionBar, useShiftAction } from './caretaker/ShiftTab';
 import TasksTab from './caretaker/TasksTab';
 
 type Props = { token: string; profile: Profile; onSignOut: () => void };
 type Tab = 'shift' | 'tasks' | 'hours' | 'firstaid';
 
 const TABS: TabDef<Tab>[] = [
-  { key: 'shift', label: 'Shift', icon: 'clock-outline' },
-  { key: 'tasks', label: 'Tasks', icon: 'format-list-checks' },
-  { key: 'hours', label: 'Hours', icon: 'chart-box-outline' },
-  { key: 'firstaid', label: 'First aid', icon: 'medical-bag' },
+  { key: 'shift', label: t.tabs.shift, icon: 'home-outline', activeIcon: 'home' },
+  { key: 'tasks', label: t.tabs.tasks, icon: 'checkbox-marked-circle-outline', activeIcon: 'checkbox-marked-circle' },
+  { key: 'hours', label: t.tabs.hours, icon: 'clock-outline', activeIcon: 'clock' },
+  { key: 'firstaid', label: t.tabs.firstAid, icon: 'medical-bag' },
 ];
+
+export type Notice = { message: string; actionLabel?: string; onAction?: () => void };
 
 export default function CaretakerHome({ token, profile, onSignOut }: Props) {
   const [tab, setTab] = useState<Tab>('shift');
@@ -31,6 +37,14 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
   const [chatOpen, setChatOpen] = useState(false);
   const [shiftId, setShiftId] = useState<number | null>(null); // the day's shift being looked at
   const [firstAid, setFirstAid] = useState<FirstAidChat>({ entries: [], lang: 'en' }); // kept while switching tabs
+  const [askFocus, setAskFocus] = useState(false); // opened from the "What's happening?" bar
+  const [notice, setNotice] = useState<Notice | null>(null);
+  const [summary, setSummary] = useState<{ tasks: { done: number; total: number } | null; week: number | null }>({
+    tasks: null,
+    week: null,
+  });
+  const tokenRef = useRef(token);
+  tokenRef.current = token;
 
   // This phone reports its position; the server compares it with the elder's phone.
   const sharing = useLocationSharing(token);
@@ -42,8 +56,17 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
       setState(await getShiftState(token));
       setError('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not load your shift.');
+      setError(e instanceof Error ? e.message : '');
     }
+  }, [token]);
+
+  // The two numbers on the Today tiles. Failures leave a dash; the tabs themselves show the errors.
+  const loadSummary = useCallback(async () => {
+    const [tasks, hours] = await Promise.allSettled([getTasks(token), getHours(token)]);
+    setSummary({
+      tasks: tasks.status === 'fulfilled' ? { done: tasks.value.filter((x) => x.is_done).length, total: tasks.value.length } : null,
+      week: hours.status === 'fulfilled' ? hours.value.week : null,
+    });
   }, [token]);
 
   useEffect(() => {
@@ -52,9 +75,26 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
     return () => clearInterval(id);
   }, [load, shiftId]);
 
+  useEffect(() => {
+    if (tab !== 'shift') return;
+    loadSummary();
+    const id = setInterval(loadSummary, 30000);
+    return () => clearInterval(id);
+  }, [tab, loadSummary]);
+
+  // Task changes made offline are kept on the phone and sent when the server is reachable again.
+  useEffect(() => {
+    loadQueue().then(() => flush(token));
+    return startAutoSync(() => tokenRef.current);
+  }, [token]);
+
+  const notify = useCallback((message: string) => setNotice({ message }), []);
+  const hide = useCallback(() => setNotice(null), []);
+  const action = useShiftAction(token, load, notify);
+
   async function refresh() {
     setRefreshing(true);
-    await load();
+    await Promise.all([load(), loadSummary(), flush(token)]);
     setRefreshing(false);
   }
 
@@ -65,39 +105,51 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
     return <ShiftDetailScreen token={token} shiftId={shiftId} onBack={() => setShiftId(null)} />;
   }
 
-  const tabBar = <TabBar tabs={TABS} active={tab} onChange={setTab} />;
+  const go = (next: Tab) => {
+    setAskFocus(false);
+    setTab(next);
+  };
+  const tabBar = <TabBar tabs={TABS} active={tab} onChange={go} />;
   if (tab === 'firstaid') {
-    return <FirstAidTab token={token} chat={firstAid} onChange={setFirstAid} footer={tabBar} />;
+    return <FirstAidTab token={token} chat={firstAid} onChange={setFirstAid} footer={tabBar} autoFocus={askFocus} />;
   }
 
   return (
     <HomeShell
       profile={profile}
       onSignOut={onSignOut}
-      footer={tabBar}
+      title={tab === 'tasks' ? t.tabs.tasks : tab === 'hours' ? t.tabs.hours : undefined}
+      footer={
+        <View>
+          {tab === 'shift' && <ShiftActionBar state={state} action={action} />}
+          {tabBar}
+        </View>
+      }
+      overlay={notice && <Toast key={notice.message} {...notice} onHide={hide} />}
       refreshing={refreshing}
       onRefresh={refresh}
     >
       {tab === 'shift' && (
-        <>
-          <VoiceCard voice={voice} />
-          <ShiftTab
-            token={token}
-            state={state}
-            error={error}
-            sharing={sharing.status}
-            sponsorName={profile.sponsor?.name ?? null}
-            onChanged={load}
-            onChat={() => setChatOpen(true)}
-            onOpenShift={setShiftId}
-          />
-          <SectionTitle>People you work with</SectionTitle>
-          <FamilyCard
-            profile={{ ...profile, caretakers: profile.caretakers.filter((c) => c.email !== profile.email) }}
-          />
-        </>
+        <ShiftTab
+          state={state}
+          error={error}
+          sharing={sharing.status}
+          sponsorName={profile.sponsor?.name ?? null}
+          tasks={summary.tasks}
+          weekMinutes={summary.week}
+          onRetry={load}
+          onChat={() => setChatOpen(true)}
+          onOpenShift={setShiftId}
+          onAsk={() => {
+            setAskFocus(true);
+            setTab('firstaid');
+          }}
+          onTasks={() => go('tasks')}
+          onHours={() => go('hours')}
+          voiceCard={<VoiceCard voice={voice} />}
+        />
       )}
-      {tab === 'tasks' && <TasksTab token={token} />}
+      {tab === 'tasks' && <TasksTab token={token} caretaker={profile.name} onNotice={setNotice} />}
       {tab === 'hours' && <HoursTab token={token} onOpenShift={setShiftId} />}
     </HomeShell>
   );

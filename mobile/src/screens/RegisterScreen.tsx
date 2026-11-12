@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInputInstance } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInputInstance } from 'react-native';
 import { register } from '../api/client';
 import { saveSession, Session } from '../auth/session';
+import { AuthFrame } from '../components/AuthFrame';
 import { CodeStep } from '../components/CodeStep';
 import { GoogleButton } from '../components/GoogleButton';
-import { Button, Card, ErrorText, Field, Logo } from '../components/ui';
-import { colors, spacing } from '../theme';
+import { Button, ErrorText, Field } from '../components/ui';
+import { colors, fonts, spacing, TAP, text } from '../theme';
 import { AuthResult, CodeChallenge } from '../types';
 
 type Props = { onLoggedIn: (s: Session) => void; onBack: () => void };
@@ -50,80 +51,73 @@ export default function RegisterScreen({ onLoggedIn, onBack }: Props) {
 
   if (pending) {
     return (
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-          <Logo />
-          <CodeStep start={pending} onDone={finish} onCancel={() => setPending(null)} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <AuthFrame title="Check your email">
+        <CodeStep start={pending} onDone={finish} onCancel={() => setPending(null)} />
+      </AuthFrame>
     );
   }
 
   return (
-    <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Logo />
-        <Card>
-          <Field
-            label="Full name"
-            value={name}
-            onChangeText={setName}
-            placeholder="Your name"
-            autoCapitalize="words"
-            autoComplete="name"
-            returnKeyType="next"
-            onSubmitEditing={() => emailRef.current?.focus()}
-          />
-          <Field
-            ref={emailRef}
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="you@example.com"
-            autoComplete="email"
-            keyboardType="email-address"
-            returnKeyType="next"
-            onSubmitEditing={() => passwordRef.current?.focus()}
-          />
-          <Field
-            ref={passwordRef}
-            label="Password"
-            secure
-            value={password}
-            onChangeText={setPassword}
-            placeholder="At least 6 characters"
-            returnKeyType="next"
-            onSubmitEditing={() => confirmRef.current?.focus()}
-          />
-          <Field
-            ref={confirmRef}
-            label="Confirm password"
-            secure
-            value={confirm}
-            onChangeText={setConfirm}
-            placeholder="Repeat your password"
-            returnKeyType="go"
-            onSubmitEditing={submit}
-          />
-          <ErrorText>{error}</ErrorText>
-          <Button title="Create account" onPress={submit} loading={loading} />
-          <GoogleButton onDone={finish} onError={setError} />
-        </Card>
+    <AuthFrame title="Create account">
+      <Field
+        label="Full name"
+        icon="account-outline"
+        value={name}
+        onChangeText={setName}
+        placeholder="Your name"
+        autoCapitalize="words"
+        autoComplete="name"
+        returnKeyType="next"
+        onSubmitEditing={() => emailRef.current?.focus()}
+      />
+      <Field
+        ref={emailRef}
+        label="Email"
+        icon="email-outline"
+        value={email}
+        onChangeText={setEmail}
+        placeholder="you@example.com"
+        autoComplete="email"
+        keyboardType="email-address"
+        returnKeyType="next"
+        onSubmitEditing={() => passwordRef.current?.focus()}
+      />
+      <Field
+        ref={passwordRef}
+        label="Password"
+        icon="lock-outline"
+        secure
+        value={password}
+        onChangeText={setPassword}
+        placeholder="6+ characters"
+        returnKeyType="next"
+        onSubmitEditing={() => confirmRef.current?.focus()}
+      />
+      <Field
+        ref={confirmRef}
+        label="Confirm password"
+        icon="lock-check-outline"
+        secure
+        value={confirm}
+        onChangeText={setConfirm}
+        placeholder="Repeat it"
+        returnKeyType="go"
+        onSubmitEditing={submit}
+      />
+      <ErrorText>{error}</ErrorText>
+      <Button title="Create account" onPress={submit} loading={loading} />
+      <GoogleButton onDone={finish} onError={setError} />
 
-        <Pressable onPress={onBack} style={styles.switch}>
-          <Text style={styles.muted}>
-            Already have an account? <Text style={styles.link}>Sign in</Text>
-          </Text>
-        </Pressable>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      <Pressable onPress={onBack} style={styles.switch} accessibilityRole="button" accessibilityLabel="Sign in to an existing account">
+        <Text style={text.body}>
+          Have an account? <Text style={styles.link}>Sign in</Text>
+        </Text>
+      </Pressable>
+    </AuthFrame>
   );
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: colors.background },
-  container: { flexGrow: 1, justifyContent: 'center', padding: spacing.lg },
-  switch: { alignItems: 'center', marginTop: spacing.lg },
-  muted: { color: colors.textMuted, fontSize: 15 },
-  link: { color: colors.primary, fontWeight: '600' },
+  switch: { alignItems: 'center', justifyContent: 'center', marginTop: spacing.md, minHeight: TAP },
+  link: { fontFamily: fonts.bodyBold, color: colors.primaryInk },
 });

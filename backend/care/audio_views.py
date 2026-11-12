@@ -22,7 +22,7 @@ from rest_framework.views import APIView
 from accounts.models import Role, User
 
 from . import presence, voice_ai
-from .models import Alert
+from .models import Alert, Location
 
 CHUNK_S = 10  # how long the phones record at a time
 
@@ -137,6 +137,9 @@ class ToneView(APIView):
                     shift=shift,
                     kind=Alert.Kind.VOCAL,
                     message='Angry-sounding voices were picked up during the visit. Please check in with both of them.',
+                    patient=shift.elderly if shift else None,
+                    confidence=round(float(result.get('tones', {}).get('angry', 0)), 3),
+                    **alert_position(user),
                 )
         return Response(
             {
@@ -146,3 +149,11 @@ class ToneView(APIView):
                 'distress': result['distress'],
             }
         )
+
+
+def alert_position(user):
+    """Where this phone last was (if the fix is recent), to show with an alert."""
+    loc = Location.objects.filter(user=user).first()
+    if not loc or (timezone.now() - loc.updated_at).total_seconds() > 600:
+        return {}
+    return {'latitude': loc.latitude, 'longitude': loc.longitude, 'accuracy': loc.accuracy}

@@ -30,7 +30,7 @@ export function ToneChart({ points, bucketMinutes }: { points: TonePoint[]; buck
     <div>
       <svg className="chart" viewBox={`0 0 ${W} ${H + AXIS}`} role="img" aria-label="Voice tone through the day">
         {[0, 25, 50, 75, 100].map((g) => (
-          <line key={g} x1={0} x2={W} y1={H - (H * g) / 100} y2={H - (H * g) / 100} stroke="#e6e9e5" strokeWidth={1} />
+          <line key={g} x1={0} x2={W} y1={H - (H * g) / 100} y2={H - (H * g) / 100} style={{ stroke: 'var(--color-border)' }} strokeWidth={1} />
         ))}
         {Array.from({ length: slots }, (_, i) => {
           const p = bySlot.get(i);
@@ -102,15 +102,15 @@ export function TensionStrip({ points, bucketMinutes }: { points: TonePoint[]; b
   return (
     <div>
       <svg className="chart" viewBox={`0 0 ${W} ${h}`} role="img" aria-label="Tension through the day">
-        <rect x={0} y={0} width={W} height={h} rx={8} fill="#f8f6f1" />
-        <line x1={0} x2={W} y1={h - (h * 30) / 100} y2={h - (h * 30) / 100} stroke="#a8700f" strokeDasharray="4 4" opacity={0.7} />
+        <rect x={0} y={0} width={W} height={h} rx={8} style={{ fill: 'var(--color-bg)' }} />
+        <line x1={0} x2={W} y1={h - (h * 30) / 100} y2={h - (h * 30) / 100} style={{ stroke: 'var(--color-warning)' }} strokeDasharray="4 4" />
         {Array.from({ length: slots }, (_, i) => {
           const p = bySlot.get(i);
           if (!p) return null;
           const bar = Math.max(3, (h * p.tension) / 100);
-          const color = p.tension <= 15 ? '#2e7d5b' : p.tension <= 30 ? '#a8700f' : '#b3372f';
+          const color = p.tension <= 15 ? 'var(--color-success)' : p.tension <= 30 ? 'var(--color-warning)' : 'var(--color-danger)';
           return (
-            <rect key={i} x={i * slotW + 1} y={h - bar} width={Math.max(2, slotW - 2)} height={bar} rx={2} fill={color}>
+            <rect key={i} x={i * slotW + 1} y={h - bar} width={Math.max(2, slotW - 2)} height={bar} rx={2} style={{ fill: color }}>
               <title>{`${fmtTime(p.start)}: ${p.tension}% tense`}</title>
             </rect>
           );

@@ -27,6 +27,23 @@ class Location(models.Model):
     updated_at = models.DateTimeField(default=timezone.now)
 
 
+class TrackPoint(models.Model):
+    """A position reported during an open shift, for the family's shift map (trail and geofence).
+
+    Recorded only while a shift is open, at most every 30 s per phone, and deleted with the shift.
+    Outside shifts only the newest fix is kept (Location above)."""
+
+    shift = models.ForeignKey('Shift', on_delete=models.CASCADE, related_name='track')
+    who = models.CharField(max_length=10)  # 'caretaker' or 'elderly'
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    accuracy = models.FloatField(null=True, blank=True)
+    at = models.DateTimeField(db_index=True)
+
+    class Meta:
+        ordering = ['at']
+
+
 class Shift(models.Model):
     """One caretaker visit to one elderly person. Worked time is the sum of its segments."""
 
@@ -164,9 +181,24 @@ class Alert(models.Model):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN)
     created_at = models.DateTimeField(auto_now_add=True)
     is_demo = models.BooleanField(default=False)
+    # Evidence shown with the alert so the family can judge it before confirming or dismissing.
+    patient = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+    )  # the elderly person the alert is about
+    latitude = models.FloatField(null=True, blank=True)  # where the phone was when the alert was raised
+    longitude = models.FloatField(null=True, blank=True)
+    accuracy = models.FloatField(null=True, blank=True)  # GPS accuracy in metres
+    confidence = models.FloatField(null=True, blank=True)  # model confidence 0-1 (voice alerts)
+
+    # How urgent each kind is, for sorting on the dashboard (higher first).
+    SEVERITY = {'sos': 3, 'vocal_distress': 2, 'unwell': 2, 'geofence': 1, 'missed_chore': 1, 'short_visit': 1}
 
     class Meta:
         ordering = ['-created_at']
+
+    @property
+    def severity(self):
+        return self.SEVERITY.get(self.kind, 1)
 
 
 class Mood(models.TextChoices):

@@ -1,4 +1,9 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type { LucideIcon } from 'lucide-react';
+import { CalendarClock, AudioLines } from 'lucide-react';
 import { ReactNode } from 'react';
 import { fmtDuration, fmtShiftDay, fmtTime, QUALITY_LABEL, STATUS_LABEL, TONE_COLOR, TONE_LABEL } from '@/lib/format';
 import { Dashboard, ShiftSummary } from '@/lib/types';
@@ -29,18 +34,47 @@ export function PageHead({ title, sub, right }: { title: string; sub?: string; r
 }
 
 export function ErrorNote({ message }: { message: string }) {
-  return message ? <p className="error">{message}</p> : null;
+  return message ? (
+    <p className="error" role="alert">
+      {message}
+    </p>
+  ) : null;
+}
+
+/** Spinner with context, so a slow connection doesn't look frozen. */
+export function Loading({ label }: { label: string }) {
+  return (
+    <div className="loading" role="status">
+      <span className="spinner" aria-hidden />
+      {label}
+    </div>
+  );
+}
+
+/** An empty list: what will appear here and why there is nothing yet. */
+export function Empty({ icon: Icon, title, children }: { icon: LucideIcon; title: string; children: ReactNode }) {
+  return (
+    <div className="empty">
+      <Icon className="icon" aria-hidden />
+      <b>{title}</b>
+      <p>{children}</p>
+    </div>
+  );
 }
 
 /** Horizontal bars for the tone mix. */
 export function ToneBars({ tones }: { tones: Dashboard['tones'] }) {
   const q = tones.quality ? QUALITY_LABEL[tones.quality] : null;
   if (!tones.items.length || !tones.dominant) {
-    return <p className="muted">Tone results appear once your caretaker and your loved one have been heard talking during a shift.</p>;
+    return (
+      <Empty icon={AudioLines} title="No voice tone yet">
+        Tone results appear once your caretaker and your loved one have been heard talking during a shift, and both have agreed to it.
+      </Empty>
+    );
   }
   return (
     <>
-      <div className="row" style={{ marginBottom: 6 }}>
+      <div className="row" style={{ marginBottom: 'var(--space-2)' }}>
         <div className="grow">
           <h3>Mostly {TONE_LABEL[tones.dominant].toLowerCase()}</h3>
           <span className="muted small">
@@ -64,7 +98,13 @@ export function ToneBars({ tones }: { tones: Dashboard['tones'] }) {
 
 /** A list of day-shifts. Each row opens that day's timeline. */
 export function ShiftTable({ shifts, showCaretaker = true }: { shifts: ShiftSummary[]; showCaretaker?: boolean }) {
-  if (!shifts.length) return <p className="muted">No shifts yet. A day&apos;s shift appears when your caretaker arrives.</p>;
+  const router = useRouter();
+  if (!shifts.length)
+    return (
+      <Empty icon={CalendarClock} title="No shifts in this period">
+        A shift appears here each day your caretaker arrives at the home, with their arrival, breaks and time worked.
+      </Empty>
+    );
   return (
     <div className="table-wrap">
       <table>
@@ -86,7 +126,7 @@ export function ShiftTable({ shifts, showCaretaker = true }: { shifts: ShiftSumm
               ? `${fmtTime(s.arrived)} – ${s.end ? fmtTime(s.end) : s.left ? `${fmtTime(s.left)} (out)` : 'now'}`
               : 'Not arrived yet';
             return (
-              <tr key={s.id} className="click">
+              <tr key={s.id} className="click" onClick={() => router.push(`/shifts/day?id=${s.id}`)}>
                 <td>
                   <Link href={`/shifts/day?id=${s.id}`}>{fmtShiftDay(s.date)}</Link>
                 </td>

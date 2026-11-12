@@ -12,7 +12,7 @@
     },
     "android": {
       "package": "com.mzazicare.app",
-      "versionCode": 2,
+      "versionCode": 4,
       "adaptiveIcon": {
         "backgroundColor": "#1F6F5F",
         "foregroundImage": "./assets/android-icon-foreground.png",

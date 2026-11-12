@@ -5,9 +5,14 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from accounts.models import Role, User
-from care.models import Alert, Chore, Shift, ShiftSegment, Task, ToneReading, ToneSample
+from care.models import Alert, Chore, Shift, ShiftSegment, Task, ToneReading, ToneSample, TrackPoint
 
-CHORES = ['Morning medication', 'Breakfast', 'Bathing assistance', 'Light housekeeping', 'Lunch', 'Afternoon walk']
+CHORES = [
+    'Gave morning medication', 'Served breakfast (uji and bread)', 'Helped with bathing', 'Changed the bed sheets',
+    'Served lunch', 'Short walk around the compound',
+]
+# A home in Kilimani, Nairobi: centre of the sample geofence.
+HOME = (-1.29070, 36.78640)
 # (happy, calm, neutral, stressed, angry) weights; mostly positive so the sample looks realistic.
 TONE_PROFILES = [(45, 30, 20, 5, 0), (30, 35, 25, 8, 2), (20, 30, 30, 15, 5), (50, 25, 20, 5, 0)]
 
@@ -76,17 +81,33 @@ class Command(BaseCommand):
             for tone, pct in zip(('happy', 'calm', 'neutral', 'stressed', 'angry'), profile):
                 ToneReading.objects.create(shift=shift, tone=tone, percent=pct)
             self.add_samples(rng, shift, profile, start, end or now)
+            self.add_track(rng, shift, start, end or now)
             last_shift = shift
 
         Alert.objects.create(
             sponsor=sponsor, shift=last_shift, kind=Alert.Kind.VOCAL, is_demo=True,
             message='Raised voice detected for about 40 seconds during the afternoon.',
+            patient=last_shift.elderly if last_shift else None, confidence=0.62,
+            latitude=HOME[0] + 0.00004, longitude=HOME[1] - 0.00003, accuracy=9,
         )
         Alert.objects.create(
             sponsor=sponsor, kind=Alert.Kind.SHORT, is_demo=True, status=Alert.Status.DISMISSED,
             message='A visit was shorter than usual (2h 10m).',
         )
         self.stdout.write(self.style.SUCCESS('Sample data created. Remove it any time by re-running or via the admin.'))
+
+    @staticmethod
+    def add_track(rng, shift, start, end):
+        """Sample positions for the shift map: the elder's phone at home, the caretaker arriving and moving about."""
+        TrackPoint.objects.create(shift=shift, who='elderly', latitude=HOME[0], longitude=HOME[1], accuracy=6, at=start)
+        at, lat, lon = start, HOME[0] - 0.0009, HOME[1] + 0.0006  # about 120 m away, walking in from the road
+        while at < end:
+            lat += (HOME[0] - lat) * 0.5 + rng.uniform(-0.00003, 0.00003)
+            lon += (HOME[1] - lon) * 0.5 + rng.uniform(-0.00003, 0.00003)
+            TrackPoint.objects.create(
+                shift=shift, who='caretaker', latitude=lat, longitude=lon, accuracy=rng.uniform(5, 14), at=at
+            )
+            at += timedelta(minutes=20)
 
     @staticmethod
     def add_samples(rng, shift, profile, start, end):

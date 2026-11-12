@@ -3,51 +3,111 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { ProofPhoto } from '@/components/ProofPhoto';
-import { PageHead, ShiftTable, Tile, ToneBars, ErrorNote } from '@/components/ui';
+import { Bell, CheckCircle2, ChevronRight, Circle, ClipboardList, HeartPulse, Pill as PillIcon } from 'lucide-react';
+import { ShiftMap } from '@/components/ShiftMap';
+import { Empty, ErrorNote, Loading, PageHead, Pill, ShiftTable, Tile, ToneBars } from '@/components/ui';
 import { resolveAlert } from '@/lib/api';
 import { useAuth, useToken } from '@/lib/auth';
 import { useDashboard } from '@/lib/dashboard';
 import { fmtDuration, fmtTime, timeAgo, timeOfDay } from '@/lib/format';
 import { AlertItem, Dashboard } from '@/lib/types';
 
+const SEVERITY: Record<number, { text: string; tone: 'bad' | 'warn' | 'quiet' }> = {
+  3: { text: 'Emergency', tone: 'bad' },
+  2: { text: 'High', tone: 'warn' },
+  1: { text: 'Check', tone: 'quiet' },
+};
+
 function AlertCard({ alert, onDone }: { alert: AlertItem; onDone: () => void }) {
   const token = useToken();
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy] = useState<'confirmed' | 'dismissed' | null>(null);
   const [error, setError] = useState('');
   const sos = alert.kind === 'sos';
+  const sev = SEVERITY[alert.severity] ?? SEVERITY[1];
+  const pos = alert.position;
 
   async function act(status: 'confirmed' | 'dismissed') {
-    setBusy(true);
+    setBusy(status);
     setError('');
     try {
       await resolveAlert(token, alert.id, status);
       onDone();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not update the alert.');
+      setError(e instanceof Error ? e.message : 'Could not update the alert. Please try again.');
     } finally {
-      setBusy(false);
+      setBusy(null);
     }
   }
 
   return (
-    <div className={`alert${sos ? ' sos' : ''}`}>
-      <h3>
-        {alert.label} · <span className="muted small">{timeAgo(alert.created_at)}</span>
-      </h3>
-      <p style={{ margin: '6px 0 10px' }}>
+    <article className={`alert sev-${alert.severity}`} aria-labelledby={`alert-${alert.id}`}>
+      <div className="alert-head">
+        <Pill tone={sev.tone}>{sev.text}</Pill>
+        <h3 id={`alert-${alert.id}`}>{alert.label}</h3>
+        <time className="muted small" dateTime={alert.created_at} title={new Date(alert.created_at).toLocaleString()}>
+          {fmtTime(alert.created_at)} · {timeAgo(alert.created_at)}
+        </time>
+      </div>
+      {alert.patient && <p className="alert-meta">About {alert.patient}</p>}
+      <p className="alert-body">
         {alert.message}
         {sos && ' Call them or message them now. Their chat is under Chats.'}
       </p>
-      <div className="row">
-        <button onClick={() => act('confirmed')} disabled={busy}>
-          {sos ? 'Handled' : alert.kind === 'unwell' ? 'Noted' : 'Confirm'}
+
+      {(pos || alert.confidence !== null) && (
+        <div className="evidence">
+          <dl>
+            {pos && (
+              <>
+                <dt>Position</dt>
+                <dd>
+                  {pos.latitude.toFixed(5)}, {pos.longitude.toFixed(5)}
+                </dd>
+                <dt>GPS accuracy</dt>
+                <dd>{pos.accuracy !== null ? `±${Math.round(pos.accuracy)} m` : 'Not reported'}</dd>
+              </>
+            )}
+            {alert.confidence !== null && (
+              <>
+                <dt>Model confidence</dt>
+                <dd>
+                  {Math.round(alert.confidence * 100)}% of the speech sounded angry
+                  <div className="confidence" aria-hidden>
+                    <div style={{ width: `${Math.round(alert.confidence * 100)}%` }} />
+                  </div>
+                </dd>
+              </>
+            )}
+            {alert.shift_id && (
+              <>
+                <dt>Shift</dt>
+                <dd>
+                  <Link href={`/shifts/day?id=${alert.shift_id}`}>Open the shift timeline</Link>
+                </dd>
+              </>
+            )}
+          </dl>
+          {pos && (
+            <ShiftMap
+              centre={null}
+              point={pos}
+              className="map"
+              label={`Map of where the phone was when this alert was raised, accurate to ${pos.accuracy ? Math.round(pos.accuracy) : 'an unknown number of'} metres`}
+            />
+          )}
+        </div>
+      )}
+
+      <div className="row wrap">
+        <button onClick={() => act('confirmed')} disabled={busy !== null} aria-busy={busy === 'confirmed'}>
+          {busy === 'confirmed' ? 'Saving…' : sos ? 'Handled' : alert.kind === 'unwell' ? 'Noted' : 'Confirm'}
         </button>
-        <button className="secondary" onClick={() => act('dismissed')} disabled={busy}>
-          {sos ? 'False alarm' : 'Dismiss'}
+        <button className="secondary" onClick={() => act('dismissed')} disabled={busy !== null} aria-busy={busy === 'dismissed'}>
+          {busy === 'dismissed' ? 'Saving…' : sos ? 'False alarm' : 'Dismiss'}
         </button>
         <ErrorNote message={error} />
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -86,7 +146,11 @@ function TodayCard({ dash }: { dash: Dashboard }) {
             {detail}
           </p>
         </div>
-        {s && <Link href={`/shifts/day?id=${s.id}`}>See today&apos;s timeline →</Link>}
+        {s && (
+          <Link href={`/shifts/day?id=${s.id}`}>
+            See today&apos;s map and timeline <ChevronRight className="icon" aria-hidden />
+          </Link>
+        )}
       </div>
     </div>
   );
@@ -96,24 +160,32 @@ export default function OverviewPage() {
   const { profile } = useAuth();
   const { dash, error, reload } = useDashboard();
 
-  if (!dash) return <p className="muted">{error || 'Loading your care overview…'}</p>;
-  const open = dash.alerts.filter((a) => a.status === 'open');
+  if (!dash) return error ? <ErrorNote message={`Couldn't load your care overview. ${error}`} /> : <Loading label="Loading your care overview…" />;
+  // most severe first, then newest
+  const open = dash.alerts
+    .filter((a) => a.status === 'open')
+    .sort((x, y) => y.severity - x.severity || y.created_at.localeCompare(x.created_at));
   const past = dash.alerts.filter((a) => a.status !== 'open');
   const doneChores = dash.today.chores.filter((c) => c.is_done).length;
 
   return (
     <>
-      <PageHead title={`${timeOfDay()}, ${profile?.name.split(' ')[0] ?? ''}`} sub="Here is how care is going today." />
+      <PageHead title={`${timeOfDay()}, ${profile?.name.split(' ')[0] ?? ''}`} sub="Today's care at a glance." />
 
       {dash.demo && (
-        <div className="banner" style={{ marginTop: 14 }}>
+        <div className="banner" style={{ marginTop: 'var(--space-4)' }}>
           Sample data. Real visits, chores and tones will appear once your caretaker starts shifts in the app.
         </div>
       )}
 
       {open.length > 0 && (
         <>
-          <h2>Needs your attention</h2>
+          <h2>
+            <Bell className="icon" aria-hidden /> Alerts{' '}
+            <span className="badge" style={{ marginLeft: 0 }} aria-label={`${open.length} open`}>
+              {open.length}
+            </span>
+          </h2>
           {open.map((a) => (
             <AlertCard key={a.id} alert={a} onDone={reload} />
           ))}
@@ -121,11 +193,11 @@ export default function OverviewPage() {
       )}
 
       {!dash.matched ? (
-        <div className="card" style={{ marginTop: 18 }}>
+        <div className="card" style={{ marginTop: 'var(--space-4)' }}>
           <h3>Set up your care circle</h3>
           <p className="muted">
             Add a caretaker and the person they care for, and this page fills with their care updates.{' '}
-            <Link href="/people">Add people →</Link>
+            <Link href="/people">Add people</Link>
           </p>
         </div>
       ) : (
@@ -133,7 +205,7 @@ export default function OverviewPage() {
           <h2>Today</h2>
           <TodayCard dash={dash} />
 
-          <div className="grid tiles" style={{ marginTop: 12 }}>
+          <div className="grid tiles" style={{ marginTop: 'var(--space-3)' }}>
             <Tile value={fmtDuration(dash.stats.avg_visit_minutes)} label="Avg. active time per day" />
             <Tile value={String(dash.stats.visits_7d)} label="Days worked this week" />
             <Tile value={dash.stats.chore_rate_7d === null ? '–' : `${dash.stats.chore_rate_7d}%`} label="Chores done (7 days)" />
@@ -146,21 +218,25 @@ export default function OverviewPage() {
               <div className="card">
                 <ToneBars tones={dash.tones} />
                 <p className="small" style={{ marginBottom: 0 }}>
-                  <Link href="/tone">Open the live tone chart →</Link>
+                  <Link href="/tone">Open the live tone chart</Link>
                 </p>
               </div>
             </div>
             <div>
               <h2>How they are today</h2>
               <div className="card divided">
-                {dash.wellbeing.length === 0 && <span className="muted">Nobody to show yet.</span>}
+                {dash.wellbeing.length === 0 && (
+                  <Empty icon={HeartPulse} title="No check-ins yet">
+                    The elderly person taps how they feel on their phone each day. Their answer shows here.
+                  </Empty>
+                )}
                 {dash.wellbeing.map((w) => (
                   <div className="row" key={w.name}>
                     <span
                       className="avatar"
                       style={{
-                        background: w.mood === 'unwell' ? 'var(--warning-soft)' : w.mood ? 'var(--primary-soft)' : 'var(--bg)',
-                        color: w.mood === 'unwell' ? 'var(--warning)' : w.mood ? 'var(--primary)' : 'var(--muted)',
+                        background: w.mood === 'unwell' ? 'var(--color-warning-soft)' : w.mood ? 'var(--color-primary-soft)' : 'var(--color-bg)',
+                        color: w.mood === 'unwell' ? 'var(--color-warning)' : w.mood ? 'var(--color-primary)' : 'var(--color-text-muted)',
                       }}
                     >
                       {w.name.charAt(0).toUpperCase()}
@@ -182,9 +258,9 @@ export default function OverviewPage() {
               <h2>Medicines</h2>
               <div className="card divided">
                 {dash.medicines.total === 0 && (
-                  <span className="muted">
-                    No medicine reminders yet. <Link href="/people">Add some →</Link>
-                  </span>
+                  <Empty icon={PillIcon} title="No medicine reminders yet">
+                    Add reminders under <Link href="/people">People</Link>. Each shows here with whether it was taken today.
+                  </Empty>
                 )}
                 {dash.medicines.items.map((m) => (
                   <div className="row" key={m.id}>
@@ -214,7 +290,9 @@ export default function OverviewPage() {
               <h2>Today&apos;s chores</h2>
               <div className="card divided">
                 {dash.today.chores.length === 0 ? (
-                  <span className="muted">No chores logged yet today.</span>
+                  <Empty icon={ClipboardList} title="Nothing ticked off yet today">
+                    Tasks appear here as the caretaker completes them, each with a photo as proof.
+                  </Empty>
                 ) : (
                   <>
                     <b>
@@ -222,8 +300,12 @@ export default function OverviewPage() {
                     </b>
                     {dash.today.chores.map((c, i) => (
                       <div className="row" key={i}>
-                        <span style={{ color: c.is_done ? 'var(--success)' : 'var(--muted)' }}>{c.is_done ? '✓' : '○'}</span>
-                        <span className="grow" style={{ color: c.is_done ? undefined : 'var(--muted)' }}>
+                        {c.is_done ? (
+                          <CheckCircle2 className="icon" style={{ color: 'var(--color-success)' }} aria-label="Done" />
+                        ) : (
+                          <Circle className="icon" style={{ color: 'var(--color-border-strong)' }} aria-label="Not done" />
+                        )}
+                        <span className="grow" style={{ color: c.is_done ? undefined : 'var(--color-text-muted)' }}>
                           {c.description}
                           {c.assigned_by && (
                             <span className="muted small">{c.assigned_by_me ? ' · set by you' : ` · set by ${c.assigned_by}`}</span>
@@ -237,7 +319,7 @@ export default function OverviewPage() {
                     ))}
                   </>
                 )}
-                <Link href="/tasks">Task history and photos →</Link>
+                <Link href="/tasks">Task history and photos</Link>
               </div>
             </div>
           </div>

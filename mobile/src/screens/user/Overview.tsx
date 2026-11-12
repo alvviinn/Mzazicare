@@ -1,14 +1,29 @@
 import { useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { resolveAlert } from '../../api/client';
-import { SectionTitle } from '../../components/HomeShell';
 import { Icon, IconName, MOOD_ICON, TONE_ICON } from '../../components/Icon';
 import { ProofPhoto } from '../../components/ProofPhoto';
-import { TaskHistory } from '../../components/TaskHistory';
 import { ShiftRow } from '../../components/ShiftRow';
-import { Button, Card } from '../../components/ui';
+import { TaskHistory } from '../../components/TaskHistory';
+import {
+  Avatar,
+  Button,
+  Card,
+  ErrorState,
+  haptic,
+  Loading,
+  PressScale,
+  Ring,
+  Row,
+  Section,
+  Segmented,
+  Sheet,
+  StatusPill,
+  Stepper,
+  Stripe,
+} from '../../components/ui';
 import { fmtDuration, fmtTime, timeAgo } from '../../format';
-import { colors, radius, spacing, toneColors } from '../../theme';
+import { colors, fonts, iconSize, radius, spacing, TAP, text, toneColors, type } from '../../theme';
 import { AlertItem, Dashboard, Profile } from '../../types';
 
 type Props = {
@@ -18,48 +33,23 @@ type Props = {
   error: string;
   onChanged: () => void;
   onGoPeople: () => void;
+  onGoShifts: () => void;
+  onGoTone: () => void;
   onOpenShift: (id: number) => void;
 };
 
-// Opens every task done in the past days, with the caretaker's proof photos.
-function TaskHistoryButton({ token }: { token: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Pressable onPress={() => setOpen(true)} style={styles.historyLink} hitSlop={6}>
-        <Icon name="history" size={18} color={colors.primary} />
-        <Text style={styles.historyText}> Task history and photos</Text>
-      </Pressable>
-      <Modal visible={open} animationType="slide" onRequestClose={() => setOpen(false)}>
-        <View style={styles.sheet}>
-          <View style={styles.sheetHead}>
-            <Text style={styles.sheetTitle}>Task history</Text>
-            <Pressable onPress={() => setOpen(false)} hitSlop={10} accessibilityLabel="Close">
-              <Icon name="close" size={24} color={colors.text} />
-            </Pressable>
-          </View>
-          <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: spacing.xl }}>
-            <TaskHistory token={token} showCaretaker />
-          </ScrollView>
-        </View>
-      </Modal>
-    </>
-  );
-}
+type SheetKind = 'meds' | 'mood' | 'chores' | 'past' | null;
 
-export default function Overview({ token, profile, dash, error, onChanged, onGoPeople, onOpenShift }: Props) {
+export default function Overview({ token, profile, dash, error, onChanged, onGoPeople, onGoShifts, onGoTone, onOpenShift }: Props) {
+  const [sheet, setSheet] = useState<SheetKind>(null);
+  const [choreView, setChoreView] = useState<'today' | 'history'>('today');
+
   if (!dash) {
-    return <Text style={styles.muted}>{error || 'Loading your care overview…'}</Text>;
+    return error ? <ErrorState message={`Couldn't load the overview. ${error}`} onRetry={onChanged} /> : <Loading label="Loading your care overview" />;
   }
   const openAlerts = dash.alerts.filter((a) => a.status === 'open');
-  const alertCards = openAlerts.length > 0 && (
-    <>
-      <SectionTitle>Needs your attention</SectionTitle>
-      {openAlerts.map((a) => (
-        <AlertCard key={a.id} alert={a} token={token} onChanged={onChanged} />
-      ))}
-    </>
-  );
+  const pastAlerts = dash.alerts.filter((a) => a.status !== 'open');
+  const alertCards = openAlerts.map((a) => <AlertCard key={a.id} alert={a} token={token} onChanged={onChanged} />);
 
   // An emergency can arrive before a caretaker is linked, so alerts show here too.
   if (!dash.matched) {
@@ -71,15 +61,18 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
     );
   }
 
-  const doneChores = dash.today.chores.filter((c) => c.is_done).length;
+  const chores = dash.today.chores;
+  const doneChores = chores.filter((c) => c.is_done).length;
+  const meds = dash.medicines;
+  const mood = dash.wellbeing[0];
+  const tone = dash.tones.dominant ? dash.tones.items[0] : null;
+  const close = () => setSheet(null);
 
   return (
     <>
       {dash.demo && (
-        <View style={styles.demo}>
-          <Text style={styles.demoText}>
-            Sample data. Real visits, chores and tones will appear once your caretaker starts shifts in the app.
-          </Text>
+        <View style={{ marginBottom: spacing.ms }}>
+          <StatusPill label="Sample data" tone="butter" />
         </View>
       )}
 
@@ -87,387 +80,419 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
 
       <TodayCard dash={dash} onOpenShift={onOpenShift} />
 
-      <View style={styles.tiles}>
-        <Tile value={fmtDuration(dash.stats.avg_visit_minutes)} label="Avg. active time per day" />
-        <Tile value={String(dash.stats.visits_7d)} label="Days worked this week" />
-        <Tile value={dash.stats.chore_rate_7d === null ? '–' : `${dash.stats.chore_rate_7d}%`} label="Chores done" />
+      {/* Bento: two rows, the wide tile swaps sides so the grid never reads as identical boxes. */}
+      <View style={styles.bento}>
+        <PressScale
+          onPress={() => setSheet('meds')}
+          style={[styles.tile, styles.tileWide, { backgroundColor: colors.primarySoft }]}
+          accessibilityRole="button"
+          accessibilityLabel={meds.total ? `Medicines: ${meds.taken} of ${meds.total} taken` : 'Medicines: none set'}
+        >
+          <Ring value={meds.taken} total={meds.total} size={64} stroke={8} color={colors.primary} track={colors.surface}>
+            <Icon name="pill" size={22} color={colors.primaryInk} />
+          </Ring>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.tileNum}>{meds.total ? `${meds.taken}/${meds.total}` : '–'}</Text>
+            <Text style={[text.small, { color: colors.primaryInk }]}>Medicines</Text>
+          </View>
+        </PressScale>
+        <PressScale
+          onPress={() => setSheet('mood')}
+          style={[styles.tile, { backgroundColor: colors.butter }]}
+          accessibilityRole="button"
+          accessibilityLabel={mood?.mood ? `${mood.name} feels ${mood.label}` : 'Mood: no check-in yet'}
+        >
+          <Icon name={mood?.mood ? MOOD_ICON[mood.mood] : 'emoticon-outline'} size={iconSize.hero} color={mood?.mood === 'unwell' ? colors.danger : colors.butterInk} />
+          <View>
+            <Text style={text.bodyStrong} numberOfLines={1}>
+              {mood?.mood ? mood.label : 'No check-in'}
+            </Text>
+            <Text style={[text.small, { color: colors.butterInk }]}>Mood</Text>
+          </View>
+        </PressScale>
+      </View>
+      <View style={styles.bento}>
+        <PressScale
+          onPress={onGoTone}
+          style={[styles.tile, { backgroundColor: colors.surface }]}
+          accessibilityRole="button"
+          accessibilityLabel={tone ? `Voice tone: mostly ${tone.label}, ${tone.percent}%` : 'Voice tone: nothing heard yet'}
+        >
+          <Icon name={tone ? TONE_ICON[tone.tone] : 'waveform'} size={iconSize.hero} color={tone ? toneColors[tone.tone] : colors.textMuted} />
+          <View>
+            <Text style={text.bodyStrong} numberOfLines={1}>
+              {tone ? tone.label : 'Quiet'}
+            </Text>
+            <Text style={text.small}>Tone · week</Text>
+          </View>
+        </PressScale>
+        <PressScale
+          onPress={() => setSheet('chores')}
+          style={[styles.tile, styles.tileWide, { backgroundColor: colors.sageSoft }]}
+          accessibilityRole="button"
+          accessibilityLabel={`Chores today: ${doneChores} of ${chores.length} done`}
+        >
+          <Ring value={doneChores} total={chores.length} size={64} stroke={8} color={colors.sage} track={colors.surface}>
+            <Icon name="broom" size={22} color={colors.sage} />
+          </Ring>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.tileNum}>{chores.length ? `${doneChores}/${chores.length}` : '0'}</Text>
+            <Text style={[text.small, { color: colors.sage }]}>Chores</Text>
+          </View>
+        </PressScale>
       </View>
 
-      <SectionTitle>How they are today</SectionTitle>
+      <Section title="This week" />
       <Card>
-        {dash.wellbeing.map((w, i) => (
-          <View key={w.name} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
-            <Icon
-              name={w.mood ? MOOD_ICON[w.mood] : 'help-circle-outline'}
-              size={38}
-              color={w.mood === 'unwell' ? colors.warning : w.mood ? colors.primary : colors.textMuted}
-            />
-            <View style={{ flex: 1, marginLeft: spacing.md }}>
-              <Text style={styles.visitTitle}>{w.name}</Text>
-              <Text style={styles.small}>
-                {w.mood ? `Feeling ${w.label?.toLowerCase()} · checked in ${fmtTime(w.at!)}` : "Hasn't checked in yet today"}
-              </Text>
-            </View>
-          </View>
-        ))}
+        <View style={styles.week}>
+          <Stat value={fmtDuration(dash.stats.avg_visit_minutes)} label="Avg / day" />
+          <View style={styles.weekLine} />
+          <Stat value={String(dash.stats.visits_7d)} label="Days" />
+          <View style={styles.weekLine} />
+          <Stat value={dash.stats.chore_rate_7d === null ? '–' : `${dash.stats.chore_rate_7d}%`} label="Chores" />
+        </View>
       </Card>
 
-      <SectionTitle>Medicines</SectionTitle>
-      <Card>
-        {dash.medicines.total === 0 ? (
-          <Text style={styles.muted}>No medicine reminders yet. Add some in the People tab.</Text>
-        ) : (
-          <>
-            <Text style={styles.progress}>
-              {dash.medicines.taken} of {dash.medicines.total} taken today
-            </Text>
-            {dash.medicines.items.map((m, i) => (
-              <View key={m.id} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
-                <View style={styles.checkBox}>
-                  <Icon name={m.taken ? 'check-circle' : 'circle-outline'} size={22} color={m.taken ? colors.success : colors.border} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.visitTitle}>
-                    {m.name}
-                    {m.dose ? ` · ${m.dose}` : ''}
-                  </Text>
-                  <Text style={styles.small}>
-                    {m.elderly} · {m.time}
-                  </Text>
-                </View>
-                <Text
-                  style={[
-                    styles.small,
-                    m.state === 'missed' && { color: colors.danger, fontWeight: '700' },
-                    m.state === 'due' && { color: colors.warning, fontWeight: '700' },
-                  ]}
-                >
-                  {m.state === 'taken' && m.taken_at ? `Taken ${fmtTime(m.taken_at)}` : m.state === 'missed' ? 'Not taken' : m.state === 'due' ? 'Due now' : 'Later'}
-                </Text>
-              </View>
-            ))}
-          </>
-        )}
-      </Card>
-
-      <SectionTitle>Today's chores</SectionTitle>
-      <Card>
-        {dash.today.chores.length === 0 ? (
-          <Text style={styles.muted}>No chores logged yet today.</Text>
-        ) : (
-          <>
-            <Text style={styles.progress}>
-              {doneChores} of {dash.today.chores.length} done
-            </Text>
-            <View style={styles.track}>
-              <View style={[styles.fill, { width: `${(100 * doneChores) / dash.today.chores.length}%` }]} />
-            </View>
-            {dash.today.chores.map((c, i) => (
-              <View key={i} style={styles.choreRow}>
-                <View style={styles.checkBox}>
-                  <Icon name={c.is_done ? 'check-circle' : 'circle-outline'} size={22} color={c.is_done ? colors.success : colors.border} />
-                </View>
-                <Text style={[styles.choreText, !c.is_done && { color: colors.textMuted }]}>
-                  {c.description}
-                  {c.assigned_by && <Text style={styles.small}>{c.assigned_by_me ? '  · set by you' : `  · set by ${c.assigned_by}`}</Text>}
-                </Text>
-                {c.done_at && <Text style={styles.small}>{fmtTime(c.done_at)}</Text>}
-                {c.completion_id !== null && (
-                  <View style={{ marginLeft: spacing.sm }}>
-                    <ProofPhoto token={token} completionId={c.completion_id} caption={`${c.description} · ${c.caretaker}`} size={40} />
-                  </View>
-                )}
-              </View>
-            ))}
-          </>
-        )}
-        <TaskHistoryButton token={token} />
-      </Card>
-
-      <SectionTitle>Service quality (voice tone, this week)</SectionTitle>
-      <ToneCard tones={dash.tones} />
-
-      <SectionTitle>Recent shifts</SectionTitle>
-      <Card>
+      <Section title="Recent shifts" action="See all" onAction={onGoShifts} />
+      <Card padded={false} style={{ paddingHorizontal: spacing.md }}>
         {dash.recent_shifts.length === 0 ? (
-          <Text style={styles.muted}>No shifts in the last 7 days.</Text>
+          <Row first leading={<Icon name="calendar-blank-outline" size={iconSize.inline} color={colors.textMuted} />} title="No shifts this week" />
         ) : (
-          dash.recent_shifts.map((s, i) => (
-            <ShiftRow key={s.id} shift={s} showCaretaker first={i === 0} onPress={() => onOpenShift(s.id)} />
+          dash.recent_shifts
+            .slice(0, 3)
+            .map((s, i) => <ShiftRow key={s.id} shift={s} showCaretaker first={i === 0} onPress={() => onOpenShift(s.id)} />)
+        )}
+      </Card>
+
+      {pastAlerts.length > 0 && (
+        <Pressable
+          onPress={() => setSheet('past')}
+          style={styles.pastLink}
+          accessibilityRole="button"
+          accessibilityLabel={`Past alerts, ${pastAlerts.length}`}
+        >
+          <Icon name="bell-check-outline" size={iconSize.inline} color={colors.textMuted} />
+          <Text style={[text.smallStrong, { flex: 1 }]}>Past alerts · {pastAlerts.length}</Text>
+          <Icon name="chevron-right" size={iconSize.inline} color={colors.textMuted} />
+        </Pressable>
+      )}
+
+      {/* ---- sheets ---- */}
+
+      <Sheet visible={sheet === 'meds'} onClose={close} title="Medicines">
+        {meds.total === 0 ? (
+          <Empty2 icon="pill" title="No reminders yet" action="Add in People" onAction={() => (close(), onGoPeople())} />
+        ) : (
+          meds.items.map((m, i) => {
+            const v = MED_STATE[m.state];
+            return (
+              <Row
+                key={m.id}
+                first={i === 0}
+                leading={<Icon name={v.icon} size={26} color={v.color} />}
+                title={m.dose ? `${m.name} · ${m.dose}` : m.name}
+                subtitle={`${m.elderly.split(' ')[0]} · ${m.time}`}
+                trailing={<StatusPill label={m.state === 'taken' && m.taken_at ? fmtTime(m.taken_at) : v.label} tone={v.tone} />}
+              />
+            );
+          })
+        )}
+      </Sheet>
+
+      <Sheet visible={sheet === 'mood'} onClose={close} title="How they feel">
+        {dash.wellbeing.map((w, i) => (
+          <Row
+            key={w.name}
+            first={i === 0}
+            leading={
+              <Icon
+                name={w.mood ? MOOD_ICON[w.mood] : 'help-circle-outline'}
+                size={40}
+                color={w.mood === 'unwell' ? colors.danger : w.mood ? colors.sage : colors.textMuted}
+              />
+            }
+            title={w.name}
+            subtitle={w.mood ? `${w.label} · ${fmtTime(w.at!)}` : 'No check-in today'}
+          />
+        ))}
+      </Sheet>
+
+      <Sheet visible={sheet === 'chores'} onClose={close} title="Chores">
+        <Segmented
+          options={[
+            { key: 'today', label: 'Today' },
+            { key: 'history', label: 'History' },
+          ]}
+          value={choreView}
+          onChange={setChoreView}
+        />
+        {choreView === 'history' ? (
+          <TaskHistory token={token} showCaretaker />
+        ) : chores.length === 0 ? (
+          <Empty2 icon="broom" title="Nothing yet today" />
+        ) : (
+          chores.map((c, i) => (
+            <Row
+              key={c.id}
+              first={i === 0}
+              leading={<Icon name={c.is_done ? 'check-circle' : 'circle-outline'} size={26} color={c.is_done ? colors.sage : colors.borderStrong} />}
+              title={c.description}
+              strike={false}
+              subtitle={[c.done_at ? fmtTime(c.done_at) : null, c.assigned_by_me ? 'by you' : c.assigned_by ? `by ${c.assigned_by.split(' ')[0]}` : null]
+                .filter(Boolean)
+                .join(' · ')}
+              trailing={
+                c.completion_id !== null ? (
+                  <ProofPhoto token={token} completionId={c.completion_id} caption={`${c.description} · ${c.caretaker}`} size={48} />
+                ) : undefined
+              }
+            />
           ))
         )}
-        <Text style={styles.hint}>Tap a day to see when they arrived, took breaks and left.</Text>
-      </Card>
-      {dash.alerts.some((a) => a.status !== 'open') && (
-        <>
-          <SectionTitle>Past alerts</SectionTitle>
-          <Card>
-            {dash.alerts
-              .filter((a) => a.status !== 'open')
-              .map((a, i) => (
-                <View key={a.id} style={[styles.visitRow, i > 0 && styles.rowBorder]}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.visitTitle}>{a.label}</Text>
-                    <Text style={styles.small}>{a.message}</Text>
-                  </View>
-                  <Text style={styles.small}>{a.status === 'confirmed' ? 'Confirmed' : 'Dismissed'}</Text>
-                </View>
-              ))}
-          </Card>
-        </>
-      )}
+      </Sheet>
+
+      <Sheet visible={sheet === 'past'} onClose={close} title="Past alerts">
+        {pastAlerts.map((a, i) => (
+          <Row
+            key={a.id}
+            first={i === 0}
+            leading={<Icon name={a.status === 'confirmed' ? 'check-decagram-outline' : 'close-circle-outline'} size={24} color={colors.textMuted} />}
+            title={a.label}
+            subtitle={`${a.status === 'confirmed' ? 'Confirmed' : 'Dismissed'} · ${timeAgo(a.created_at)}`}
+          />
+        ))}
+      </Sheet>
     </>
+  );
+}
+
+const MED_STATE: Record<Dashboard['medicines']['items'][number]['state'], { icon: IconName; color: string; label: string; tone: 'sage' | 'butter' | 'danger' | 'quiet' }> = {
+  taken: { icon: 'check-circle', color: colors.sage, label: 'Taken', tone: 'sage' },
+  due: { icon: 'clock-alert-outline', color: colors.butterInk, label: 'Due now', tone: 'butter' },
+  missed: { icon: 'alert-circle-outline', color: colors.danger, label: 'Not taken', tone: 'danger' },
+  later: { icon: 'clock-outline', color: colors.textMuted, label: 'Later', tone: 'quiet' },
+};
+
+function Empty2({ icon, title, action, onAction }: { icon: IconName; title: string; action?: string; onAction?: () => void }) {
+  return (
+    <View style={styles.empty2}>
+      <Icon name={icon} size={iconSize.hero} color={colors.textMuted} />
+      <Text style={text.h2}>{title}</Text>
+      {action && onAction && <Button title={action} variant="secondary" size="md" onPress={onAction} />}
+    </View>
+  );
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center' }} accessible accessibilityLabel={`${label}: ${value}`}>
+      <Text style={styles.statValue} numberOfLines={1} adjustsFontSizeToFit>
+        {value}
+      </Text>
+      <Text style={text.caption}>{label}</Text>
+    </View>
   );
 }
 
 // Shown before the family has linked both a caretaker and an elderly person.
 function Onboarding({ profile, onGoPeople }: { profile: Profile; onGoPeople: () => void }) {
-  const step = (title: string, list: Profile['caretakers']) => {
+  const step = (title: string, icon: IconName, list: Profile['caretakers']) => {
     const active = list.some((m) => m.status === 'active');
     const invited = list.some((m) => m.status === 'pending');
-    return { title, state: active ? 'Linked' : invited ? 'Invited, waiting for them to register' : 'Not added yet', done: active };
+    return { title, icon, state: active ? 'Linked' : invited ? 'Invited' : 'Not yet', done: active, invited };
   };
-  const steps = [step('Add a caretaker', profile.caretakers), step('Add an elderly person', profile.elderly)];
+  const steps = [step('Caretaker', 'account-heart-outline', profile.caretakers), step('Elder', 'human-cane', profile.elderly)];
 
   return (
-    <>
-      <Card>
-        <Text style={styles.cardTitle}>Set up your care circle</Text>
-        <Text style={styles.muted}>
-          Once you've linked a caretaker and the person they care for, this page fills with their care updates.
-        </Text>
+    <Card tint="peach" raised>
+      <Text style={text.h1}>Set up your circle</Text>
+      <Text style={[text.small, { marginTop: 2 }]}>Two people, then this fills up.</Text>
+      <View style={styles.setup}>
         {steps.map((s) => (
-          <View key={s.title} style={styles.stepRow}>
-            <View style={styles.checkBox}>
-              <Icon name={s.done ? 'check-circle' : 'circle-outline'} size={22} color={s.done ? colors.success : colors.border} />
+          <View key={s.title} style={styles.setupStep}>
+            <View style={[styles.setupIcon, s.done && { backgroundColor: colors.sage }]}>
+              <Icon name={s.done ? 'check-bold' : s.icon} size={iconSize.large} color={s.done ? colors.onPrimary : colors.primaryInk} />
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.visitTitle}>{s.title}</Text>
-              <Text style={styles.small}>{s.state}</Text>
-            </View>
+            <Text style={text.bodyStrong}>{s.title}</Text>
+            <StatusPill label={s.state} tone={s.done ? 'sage' : s.invited ? 'butter' : 'quiet'} />
           </View>
         ))}
-        <View style={{ marginTop: spacing.md }}>
-          <Button title="Add people" onPress={onGoPeople} />
-        </View>
-      </Card>
-
-      <SectionTitle>What you'll see here</SectionTitle>
-      <Card>
-        {(
-          [
-            ['clock-outline', 'When your caretaker arrives and leaves, and how long visits last'],
-            ['format-list-checks', 'Which chores were done each day'],
-            ['emoticon-happy-outline', 'The tone of voice during care, with a percentage for each tone'],
-            ['pill', "Your loved one's medicines and how they say they feel"],
-            ['bell-outline', 'Alerts you can confirm or dismiss'],
-            ['message-text-outline', 'Separate private chats with your caretaker and your elderly loved one'],
-          ] as [IconName, string][]
-        ).map(([icon, text]) => (
-          <View key={text} style={styles.stepRow}>
-            <View style={styles.iconBox}>
-              <Icon name={icon} size={22} />
-            </View>
-            <Text style={[styles.choreText, { flex: 1 }]}>{text}</Text>
-          </View>
-        ))}
-      </Card>
-    </>
+      </View>
+      <Button title="Add people" icon="account-plus-outline" onPress={onGoPeople} />
+      <Stripe height={4} style={{ marginTop: spacing.lg, width: 96, alignSelf: 'center' }} />
+    </Card>
   );
 }
 
+// The live tracker: who is with your loved one, for how long, and where in the day they are.
 function TodayCard({ dash, onOpenShift }: { dash: Dashboard; onOpenShift: (id: number) => void }) {
   const { status, shifts } = dash.today;
   const s = shifts[0];
-  let headline = 'No shift yet today';
-  let detail = 'Nobody has arrived today.';
-  if (status === 'on_shift' && s) {
-    const breaks = s.breaks ? ` · ${s.breaks} break${s.breaks === 1 ? '' : 's'} so far` : '';
-    headline = `${s.caretaker} is on shift`;
-    detail = `With ${s.elderly} since ${fmtTime(s.start)} · active ${fmtDuration(s.minutes)}${breaks}`;
-  } else if (status === 'paused' && s) {
-    headline = `${s.caretaker} is on a break`;
-    detail = `Stepped out${s.left ? ` at ${fmtTime(s.left)}` : ''}. Active time so far: ${fmtDuration(s.minutes)}. The same shift continues when they return.`;
-  } else if (status === 'away' && s) {
-    headline = `${s.caretaker} has left for now`;
-    detail = `Last seen ${s.left ? fmtTime(s.left) : ''}. Active today: ${fmtDuration(s.minutes)}. If they return today it counts as the same shift.`;
-  } else if (status === 'waiting' && s) {
-    headline = `${s.caretaker}'s shift is open`;
-    detail = 'They have not arrived yet.';
-  } else if (status === 'completed' && s) {
-    headline = `${s.caretaker} has finished for the day`;
-    detail = `${fmtTime(s.start)} – ${s.end ? fmtTime(s.end) : ''} · active ${fmtDuration(s.minutes)}`;
-  }
-  const dotColor =
-    status === 'on_shift' ? colors.success : status === 'paused' || status === 'away' ? colors.warning : colors.border;
+  const live = status === 'on_shift';
+  const paused = status === 'paused' || status === 'away';
+  const label = {
+    on_shift: 'On shift',
+    paused: 'On a break',
+    away: 'Away',
+    waiting: 'Not arrived',
+    completed: 'Finished',
+    none: 'No shift yet',
+  }[status];
+  const step = status === 'none' || status === 'waiting' ? 0 : status === 'completed' ? 2 : 1;
+  const since = s
+    ? status === 'completed'
+      ? `${fmtTime(s.start)} – ${s.end ? fmtTime(s.end) : ''}`
+      : paused && s.left
+        ? `out since ${fmtTime(s.left)}`
+        : s.arrived
+          ? `since ${fmtTime(s.arrived)}`
+          : ''
+    : '';
+
   const body = (
-    <Card>
-      <View style={styles.statusRow}>
-        <View style={[styles.dot, { backgroundColor: dotColor }]} />
-        <Text style={[styles.cardTitle, { flex: 1 }]}>{headline}</Text>
-        {s && <Icon name="chevron-right" size={22} color={colors.textMuted} />}
+    <Card tint={live ? 'sage' : paused ? 'butter' : 'surface'} raised style={{ marginBottom: spacing.ms }}>
+      <View style={styles.todayTop}>
+        {s ? <Avatar name={s.caretaker} size={48} ring={colors.surface} /> : <Avatar name="?" size={48} />}
+        <View style={{ flex: 1 }}>
+          <Text style={text.h2} numberOfLines={1}>
+            {s ? s.caretaker.split(' ')[0] : 'Today'}
+          </Text>
+          <Text style={text.small} numberOfLines={1}>
+            {s ? `with ${s.elderly.split(' ')[0]}${since ? ` · ${since}` : ''}` : 'Nobody has arrived'}
+          </Text>
+        </View>
+        <StatusPill label={label} tone={live ? 'sage' : paused ? 'butter' : 'quiet'} live={live} />
       </View>
-      <Text style={[styles.muted, { marginTop: spacing.xs }]}>{detail}</Text>
-      {s && <Text style={styles.link}>See today's timeline</Text>}
+      {s && (
+        <View style={{ marginTop: spacing.md }}>
+          <Text style={text.number}>{fmtDuration(s.minutes)}</Text>
+          <Text style={text.small}>{['active today', s.breaks ? `${s.breaks} break${s.breaks === 1 ? '' : 's'}` : null].filter(Boolean).join(' · ')}</Text>
+        </View>
+      )}
+      <View style={{ marginTop: spacing.lg, marginBottom: spacing.sm }}>
+        <Stepper steps={['Arrive', 'On shift', 'Done']} current={step} color={paused ? colors.butterInk : colors.sage} />
+      </View>
     </Card>
   );
-  return s ? <Pressable onPress={() => onOpenShift(s.id)}>{body}</Pressable> : body;
-}
-
-function Tile({ value, label }: { value: string; label: string }) {
-  return (
-    <View style={styles.tile}>
-      <Text style={styles.tileValue}>{value}</Text>
-      <Text style={styles.tileLabel}>{label}</Text>
-    </View>
+  return s ? (
+    <PressScale
+      onPress={() => onOpenShift(s.id)}
+      scaleTo={0.985}
+      accessibilityRole="button"
+      accessibilityLabel={`${s.caretaker}: ${label}. Active ${fmtDuration(s.minutes)}`}
+      accessibilityHint="Opens today's timeline"
+    >
+      {body}
+    </PressScale>
+  ) : (
+    body
   );
 }
 
-const QUALITY: Record<string, { text: string; color: string; bg: string }> = {
-  good: { text: 'Good', color: colors.success, bg: colors.primarySoft },
-  fair: { text: 'Fair', color: colors.warning, bg: colors.warningSoft },
-  needs_attention: { text: 'Needs attention', color: colors.danger, bg: colors.dangerSoft },
+const SEVERITY: Record<number, { text: string; tone: 'danger' | 'butter' | 'quiet' }> = {
+  3: { text: 'Emergency', tone: 'danger' },
+  2: { text: 'High', tone: 'butter' },
+  1: { text: 'Check', tone: 'quiet' },
 };
 
-export function ToneCard({ tones, period = 'this week' }: { tones: Dashboard['tones']; period?: string }) {
-  if (!tones.items.length || !tones.dominant) {
-    return (
-      <Card>
-        <Text style={styles.muted}>Tone results appear once your caretaker and your loved one have been heard talking during a shift.</Text>
-      </Card>
-    );
-  }
-  const top = tones.items[0];
-  const q = tones.quality ? QUALITY[tones.quality] : null;
-  return (
-    <Card>
-      <View style={styles.statusRow}>
-        <Icon name={TONE_ICON[top.tone]} size={46} color={toneColors[top.tone]} />
-        <View style={{ flex: 1, marginLeft: spacing.md }}>
-          <Text style={styles.cardTitle}>Mostly {top.label.toLowerCase()}</Text>
-          <Text style={styles.small}>Dominant tone {period} · {top.percent}%</Text>
-        </View>
-        {q && (
-          <View style={[styles.pill, { backgroundColor: q.bg }]}>
-            <Text style={[styles.pillText, { color: q.color }]}>{q.text}</Text>
-          </View>
-        )}
-      </View>
-      <View style={{ marginTop: spacing.md }}>
-        {tones.items.map((t) => (
-          <View key={t.tone} style={styles.toneRow}>
-            <View style={styles.toneIcon}>
-              <Icon name={TONE_ICON[t.tone]} size={22} color={toneColors[t.tone]} />
-            </View>
-            <Text style={styles.toneLabel}>{t.label}</Text>
-            <View style={styles.toneTrack}>
-              <View style={[styles.fill, { width: `${t.percent}%`, backgroundColor: toneColors[t.tone] }]} />
-            </View>
-            <Text style={styles.tonePct}>{t.percent}%</Text>
-          </View>
-        ))}
-      </View>
-    </Card>
-  );
-}
-
 function AlertCard({ alert, token, onChanged }: { alert: AlertItem; token: string; onChanged: () => void }) {
+  const [busy, setBusy] = useState<'confirmed' | 'dismissed' | null>(null);
+  const [error, setError] = useState('');
   async function act(status: 'confirmed' | 'dismissed') {
-    await resolveAlert(token, alert.id, status);
-    onChanged();
+    setBusy(status);
+    setError('');
+    try {
+      await resolveAlert(token, alert.id, status);
+      haptic.success();
+      onChanged();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not update the alert. Try again.');
+    } finally {
+      setBusy(null);
+    }
   }
   const sos = alert.kind === 'sos';
+  const sev = SEVERITY[alert.severity] ?? SEVERITY[1];
   const yes = sos ? 'Handled' : alert.kind === 'unwell' ? 'Noted' : 'Confirm';
   const no = sos ? 'False alarm' : 'Dismiss';
+  const pos = alert.position;
   return (
-    <View style={[styles.alert, sos && styles.sosAlert]}>
-      <View style={styles.alertHead}>
-        {sos && <Icon name="alarm-light-outline" size={22} color={colors.danger} />}
-        <Text style={[styles.alertTitle, sos && { fontSize: 18, marginLeft: spacing.sm }]}>
-          {alert.label} · <Text style={styles.small}>{timeAgo(alert.created_at)}</Text>
-        </Text>
+    <Card tint="danger" raised={sos} style={[{ marginBottom: spacing.ms }, sos && styles.sos]}>
+      <View accessibilityRole={sos ? 'alert' : undefined}>
+        <View style={styles.alertHead}>
+          <StatusPill label={sev.text} tone={sev.tone} live={sos} />
+          <Text style={[text.small, { marginLeft: 'auto' }]}>{timeAgo(alert.created_at)}</Text>
+        </View>
+        <Text style={[text.h2, { marginTop: spacing.sm }]}>{alert.label}</Text>
+        <Text style={text.body}>{alert.message}</Text>
+        {!!alert.patient && <Text style={text.small}>{alert.patient}</Text>}
       </View>
-      <Text style={styles.alertBody}>{alert.message}</Text>
-      {sos && <Text style={styles.alertBody}>Call them or message them now. Their chat is in the Chats tab.</Text>}
+
+      {/* The evidence, before the decision. */}
+      {(pos || alert.confidence !== null) && (
+        <View style={styles.evidence}>
+          {pos && (
+            <Pressable
+              onPress={() => Linking.openURL(`geo:${pos.latitude},${pos.longitude}?q=${pos.latitude},${pos.longitude}`)}
+              style={styles.evChip}
+              accessibilityRole="link"
+              accessibilityLabel={`Open the position in Maps. GPS accuracy ${pos.accuracy !== null ? `${Math.round(pos.accuracy)} metres` : 'unknown'}`}
+            >
+              <Icon name="map-marker-outline" size={18} color={colors.primaryInk} />
+              <Text style={styles.evText}>Map{pos.accuracy !== null ? ` · ±${Math.round(pos.accuracy)} m` : ''}</Text>
+            </Pressable>
+          )}
+          {alert.confidence !== null && (
+            <View style={styles.evChip} accessible accessibilityLabel={`Voice model: ${Math.round(alert.confidence * 100)}% of the speech sounded angry`}>
+              <Icon name="waveform" size={18} color={colors.textMuted} />
+              <Text style={[styles.evText, { color: colors.text }]}>{Math.round(alert.confidence * 100)}% angry</Text>
+            </View>
+          )}
+        </View>
+      )}
+
+      {!!error && <Text style={[text.small, { color: colors.danger, marginTop: spacing.sm }]}>{error}</Text>}
       <View style={styles.alertActions}>
         <View style={{ flex: 1 }}>
-          <Button title={yes} onPress={() => act('confirmed')} />
+          <Button title={yes} variant={sos ? 'danger' : 'ink'} size="md" onPress={() => act('confirmed')} loading={busy === 'confirmed'} disabled={busy !== null} />
         </View>
         <View style={{ flex: 1 }}>
-          <Button title={no} variant="secondary" onPress={() => act('dismissed')} />
+          <Button title={no} variant="quiet" size="md" onPress={() => act('dismissed')} loading={busy === 'dismissed'} disabled={busy !== null} />
         </View>
       </View>
-    </View>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  muted: { color: colors.textMuted, fontSize: 14 },
-  small: { color: colors.textMuted, fontSize: 12, marginTop: 2 },
-  cardTitle: { fontSize: 17, fontWeight: '700', color: colors.text, flexShrink: 1 },
-  demo: {
-    backgroundColor: colors.warningSoft,
-    borderRadius: radius.md,
-    padding: spacing.sm + 4,
-    marginBottom: spacing.md,
-  },
-  demoText: { color: colors.warning, fontSize: 13 },
-  statusRow: { flexDirection: 'row', alignItems: 'center' },
-  dot: { width: 10, height: 10, borderRadius: 5, marginRight: spacing.sm },
-  tiles: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  tile: {
-    flex: 1,
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
-  },
-  tileValue: { fontSize: 20, fontWeight: '700', color: colors.primary },
-  tileLabel: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
-  progress: { fontSize: 14, fontWeight: '600', color: colors.text, marginBottom: spacing.sm },
-  track: { height: 8, borderRadius: 4, backgroundColor: colors.primarySoft, overflow: 'hidden', marginBottom: spacing.sm },
-  fill: { height: '100%', borderRadius: 4, backgroundColor: colors.primary },
-  choreRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 6 },
-  check: { fontSize: 16, width: 26 },
-  choreText: { fontSize: 15, color: colors.text, flex: 1 },
-  stepRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
-  visitRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
-  rowBorder: { borderTopWidth: 1, borderTopColor: colors.border },
-  visitTitle: { fontSize: 15, fontWeight: '600', color: colors.text },
-  checkBox: { width: 30 },
-  historyLink: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md },
-  historyText: { color: colors.primary, fontWeight: '700', fontSize: 15 },
-  sheet: { flex: 1, backgroundColor: colors.background, paddingTop: spacing.xl },
-  sheetHead: {
+  bento: { flexDirection: 'row', gap: spacing.ms, marginBottom: spacing.ms },
+  tile: { flex: 1, borderRadius: radius.lg, padding: spacing.md, minHeight: 124, justifyContent: 'space-between' },
+  tileWide: { flex: 1.5, flexDirection: 'row', alignItems: 'center', gap: spacing.ms, justifyContent: 'flex-start' },
+  tileNum: { fontFamily: fonts.display, fontSize: 28, lineHeight: 32, color: colors.text },
+  week: { flexDirection: 'row', alignItems: 'center' },
+  weekLine: { width: StyleSheet.hairlineWidth, alignSelf: 'stretch', backgroundColor: colors.border },
+  statValue: { fontFamily: fonts.display, fontSize: type.h2, color: colors.text },
+  pastLink: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: TAP, marginTop: spacing.md, paddingHorizontal: spacing.xs },
+  empty2: { alignItems: 'center', gap: spacing.ms, paddingVertical: spacing.lg },
+
+  setup: { flexDirection: 'row', gap: spacing.ms, marginVertical: spacing.lg },
+  setupStep: { flex: 1, alignItems: 'center', gap: spacing.sm, backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.md },
+  setupIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' },
+
+  todayTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms },
+
+  sos: { borderWidth: 2, borderColor: colors.danger },
+  alertHead: { flexDirection: 'row', alignItems: 'center' },
+  evidence: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.ms },
+  evChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    gap: 6,
+    backgroundColor: colors.surface,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.ms,
+    minHeight: 40,
   },
-  sheetTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
-  link: { color: colors.primary, fontWeight: '600', fontSize: 13, marginTop: spacing.sm },
-  hint: { color: colors.textMuted, fontSize: 12, marginTop: spacing.sm },
-  iconBox: { width: 36 },
-  alertHead: { flexDirection: 'row', alignItems: 'center' },
-  pill: { borderRadius: radius.md, paddingHorizontal: 10, paddingVertical: 4 },
-  pillText: { fontSize: 12, fontWeight: '700' },
-  toneRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
-  toneIcon: { width: 30 },
-  toneLabel: { width: 70, fontSize: 13, color: colors.text },
-  toneTrack: { flex: 1, height: 8, borderRadius: 4, backgroundColor: colors.primarySoft, overflow: 'hidden' },
-  tonePct: { width: 42, textAlign: 'right', fontSize: 13, fontWeight: '600', color: colors.text },
-  alert: {
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    marginBottom: spacing.sm,
-  },
-  sosAlert: { borderWidth: 2, borderColor: colors.danger },
-  alertTitle: { fontSize: 15, fontWeight: '700', color: colors.danger },
-  alertBody: { fontSize: 14, color: colors.text, marginTop: spacing.xs },
+  evText: { fontFamily: fonts.bodyBold, fontSize: type.small, color: colors.primaryInk },
   alertActions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
 });

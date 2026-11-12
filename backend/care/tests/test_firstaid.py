@@ -39,7 +39,15 @@ class AccessAndInputTests(TestCase):
     def test_message_is_passed_on(self):
         r = client_for(self.carer).post(URL, {'message': 'she burnt her hand', 'lang': 'sw', 'awaiting': 'cpr'}, format='json')
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.json()['echo'], {'message': 'she burnt her hand', 'topic': None, 'awaiting': 'cpr', 'lang': 'sw'})
+        self.assertEqual(r.json()['echo'], {'message': 'she burnt her hand', 'topic': None, 'awaiting': 'cpr', 'lang': 'sw',
+                                            'check': None})
+
+    def test_safety_question_answer(self):
+        c = client_for(self.carer)
+        r = c.post(URL, {'message': 'she cut her finger', 'check': 'yes'}, format='json')
+        self.assertEqual(r.json()['echo']['check'], 'yes')
+        self.assertEqual(c.post(URL, {'message': 'she cut her finger', 'check': 'maybe'}, format='json').status_code, 400)
+        self.assertEqual(c.post(URL, {'topic': 'burns', 'check': 'no'}, format='json').status_code, 400)  # needs the message
 
     def test_button_topic_and_bad_input(self):
         c = client_for(self.carer)
@@ -78,7 +86,9 @@ class RealAssistantTests(TestCase):
     def test_answers_in_kiswahili(self):
         r = self.ask(message='bibi ameanguka bafuni na hawezi kuinuka')
         self.assertEqual(r['lang'], 'sw')
-        self.assertIn(r['kind'], ('answer', 'clarify'))
+        self.assertIn(r['kind'], ('answer', 'clarify', 'check'))  # check: "Je, kuna mtu yuko hatarini sasa hivi?"
+        if r['kind'] == 'check':
+            self.assertIn('hatarini', r['text'])
         if r['kind'] == 'answer':
             self.assertEqual(r['topic'], 'fall')
 
@@ -90,6 +100,31 @@ class RealAssistantTests(TestCase):
         self.assertEqual(by_button['topic'], 'choking_mild')
         by_yes = self.ask(message='yes', awaiting='choking_severe')
         self.assertEqual(by_yes['topic'], 'choking_mild')
+
+    def test_safety_question_yes_and_no(self):
+        """When the danger signals are unclear the assistant asks "Is someone in danger right now?" (round-3 policy)."""
+        for text in ('he is very tired and weak today', 'tell me about blood pressure tablets', 'my dad feels strange'):
+            q = self.ask(message=text)
+            if q['kind'] == 'check':
+                break
+        else:
+            self.skipTest('none of these messages gets the safety question with this model')
+        self.assertFalse(q['emergency'])
+        self.assertEqual([o['topic'] for o in q['followup']['options']], ['__check_yes', '__check_no'])
+        yes = self.ask(message=q['check_message'], check='yes')
+        self.assertTrue(yes['emergency'])
+        self.assertIn('999', yes['urgent'])
+        self.assertTrue(yes['followup']['options'])
+        no = self.ask(message=q['check_message'], check='no')
+        self.assertNotEqual(no['kind'], 'check')
+        self.assertFalse(no['emergency'])
+
+    def test_small_problem_gets_advice_with_danger_banner(self):
+        r = self.ask(message='she cut her finger while cooking')
+        self.assertEqual(r['kind'], 'answer')
+        if r.get('danger_banner'):
+            self.assertFalse(r['emergency'])
+            self.assertIn('999', r['danger_banner'])
 
     def test_not_first_aid(self):
         self.assertEqual(self.ask(message='what will the weather be like tomorrow')['kind'], 'out_of_scope')

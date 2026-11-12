@@ -258,9 +258,9 @@ def start_manual(caretaker, now=None):
     now = now or timezone.now()
     elders = list(User.objects.filter(sponsor_id=caretaker.sponsor_id, role=Role.ELDERLY).order_by('date_joined'))
     if not elders:
-        raise ValueError('No elderly person is linked to you yet.')
+        raise ValueError("You can't start a shift yet: nobody is linked to you. Ask the family to add you and the person you care for.")
     if evaluate(caretaker, now):
-        raise ValueError('A shift is already running.')
+        raise ValueError('Your shift has already started. Nothing more to do: your time is being counted.')
 
     cloc = Location.objects.filter(user=caretaker).first()
     ranked = []
@@ -283,7 +283,7 @@ def stop_manual(caretaker, now=None):
     now = now or timezone.now()
     shift = evaluate(caretaker, now)  # settle the segment first so the final minutes are right
     if not shift:
-        raise ValueError('No shift is running.')
+        raise ValueError('There is no shift to end. It may have ended already. Pull down to refresh.')
     _end(shift, 'manual', now)
 
 

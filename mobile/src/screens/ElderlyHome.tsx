@@ -1,38 +1,39 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getElderHome, sendCheckIn, sendSos, takeMedicine } from '../api/client';
+import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
 import { Icon, IconName, MOOD_ICON } from '../components/Icon';
 import { SharingBanner } from '../components/SharingBanner';
+import { Avatar, Button, Card, haptic, OfflineBanner, PressScale, Sheet, Stripe } from '../components/ui';
+import { VoiceCard } from '../components/VoiceCard';
 import { Lang, t } from '../elder/i18n';
 import { SCALES, useElderPrefs } from '../elder/prefs';
 import { fmtTime } from '../format';
-import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
-import { VoiceCard } from '../components/VoiceCard';
 import { useLocationSharing } from '../location/useLocationSharing';
-import { colors, radius, spacing } from '../theme';
+import { colors, fonts, radius, spacing, TAP, text, TOP_INSET } from '../theme';
 import { ElderHome, Medicine, Mood, Profile } from '../types';
 import ChatScreen from './ChatScreen';
 
 type Props = { token: string; profile: Profile; onSignOut: () => void };
 type Status = ElderHome['caretaker']['status'];
 
-const MOODS: { key: Mood; color: string }[] = [
-  { key: 'good', color: colors.success },
-  { key: 'okay', color: colors.textMuted },
-  { key: 'unwell', color: colors.warning },
+const MOODS: { key: Mood; bg: string; fg: string }[] = [
+  { key: 'good', bg: colors.sageSoft, fg: colors.sage },
+  { key: 'okay', bg: colors.butter, fg: colors.butterInk },
+  { key: 'unwell', bg: colors.primarySoft, fg: colors.primaryInk },
 ];
 
-const CARETAKER_VISUAL: Record<Status, { icon: IconName; color: string }> = {
-  here: { icon: 'hand-wave-outline', color: colors.success },
-  away: { icon: 'walk', color: colors.warning },
-  left: { icon: 'check-circle-outline', color: colors.primary },
-  not_arrived: { icon: 'timer-sand', color: colors.textMuted },
-  none: { icon: 'account-outline', color: colors.textMuted },
+const CARETAKER_VISUAL: Record<Status, { icon: IconName; bg: string; fg: string }> = {
+  here: { icon: 'hand-wave-outline', bg: colors.sageSoft, fg: colors.sage },
+  away: { icon: 'walk', bg: colors.butter, fg: colors.butterInk },
+  left: { icon: 'check-circle-outline', bg: colors.surface, fg: colors.sage },
+  not_arrived: { icon: 'timer-sand', bg: colors.surface, fg: colors.textMuted },
+  none: { icon: 'account-outline', bg: colors.surface, fg: colors.textMuted },
 };
 
 const MED_VISUAL: Record<Medicine['state'], { icon: IconName; color: string }> = {
-  taken: { icon: 'check-circle', color: colors.success },
-  due: { icon: 'clock-alert-outline', color: colors.warning },
+  taken: { icon: 'check-circle', color: colors.sage },
+  due: { icon: 'bell-ring-outline', color: colors.primaryInk },
   missed: { icon: 'alert-circle-outline', color: colors.danger },
   later: { icon: 'clock-outline', color: colors.textMuted },
 };
@@ -46,14 +47,14 @@ function clock12(hhmm: string) {
 export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   const prefs = useElderPrefs();
   const { lang, scale } = prefs;
-  const f = (n: number) => Math.round(n * scale); // scaled font size
+  const f = (n: number) => Math.round(n * scale); // scaled size
 
   const [home, setHome] = useState<ElderHome | null>(null);
   const [error, setError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [pickingMood, setPickingMood] = useState(false);
-  const [showWhy, setShowWhy] = useState(false);
+  const [settings, setSettings] = useState(false);
 
   // This phone is the centre of the 15 m geofence that confirms the caretaker is with you.
   const sharing = useLocationSharing(token);
@@ -81,6 +82,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   }
 
   async function chooseMood(mood: Mood) {
+    haptic.success();
     setPickingMood(false);
     try {
       await sendCheckIn(token, mood);
@@ -91,6 +93,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   }
 
   async function take(m: Medicine) {
+    haptic.success();
     setHome((h) =>
       h ? { ...h, medicines: h.medicines.map((x) => (x.id === m.id ? { ...x, taken: true, state: 'taken' } : x)) } : h,
     );
@@ -102,6 +105,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   }
 
   function askForHelp() {
+    haptic.warn();
     Alert.alert(t(lang, 'help_title'), t(lang, 'help_body'), [
       { text: t(lang, 'no'), style: 'cancel' },
       {
@@ -125,11 +129,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
 
   const hour = new Date().getHours();
   const greeting = t(lang, hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening');
-  const today = new Date().toLocaleDateString(lang === 'sw' ? 'sw-KE' : 'en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  });
+  const today = new Date().toLocaleDateString(lang === 'sw' ? 'sw-KE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 
   const ct = home?.caretaker;
   const ctName = ct?.name?.split(' ')[0] ?? '';
@@ -137,340 +137,281 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   const showMoodButtons = !mood || pickingMood;
   const familyName = profile.sponsor?.name.split(' ')[0] ?? '';
 
-  // Everyone linked to this person, in one simple list.
+  // Everyone linked to this person.
   const people: { name: string; role: string; invited: boolean }[] = [];
   if (profile.sponsor) people.push({ name: profile.sponsor.name, role: t(lang, 'family'), invited: false });
-  profile.caretakers.forEach((c) =>
-    people.push({ name: c.name ?? c.email, role: t(lang, 'caretaker'), invited: c.status === 'pending' }),
-  );
+  profile.caretakers.forEach((c) => people.push({ name: c.name ?? c.email, role: t(lang, 'caretaker'), invited: c.status === 'pending' }));
+
+  const big = { fontSize: f(26), lineHeight: f(32) };
+  const body = { fontSize: f(17), lineHeight: f(24) };
+  const small = { fontSize: f(15), lineHeight: f(21) };
 
   return (
     <View style={styles.flex}>
+      <OfflineBanner />
       <ScrollView
         style={styles.flex}
         contentContainerStyle={styles.container}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
       >
-        {/* ── Header ─────────────────────────────── */}
-        <Text style={[styles.greeting, { fontSize: f(30) }]}>
-          {greeting}, {profile.name.split(' ')[0]}
-        </Text>
-        <Text style={[styles.date, { fontSize: f(17) }]}>{today}</Text>
-
-        {/* ── Comfort settings: text size and language ── */}
-        <View style={styles.settings}>
-          <View style={styles.settingGroup}>
-            <Text style={styles.settingLabel}>{t(lang, 'text_size')}</Text>
-            <View style={styles.segment}>
-              {SCALES.map((_, i) => (
-                <Pressable
-                  key={i}
-                  accessibilityLabel={`${t(lang, 'text_size')} ${i + 1}`}
-                  onPress={() => prefs.setScaleIndex(i)}
-                  style={[styles.seg, prefs.scaleIndex === i && styles.segOn]}
-                >
-                  <Text style={[styles.segText, { fontSize: 13 + i * 4 }, prefs.scaleIndex === i && styles.segTextOn]}>A</Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-          <View style={styles.settingGroup}>
-            <Text style={styles.settingLabel}>{t(lang, 'language')}</Text>
-            <View style={styles.segment}>
-              {(['en', 'sw'] as Lang[]).map((l) => (
-                <Pressable key={l} onPress={() => prefs.setLang(l)} style={[styles.seg, lang === l && styles.segOn]}>
-                  <Text style={[styles.segText, lang === l && styles.segTextOn]}>{l === 'en' ? 'English' : 'Kiswahili'}</Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-        </View>
-
-        {error && !home && <Text style={[styles.error, { fontSize: f(16) }]}>{t(lang, 'load_error')}</Text>}
-
-        {/* ── Right now ──────────────────────────── */}
-        <Section title={t(lang, 'right_now')} size={f(19)} />
-        {ct && (
-          <View style={[styles.card, styles.hero, { borderLeftColor: CARETAKER_VISUAL[ct.status].color }]}>
-            <View
-              style={[
-                styles.badge,
-                { width: f(60), height: f(60), borderRadius: f(30), backgroundColor: CARETAKER_VISUAL[ct.status].color + '22' },
-              ]}
-            >
-              <Icon name={CARETAKER_VISUAL[ct.status].icon} size={f(32)} color={CARETAKER_VISUAL[ct.status].color} />
-            </View>
-            <Text style={[styles.heroText, { fontSize: f(22) }]}>
-              {ct.status === 'none' ? t(lang, 'caretaker_none') : t(lang, `caretaker_${ct.status}`, ctName)}
+        <View style={styles.header}>
+          <View style={{ flex: 1 }}>
+            <Text style={[text.small, small]}>{today}</Text>
+            <Text style={[text.h1, { fontSize: f(30), lineHeight: f(36) }]} accessibilityRole="header">
+              {greeting}, {profile.name.split(' ')[0]}
             </Text>
           </View>
+          <PressScale
+            onPress={() => setSettings(true)}
+            style={styles.aa}
+            accessibilityRole="button"
+            accessibilityLabel={`${t(lang, 'text_size')}, ${t(lang, 'language')}`}
+          >
+            <Text style={styles.aaText}>Aa</Text>
+          </PressScale>
+        </View>
+        <Stripe height={6} style={{ width: 96, marginBottom: spacing.lg }} />
+
+        {error && !home && (
+          <Card tint="danger" style={{ marginBottom: spacing.md }}>
+            <Text style={[text.bodyStrong, body, { color: colors.danger }]}>{t(lang, 'load_error')}</Text>
+          </Card>
         )}
 
-        {/* ── Today ──────────────────────────────── */}
-        <Section title={t(lang, 'today')} size={f(19)} />
+        {/* Right now: is my caretaker here? */}
+        {ct && (
+          <Card raised style={{ backgroundColor: CARETAKER_VISUAL[ct.status].bg, marginBottom: spacing.md }}>
+            <View style={styles.heroRow} accessible accessibilityLabel={ct.status === 'none' ? t(lang, 'caretaker_none') : t(lang, `caretaker_${ct.status}`, ctName)}>
+              <View style={[styles.heroIcon, { width: f(72), height: f(72), borderRadius: f(36) }]}>
+                <Icon name={CARETAKER_VISUAL[ct.status].icon} size={f(36)} color={CARETAKER_VISUAL[ct.status].fg} />
+              </View>
+              <Text style={[text.h1, big, { flex: 1 }]}>
+                {ct.status === 'none' ? t(lang, 'caretaker_none') : t(lang, `caretaker_${ct.status}`, ctName)}
+              </Text>
+            </View>
+          </Card>
+        )}
 
-        <View style={styles.card}>
-          <Text style={[styles.cardTitle, { fontSize: f(20) }]}>{t(lang, 'feeling_q')}</Text>
+        {/* How are you feeling? Three big faces. */}
+        <Card style={{ marginBottom: spacing.md }}>
+          <Text style={[text.h2, { fontSize: f(21), lineHeight: f(27) }]}>{t(lang, 'feeling_q')}</Text>
           {showMoodButtons ? (
             <View style={styles.moods}>
               {MOODS.map((m) => (
-                <Pressable key={m.key} style={styles.mood} onPress={() => chooseMood(m.key)}>
-                  <Icon name={MOOD_ICON[m.key]} size={f(46)} color={m.color} />
-                  <Text style={[styles.moodLabel, { fontSize: f(16) }]}>{t(lang, m.key)}</Text>
-                </Pressable>
+                <PressScale
+                  key={m.key}
+                  style={[styles.mood, { backgroundColor: m.bg }]}
+                  onPress={() => chooseMood(m.key)}
+                  accessibilityRole="button"
+                  accessibilityLabel={t(lang, m.key)}
+                >
+                  <Icon name={MOOD_ICON[m.key]} size={f(48)} color={m.fg} />
+                  <Text style={[text.bodyStrong, body, { color: m.fg }]}>{t(lang, m.key)}</Text>
+                </PressScale>
               ))}
             </View>
           ) : (
-            <>
-              <View style={styles.answerRow}>
-                <Icon
-                  name={MOOD_ICON[mood!.mood]}
-                  size={f(34)}
-                  color={MOODS.find((m) => m.key === mood!.mood)?.color ?? colors.primary}
-                />
-                <View style={{ marginLeft: spacing.md, flex: 1 }}>
-                  <Text style={[styles.answerTitle, { fontSize: f(19) }]}>{t(lang, mood!.mood)}</Text>
-                  <Text style={[styles.muted, { fontSize: f(15) }]}>
-                    {fmtTime(mood!.at)} · {t(lang, mood!.mood === 'unwell' ? 'feeling_unwell_thanks' : 'feeling_thanks')}
-                  </Text>
-                </View>
+            <View style={styles.answer}>
+              <View style={[styles.answerIcon, { backgroundColor: MOODS.find((m) => m.key === mood!.mood)?.bg }]}>
+                <Icon name={MOOD_ICON[mood!.mood]} size={f(36)} color={MOODS.find((m) => m.key === mood!.mood)?.fg} />
               </View>
-              <Pressable onPress={() => setPickingMood(true)} style={styles.linkBtn}>
-                <Text style={[styles.link, { fontSize: f(16) }]}>{t(lang, 'change')}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={[text.bodyStrong, body]}>{t(lang, mood!.mood)}</Text>
+                <Text style={[text.small, small]}>
+                  {fmtTime(mood!.at)} · {t(lang, mood!.mood === 'unwell' ? 'feeling_unwell_thanks' : 'feeling_thanks')}
+                </Text>
+              </View>
+              <Pressable onPress={() => setPickingMood(true)} style={styles.change} accessibilityRole="button" accessibilityLabel={t(lang, 'change')}>
+                <Text style={[styles.link, small]}>{t(lang, 'change')}</Text>
               </Pressable>
-            </>
-          )}
-        </View>
-
-        {!!home?.medicines.length && (
-          <View style={styles.card}>
-            <View style={styles.cardHead}>
-              <Icon name="pill" size={f(26)} />
-              <Text style={[styles.cardTitle, { fontSize: f(20), marginLeft: spacing.sm }]}>{t(lang, 'medicine_title')}</Text>
             </View>
-            {home.medicines.map((m, i) => {
+          )}
+        </Card>
+
+        {/* Medicines: one card each, the button in reach. */}
+        {!!home?.medicines.length && (
+          <>
+            <Text style={[text.h2, { fontSize: f(21), lineHeight: f(27), marginBottom: spacing.ms }]}>{t(lang, 'medicine_title')}</Text>
+            {home.medicines.map((m) => {
               const v = MED_VISUAL[m.state];
+              const due = m.state === 'due' || m.state === 'missed';
               return (
-                <View key={m.id} style={[styles.medRow, i > 0 && styles.rowBorder]}>
-                  <Icon name={v.icon} size={f(28)} color={v.color} />
-                  <View style={{ flex: 1, marginLeft: spacing.md }}>
-                    <Text style={[styles.medName, { fontSize: f(19) }]}>{m.name}</Text>
-                    <Text style={[styles.muted, { fontSize: f(15) }]}>
-                      {[m.dose, m.state === 'later' || m.state === 'taken' ? clock12(m.time) : null].filter(Boolean).join(' · ')}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.medState,
-                        { fontSize: f(15), color: v.color },
-                      ]}
-                    >
-                      {m.state === 'later' ? t(lang, 'later_at', clock12(m.time)) : t(lang, m.state === 'taken' ? 'taken' : m.state === 'due' ? 'due_now' : 'missed')}
-                    </Text>
+                <Card key={m.id} tint={m.taken ? 'sage' : due ? 'peach' : 'surface'} style={{ marginBottom: spacing.ms }}>
+                  <View style={styles.med}>
+                    <View style={styles.medTime}>
+                      <Icon name={v.icon} size={f(26)} color={v.color} />
+                      <Text style={[styles.medClock, { fontSize: f(14) }]}>{clock12(m.time)}</Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={[text.bodyStrong, body]}>{m.name}</Text>
+                      <Text style={[text.small, small, { color: v.color }]}>
+                        {[m.dose || null, m.state === 'later' ? t(lang, 'later_at', clock12(m.time)) : t(lang, m.state === 'taken' ? 'taken' : m.state === 'due' ? 'due_now' : 'missed')]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      </Text>
+                    </View>
                   </View>
                   {!m.taken && (
-                    <Pressable style={styles.tookBtn} onPress={() => take(m)}>
-                      <Text style={[styles.tookText, { fontSize: f(16) }]}>{t(lang, 'took_it')}</Text>
-                    </Pressable>
+                    <View style={{ marginTop: spacing.ms }}>
+                      <Button
+                        title={t(lang, 'took_it')}
+                        icon="check"
+                        variant={due ? 'primary' : 'secondary'}
+                        onPress={() => take(m)}
+                        accessibilityLabel={`${t(lang, 'took_it')}: ${m.name}`}
+                      />
+                    </View>
                   )}
-                </View>
+                </Card>
               );
             })}
-          </View>
+          </>
         )}
 
-        {/* ── Stay in touch ──────────────────────── */}
-        <Section title={t(lang, 'stay_in_touch')} size={f(19)} />
-
+        {/* Stay in touch */}
         {profile.sponsor && (
-          <Pressable style={({ pressed }) => [styles.msgBtn, pressed && { opacity: 0.9 }]} onPress={() => setChatOpen(true)}>
-            <Icon name="message-text-outline" size={f(26)} color={colors.onPrimary} />
-            <Text style={[styles.msgText, { fontSize: f(20) }]}>{t(lang, 'msg_family', familyName)}</Text>
-          </Pressable>
+          <PressScale
+            style={styles.msg}
+            onPress={() => setChatOpen(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t(lang, 'msg_family', familyName)}
+          >
+            <Avatar name={profile.sponsor.name} size={f(48)} ring={colors.surface} />
+            <Text style={[styles.msgText, { fontSize: f(19) }]}>{t(lang, 'msg_family', familyName)}</Text>
+            <Icon name="message-text" size={f(26)} color={colors.onPrimary} />
+          </PressScale>
         )}
 
         {people.length > 0 && (
-          <View style={[styles.card, { marginTop: spacing.md }]}>
+          <View style={styles.people}>
             {people.map((p, i) => (
-              <View key={`${p.name}-${i}`} style={[styles.personRow, i > 0 && styles.rowBorder]}>
-                <View style={[styles.avatar, { width: f(44), height: f(44), borderRadius: f(22) }]}>
-                  <Text style={[styles.avatarText, { fontSize: f(18) }]}>{p.name.charAt(0).toUpperCase()}</Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.personName, { fontSize: f(18) }]}>{p.name}</Text>
-                  <Text style={[styles.muted, { fontSize: f(14) }]}>
-                    {p.role}
-                    {p.invited ? ` · ${t(lang, 'invited')}` : ''}
-                  </Text>
-                </View>
+              <View key={`${p.name}-${i}`} style={styles.person} accessible accessibilityLabel={`${p.name}, ${p.role}${p.invited ? `, ${t(lang, 'invited')}` : ''}`}>
+                <Avatar name={p.name} size={f(52)} />
+                <Text style={[text.smallStrong, small]} numberOfLines={1}>
+                  {p.name.split(' ')[0]}
+                </Text>
+                <Text style={[text.caption, { fontSize: f(12) }]}>{p.invited ? t(lang, 'invited') : p.role}</Text>
               </View>
             ))}
           </View>
         )}
 
         <VoiceCard voice={voice} lang={lang} scale={scale} />
-
-        {/* ── About ──────────────────────────────── */}
-        <Section title={t(lang, 'about')} size={f(19)} />
-        <View style={styles.card}>
-          <Pressable onPress={() => setShowWhy((v) => !v)} style={styles.cardHead}>
-            <Icon name="map-marker-outline" size={f(24)} />
-            <Text style={[styles.whyTitle, { fontSize: f(17) }]}>{t(lang, 'why_location')}</Text>
-            <Icon name={showWhy ? 'chevron-up' : 'chevron-down'} size={f(24)} color={colors.textMuted} />
-          </Pressable>
-          {showWhy && <Text style={[styles.muted, { fontSize: f(15), marginTop: spacing.sm }]}>{t(lang, 'phone_body')}</Text>}
-          <SharingBanner status={sharing.status} lang={lang} scale={scale} />
-        </View>
-
-        <Pressable onPress={onSignOut} style={styles.signOut}>
-          <Icon name="logout" size={f(20)} color={colors.textMuted} />
-          <Text style={[styles.signOutText, { fontSize: f(16) }]}>{t(lang, 'sign_out')}</Text>
-        </Pressable>
+        <SharingBanner status={sharing.status} lang={lang} scale={scale} />
       </ScrollView>
 
       {/* Always on screen: the emergency button */}
       <View style={styles.sosBar}>
-        <Pressable style={({ pressed }) => [styles.sos, pressed && { opacity: 0.85 }]} onPress={askForHelp}>
-          <Icon name="alarm-light-outline" size={f(28)} color={colors.onPrimary} />
+        <PressScale style={styles.sos} onPress={askForHelp} accessibilityRole="button" accessibilityLabel={t(lang, 'help_button')}>
+          <View style={styles.sosIcon}>
+            <Icon name="alarm-light" size={f(26)} color={colors.danger} />
+          </View>
           <Text style={[styles.sosText, { fontSize: f(22) }]}>{t(lang, 'help_button')}</Text>
-        </Pressable>
+        </PressScale>
       </View>
-    </View>
-  );
-}
 
-function Section({ title, size }: { title: string; size: number }) {
-  return (
-    <View style={styles.sectionRow}>
-      <Text style={[styles.section, { fontSize: size }]}>{title}</Text>
-      <View style={styles.sectionLine} />
+      <Sheet visible={settings} onClose={() => setSettings(false)} title={t(lang, 'text_size')}>
+        <View style={styles.sizes}>
+          {SCALES.map((_, i) => (
+            <PressScale
+              key={i}
+              onPress={() => {
+                haptic.tap();
+                prefs.setScaleIndex(i);
+              }}
+              style={[styles.size, prefs.scaleIndex === i && styles.sizeOn]}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: prefs.scaleIndex === i }}
+              accessibilityLabel={`${t(lang, 'text_size')} ${i + 1}`}
+            >
+              <Text style={[styles.sizeText, { fontSize: 18 + i * 8 }, prefs.scaleIndex === i && { color: colors.onPrimary }]}>A</Text>
+            </PressScale>
+          ))}
+        </View>
+
+        <Text style={[text.h2, { marginTop: spacing.lg, marginBottom: spacing.ms }]}>{t(lang, 'language')}</Text>
+        <View style={styles.sizes}>
+          {(['en', 'sw'] as Lang[]).map((l) => (
+            <PressScale
+              key={l}
+              onPress={() => {
+                haptic.tap();
+                prefs.setLang(l);
+              }}
+              style={[styles.size, lang === l && styles.sizeOn]}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: lang === l }}
+              accessibilityLabel={l === 'en' ? 'English' : 'Kiswahili'}
+            >
+              <Text style={[text.bodyStrong, lang === l && { color: colors.onPrimary }]}>{l === 'en' ? 'English' : 'Kiswahili'}</Text>
+            </PressScale>
+          ))}
+        </View>
+
+        <Text style={[text.h2, { marginTop: spacing.lg }]}>{t(lang, 'why_location')}</Text>
+        <Text style={[text.body, { marginTop: spacing.xs }]}>{t(lang, 'phone_body')}</Text>
+
+        <View style={{ marginTop: spacing.lg }}>
+          <Button title={t(lang, 'sign_out')} icon="logout" variant="quiet" onPress={onSignOut} />
+        </View>
+      </Sheet>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
-  container: { padding: spacing.lg, paddingTop: spacing.xl + spacing.lg, paddingBottom: spacing.xl },
+  container: { padding: spacing.md, paddingTop: TOP_INSET, paddingBottom: spacing.xl },
+  header: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms, marginBottom: spacing.ms },
+  aa: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  aaText: { fontFamily: fonts.display, fontSize: 22, color: colors.text },
 
-  greeting: { fontWeight: '700', color: colors.text },
-  date: { color: colors.textMuted, marginTop: 2 },
-
-  settings: {
-    flexDirection: 'row',
-    gap: spacing.md,
-    marginTop: spacing.lg,
-    padding: spacing.md,
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  settingGroup: { flex: 1 },
-  settingLabel: { fontSize: 12, fontWeight: '600', color: colors.textMuted, marginBottom: 6 },
-  segment: { flexDirection: 'row', backgroundColor: colors.background, borderRadius: radius.md, padding: 3 },
-  seg: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 7, borderRadius: radius.md - 3 },
-  segOn: { backgroundColor: colors.primary },
-  segText: { fontSize: 13, fontWeight: '700', color: colors.primary },
-  segTextOn: { color: colors.onPrimary },
-
-  error: { color: colors.danger, marginTop: spacing.md },
-
-  sectionRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.xl, marginBottom: spacing.md },
-  section: { fontWeight: '700', color: colors.text },
-  sectionLine: { flex: 1, height: 1, backgroundColor: colors.border, marginLeft: spacing.md },
-
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.lg,
-    marginBottom: spacing.md,
-  },
-  cardHead: { flexDirection: 'row', alignItems: 'center' },
-  cardTitle: { fontWeight: '700', color: colors.text, flexShrink: 1 },
-  muted: { color: colors.textMuted, marginTop: 2 },
-  rowBorder: { borderTopWidth: 1, borderTopColor: colors.border },
-
-  hero: { flexDirection: 'row', alignItems: 'center', borderLeftWidth: 6 },
-  badge: { alignItems: 'center', justifyContent: 'center', marginRight: spacing.md },
-  heroText: { flex: 1, fontWeight: '700', color: colors.text },
+  heroRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  heroIcon: { backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
 
   moods: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  mood: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: spacing.md,
-    borderRadius: radius.lg,
-    backgroundColor: colors.primarySoft,
-  },
-  moodLabel: { color: colors.text, fontWeight: '600', marginTop: 4 },
-  answerRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md },
-  answerTitle: { fontWeight: '700', color: colors.text },
-  linkBtn: { alignSelf: 'flex-start', marginTop: spacing.md, paddingVertical: 4 },
-  link: { color: colors.primary, fontWeight: '700' },
+  mood: { flex: 1, alignItems: 'center', gap: spacing.xs, paddingVertical: spacing.lg, borderRadius: radius.lg },
+  answer: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms, marginTop: spacing.md },
+  answerIcon: { width: 60, height: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' },
+  change: { minHeight: TAP, minWidth: TAP, justifyContent: 'center', alignItems: 'center' },
+  link: { fontFamily: fonts.bodyBold, color: colors.primaryInk },
 
-  medRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md },
-  medName: { fontWeight: '700', color: colors.text },
-  medState: { fontWeight: '600', marginTop: 2 },
-  tookBtn: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 14,
-    marginLeft: spacing.sm,
-  },
-  tookText: { color: colors.onPrimary, fontWeight: '700' },
+  med: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  medTime: { width: 76, alignItems: 'center', gap: 2, backgroundColor: colors.surface, borderRadius: radius.md, paddingVertical: spacing.sm },
+  medClock: { fontFamily: fonts.bodyBold, color: colors.text },
 
-  msgBtn: {
+  msg: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.sm,
-    backgroundColor: colors.primary,
-    borderRadius: radius.lg,
-    paddingVertical: 20,
+    gap: spacing.ms,
+    backgroundColor: colors.sage,
+    borderRadius: radius.pill,
+    padding: spacing.sm,
+    paddingRight: spacing.lg,
+    minHeight: 68,
+    marginTop: spacing.sm,
   },
-  msgText: { color: colors.onPrimary, fontWeight: '700' },
+  msgText: { flex: 1, fontFamily: fonts.bodyBold, color: colors.onPrimary },
 
-  personRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
-  avatar: {
-    backgroundColor: colors.primarySoft,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.md,
-  },
-  avatarText: { color: colors.primary, fontWeight: '700' },
-  personName: { fontWeight: '600', color: colors.text },
+  people: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md, marginTop: spacing.lg },
+  person: { width: 80, alignItems: 'center', gap: 4 },
 
-  whyTitle: { flex: 1, fontWeight: '600', color: colors.text, marginLeft: spacing.sm, marginRight: spacing.sm },
-
-  signOut: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.sm,
-    marginTop: spacing.md,
-    paddingVertical: 14,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  signOutText: { color: colors.textMuted, fontWeight: '600' },
-
-  sosBar: {
-    padding: spacing.md,
-    backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
+  sosBar: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: spacing.md, backgroundColor: colors.background },
   sos: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.sm,
+    gap: spacing.ms,
     backgroundColor: colors.danger,
-    borderRadius: radius.lg,
-    paddingVertical: 20,
+    borderRadius: radius.pill,
+    minHeight: 72,
+    paddingHorizontal: spacing.md,
   },
-  sosText: { color: colors.onPrimary, fontWeight: '800', letterSpacing: 0.5 },
+  sosIcon: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  sosText: { fontFamily: fonts.display, color: colors.onPrimary },
+
+  sizes: { flexDirection: 'row', gap: spacing.sm },
+  size: { flex: 1, minHeight: 64, borderRadius: radius.lg, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  sizeOn: { backgroundColor: colors.text },
+  sizeText: { fontFamily: fonts.display, color: colors.text },
 });

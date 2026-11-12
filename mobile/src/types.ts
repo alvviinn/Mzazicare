@@ -76,6 +76,11 @@ export type AlertItem = {
   message: string;
   status: 'open' | 'confirmed' | 'dismissed';
   created_at: string;
+  severity: number; // 3 emergency, 2 high, 1 check
+  patient: string | null; // the elderly person it is about
+  shift_id: number | null;
+  position: { latitude: number; longitude: number; accuracy: number | null } | null; // where the phone was
+  confidence: number | null; // model confidence 0-1 (voice alerts)
 };
 
 export type Mood = 'good' | 'okay' | 'unwell';
@@ -239,7 +244,10 @@ export type TodayTask = {
 export type FirstAidOption = { label: string; topic: string };
 
 export type FirstAidReply = {
-  kind: 'answer' | 'clarify' | 'greeting' | 'out_of_scope' | 'general_medical';
+  // 'check': the safety question "Is someone in danger right now?" with Yes / No options
+  kind: 'answer' | 'clarify' | 'check' | 'greeting' | 'out_of_scope' | 'general_medical';
+  check_message?: string; // for 'check': the message to send back with the answer
+  danger_banner?: string; // advice shown at once under a red "anyone in danger right now? call 999" banner
   topic: string | null;
   title?: string;
   lang: 'en' | 'sw';

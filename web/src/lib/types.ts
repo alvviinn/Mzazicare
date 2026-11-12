@@ -65,6 +65,16 @@ export type ShiftDetail = ShiftSummary & {
   chores: { description: string; is_done: boolean; done_at: string | null }[];
   tones?: Dashboard['tones']; // family only
   tone_timeline?: TonePoint[]; // family only
+  map?: ShiftMap; // family only
+};
+
+export type GeoPoint = { latitude: number; longitude: number; accuracy: number | null };
+
+// The shift map: the caretaker's trail and the geofence around the elder's phone.
+export type ShiftMap = {
+  radius_m: number;
+  centre: GeoPoint | null;
+  trail: (GeoPoint & { at: string })[];
 };
 
 export type AlertItem = {
@@ -74,6 +84,11 @@ export type AlertItem = {
   message: string;
   status: 'open' | 'confirmed' | 'dismissed';
   created_at: string;
+  severity: number; // 3 emergency, 2 high, 1 check
+  patient: string | null; // the elderly person it is about
+  shift_id: number | null;
+  position: GeoPoint | null; // where the phone was when it was raised
+  confidence: number | null; // model confidence 0-1 (voice alerts)
 };
 
 export type Mood = 'good' | 'okay' | 'unwell';

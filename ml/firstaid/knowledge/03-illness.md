@@ -12,9 +12,9 @@ steps:
 - If they are awake and can swallow, sit them down.
 - Give fast sugar straight away: half a glass (150 ml) of fruit juice or a non-diet soda, or 3 to 4 teaspoons of sugar stirred into water, or glucose tablets.
 - Wait 10 to 15 minutes and check their sugar with their meter if they have one.
-- If they are not better, give fast sugar again. You can repeat up to 3 times.
+- If they are not better 10 to 15 minutes after the first sugar, give fast sugar again and call 999 or 112.
 - Once they feel better, give a starchy snack or their next meal, such as bread, biscuits or ugali.
-- If they do not improve after 3 rounds, or get worse, call 999 or 112.
+- If they get worse at any point, call 999 or 112 straight away.
 avoid:
 - Do not give anything by mouth if they are drowsy or cannot swallow safely.
 - Do not give chocolate or fatty food as the first treatment, it works too slowly.
@@ -28,9 +28,9 @@ steps:
 - Kama yuko macho na anaweza kumeza, mkalishe chini.
 - Mpe sukari ya haraka mara moja: nusu glasi (ml 150) ya juisi ya matunda au soda isiyo ya diet, au vijiko 3 hadi 4 vya sukari vilivyokorogwa kwenye maji, au vidonge vya glukosi.
 - Subiri dakika 10 hadi 15 na upime sukari kwa mashine yake kama anayo.
-- Kama hajapata nafuu, mpe sukari ya haraka tena. Unaweza kurudia hadi mara 3.
+- Kama hajapata nafuu dakika 10 hadi 15 baada ya sukari ya kwanza, mpe sukari ya haraka tena na upige 999 au 112.
 - Akijisikia vizuri, mpe chakula cha wanga au mlo wake unaofuata, kama mkate, biskuti au ugali.
-- Kama hapati nafuu baada ya mara 3, au anazidi kuwa mbaya, piga 999 au 112.
+- Akizidi kuwa mbaya wakati wowote, piga 999 au 112 mara moja.
 avoid:
 - Usimpe chochote kwa mdomo kama anasinzia au hawezi kumeza salama.
 - Usimpe chokoleti au vyakula vya mafuta kama tiba ya kwanza, vinafanya kazi polepole sana.

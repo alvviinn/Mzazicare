@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInputInstance } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInputInstance } from 'react-native';
 import { login } from '../api/client';
 import { saveSession, Session } from '../auth/session';
+import { AuthFrame } from '../components/AuthFrame';
 import { CodeStep } from '../components/CodeStep';
 import { GoogleButton } from '../components/GoogleButton';
-import { Button, Card, ErrorText, Field, Logo } from '../components/ui';
-import { colors, spacing } from '../theme';
+import { Button, ErrorText, Field } from '../components/ui';
+import { colors, fonts, spacing, TAP, text } from '../theme';
 import { AuthResult, CodeChallenge } from '../types';
 
 type Props = { onLoggedIn: (s: Session) => void; onRegister: () => void };
@@ -44,62 +45,51 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
 
   if (pending) {
     return (
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-          <Logo />
-          <CodeStep start={pending} onDone={finish} onCancel={() => setPending(null)} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <AuthFrame title="Check your email">
+        <CodeStep start={pending} onDone={finish} onCancel={() => setPending(null)} />
+      </AuthFrame>
     );
   }
 
   return (
-    <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Logo />
-        <Card>
-          <Field
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="you@example.com"
-            autoComplete="email"
-            keyboardType="email-address"
-            returnKeyType="next"
-            onSubmitEditing={() => passwordRef.current?.focus()}
-          />
-          <Field
-            ref={passwordRef}
-            label="Password"
-            secure
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Your password"
-            autoComplete="password"
-            returnKeyType="go"
-            onSubmitEditing={submit}
-          />
-          <ErrorText>{error}</ErrorText>
-          <Button title="Sign in" onPress={submit} loading={loading} />
-          <GoogleButton onDone={finish} onError={setError} />
-        </Card>
+    <AuthFrame title="Sign in">
+      <Field
+        label="Email"
+        icon="email-outline"
+        value={email}
+        onChangeText={setEmail}
+        placeholder="you@example.com"
+        autoComplete="email"
+        keyboardType="email-address"
+        returnKeyType="next"
+        onSubmitEditing={() => passwordRef.current?.focus()}
+      />
+      <Field
+        ref={passwordRef}
+        label="Password"
+        icon="lock-outline"
+        secure
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Your password"
+        autoComplete="password"
+        returnKeyType="go"
+        onSubmitEditing={submit}
+      />
+      <ErrorText>{error}</ErrorText>
+      <Button title="Sign in" onPress={submit} loading={loading} />
+      <GoogleButton onDone={finish} onError={setError} />
 
-        <Pressable onPress={onRegister} style={styles.switch}>
-          <Text style={styles.muted}>
-            Don't have an account? <Text style={styles.link}>Create one</Text>
-          </Text>
-        </Pressable>
-        <Text style={styles.footnote}>You will stay signed in on this device for 3 months.</Text>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      <Pressable onPress={onRegister} style={styles.switch} accessibilityRole="button" accessibilityLabel="Create an account">
+        <Text style={text.body}>
+          New here? <Text style={styles.link}>Create account</Text>
+        </Text>
+      </Pressable>
+    </AuthFrame>
   );
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: colors.background },
-  container: { flexGrow: 1, justifyContent: 'center', padding: spacing.lg },
-  switch: { alignItems: 'center', marginTop: spacing.lg },
-  muted: { color: colors.textMuted, fontSize: 15 },
-  link: { color: colors.primary, fontWeight: '600' },
-  footnote: { textAlign: 'center', color: colors.textMuted, fontSize: 13, marginTop: spacing.md },
+  switch: { alignItems: 'center', justifyContent: 'center', marginTop: spacing.md, minHeight: TAP },
+  link: { fontFamily: fonts.bodyBold, color: colors.primaryInk },
 });

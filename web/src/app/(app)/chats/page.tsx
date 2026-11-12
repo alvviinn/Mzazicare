@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { PageHead } from '@/components/ui';
+import { Loading, PageHead } from '@/components/ui';
 import { getMessages, sendMessage } from '@/lib/api';
 import { useToken } from '@/lib/auth';
 import { useDashboard } from '@/lib/dashboard';
@@ -14,7 +14,7 @@ export default function ChatsPage() {
   const { dash, reload } = useDashboard();
   const [peer, setPeer] = useState<ChatPerson | null>(null);
 
-  if (!dash) return <p className="muted">Loading…</p>;
+  if (!dash) return <Loading label="Loading chats…" />;
   const people = [...dash.caretakers, ...dash.elderly];
   if (!people.length) {
     return (
@@ -24,7 +24,7 @@ export default function ChatsPage() {
           <h3>No chats yet</h3>
           <p className="muted">
             You can chat with your caretaker and your elderly loved one once they&apos;ve registered and been linked to you.{' '}
-            <Link href="/people">Add people →</Link>
+            <Link href="/people">Add people</Link>
           </p>
         </div>
       </>
@@ -54,7 +54,7 @@ export default function ChatsPage() {
 
 function PersonButton({ p, on, onPick }: { p: ChatPerson; on: boolean; onPick: () => void }) {
   return (
-    <button className={`person${on ? ' on' : ''}`} onClick={onPick}>
+    <button className={`person${on ? ' on' : ''}`} onClick={onPick} aria-pressed={on}>
       <span className="avatar">{p.name.charAt(0).toUpperCase()}</span>
       <span style={{ flex: 1, minWidth: 0 }}>
         <b style={{ display: 'block' }}>{p.name}</b>
@@ -118,12 +118,12 @@ function Thread({ peer, onRead }: { peer: ChatPerson; onRead: () => Promise<void
 
   return (
     <div className="thread">
-      <div className="row" style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="row" style={{ padding: 'var(--space-3) var(--space-4)', borderBottom: '1px solid var(--color-border)' }}>
         <span className="avatar">{peer.name.charAt(0).toUpperCase()}</span>
         <b>{peer.name}</b>
       </div>
       <div className="messages">
-        {messages === null && <span className="muted">Loading…</span>}
+        {messages === null && <Loading label="Loading messages…" />}
         {messages?.length === 0 && <span className="muted">No messages yet. Say hello.</span>}
         {messages?.map((m) => (
           <div key={m.id} className={`msg${m.mine ? ' mine' : ''}`}>
@@ -135,7 +135,7 @@ function Thread({ peer, onRead }: { peer: ChatPerson; onRead: () => Promise<void
       </div>
       {error && <p className="error" style={{ padding: '0 16px' }}>{error}</p>}
       <form className="composer" onSubmit={send}>
-        <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Write a message" maxLength={1000} />
+        <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Write a message" maxLength={1000} aria-label="Message" />
         <button type="submit" disabled={sending || !text.trim()}>
           Send
         </button>

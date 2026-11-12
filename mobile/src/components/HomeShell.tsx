@@ -1,89 +1,135 @@
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Profile, Role } from '../types';
-import { colors, radius, spacing } from '../theme';
-import { Card } from './ui';
+import { useState } from 'react';
+import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { t } from '../strings';
+import { colors, spacing, TAP, text, TOP_INSET } from '../theme';
+import { Profile } from '../types';
+import { Icon } from './Icon';
+import { Avatar, Button, Card, OfflineBanner, Row, Sheet } from './ui';
 
-const ROLE_LABEL: Record<Role, string> = {
-  user: 'Family account',
-  caretaker: 'Caretaker',
-  elderly: 'Elderly care recipient',
-};
-
-// Common frame for every role's home screen: greeting, role badge, content, sign out.
+// Common frame for the caretaker and family homes: greeting, avatar (opens the account sheet), content, footer.
 export function HomeShell({
   profile,
   onSignOut,
   children,
   footer,
+  overlay,
   refreshing,
   onRefresh,
+  title,
 }: {
   profile: Profile;
   onSignOut: () => void;
   children: React.ReactNode;
-  footer?: React.ReactNode; // fixed bar under the scrolling content (e.g. tabs)
+  footer?: React.ReactNode; // fixed under the scrolling content (main action, tabs)
+  overlay?: React.ReactNode; // a toast, drawn above the footer
   refreshing?: boolean;
   onRefresh?: () => void;
+  title?: string; // a tab's own title instead of the greeting
 }) {
+  const [account, setAccount] = useState(false);
+  const first = profile.name.split(' ')[0];
+  const day = new Date().toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'short' });
+
   return (
     <View style={styles.flex}>
-      <ScrollView
-        style={styles.flex}
-        contentContainerStyle={styles.container}
-        refreshControl={
-          onRefresh ? (
-            <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
-          ) : undefined
-        }
-      >
-        <View style={styles.header}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.hello}>Hello, {profile.name.split(' ')[0]}</Text>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{ROLE_LABEL[profile.role]}</Text>
+      <OfflineBanner />
+      <View style={styles.flex}>
+        <ScrollView
+          style={styles.flex}
+          contentContainerStyle={styles.container}
+          refreshControl={
+            onRefresh ? (
+              <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} />
+            ) : undefined
+          }
+        >
+          <View style={styles.header}>
+            <View style={{ flex: 1 }}>
+              <Text style={text.small}>{title ? t.roles[profile.role] : day}</Text>
+              <Text style={text.h1} accessibilityRole="header" numberOfLines={1}>
+                {title ?? t.common.hello(first)}
+              </Text>
             </View>
+            <Pressable
+              onPress={() => setAccount(true)}
+              style={styles.me}
+              accessibilityRole="button"
+              accessibilityLabel={`${t.common.account}: ${profile.name}`}
+            >
+              <Avatar name={profile.name} size={46} />
+            </Pressable>
           </View>
-          <Pressable onPress={onSignOut}>
-            <Text style={styles.signOut}>Sign out</Text>
-          </Pressable>
-        </View>
-        {children}
-      </ScrollView>
+          {children}
+        </ScrollView>
+        {overlay}
+      </View>
       {footer}
+
+      <AccountSheet profile={profile} visible={account} onClose={() => setAccount(false)} onSignOut={onSignOut} />
     </View>
   );
 }
 
-export function SectionTitle({ children }: { children: string }) {
-  return <Text style={styles.section}>{children}</Text>;
+function AccountSheet({
+  profile,
+  visible,
+  onClose,
+  onSignOut,
+}: {
+  profile: Profile;
+  visible: boolean;
+  onClose: () => void;
+  onSignOut: () => void;
+}) {
+  function confirmSignOut() {
+    Alert.alert(t.common.signOutConfirm, t.common.signOutBody, [
+      { text: t.common.cancel, style: 'cancel' },
+      { text: t.common.signOut, style: 'destructive', onPress: onSignOut },
+    ]);
+  }
+  return (
+    <Sheet visible={visible} onClose={onClose}>
+      <View style={styles.meHead}>
+        <Avatar name={profile.name} size={72} />
+        <Text style={[text.h1, { marginTop: spacing.sm }]}>{profile.name}</Text>
+        <Text style={text.small}>
+          {t.roles[profile.role]} · {profile.email}
+        </Text>
+      </View>
+      <Text style={[text.h2, { marginTop: spacing.lg, marginBottom: spacing.xs }]}>{t.common.circle}</Text>
+      <FamilyCard profile={profile} />
+      <View style={{ marginTop: spacing.lg }}>
+        <Button title={t.common.signOut} icon="logout" variant="quiet" onPress={confirmSignOut} />
+      </View>
+    </Sheet>
+  );
 }
 
-// Read-only list of the people linked through the same family account.
-export function FamilyCard({ profile }: { profile: Profile }) {
+// The people linked through the same family account, as avatar rows.
+export function FamilyCard({ profile, tint = 'surface' }: { profile: Profile; tint?: 'surface' | 'sunken' }) {
   const rows: { label: string; name: string; sub: string; pending?: boolean }[] = [];
-  if (profile.sponsor) {
-    rows.push({ label: 'Family account', name: profile.sponsor.name, sub: profile.sponsor.email });
-  }
+  if (profile.sponsor) rows.push({ label: t.roles.user, name: profile.sponsor.name, sub: profile.sponsor.email });
   profile.caretakers.forEach((m) =>
-    rows.push({ label: 'Caretaker', name: m.name ?? m.email, sub: m.email, pending: m.status === 'pending' }),
+    rows.push({ label: t.roles.caretaker, name: m.name ?? m.email, sub: m.email, pending: m.status === 'pending' }),
   );
   profile.elderly.forEach((m) =>
-    rows.push({ label: 'Elderly', name: m.name ?? m.email, sub: m.email, pending: m.status === 'pending' }),
+    rows.push({ label: t.roles.elderly, name: m.name ?? m.email, sub: m.email, pending: m.status === 'pending' }),
   );
 
   return (
-    <Card>
+    <Card tint={tint} padded={false} style={{ paddingHorizontal: spacing.md }}>
       {rows.length === 0 ? (
-        <Text style={styles.empty}>Nobody is linked yet.</Text>
+        <Row first leading={<Icon name="account-multiple-plus-outline" size={24} color={colors.textMuted} />} title={t.common.nobodyLinked} />
       ) : (
         rows.map((r, i) => (
-          <View key={`${r.sub}-${i}`} style={[styles.row, i > 0 && styles.rowBorder]}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.rowName}>{r.name}</Text>
-              <Text style={styles.rowSub}>{r.sub}</Text>
-            </View>
-            <Text style={styles.rowTag}>{r.pending ? `${r.label} · invited` : r.label}</Text>
-          </View>
+          <Row
+            key={`${r.sub}-${i}`}
+            first={i === 0}
+            leading={<Avatar name={r.name} size={40} />}
+            title={r.name}
+            subtitle={r.pending ? `${r.label} · ${t.common.invited}` : r.label}
+            accessibilityLabel={`${r.name}, ${r.label}${r.pending ? ', invited' : ''}`}
+          />
         ))
       )}
     </Card>
@@ -92,24 +138,8 @@ export function FamilyCard({ profile }: { profile: Profile }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
-  container: { padding: spacing.lg, paddingTop: spacing.xl + spacing.lg },
-  header: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: spacing.lg },
-  hello: { fontSize: 26, fontWeight: '700', color: colors.text },
-  badge: {
-    alignSelf: 'flex-start',
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.md,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    marginTop: spacing.sm,
-  },
-  badgeText: { color: colors.primary, fontWeight: '600', fontSize: 13 },
-  signOut: { color: colors.primary, fontWeight: '600', marginTop: spacing.xs },
-  section: { fontSize: 17, fontWeight: '700', color: colors.text, marginTop: spacing.lg, marginBottom: spacing.sm },
-  empty: { color: colors.textMuted },
-  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.sm },
-  rowBorder: { borderTopWidth: 1, borderTopColor: colors.border },
-  rowName: { fontSize: 16, fontWeight: '600', color: colors.text },
-  rowSub: { fontSize: 13, color: colors.textMuted, marginTop: 2 },
-  rowTag: { fontSize: 12, color: colors.textMuted, marginLeft: spacing.sm },
+  container: { paddingHorizontal: spacing.md, paddingTop: TOP_INSET, paddingBottom: spacing.xl },
+  header: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md, gap: spacing.ms },
+  me: { minWidth: TAP, minHeight: TAP, alignItems: 'center', justifyContent: 'center' },
+  meHead: { alignItems: 'center', paddingTop: spacing.sm },
 });

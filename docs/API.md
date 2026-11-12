@@ -22,7 +22,7 @@ Roles: **family** (`user`), **caretaker**, **elderly**.
 
 | Method and path | Purpose |
 |---|---|
-| `GET /dashboard/` | Everything on the Overview: whether a caretaker and an elderly person are linked (`matched`), today's shift status (`none` / `on_shift` / `paused` (on a break) / `away` / `waiting` / `completed`), the caretaker's to-do list for today, average active time per day, days worked and chore completion over 7 days, tone shares (with dominant tone and quality rating), recent day-shifts (each opens with `GET /shifts/<id>/`), how each elderly person feels today, medicine adherence, alerts (open first), and unread chat counts. |
+| `GET /dashboard/` | Everything on the Overview: whether a caretaker and an elderly person are linked (`matched`), today's shift status (`none` / `on_shift` / `paused` (on a break) / `away` / `waiting` / `completed`), the caretaker's to-do list for today, average active time per day, days worked and chore completion over 7 days, tone shares (with dominant tone and quality rating), recent day-shifts (each opens with `GET /shifts/<id>/`), how each elderly person feels today, medicine adherence, alerts (open first, most severe first; each with `severity` 3/2/1, `patient`, `shift_id`, and the evidence: `position` {latitude, longitude, accuracy in m} when a recent fix exists, `confidence` 0-1 for voice alerts), and unread chat counts. |
 | `POST /alerts/<id>/` | `{status: "confirmed" \| "dismissed"}`. The human decision on an alert. |
 | `GET /chat/?with=<email>` | The conversation with one person in the circle (marks their messages read). |
 | `POST /chat/` | `{to, body}` (max 2,000 characters). Allowed only between a family account and the people it linked (family <-> caretaker, family <-> elderly; **not** caretaker <-> elderly). Also used by caretakers and elderly people to message the family. |
@@ -38,7 +38,7 @@ time counts as hours.
 | Method and path | Who | Purpose |
 |---|---|---|
 | `GET /shifts/?days=30` | caretaker (own days), family (its caretakers' days) | One card per day, newest first (up to 90 days): date, first arrival, last time out, end, active minutes, number of breaks and break minutes, status, chores done. Elderly accounts get 403. |
-| `GET /shifts/<id>/` | caretaker (own), family (own circle) | The detail of one day: `timeline` (arrived, stepped out, came back after N minutes, left), `segments` (active periods), `breaks_list`, `chores`, and for the **family only** the day's `tones` and `tone_timeline` (the tone chart for that visit). Anyone else gets 404. |
+| `GET /shifts/<id>/` | caretaker (own), family (own circle) | The detail of one day: `timeline` (arrived, stepped out, came back after N minutes, left), `segments` (active periods), `breaks_list`, `chores`, and for the **family only** the day's `tones`, `tone_timeline` (the tone chart for that visit) and `map` (`radius_m`, `centre` = the elder's phone, `trail` = the caretaker's positions during the shift). Anyone else gets 404. |
 | `GET /tone/live/` | family | The live tone view for today, polled every ~5 s: `state` (`live` = speech heard in the last 3 minutes, `listening` = caretaker in range, `idle`), `last_heard`, `current` (last 5 minutes), `series` (15-minute buckets with tone shares, `tension` = stressed + angry, `positive`, `dominant`), `today` (tone mix, quality, speech minutes, calmest and most tense time, comparison with the usual level, raised-voice clips and vocal alerts) and `earlier_days` (daily tension for the previous week). Caretaker and elderly get 403. |
 
 ## Caretaker

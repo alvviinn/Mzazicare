@@ -97,9 +97,15 @@ SIMPLE_JWT = {
 # Client IDs from Google Cloud (OAuth): web, Android and iOS, comma-separated. Empty = Google sign-in is off.
 GOOGLE_CLIENT_IDS = [c.strip() for c in os.environ.get('GOOGLE_CLIENT_IDS', '').split(',') if c.strip()]
 
-# Email for the 6-digit sign-in codes. Without EMAIL_HOST the codes are printed in the backend console instead.
+# Email for the 6-digit sign-in codes, in order of preference:
+# 1. Azure Communication Services Email (ACS_EMAIL_CONNECTION_STRING): Azure's own sending address, no mailbox needed.
+# 2. Any SMTP server (EMAIL_HOST ...).
+# 3. Neither: the codes are printed in the backend console (development).
+ACS_EMAIL_CONNECTION_STRING = os.environ.get('ACS_EMAIL_CONNECTION_STRING', '')
 EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
-if EMAIL_HOST:
+if ACS_EMAIL_CONNECTION_STRING:
+    EMAIL_BACKEND = 'accounts.azure_email.AzureEmailBackend'
+elif EMAIL_HOST:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
     EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
@@ -111,7 +117,7 @@ else:
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_FROM', 'MzaziCare <no-reply@mzazicare.local>')
 # Development aid for scripts such as ml/voice/test_endpoint.py: also return the code in the API response.
 # Only ever honoured while DEBUG is on and no real email server is configured.
-TWO_FACTOR_ECHO_CODE = DEBUG and not EMAIL_HOST and os.environ.get('MZAZI_2FA_ECHO_CODE', '0') == '1'
+TWO_FACTOR_ECHO_CODE = DEBUG and not (EMAIL_HOST or ACS_EMAIL_CONNECTION_STRING) and os.environ.get('MZAZI_2FA_ECHO_CODE', '0') == '1'
 
 # ---- Acoustic tone AI ----
 # The model code lives in <repo>/ml/voice. Audio sent for analysis is held in memory only: never saved.
@@ -130,7 +136,7 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Azure ends HTTPS in front of the app
     CSRF_TRUSTED_ORIGINS = [f'https://{h}' for h in ALLOWED_HOSTS if h and h != '*']
     SESSION_COOKIE_SECURE = CSRF_COOKIE_SECURE = True
-LOGGING = {  # errors (and, without EMAIL_HOST, the sign-in codes) appear in the App Service log stream
+LOGGING = {  # errors (and, with no email service set, the sign-in codes) appear in the App Service log stream
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {'console': {'class': 'logging.StreamHandler'}},

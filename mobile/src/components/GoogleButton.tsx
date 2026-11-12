@@ -3,7 +3,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { googleSignIn } from '../api/client';
-import { colors, radius, spacing } from '../theme';
+import { colors, fonts, radius, spacing, type } from '../theme';
 import { AuthResult } from '../types';
 import { Icon } from './Icon';
 
@@ -70,6 +70,8 @@ function GoogleButtonInner({
           prompt().catch(() => setBusy(false));
         }}
         accessibilityRole="button"
+        accessibilityLabel="Continue with Google"
+        accessibilityState={{ disabled: !request || busy, busy }}
       >
         {busy ? <ActivityIndicator color={colors.text} /> : <Icon name="google" size={20} color={colors.text} />}
         <Text style={styles.text}>Continue with Google</Text>
@@ -81,17 +83,17 @@ function GoogleButtonInner({
 const styles = StyleSheet.create({
   or: { flexDirection: 'row', alignItems: 'center', marginVertical: spacing.md },
   line: { flex: 1, height: 1, backgroundColor: colors.border },
-  orText: { marginHorizontal: spacing.sm, color: colors.textMuted },
+  orText: { marginHorizontal: spacing.sm, color: colors.textMuted, fontFamily: fonts.body, fontSize: type.small },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.sm,
+    borderRadius: radius.pill,
+    minHeight: 56,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingVertical: 12,
-    backgroundColor: colors.surface,
   },
-  text: { fontSize: 16, fontWeight: '600', color: colors.text },
+  text: { fontFamily: fonts.bodyBold, fontSize: type.body, color: colors.text },
 });

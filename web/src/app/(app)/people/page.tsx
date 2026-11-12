@@ -1,8 +1,9 @@
 'use client';
 
+import { CheckCircle2, Circle } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { ProofPhoto } from '@/components/ProofPhoto';
-import { ErrorNote, PageHead, Pill } from '@/components/ui';
+import { ErrorNote, Loading, PageHead, Pill } from '@/components/ui';
 import { addMedicine, addMember, assignTask, deleteMedicine, deleteTask } from '@/lib/api';
 import { useAuth, useToken } from '@/lib/auth';
 import { useDashboard } from '@/lib/dashboard';
@@ -131,7 +132,7 @@ function Medicines({ dash, onChanged }: { dash: Dashboard; onChanged: () => Prom
                 {m.elderly} · every day at {m.time}
               </div>
             </div>
-            <button className="danger" onClick={() => remove(m.id, `${m.name} (${m.elderly})`)}>
+            <button className="danger" onClick={() => remove(m.id, `${m.name} (${m.elderly})`)} aria-label={`Delete reminder ${m.name}`}>
               Remove
             </button>
           </div>
@@ -218,7 +219,11 @@ function Tasks({ dash, onChanged }: { dash: Dashboard; onChanged: () => Promise<
         {mine.length === 0 && <span className="muted">No tasks assigned yet.</span>}
         {mine.map((t) => (
           <div className="row" key={t.id}>
-            <span style={{ color: t.is_done ? 'var(--success)' : 'var(--muted)' }}>{t.is_done ? '✓' : '○'}</span>
+            {t.is_done ? (
+              <CheckCircle2 className="icon" style={{ color: 'var(--color-success)' }} aria-label="Done" />
+            ) : (
+              <Circle className="icon" style={{ color: 'var(--color-border-strong)' }} aria-label="Not done" />
+            )}
             <div className="grow">
               <b>{t.description}</b>
               <div className="muted small">
@@ -227,7 +232,7 @@ function Tasks({ dash, onChanged }: { dash: Dashboard; onChanged: () => Promise<
               </div>
             </div>
             {t.completion_id !== null && <ProofPhoto completionId={t.completion_id} caption={`${t.description} · ${t.caretaker}`} size={40} />}
-            <button className="danger" onClick={() => remove(t.id, t.description)}>
+            <button className="danger" onClick={() => remove(t.id, t.description)} aria-label={`Delete task ${t.description}`}>
               Remove
             </button>
           </div>
@@ -282,10 +287,10 @@ export default function PeoplePage() {
       </div>
 
       <h2>Medicine reminders</h2>
-      {dash ? <Medicines dash={dash} onChanged={reload} /> : <p className="muted">Loading…</p>}
+      {dash ? <Medicines dash={dash} onChanged={reload} /> : <Loading label="Loading…" />}
 
       <h2>Tasks for the caretaker</h2>
-      {dash ? <Tasks dash={dash} onChanged={reload} /> : <p className="muted">Loading…</p>}
+      {dash ? <Tasks dash={dash} onChanged={reload} /> : <Loading label="Loading…" />}
 
       <h2>Add people</h2>
       <div className="grid two">

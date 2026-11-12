@@ -128,7 +128,7 @@ keywords: not breathing, stopped breathing, no pulse, heart stopped, cardiac arr
 
 ### en
 intro: If someone is unresponsive and not breathing normally, their heart has probably stopped. CPR keeps blood flowing to the brain until help arrives.
-urgent: Call 999 or 112 now and put the phone on speaker. If there is a defibrillator (AED) nearby, send someone to get it.
+urgent: Call 999 or 112 now and put the phone on speaker. If there is a defibrillator (AED) nearby and someone else can fetch it, send them. If you are alone, do not leave the person to look for one: AEDs are rare in Kenya, just keep doing CPR.
 steps:
 - Kneel beside them on a firm surface, on the floor rather than a bed.
 - Put the heel of one hand in the centre of the chest, on the lower half of the breastbone, and your other hand on top.
@@ -136,15 +136,16 @@ steps:
 - Let the chest come all the way back up after each push.
 - If you are trained and willing, give 2 rescue breaths after every 30 pushes. If not, just keep pushing without stopping.
 - When the AED arrives, switch it on and follow its spoken instructions. Nobody touches the person while it checks or shocks.
-- Keep going until help takes over, the person starts breathing normally, or you are too exhausted to continue. If someone else can help, swap every 2 minutes.
+- Keep going until help takes over, the person starts breathing normally, or you are too exhausted to continue. If someone else can help, swap every 1 to 2 minutes.
 avoid:
 - Do not stop pushing to check for a pulse.
 - Do not be afraid of hurting them. Ribs can crack in older people, keep going anyway: without CPR they will not survive.
+- These steps are for adults. For a child or baby, give 5 rescue breaths first, then push about one third of the depth of the chest (two fingers for a baby), 30 pushes to 2 breaths.
 after: If they start breathing normally, put them in the recovery position and keep watching their breathing.
 
 ### sw
 intro: Mtu asiyejibu na asiyepumua kawaida, huenda moyo wake umesimama. CPR husaidia damu kuendelea kufika kwenye ubongo mpaka msaada ufike.
-urgent: Piga 999 au 112 sasa hivi na uweke simu kwenye spika. Kama kuna mashine ya kushtua moyo (AED) karibu, mtume mtu akaileta.
+urgent: Piga 999 au 112 sasa hivi na uweke simu kwenye spika. Kama kuna mashine ya kushtua moyo (AED) karibu na kuna mtu mwingine wa kuileta, mtume. Kama uko peke yako, usimwache mgonjwa kwenda kuitafuta: AED ni chache Kenya, endelea tu na CPR.
 steps:
 - Piga magoti kando yake akiwa juu ya sehemu ngumu, sakafuni badala ya kitandani.
 - Weka kisigino cha kiganja kimoja katikati ya kifua, nusu ya chini ya mfupa wa kifua, na kiganja kingine juu yake.
@@ -152,10 +153,11 @@ steps:
 - Acha kifua kirudi juu kabisa baada ya kila kubonyeza.
 - Kama umefunzwa na uko tayari, mpe pumzi 2 baada ya kila mabonyezo 30. Kama sivyo, endelea tu kubonyeza bila kusimama.
 - AED ikifika, iwashe na ufuate maelekezo yake ya sauti. Mtu yeyote asimguse mgonjwa wakati inapima au inashtua.
-- Endelea mpaka wahudumu wachukue nafasi, mtu aanze kupumua kawaida, au umechoka kabisa. Kama kuna mtu mwingine, badilishaneni kila dakika 2.
+- Endelea mpaka wahudumu wachukue nafasi, mtu aanze kupumua kawaida, au umechoka kabisa. Kama kuna mtu mwingine, badilishaneni kila dakika 1 hadi 2.
 avoid:
 - Usisimame kubonyeza ili kupima mapigo ya moyo.
 - Usiogope kumuumiza. Mbavu zinaweza kuvunjika kwa wazee, endelea tu: bila CPR hataishi.
+- Hatua hizi ni za watu wazima. Kwa mtoto au mtoto mchanga, mpe pumzi 5 kwanza, kisha bonyeza karibu theluthi moja ya kina cha kifua (vidole viwili kwa mtoto mchanga), mabonyezo 30 kwa pumzi 2.
 after: Akianza kupumua kawaida, mlaze katika mkao wa kupona na uendelee kuangalia anavyopumua.
 
 ### examples
@@ -186,7 +188,7 @@ keywords: choking, choke, food stuck in throat, can't breathe after eating, some
 
 ### en
 intro: Choking happens when something blocks the airway. If the person cannot cough, speak or breathe, act straight away.
-urgent: Ask someone to call 999 or 112 while you start.
+urgent: Ask someone to call 999 or 112 while you start. If you are alone and it has not cleared after 5 back blows and 5 abdominal thrusts, call 999 or 112 yourself straight away on speaker, then keep going.
 steps:
 - Ask "Are you choking?" If they can cough, encourage them to keep coughing.
 - If they cannot cough, speak or breathe, stand to the side and slightly behind them and lean them forward.
@@ -197,11 +199,12 @@ steps:
 avoid:
 - Do not put your fingers in their mouth to feel for the object, you can push it deeper. Only remove something you can clearly see.
 - Do not give water while they are choking.
+- Do not give abdominal thrusts to a baby under 1. For a baby, give up to 5 back blows with the baby face down along your forearm, then up to 5 chest thrusts with two fingers on the breastbone, and call 999 or 112.
 after: Anyone who has had abdominal thrusts must see a doctor the same day, as they can cause internal injury.
 
 ### sw
 intro: Kukabwa hutokea kitu kinapoziba njia ya hewa. Kama mtu hawezi kukohoa, kuongea wala kupumua, chukua hatua mara moja.
-urgent: Mwombe mtu apige 999 au 112 wakati wewe unaanza.
+urgent: Mwombe mtu apige 999 au 112 wakati wewe unaanza. Kama uko peke yako na kitu hakijatoka baada ya makofi 5 na mibano ya tumbo 5, piga 999 au 112 wewe mwenyewe mara moja kwa spika, kisha uendelee.
 steps:
 - Muulize "Umekabwa?" Kama anaweza kukohoa, mhimize aendelee kukohoa.
 - Kama hawezi kukohoa, kuongea wala kupumua, simama kando yake na nyuma kidogo, kisha umwinamishe mbele.
@@ -212,6 +215,7 @@ steps:
 avoid:
 - Usiingize vidole mdomoni kutafuta kitu, unaweza kukisukuma ndani zaidi. Toa tu kitu unachokiona waziwazi.
 - Usimpe maji wakati amekabwa.
+- Usimpe mtoto mchanga (chini ya mwaka 1) mibano ya tumbo. Kwa mtoto mchanga, mpe makofi hadi 5 mgongoni akiwa amelala kifudifudi juu ya mkono wako, kisha mibano hadi 5 ya kifua kwa vidole viwili juu ya mfupa wa kifua, na upige 999 au 112.
 after: Mtu yeyote aliyefanyiwa mibano ya tumbo lazima amwone daktari siku hiyo hiyo, kwani inaweza kusababisha jeraha la ndani.
 
 ### followup
@@ -393,14 +397,13 @@ urgent: Call 999 or 112 now, or ask someone else to call.
 steps:
 - Put on gloves or use a plastic bag over your hand if you can, but do not delay.
 - Press firmly and directly on the wound with a clean cloth, pad or your hand.
-- Keep pressing hard without letting go for at least 10 minutes. Do not lift it to look.
-- If blood soaks through, put more cloth on top and keep pressing.
+- Keep pressing hard without letting go until help arrives. Do not lift it to look.
+- If blood soaks through, remove the pad and press again firmly with a fresh pad straight away.
 - Once bleeding slows, tie a bandage or cloth firmly over the pad, not so tight that fingers or toes go cold or blue.
 - If it is an arm or leg, the bleeding is life-threatening and pressure is not stopping it, a tourniquet can be used by someone trained: 5 to 7 cm above the wound, tightened until bleeding stops, with the time written down.
 - Help them lie down. If they look pale, cold or sweaty, raise their legs and keep them warm.
 avoid:
 - Do not remove something stuck in the wound. Press around it instead.
-- Do not remove soaked pads, add more on top.
 after: Tell the paramedics if the person takes blood thinners, such as warfarin or aspirin, as they will bleed more.
 
 ### sw
@@ -409,14 +412,13 @@ urgent: Piga 999 au 112 sasa hivi, au mwombe mtu mwingine apige.
 steps:
 - Vaa glavu au funika mkono na mfuko wa plastiki kama unaweza, lakini usichelewe.
 - Bonyeza kwa nguvu moja kwa moja juu ya jeraha kwa kitambaa safi, pedi au mkono wako.
-- Endelea kubonyeza kwa nguvu bila kuachia kwa angalau dakika 10. Usiinue kuangalia.
-- Damu ikilowa, weka kitambaa kingine juu na uendelee kubonyeza.
+- Endelea kubonyeza kwa nguvu bila kuachia mpaka msaada ufike. Usiinue kuangalia.
+- Damu ikilowesha pedi, iondoe na ubonyeze tena kwa nguvu mara moja kwa pedi mpya.
 - Damu ikipungua, funga bendeji au kitambaa kwa nguvu juu ya pedi, lakini si kwa kubana sana hadi vidole viwe baridi au bluu.
 - Kama ni mkono au mguu, damu ni hatari kwa maisha na kubonyeza hakuisimamishi, mtu aliyefunzwa anaweza kufunga tourniquet: sentimita 5 hadi 7 juu ya jeraha, kaza mpaka damu isimame, na uandike saa.
 - Msaidie alale chini. Akionekana mweupe, baridi au anatokwa jasho, inua miguu yake na umpe joto.
 avoid:
 - Usitoe kitu kilichokwama ndani ya jeraha. Bonyeza kuzunguka kitu hicho.
-- Usiondoe vitambaa vilivyolowa damu, ongeza vingine juu.
 after: Waambie wahudumu wa afya kama mtu anatumia dawa za kupunguza kuganda kwa damu, kama warfarin au aspirini, kwani atatokwa na damu zaidi.
 
 ### followup
@@ -454,7 +456,7 @@ steps:
 - If they have an adrenaline auto-injector (such as an EpiPen), help them use it straight away into the outer thigh. It can go through clothing.
 - Hold it in place for as long as the device instructions say, then note the time.
 - If breathing is difficult, let them sit up. If they feel faint, lie them down with legs raised.
-- If there is no improvement after 5 minutes and they have a second injector, give the second dose.
+- If there is no improvement after 5 minutes, or the symptoms come back, and they have a second injector, give the second dose.
 - Stay with them. If they become unresponsive and stop breathing normally, start CPR.
 avoid:
 - Do not wait to see if it gets better.
@@ -468,7 +470,7 @@ steps:
 - Kama ana sindano ya adrenaline (kama EpiPen), msaidie aitumie mara moja kwenye upande wa nje wa paja. Inaweza kupita kwenye nguo.
 - Ishikilie kwa muda ambao maelekezo ya kifaa yanasema, kisha andika saa.
 - Kama anapumua kwa shida, mwache akae. Akihisi kuzimia, mlaze na uinue miguu yake.
-- Kama hakuna nafuu baada ya dakika 5 na ana sindano ya pili, mpe dozi ya pili.
+- Kama hakuna nafuu baada ya dakika 5, au dalili zinarudi, na ana sindano ya pili, mpe dozi ya pili.
 - Kaa naye. Akiacha kujitambua na kuacha kupumua kawaida, anza CPR.
 avoid:
 - Usisubiri kuona kama itapona.
@@ -498,7 +500,7 @@ keywords: seizure, fit, fitting, convulsions, convulsing, shaking uncontrollably
 
 ### en
 intro: During a seizure a person may fall, go stiff and jerk. Most seizures stop on their own within a few minutes. Your job is to keep them safe.
-urgent: Call 999 or 112 if it lasts more than 5 minutes, it is their first seizure, another one follows, they are injured, they have trouble breathing afterwards, it happened in water, or they do not wake up.
+urgent: Call 999 or 112 if it lasts more than 5 minutes, it is their first seizure or the cause is unknown, another one follows, they are injured, they have trouble breathing afterwards, it happened in water, or they are not awake 10 minutes after it stops.
 steps:
 - Stay calm and note the time the seizure started.
 - Move hard or sharp objects away and put something soft under their head.
@@ -513,7 +515,7 @@ after: Write down how long it lasted and what happened, and tell their doctor an
 
 ### sw
 intro: Wakati wa kifafa mtu anaweza kuanguka, kukakamaa na kurusha viungo. Vifafa vingi huisha vyenyewe ndani ya dakika chache. Kazi yako ni kumweka salama.
-urgent: Piga 999 au 112 kama kinachukua zaidi ya dakika 5, ni mara yake ya kwanza, kingine kinafuata, ameumia, anapumua kwa shida baadaye, kilitokea majini, au hazinduki.
+urgent: Piga 999 au 112 kama kinachukua zaidi ya dakika 5, ni mara yake ya kwanza au chanzo hakijulikani, kingine kinafuata, ameumia, anapumua kwa shida baadaye, kilitokea majini, au hajazinduka dakika 10 baada ya kuisha.
 steps:
 - Tulia na uandike saa kifafa kilipoanza.
 - Ondoa vitu vigumu au vyenye ncha karibu naye na uweke kitu laini chini ya kichwa chake.
@@ -638,7 +640,7 @@ urgent: Call 999 or 112 now.
 steps:
 - Switch off the power at the main switch or pull out the plug. Do not touch the person until the power is off.
 - If you cannot switch it off, stand on something dry like a wooden board or folded newspaper and push them away from the source with a dry wooden broom or chair.
-- For high-voltage power lines, stay at least 18 metres away and wait for the power company or emergency services.
+- For high-voltage power lines, stay at least 18 metres away and wait for Kenya Power or emergency services.
 - Once safe, check if they are breathing normally. If not, start CPR.
 - Cool any burns under cool running water for 20 minutes and cover them loosely with cling film or a clean cloth.
 avoid:
@@ -652,7 +654,7 @@ urgent: Piga 999 au 112 sasa hivi.
 steps:
 - Zima umeme kwenye swichi kuu au chomoa plagi. Usimguse mtu mpaka umeme uzimwe.
 - Kama huwezi kuzima, simama juu ya kitu kikavu kama ubao au gazeti lililokunjwa na umsukume mbali na chanzo kwa ufagio au kiti kikavu cha mbao.
-- Kwa nyaya za umeme mkubwa, kaa angalau mita 18 mbali na usubiri kampuni ya umeme au huduma za dharura.
+- Kwa nyaya za umeme mkubwa, kaa angalau mita 18 mbali na usubiri Kenya Power au huduma za dharura.
 - Ikiwa salama, angalia kama anapumua kawaida. Kama hapumui, anza CPR.
 - Poza majeraha ya moto chini ya maji baridi yanayotiririka kwa dakika 20 na uyafunike kwa ulegevu kwa karatasi ya plastiki au kitambaa safi.
 avoid:

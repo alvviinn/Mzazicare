@@ -1,10 +1,17 @@
+import {
+  AtkinsonHyperlegibleNext_400Regular,
+  AtkinsonHyperlegibleNext_500Medium,
+  AtkinsonHyperlegibleNext_700Bold,
+} from '@expo-google-fonts/atkinson-hyperlegible-next';
+import { BricolageGrotesque_600SemiBold, BricolageGrotesque_700Bold } from '@expo-google-fonts/bricolage-grotesque';
+import { useFonts } from 'expo-font';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { getProfile, SESSION_EXPIRED } from './src/api/client';
 import { clearSession, loadSession, Session } from './src/auth/session';
-import { Button } from './src/components/ui';
+import { Button, Empty } from './src/components/ui';
 import CaretakerHome from './src/screens/CaretakerHome';
 import ElderlyHome from './src/screens/ElderlyHome';
 import LoginScreen from './src/screens/LoginScreen';
@@ -22,6 +29,14 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [screen, setScreen] = useState<'login' | 'register'>('login');
   const [loadError, setLoadError] = useState('');
+  // The app's two typefaces. If they fail to load the system font is used, so the app still opens.
+  const [fontsLoaded, fontError] = useFonts({
+    BricolageGrotesque_600SemiBold,
+    BricolageGrotesque_700Bold,
+    AtkinsonHyperlegibleNext_400Regular,
+    AtkinsonHyperlegibleNext_500Medium,
+    AtkinsonHyperlegibleNext_700Bold,
+  });
 
   const signOut = useCallback(async () => {
     await clearSession();
@@ -38,7 +53,7 @@ export default function App() {
         setProfile(await getProfile(s.token));
       } catch (e) {
         if (e instanceof Error && e.message === SESSION_EXPIRED) await signOut();
-        else setLoadError('Could not load your account. Check your connection.');
+        else setLoadError('Check your connection.');
       }
     },
     [signOut],
@@ -55,7 +70,7 @@ export default function App() {
     if (session) refresh(session);
   }, [session, refresh]);
 
-  const loading = !ready || (session && !profile && !loadError);
+  const loading = !ready || (!fontsLoaded && !fontError) || (session && !profile && !loadError);
 
   useEffect(() => {
     if (!loading) SplashScreen.hideAsync().catch(() => {});
@@ -80,10 +95,10 @@ export default function App() {
   } else if (!profile) {
     content = (
       <View style={styles.center}>
-        <Text style={styles.error}>{loadError}</Text>
-        <View style={{ width: 200, gap: spacing.sm }}>
-          <Button title="Try again" onPress={() => refresh(session)} />
-          <Button title="Sign out" variant="secondary" onPress={signOut} />
+        <View style={{ alignSelf: 'stretch', gap: spacing.ms }}>
+          <Empty icon="wifi-strength-alert-outline" title="Can't reach MzaziCare" body={loadError} />
+          <Button title="Try again" icon="refresh" onPress={() => refresh(session)} />
+          <Button title="Sign out" variant="quiet" onPress={signOut} />
         </View>
       </View>
     );
@@ -113,5 +128,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     padding: spacing.lg,
   },
-  error: { color: colors.textMuted, marginBottom: spacing.md, textAlign: 'center' },
 });

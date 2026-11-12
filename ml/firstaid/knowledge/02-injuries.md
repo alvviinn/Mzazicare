@@ -164,7 +164,7 @@ keywords: head injury, hit his head, hit her head, bumped head, knock on the hea
 
 ### en
 intro: Most bumps to the head are minor, but older people and anyone on blood thinners can bleed inside the skull, sometimes hours later.
-urgent: Call 999 or 112 if they were knocked out even briefly, are confused or very drowsy, vomit more than once, have a severe or worsening headache, have a seizure, have blood or clear fluid from the ears or nose, have weakness, slurred speech or vision problems. Anyone on blood thinners who hits their head must go to hospital today.
+urgent: Call 999 or 112 if they were knocked out even briefly, are confused or very drowsy, vomit more than once, have a severe or worsening headache, have a seizure, have blood or clear fluid from the ears or nose, have weakness, slurred speech, unequal pupils, double vision, loss of balance or memory, or difficulty walking. Anyone over 65, on blood thinners, who has had brain surgery or has been drinking alcohol should be checked at a hospital or clinic today.
 steps:
 - Help them sit down and rest.
 - Hold a cold pack wrapped in a cloth on the bump for 10 to 20 minutes.
@@ -179,7 +179,7 @@ after: Tell the family and the doctor about the head injury, even if it seemed s
 
 ### sw
 intro: Michubuko mingi ya kichwa ni midogo, lakini wazee na yeyote anayetumia dawa za kupunguza kuganda kwa damu wanaweza kuvuja damu ndani ya fuvu, wakati mwingine saa kadhaa baadaye.
-urgent: Piga 999 au 112 kama alipoteza fahamu hata kwa muda mfupi, amechanganyikiwa au anasinzia sana, anatapika zaidi ya mara moja, ana maumivu makali ya kichwa au yanayozidi, anapata kifafa, anatokwa damu au maji meupe masikioni au puani, ana udhaifu, maneno hayatoki vizuri au matatizo ya kuona. Yeyote anayetumia dawa za kupunguza kuganda kwa damu akigonga kichwa lazima aende hospitali leo.
+urgent: Piga 999 au 112 kama alipoteza fahamu hata kwa muda mfupi, amechanganyikiwa au anasinzia sana, anatapika zaidi ya mara moja, ana maumivu makali ya kichwa au yanayozidi, anapata kifafa, anatokwa damu au maji meupe masikioni au puani, ana udhaifu, maneno hayatoki vizuri, mboni za macho hazilingani, anaona vitu viwili, anapoteza usawa au kumbukumbu, au anatembea kwa shida. Yeyote mwenye zaidi ya miaka 65, anayetumia dawa za kupunguza kuganda kwa damu, aliyefanyiwa upasuaji wa ubongo au aliyekunywa pombe akigonga kichwa achunguzwe hospitali au kliniki leo.
 steps:
 - Msaidie akae na apumzike.
 - Shikilia barafu iliyofungwa kwenye kitambaa juu ya uvimbe kwa dakika 10 hadi 20.

@@ -64,6 +64,24 @@ def can_chat(a, b):
     return (a.role == Role.USER and b.sponsor_id == a.pk) or (b.role == Role.USER and a.sponsor_id == b.pk)
 
 
+def alert_json(a):
+    patient = a.patient or (a.shift.elderly if a.shift_id else None)
+    return {
+        'id': a.pk,
+        'kind': a.kind,
+        'label': Alert.Kind(a.kind).label,
+        'message': a.message,
+        'status': a.status,
+        'created_at': a.created_at.isoformat(),
+        'severity': a.severity,
+        'patient': patient.name if patient else None,
+        'shift_id': a.shift_id,
+        'position': {'latitude': a.latitude, 'longitude': a.longitude, 'accuracy': a.accuracy}
+        if a.latitude is not None else None,
+        'confidence': a.confidence,
+    }
+
+
 class DashboardView(APIView):
     def get(self, request):
         me = request.user
@@ -153,12 +171,11 @@ class DashboardView(APIView):
                 'tones': tone_summary(week),
                 'recent_shifts': [shift_json(s) for s in week[:8]],
                 'alerts': [
-                    {'id': a.pk, 'kind': a.kind, 'label': Alert.Kind(a.kind).label, 'message': a.message,
-                     'status': a.status, 'created_at': a.created_at.isoformat()}
-                    # open flags first, then the most recent resolved ones
+                    alert_json(a)
+                    # open flags first (most severe, then newest), then the most recent resolved ones
                     for a in sorted(
-                        Alert.objects.filter(sponsor=me)[:20],
-                        key=lambda a: a.status != Alert.Status.OPEN,
+                        Alert.objects.filter(sponsor=me).select_related('patient', 'shift__elderly')[:20],
+                        key=lambda a: (a.status != Alert.Status.OPEN, -a.severity if a.status == Alert.Status.OPEN else 0),
                     )[:10]
                 ],
             }

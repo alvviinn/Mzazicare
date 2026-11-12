@@ -95,6 +95,18 @@ def shift_detail(shift, now, with_tone):
             ],
         }
     )
+    if with_tone:  # the map is for the family: the trail, and the geofence around the elder's phone
+        track = list(shift.track.all())
+        elder = [p for p in track if p.who == 'elderly']
+        data['map'] = {
+            'radius_m': presence.ENTER_RADIUS_M,
+            'centre': {'latitude': elder[-1].latitude, 'longitude': elder[-1].longitude, 'accuracy': elder[-1].accuracy}
+            if elder else None,
+            'trail': [
+                {'latitude': p.latitude, 'longitude': p.longitude, 'accuracy': p.accuracy, 'at': iso(p.at)}
+                for p in track if p.who == 'caretaker'
+            ],
+        }
     if with_tone:  # the tone of the visit is for the family, not shown on the caretaker's own screen
         from .views import tone_summary  # imported here: views imports this module
 

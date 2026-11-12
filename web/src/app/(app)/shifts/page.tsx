@@ -1,6 +1,6 @@
 'use client';
 
-import { PageHead, ShiftTable } from '@/components/ui';
+import { ErrorNote, Loading, PageHead, ShiftTable } from '@/components/ui';
 import { getShifts } from '@/lib/api';
 import { usePolling } from '@/lib/auth';
 import { fmtDuration } from '@/lib/format';
@@ -8,7 +8,7 @@ import { fmtDuration } from '@/lib/format';
 // Every day's shift for the last 30 days. A shift is one day: breaks do not end it.
 export default function ShiftsPage() {
   const { data: shifts, error } = usePolling((t) => getShifts(t, 30), 20000);
-  if (!shifts) return <p className="muted">{error || 'Loading…'}</p>;
+  if (!shifts) return error ? <ErrorNote message={`Couldn't load the shifts. ${error}`} /> : <Loading label="Loading shifts…" />;
   const total = shifts.reduce((n, s) => n + s.minutes, 0);
 
   return (

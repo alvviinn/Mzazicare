@@ -1,10 +1,12 @@
 import { ShiftStatus, Tone } from './types';
 
+// Same values as --tone-* in styles/tokens.css (repeated here because SVG fill attributes can't read CSS variables).
+// Each is at least 3:1 on white so the chart marks stay visible.
 export const TONE_COLOR: Record<Tone, string> = {
   happy: '#3E9B6B',
-  calm: '#6FB7A8',
-  neutral: '#A6AFAC',
-  stressed: '#D9A03A',
+  calm: '#4E9B8B',
+  neutral: '#84918D',
+  stressed: '#BA8424',
   angry: '#C4503F',
 };
 

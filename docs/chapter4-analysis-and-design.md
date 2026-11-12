@@ -259,7 +259,7 @@ Design decisions:
 * **One `USER` table with a role and a self-link `sponsor_id`**, instead of separate Sponsor, Caretaker and Patient tables. The elderly person has their own login, and role conversion
   is a single field change. A family owns many caretakers and many elderly people.
 * **`SHIFTSEGMENT`** holds only the time the caretaker was verified in range; worked time is the sum of segments. That makes manual start/stop and pauses honest: unverified time never counts.
-* **`LOCATION` keeps only the latest fix** per phone: enough to verify presence, with no movement trail to leak.
+* **`LOCATION` keeps only the latest fix** per phone outside shifts. **While a shift is open**, a position at most every 30 s is also kept as a `TRACK_POINT` of that shift, so the family can see the visit on a map (trail and geofence). These points belong to the shift and are deleted with it; nothing is recorded between shifts.
 * **`ALERT`** replaces the proposal's `AnomalyLog`. It is linked to a shift only when relevant and has a status, which is the human decision recorded for later retraining.
 * **`TONEREADING` stores derived totals only.** There is no audio table.
 

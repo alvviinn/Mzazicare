@@ -157,7 +157,10 @@ if ($Only -in 'all', 'api') {
     New-Item -ItemType Directory -Force (Join-Path $firstaid 'artifacts') | Out-Null
     Set-Content -Path (Join-Path $firstaid '__init__.py') -Value '' -Encoding ascii
     Copy-Item (Join-Path $Root 'ml\firstaid\assistant.py') $firstaid
-    foreach ($f in 'guide.json', 'intent.onnx', 'intent.json', 'tokenizer.json') {
+    Copy-Item (Join-Path $Root 'ml\firstaid\safety.py') $firstaid  # round-3 policy (numpy only)
+    foreach ($f in 'guide.json', 'intent.onnx', 'intent.json', 'tokenizer.json', 'policy.json',
+                   'baseline.npz', 'baseline_vocab.json', 'danger.npz', 'danger_vocab.json',
+                   'oos_gate.npz', 'oos_gate_vocab.json') {
         $src = Join-Path $Root "ml\firstaid\artifacts\$f"
         if (Test-Path $src) { Copy-Item $src (Join-Path $firstaid 'artifacts') } else { Warn "First-aid file missing: $f (run python -m firstaid.export in ml)" }
     }

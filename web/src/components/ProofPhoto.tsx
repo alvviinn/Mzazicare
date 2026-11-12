@@ -1,5 +1,6 @@
 'use client';
 
+import { ImageOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchProofPhoto } from '@/lib/api';
 import { useToken } from '@/lib/auth';
@@ -28,11 +29,16 @@ export function ProofPhoto({ completionId, caption, size = 48 }: { completionId:
     };
   }, [token, completionId]);
 
-  if (failed) return <span className="proof missing" style={{ width: size, height: size }} title="Photo unavailable">×</span>;
+  if (failed)
+    return (
+      <span className="proof missing" style={{ width: size, height: size }} title="Photo unavailable" role="img" aria-label="Photo unavailable">
+        <ImageOff className="icon" aria-hidden />
+      </span>
+    );
   if (!url) return <span className="proof" style={{ width: size, height: size }} />;
   return (
     <>
-      <button className="proof" style={{ width: size, height: size }} onClick={() => setOpen(true)} title="See the proof photo">
+      <button className="proof" style={{ width: size, height: size }} onClick={() => setOpen(true)} title="See the proof photo" aria-label={caption ? `See the proof photo for ${caption}` : 'See the proof photo'}>
         {/* eslint-disable-next-line @next/next/no-img-element -- a private blob URL, not an optimisable asset */}
         <img src={url} alt={caption ? `Proof photo: ${caption}` : 'Proof photo'} />
       </button>

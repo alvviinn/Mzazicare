@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from accounts.models import Role, User
 
 from . import presence
-from .models import Alert, Chore, Location, Shift, ShiftSegment, Task, TaskCompletion
+from .models import Alert, Chore, Location, Shift, ShiftSegment, Task, TaskCompletion, TrackPoint
 from .shift_views import shift_card
 from .tasks import MAX_PHOTO_BYTES, MAX_TASKS, completion_json, photo_type, task_json, visible_tasks
 
@@ -81,7 +81,24 @@ class LocationView(APIView):
         elif user.sponsor_id:
             for c in User.objects.filter(sponsor_id=user.sponsor_id, role=Role.CARETAKER):
                 presence.evaluate(c, now)
+        if not mocked:
+            record_track(user, lat, lon, acc, now)
         return Response({'detail': 'ok'})
+
+
+TRACK_EVERY_S = 30
+
+
+def record_track(user, lat, lon, acc, now):
+    """Keep the position for the shift map, only while one of this phone's shifts is open."""
+    who = 'caretaker' if user.role == Role.CARETAKER else 'elderly'
+    open_shifts = Shift.objects.filter(end_time__isnull=True, is_demo=False)
+    open_shifts = open_shifts.filter(caretaker=user) if who == 'caretaker' else open_shifts.filter(elderly=user)
+    for shift in open_shifts:
+        last = shift.track.filter(who=who).order_by('-at').first()
+        if last and (now - last.at).total_seconds() < TRACK_EVERY_S:
+            continue
+        TrackPoint.objects.create(shift=shift, who=who, latitude=lat, longitude=lon, accuracy=acc, at=now)
 
 
 def state_json(user, now):

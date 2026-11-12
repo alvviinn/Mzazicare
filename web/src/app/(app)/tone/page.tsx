@@ -1,6 +1,6 @@
 'use client';
 
-import { PageHead, Pill, Tile, ToneBars } from '@/components/ui';
+import { ErrorNote, Loading, PageHead, Pill, Tile, ToneBars } from '@/components/ui';
 import { TensionStrip, ToneChart } from '@/components/ToneChart';
 import { getLiveTone } from '@/lib/api';
 import { usePolling } from '@/lib/auth';
@@ -19,7 +19,7 @@ const STATE: Record<LiveTone['state'], { text: string; tone: 'good' | 'warn' | '
 // What the voices sound like right now, how today has gone, and how it compares with earlier days.
 export default function TonePage() {
   const { data, error } = usePolling(getLiveTone, REFRESH_MS);
-  if (!data) return <p className="muted">{error || 'Loading…'}</p>;
+  if (!data) return error ? <ErrorNote message={`Couldn't load the voice tone. ${error}`} /> : <Loading label="Loading the voice tone…" />;
 
   const st = STATE[data.state];
   const now = data.current;
@@ -139,7 +139,7 @@ export default function TonePage() {
                     <div
                       style={{
                         height: `${Math.max(4, d.tension)}%`,
-                        background: d.tension <= 15 ? 'var(--success)' : d.tension <= 30 ? 'var(--warning)' : 'var(--danger)',
+                        background: d.tension <= 15 ? 'var(--color-success)' : d.tension <= 30 ? 'var(--color-warning)' : 'var(--color-danger)',
                       }}
                     />
                   </div>

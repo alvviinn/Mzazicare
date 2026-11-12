@@ -1,51 +1,52 @@
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Voice } from '../audio/useVoiceMonitoring';
-import { colors, radius, spacing } from '../theme';
-import { Icon } from './Icon';
-import { Button } from './ui';
+import { colors, fonts, iconSize, radius, spacing, TAP, text, type } from '../theme';
+import { Icon, IconName } from './Icon';
+import { Button, Card, LiveDot } from './ui';
 
 type Lang = 'en' | 'sw';
 
-const TEXT: Record<Lang, Record<string, string>> = {
+// Consent is the one place that keeps its full meaning: three short promises, each with an icon.
+const TEXT: Record<Lang, { title: string; points: [IconName, string][]; [k: string]: unknown }> = {
   en: {
-    title: 'Voice tone monitoring',
-    ask:
-      'While the caretaker is with the elderly person, both phones can listen to how the voices sound (calm, happy, stressed or angry) so the family can see how visits go.\n\n' +
-      '• Only during a verified visit. Never at home or after the visit ends.\n' +
-      '• The tone only: no words are written down and no recording is kept.\n' +
-      '• It starts only when BOTH of you have agreed, and you can switch it off at any time.',
+    title: 'Voice tone',
+    lead: 'Lets the family see how visits feel.',
+    points: [
+      ['map-marker-check-outline', 'Only during a verified visit'],
+      ['microphone-off', 'Tone only · nothing recorded or written down'],
+      ['account-multiple-check-outline', 'Starts when both agree · stop anytime'],
+    ],
     agree: 'I agree',
-    on_now: 'Listening now: a visit is in progress',
-    no_shift: 'Not listening. It only listens during a visit.',
-    other: 'Waiting for the other person to agree before anything is listened to.',
-    you: 'You have switched this off.',
-    on: 'You have agreed. It listens only during visits.',
+    on_now: 'Listening · visit in progress',
+    no_shift: 'Off until a visit starts',
+    other: 'Waiting for the other person',
+    on: 'Agreed · only during visits',
     off: 'Turn off',
     off_title: 'Turn off voice monitoring?',
     off_body: 'Nothing will be listened to until you agree again.',
     cancel: 'Cancel',
-    mic: 'Microphone permission is off. Turn it on in your phone settings.',
+    mic: 'Microphone is off in phone settings',
     fail: 'Could not save your choice. Check your connection.',
   },
   sw: {
-    title: 'Ufuatiliaji wa sauti',
-    ask:
-      'Mlezi akiwa na mzee, simu zote mbili zinaweza kusikiliza jinsi sauti zinavyosikika (tulivu, furaha, wasiwasi au hasira) ili familia ione jinsi ziara zinavyoenda.\n\n' +
-      '• Wakati wa ziara iliyothibitishwa tu. Kamwe nyumbani au baada ya ziara.\n' +
-      '• Sauti tu: hakuna maneno yanayoandikwa wala rekodi inayohifadhiwa.\n' +
-      '• Huanza tu wakati NYOTE mmekubali, na unaweza kuizima wakati wowote.',
+    title: 'Sauti',
+    lead: 'Familia inaona jinsi ziara zinavyoenda.',
+    points: [
+      ['map-marker-check-outline', 'Wakati wa ziara iliyothibitishwa tu'],
+      ['microphone-off', 'Sauti tu · hakuna rekodi wala maandishi'],
+      ['account-multiple-check-outline', 'Huanza mkikubali nyote · zima wakati wowote'],
+    ],
     agree: 'Nakubali',
-    on_now: 'Inasikiliza sasa: ziara inaendelea',
-    no_shift: 'Haisikilizi. Inasikiliza wakati wa ziara tu.',
-    other: 'Inasubiri mtu mwingine akubali kabla ya kusikiliza chochote.',
-    you: 'Umezima huduma hii.',
-    on: 'Umekubali. Inasikiliza wakati wa ziara tu.',
+    on_now: 'Inasikiliza · ziara inaendelea',
+    no_shift: 'Imezimwa hadi ziara ianze',
+    other: 'Inasubiri mtu mwingine',
+    on: 'Umekubali · wakati wa ziara tu',
     off: 'Zima',
     off_title: 'Kuzima ufuatiliaji wa sauti?',
     off_body: 'Hakuna kitakachosikilizwa hadi ukubali tena.',
     cancel: 'Ghairi',
-    mic: 'Ruhusa ya maikrofoni imezimwa. Iwashe kwenye mipangilio ya simu.',
+    mic: 'Maikrofoni imezimwa kwenye mipangilio',
     fail: 'Haikuweza kuhifadhi chaguo lako. Angalia mtandao.',
   },
 };
@@ -53,7 +54,7 @@ const TEXT: Record<Lang, Record<string, string>> = {
 // Asks for consent, and afterwards shows plainly whether the microphone is on.
 export function VoiceCard({ voice, lang = 'en', scale = 1 }: { voice: Voice; lang?: Lang; scale?: number }) {
   const [busy, setBusy] = useState(false);
-  const x = TEXT[lang];
+  const x = TEXT[lang] as (typeof TEXT)['en'] & Record<string, string>;
   if (voice.consent === null) return null;
 
   async function change(agree: boolean) {
@@ -74,52 +75,71 @@ export function VoiceCard({ voice, lang = 'en', scale = 1 }: { voice: Voice; lan
     ]);
   }
 
+  const f = (n: number) => Math.round(n * scale);
+
   if (!voice.consent) {
     return (
-      <View style={styles.card}>
+      <Card tint="butter" style={{ marginTop: spacing.ms }}>
         <View style={styles.head}>
-          <Icon name="microphone-outline" size={24 * scale} />
-          <Text style={[styles.title, { fontSize: 17 * scale }]}>{x.title}</Text>
+          <View style={styles.icon}>
+            <Icon name="waveform" size={iconSize.inline * scale} color={colors.butterInk} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={[text.h2, { fontSize: f(type.h2), lineHeight: f(26) }]}>{x.title}</Text>
+            <Text style={[text.small, { color: colors.butterInk, fontSize: f(type.small), lineHeight: f(20) }]}>{x.lead}</Text>
+          </View>
         </View>
-        <Text style={[styles.body, { fontSize: 14 * scale }]}>{x.ask}</Text>
-        <Button title={x.agree} onPress={() => change(true)} loading={busy} />
-      </View>
+        <View style={{ gap: spacing.sm, marginVertical: spacing.md }}>
+          {x.points.map(([icon, p]) => (
+            <View key={p} style={styles.point}>
+              <Icon name={icon} size={18 * scale} color={colors.text} />
+              <Text style={[text.body, { flex: 1, fontSize: f(type.body), lineHeight: f(23) }]}>{p}</Text>
+            </View>
+          ))}
+        </View>
+        <Button title={x.agree} variant="sage" icon="check" onPress={() => change(true)} loading={busy} />
+      </Card>
     );
   }
 
-  const status = voice.recording ? x.on_now : voice.reason === 'other_has_not_agreed' ? x.other : voice.reason === 'no_shift' ? x.no_shift : x.on;
+  const status = voice.recording
+    ? x.on_now
+    : voice.reason === 'other_has_not_agreed'
+      ? x.other
+      : voice.reason === 'no_shift'
+        ? x.no_shift
+        : x.on;
   return (
-    <View style={[styles.card, voice.recording && styles.live]}>
-      <View style={styles.head}>
-        <Icon
-          name={voice.recording ? 'microphone' : 'microphone-outline'}
-          size={24 * scale}
-          color={voice.recording ? colors.danger : colors.primary}
-        />
-        <Text style={[styles.title, { fontSize: 17 * scale }]}>{x.title}</Text>
+    <Card tint={voice.recording ? 'sage' : 'surface'} style={{ marginTop: spacing.ms }} padded={false}>
+      <View style={styles.compact}>
+        <View style={[styles.icon, { backgroundColor: voice.recording ? colors.surface : colors.sunken }]}>
+          {voice.recording ? <LiveDot color={colors.sage} /> : <Icon name="waveform" size={iconSize.inline * scale} color={colors.textMuted} />}
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={[text.bodyStrong, { fontSize: f(type.body), lineHeight: f(23) }]}>{x.title}</Text>
+          <Text style={[text.small, { fontSize: f(type.small), lineHeight: f(20) }]}>{status}</Text>
+          {voice.micDenied && <Text style={[styles.warn, { fontSize: f(type.small) }]}>{x.mic}</Text>}
+        </View>
+        <Pressable
+          onPress={confirmOff}
+          disabled={busy}
+          style={styles.off}
+          accessibilityRole="button"
+          accessibilityLabel={`${x.off}: ${x.title}`}
+        >
+          <Text style={[styles.offText, { fontSize: f(type.small) }]}>{x.off}</Text>
+        </Pressable>
       </View>
-      <Text style={[styles.body, { fontSize: 14 * scale }]}>{status}</Text>
-      {voice.micDenied && <Text style={[styles.warn, { fontSize: 13 * scale }]}>{x.mic}</Text>}
-      <Text onPress={busy ? undefined : confirmOff} style={[styles.link, { fontSize: 14 * scale }]}>
-        {x.off}
-      </Text>
-    </View>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-  },
-  live: { borderColor: colors.danger },
-  head: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm },
-  title: { fontWeight: '700', color: colors.text },
-  body: { color: colors.text, marginBottom: spacing.md },
-  warn: { color: colors.warning, marginBottom: spacing.sm },
-  link: { color: colors.primary, fontWeight: '600' },
+  head: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms },
+  icon: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  point: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms },
+  compact: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms, padding: spacing.ms, paddingLeft: spacing.md },
+  warn: { fontFamily: fonts.bodyBold, color: colors.danger, marginTop: 2 },
+  off: { minHeight: TAP, minWidth: TAP, paddingHorizontal: spacing.ms, borderRadius: radius.pill, justifyContent: 'center', alignItems: 'center' },
+  offText: { fontFamily: fonts.bodyBold, color: colors.primaryInk },
 });

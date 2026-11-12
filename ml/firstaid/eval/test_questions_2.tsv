@@ -1,0 +1,193 @@
+# Second held-out test set, written on 2026-11-10 after the first test set had been seen, and BEFORE the combined
+# (both-models-agree) assistant was built or scored, so that the combined design is judged on messages it was not
+# tuned on. Same style: caretaker messages with context, typos, Kiswahili and mixed language. Used once, at the end.
+# label<TAB>question
+call_for_help	what number do i dial for an ambulance from a safaricom line
+call_for_help	nambari ya dharura ya kuita ambulensi ni gani
+call_for_help	who do i call first if mzee collapses, the family or the ambulance
+call_for_help	red cross ambulance number please its urgent
+unresponsive_breathing	she wont wake up but her chest is going up and down
+unresponsive_breathing	amezimia lakini bado anapumua, nimlaze aje
+unresponsive_breathing	he is breathing but not answering when i shake him
+unresponsive_breathing	babu hajibu nikimwita ila anapumua polepole
+cpr	how many chest pushes before giving breaths
+cpr	hapumui na moyo hausikiki nifanye nini sasa hivi
+cpr	no pulse and not breathing what do i do while waiting
+cpr	jinsi ya kufanya cpr kwa mzee
+choking_severe	she is grabbing her throat and cant make a sound
+choking_severe	amekwama na kipande cha nyama hawezi kupumua kabisa
+choking_severe	he swallowed a bone and is turning blue
+choking_severe	mama ameshikwa koo na chakula hatoi sauti
+heart_attack	pain spreading to his left arm and jaw, sweating a lot
+heart_attack	ana maumivu makali ya kifua yanayoenda mkono wa kushoto
+heart_attack	tight heavy feeling in the chest for 15 minutes now
+heart_attack	shosho anasema kifua kinambana sana na anatoka jasho
+stroke	one side of her face has dropped and she is talking funny
+stroke	mkono mmoja umekufa ganzi ghafla na anaongea vibaya
+stroke	he suddenly cant lift his right arm and is confused
+stroke	sura imepinda upande mmoja ghafla leo asubuhi
+severe_bleeding	blood is spurting from his leg and wont stop
+severe_bleeding	amejikata vibaya na damu inamwagika sana
+severe_bleeding	deep cut on the arm soaking through the towel
+severe_bleeding	damu haikomi hata nikibonyeza
+anaphylaxis	her lips and tongue are swelling after eating groundnuts
+anaphylaxis	amevimba uso na hawezi kupumua baada ya dawa mpya
+anaphylaxis	throat closing up after a bee sting and he has rash everywhere
+anaphylaxis	koo linamfunga baada ya kula samaki
+seizure	he is shaking all over on the floor and foaming
+seizure	ana kifafa sasa hivi anatetemeka mwili mzima
+seizure	her body went stiff and jerking for two minutes
+seizure	babu anagaagaa chini macho yamegeuka
+shock	he is pale cold and sweaty after vomiting blood
+shock	ngozi ni baridi na anapumua haraka baada ya kuumia
+shock	weak fast pulse and grey skin what does it mean
+drowning	we pulled her out of the water tank and she is coughing
+drowning	amezama kwenye bwawa tumemtoa sasa
+drowning	he fell in the bathtub and inhaled water
+electric_shock	she touched a live wire while ironing
+electric_shock	amepigwa na shoti ya umeme kwenye soketi
+electric_shock	he got shocked fixing the bulb and fell
+fall	mzee has slipped in the toilet and is on the floor
+fall	bibi ameanguka kitandani usiku
+fall	she tripped on the step and is lying there, should i lift her
+fall	ameanguka kwenye ngazi asubuhi hii
+fracture	her wrist looks bent after she fell on it
+fracture	nadhani mguu umevunjika umevimba na umepinda
+fracture	heard a crack when he landed on his hip
+fracture	mfupa wa mkono unaonekana umevunjika
+sprain	twisted her ankle getting off the matatu
+sprain	ameteguka kifundo akiteremka ngazi za soko
+sprain	knee is swollen after he turned it wrong
+head_injury	he hit his head on the door and now has a bump and headache
+head_injury	amegonga kichwa na sasa anatapika
+head_injury	she banged her head when she fell, is that dangerous
+head_injury	kichwa kimevimba baada ya kuanguka
+spinal_injury	he fell from the ladder and says he cant feel his legs
+spinal_injury	ameanguka na analalamika shingo na mgongo
+spinal_injury	should i move her if i think her back is broken
+minor_wound	small cut on his finger from the knife
+minor_wound	amejikuna goti, nisafishe vipi
+minor_wound	how do i clean a scrape on the elbow
+minor_wound	kidonda kidogo cha mkono
+skin_tear	her thin skin tore when i held her arm
+skin_tear	ngozi ya mkono imechanika kidogo nikimsaidia
+skin_tear	papery skin ripped on the bed rail
+nosebleed	blood coming from her nose since morning
+nosebleed	damu inatoka puani
+nosebleed	nosebleed that started while he was sitting
+burns	she spilled hot chai on her thigh
+burns	ameungua na maji moto mkononi
+burns	burn from the jiko blistering on his hand
+burns	nimeungua na mafuta ya kupikia
+eye_injury	sand got in his eye and its red
+eye_injury	jicho limeingia kemikali ya kusafisha
+eye_injury	she poked her eye and it is watering
+animal_bite	the neighbours dog bit her leg
+animal_bite	ameumwa na mbwa barabarani
+animal_bite	a cat scratched and bit him, does he need jab
+snake_bite	a snake bit him in the shamba
+snake_bite	ameumwa na nyoka mguuni
+snake_bite	what to do after snakebite while waiting for transport
+insect_sting	stung by a bee on the neck
+insect_sting	ameumwa na nyuki mkononi
+insect_sting	wasp sting is red and itchy
+low_blood_sugar	she is diabetic and shaking and sweating, hasnt eaten
+low_blood_sugar	sukari imeshuka anatetemeka
+low_blood_sugar	he takes insulin and is now confused and sweaty
+low_blood_sugar	ana kizunguzungu na jasho baada ya kukosa chakula na ana kisukari
+high_blood_sugar	his sugar reading is 25 and he is very thirsty
+high_blood_sugar	sukari iko juu sana anakojoa mara kwa mara
+high_blood_sugar	glucometer says HI what do i do
+asthma	she is wheezing and her inhaler is finished
+asthma	pumu imemshika anapumua kwa shida
+asthma	asthma attack and the blue pump isnt helping much
+breathing_difficulty	he is short of breath walking to the toilet
+breathing_difficulty	anapumua kwa shida tangu asubuhi
+breathing_difficulty	breathing very fast and struggling but no asthma
+fainting	she felt dizzy and fainted when she stood up
+fainting	amezirai kidogo halafu akarudi
+fainting	he passed out for a few seconds in church
+poisoning	he drank paraffin by mistake from a soda bottle
+poisoning	amekunywa dawa ya panya
+poisoning	charcoal jiko in the closed room and they have headaches
+poisoning	amemeza sabuni ya kuosha nguo
+medication_mistake	i gave her the evening tablets twice
+medication_mistake	nimempa dawa mara mbili kwa makosa
+medication_mistake	she took her husbands blood pressure pills
+medication_mistake	nimesahau kumpa dawa ya asubuhi nimpe sasa
+heat_illness	he was in the sun all day and is hot and confused
+heat_illness	joto limemzidi anaumwa kichwa
+heat_illness	sweating a lot and cramping after working outside in the heat
+hypothermia	she is shivering and very cold after the rain
+hypothermia	ana baridi sana anatetemeka usiku
+hypothermia	his hands are cold and he is sleepy after being outside at night
+dehydration	she has not drunk water all day and her lips are dry
+dehydration	ameharisha sana na amechoka
+dehydration	dark urine and very weak, hasnt been drinking
+fever	temperature is 39 since yesterday
+fever	ana homa kali na kutetemeka
+fever	high fever and shivering what can i give
+fever	mwili uko moto sana
+confusion	she suddenly doesnt know where she is today
+confusion	amechanganyikiwa ghafla hamtambui mtu
+confusion	he is more confused than usual since this afternoon
+high_blood_pressure	bp machine says 190 over 110
+high_blood_pressure	presha iko juu sana leo
+high_blood_pressure	headache and her pressure reading is very high
+abdominal_pain	bad pain in the lower right of his stomach
+abdominal_pain	tumbo linamkata tangu jana usiku hataki kula
+abdominal_pain	stomach is hard and painful and she is vomiting
+allergic_reaction	itchy rash all over after the new soap
+allergic_reaction	amepata vipele baada ya dawa
+allergic_reaction	mild swelling and itching from the new tablets
+panic_attack	she is breathing fast and says she is going to die but no pain
+panic_attack	ana hofu kubwa moyo unadunda
+panic_attack	panicking and shaking after hearing bad news
+pressure_sore	red patch on his bottom that wont go away
+pressure_sore	kidonda cha kulala mgongoni
+pressure_sore	how often should i turn her so she doesnt get bedsores
+first_aid_kit	what should i keep in the first aid box
+first_aid_kit	vitu gani viwe kwenye sanduku la huduma ya kwanza
+first_aid_kit	list of first aid supplies for the house
+greeting	hello hello, anyone there
+greeting	habari za asubuhi daktari wa simu
+greeting	hi there, just testing this app
+greeting	niaje msee
+greeting	good evening to you and thanks for being here
+greeting	mambo vipi msaidizi
+greeting	thank you so much that helped a lot
+greeting	nashukuru kwa msaada
+greeting	hey there helper
+greeting	shikamoo, natumaini uko salama
+general_medical	what is the normal blood pressure for a 70 year old
+general_medical	je kisukari kinatibika
+general_medical	what foods are good for someone with arthritis
+general_medical	how much water should an old person drink daily
+general_medical	what causes memory loss in old age
+general_medical	ni vyakula gani vizuri kwa presha
+general_medical	is it safe to take panadol every day
+general_medical	what are the side effects of metformin
+general_medical	how can i help her sleep better at night
+general_medical	dalili za saratani ya tezi dume ni zipi
+general_medical	should she get the flu vaccine
+general_medical	what exercises are good for the elderly
+out_of_scope	what time does naivas close tonight
+out_of_scope	put on some gospel songs
+out_of_scope	how much is a bundle of 1gb
+out_of_scope	nitumie pesa
+out_of_scope	what is the score in the arsenal game
+out_of_scope	set an alarm for 6am
+out_of_scope	when is my salary coming
+out_of_scope	hali ya hewa kesho itakuwaje
+out_of_scope	say something funny
+out_of_scope	how do i get to westlands from town
+out_of_scope	who is the president of kenya
+out_of_scope	book me an uber
+out_of_scope	what is the price of unga today
+out_of_scope	niambie habari za leo
+out_of_scope	how do i reset my phone
+out_of_scope	translate good morning to french
+out_of_scope	recommend a good movie
+out_of_scope	can i pay rent with mpesa
+out_of_scope	weka kengele saa kumi na mbili
+out_of_scope	what is 25 times 4

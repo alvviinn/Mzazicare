@@ -14,6 +14,14 @@ import ToneTab from './user/ToneTab';
 type Props = { token: string; profile: Profile; onChanged: () => Promise<void>; onSignOut: () => void };
 type Tab = 'overview' | 'shifts' | 'tone' | 'chats' | 'people';
 
+const TITLES: Record<Tab, string | undefined> = {
+  overview: undefined, // the greeting
+  shifts: 'Shifts',
+  tone: 'Voice tone',
+  chats: 'Chats',
+  people: 'People',
+};
+
 export default function UserHome({ token, profile, onChanged, onSignOut }: Props) {
   const [tab, setTab] = useState<Tab>('overview');
   const [dash, setDash] = useState<Dashboard | null>(null);
@@ -27,7 +35,7 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
       setDash(await getDashboard(token));
       setError('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not load the dashboard.');
+      setError(e instanceof Error ? e.message : '');
     }
   }, [token]);
 
@@ -52,19 +60,21 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
     return <ShiftDetailScreen token={token} shiftId={shiftId} onBack={() => setShiftId(null)} />;
   }
 
+  const openAlerts = dash ? dash.alerts.filter((a) => a.status === 'open').length : 0;
   const unread = dash ? [...dash.caretakers, ...dash.elderly].reduce((n, p) => n + p.unread, 0) : 0;
   const tabs: TabDef<Tab>[] = [
-    { key: 'overview', label: 'Overview', icon: 'home-variant-outline' },
-    { key: 'shifts', label: 'Shifts', icon: 'calendar-clock' },
+    { key: 'overview', label: 'Home', icon: 'home-outline', activeIcon: 'home', badge: openAlerts },
+    { key: 'shifts', label: 'Shifts', icon: 'calendar-blank-outline', activeIcon: 'calendar' },
     { key: 'tone', label: 'Tone', icon: 'waveform' },
-    { key: 'chats', label: 'Chats', icon: 'message-text-outline', badge: unread },
-    { key: 'people', label: 'People', icon: 'account-group-outline' },
+    { key: 'chats', label: 'Chats', icon: 'message-text-outline', activeIcon: 'message-text', badge: unread },
+    { key: 'people', label: 'People', icon: 'account-group-outline', activeIcon: 'account-group' },
   ];
 
   return (
     <HomeShell
       profile={profile}
       onSignOut={onSignOut}
+      title={TITLES[tab]}
       footer={<TabBar tabs={tabs} active={tab} onChange={setTab} />}
       refreshing={refreshing}
       onRefresh={refresh}
@@ -77,6 +87,8 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
           error={error}
           onChanged={load}
           onGoPeople={() => setTab('people')}
+          onGoShifts={() => setTab('shifts')}
+          onGoTone={() => setTab('tone')}
           onOpenShift={setShiftId}
         />
       )}

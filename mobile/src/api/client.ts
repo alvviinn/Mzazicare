@@ -18,6 +18,8 @@ import {
   TaskItem,
 } from '../types';
 
+import { NETWORK_ERROR, setOnline } from '../net';
+
 // Address of the Django backend, set in mobile/.env.local (see mobile/.env.example).
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -38,8 +40,10 @@ async function request<T>(path: string, init: RequestInit & { token?: string } =
       },
     });
   } catch {
-    throw new Error("Can't reach the server. Check your internet connection and that the backend is running.");
+    setOnline(false);
+    throw new Error(NETWORK_ERROR);
   }
+  setOnline(true);
   if (res.status === 401 && token) throw new Error(SESSION_EXPIRED);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.detail ?? 'Something went wrong. Please try again.');
@@ -177,8 +181,10 @@ export async function completeTask(token: string, id: number, photo: ArrayBuffer
       body: photo,
     });
   } catch {
-    throw new Error("Can't reach the server. Check your internet connection and try again.");
+    setOnline(false);
+    throw new Error(NETWORK_ERROR);
   }
+  setOnline(true);
   if (res.status === 401) throw new Error(SESSION_EXPIRED);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.detail ?? 'Could not send the photo. Please try again.');
@@ -197,5 +203,5 @@ export const proofPhotoSource = (token: string, completionId: number) => ({
 // ---- First-aid assistant (caretakers). Messages are answered and not stored. ----
 export const askFirstAid = (
   token: string,
-  body: { message?: string; topic?: string; awaiting?: string | null; lang?: 'en' | 'sw' },
+  body: { message?: string; topic?: string; awaiting?: string | null; lang?: 'en' | 'sw'; check?: 'yes' | 'no' },
 ): Promise<FirstAidReply> => request('/api/firstaid/chat/', { ...post(body), token });

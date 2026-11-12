@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ProofPhoto } from '@/components/ProofPhoto';
-import { ErrorNote, PageHead } from '@/components/ui';
+import { ErrorNote, Loading, PageHead } from '@/components/ui';
 import { getTaskHistory } from '@/lib/api';
 import { useToken } from '@/lib/auth';
 import { fmtDay, fmtTime } from '@/lib/format';
@@ -44,7 +44,7 @@ export default function TaskHistoryPage() {
         right={
           <div className="ranges">
             {RANGES.map((d) => (
-              <button key={d} className={days === d ? '' : 'secondary'} onClick={() => setDays(d)}>
+              <button key={d} className={days === d ? '' : 'secondary'} onClick={() => setDays(d)} aria-pressed={days === d}>
                 {d} days
               </button>
             ))}
@@ -52,7 +52,7 @@ export default function TaskHistoryPage() {
         }
       />
       <ErrorNote message={error} />
-      {items === null && !error && <p className="muted">Loading…</p>}
+      {items === null && !error && <Loading label="Loading task history…" />}
       {items !== null && groups.length === 0 && (
         <div className="card muted" style={{ marginTop: 18 }}>
           No tasks were done in the last {days} days.

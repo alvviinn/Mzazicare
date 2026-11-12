@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from accounts.models import Role, User
 
 from . import presence
+from .audio_views import alert_position
 from .models import Alert, CheckIn, Medication, MedicationLog, Message, Mood, Shift
 
 MAX_MEDICINES_PER_ELDER = 20
@@ -123,6 +124,7 @@ class CheckInView(APIView):
                     sponsor_id=me.sponsor_id,
                     kind=Alert.Kind.UNWELL,
                     message=f'{me.name} says they are not feeling well today.',
+                    patient=me,
                 )
         return Response({'detail': 'ok'}, status=201)
 
@@ -144,6 +146,8 @@ class SosView(APIView):
                 sponsor_id=me.sponsor_id,
                 kind=Alert.Kind.SOS,
                 message=f'{me.name} pressed the emergency button and needs help.',
+                patient=me,
+                **alert_position(me),
             )
             Message.objects.create(sender=me, recipient_id=me.sponsor_id, body='I need help. Please call me now.')
         return Response({'detail': 'ok'}, status=201)

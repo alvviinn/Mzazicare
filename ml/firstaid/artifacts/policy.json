@@ -1,0 +1,118 @@
+{
+ "temperature": {
+  "baseline": 0.7359180403287903,
+  "finetuned": 0.7359180403287903,
+  "danger": 2.134755010003656,
+  "oos_gate": 0.6107854681671063,
+  "danger_head": 1.0402745932744673
+ },
+ "candidates": {
+  "baseline": {
+   "models": [
+    "baseline"
+   ],
+   "danger": 0.3,
+   "oos_hard": 0.9,
+   "oos": 0.3,
+   "answer": 0.99,
+   "passes_on_validation_with_margin": false
+  },
+  "fine-tuned": {
+   "models": [
+    "finetuned"
+   ],
+   "danger": 0.3,
+   "oos_hard": 0.9,
+   "oos": 0.3,
+   "answer": 0.99,
+   "passes_on_validation_with_margin": false
+  },
+  "ensemble": {
+   "models": [
+    "baseline",
+    "finetuned"
+   ],
+   "danger": 0.3,
+   "oos_hard": 0.9,
+   "oos": 0.3,
+   "answer": 0.97,
+   "passes_on_validation_with_margin": false
+  },
+  "baseline+check": {
+   "models": [
+    "baseline"
+   ],
+   "policy": "check",
+   "danger_source": "tfidf",
+   "danger": 0.02,
+   "danger_strong": 0.3,
+   "critical_conf": 0.5,
+   "oos": 0.3,
+   "nontopic": 0.5,
+   "answer": 0.95,
+   "passes_on_validation_with_margin": true
+  },
+  "fine-tuned+check": {
+   "models": [
+    "finetuned"
+   ],
+   "policy": "check",
+   "danger_source": "tfidf",
+   "danger": 0.3,
+   "danger_strong": 2.0,
+   "critical_conf": 0.5,
+   "oos": 0.9,
+   "nontopic": 0.5,
+   "answer": 0.95,
+   "passes_on_validation_with_margin": true
+  },
+  "ensemble+check": {
+   "models": [
+    "baseline",
+    "finetuned"
+   ],
+   "policy": "check",
+   "danger_source": "tfidf",
+   "danger": 0.02,
+   "danger_strong": 0.3,
+   "critical_conf": 0.5,
+   "oos": 0.3,
+   "nontopic": 0.5,
+   "answer": 0.9,
+   "passes_on_validation_with_margin": true
+  },
+  "fine-tuned+inline": {
+   "models": [
+    "finetuned"
+   ],
+   "policy": "check",
+   "danger_source": "tfidf",
+   "danger": 0.01,
+   "danger_strong": 0.3,
+   "critical_conf": 0.5,
+   "oos": 0.3,
+   "nontopic": 0.5,
+   "answer": 0.95,
+   "inline": 0.95,
+   "passes_on_validation_with_margin": false
+  },
+  "ensemble+inline": {
+   "models": [
+    "baseline",
+    "finetuned"
+   ],
+   "policy": "check",
+   "danger_source": "tfidf",
+   "danger": 0.01,
+   "danger_strong": 0.3,
+   "critical_conf": 0.5,
+   "oos": 0.3,
+   "nontopic": 0.5,
+   "answer": 0.95,
+   "inline": 0.7,
+   "passes_on_validation_with_margin": false
+  }
+ },
+ "chosen_before_test": "ensemble+inline",
+ "chosen_reason": "Chosen on validation before scoring test_v5, at the user request to make the assistant practical (2026-11-12). Passes the real gates on validation (G1 100 %, G2 0.3 %, G3 1.0 %) but misses the stricter validation margin for G3 (1.0 %) by one message (3/295 vs 2/295 for ensemble+check). Blocking safety question on ordinary first aid 7 % vs 50 %; correct advice at once 76 % vs 54 %."
+}

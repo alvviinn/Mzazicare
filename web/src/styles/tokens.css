@@ -1,0 +1,65 @@
+/* Design tokens: the only place colours, spacing, type and shapes are defined. Same palette as the app.
+   Every text/background pair meets WCAG AA (4.5:1 text, 3:1 large text, icons, outlines, chart marks). */
+:root {
+  /* colour */
+  --color-primary: #1f6f5f; /* 6.0:1 on white */
+  --color-primary-hover: #16554a;
+  --color-primary-soft: #e3f0ed;
+  --color-on-primary: #ffffff;
+
+  --color-bg: #f8f6f1;
+  --color-surface: #ffffff;
+  --color-overlay: rgba(0, 0, 0, 0.88);
+  --color-on-overlay: #ffffff;
+
+  --color-text: #1e2a28;
+  --color-text-muted: #5b6663; /* was #6b7774 (4.3:1 on the page); same grey, darkened to 5.5:1 */
+
+  --color-border: #d9ded9; /* dividers and card edges */
+  --color-border-strong: #839383; /* input outlines: 3:1, same grey-green */
+
+  --color-success: #2d7958; /* was #2e7d5b (4.4:1 on soft teal) */
+  --color-success-soft: #e3f0ed;
+  --color-warning: #95640d; /* was #a8700f (3.8:1 on its soft tint) */
+  --color-warning-soft: #fbf1dc;
+  --color-danger: #b3372f;
+  --color-danger-hover: #8f2c26;
+  --color-danger-soft: #f9e7e5;
+  --color-danger-border: #e8c4c0; /* tint of danger, decorative edge */
+
+  --color-focus: #1f6f5f;
+
+  /* voice-tone chart marks: each at least 3:1 on white */
+  --tone-happy: #3e9b6b;
+  --tone-calm: #4e9b8b; /* was #6fb7a8 (2.3:1) */
+  --tone-neutral: #84918d; /* was #a6afac (2.3:1) */
+  --tone-stressed: #ba8424; /* was #d9a03a (2.3:1) */
+  --tone-angry: #c4503f;
+
+  /* spacing scale: 4 8 12 16 24 32 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* type scale; weights: 400 body, 600 labels, 700 headings */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* shape: one radius for cards and inputs, one for buttons */
+  --radius-card: 12px;
+  --radius-button: 10px;
+  --radius-pill: 999px;
+
+  --control-height: 44px; /* buttons and inputs */
+  --icon-size: 20px;
+}
