@@ -6,17 +6,18 @@ import { STATUS_LABEL } from '../components/ShiftRow';
 import { ToneCard, ToneChart } from '../components/ToneChart';
 import { Avatar, Card, ErrorState, Loading, Ring, Row, ScreenHeader, Section, Segmented, StatusPill } from '../components/ui';
 import { fmtDuration, fmtShiftDayLong, fmtTime } from '../format';
-import { colors, fonts, iconSize, radius, spacing, text, type } from '../theme';
+import { colors, icon, on, radius, space, text } from '../theme';
 import { ShiftDetail, TimelineEvent } from '../types';
 
 type Props = { token: string; shiftId: number; onBack: () => void };
 
-const EVENT: Record<TimelineEvent['kind'], { icon: IconName; color: string; bg: string; title: string }> = {
-  started: { icon: 'play', color: colors.primaryInk, bg: colors.primarySoft, title: 'Shift opened' },
-  arrived: { icon: 'login', color: colors.sage, bg: colors.sageSoft, title: 'Arrived' },
-  stepped_out: { icon: 'coffee-outline', color: colors.butterInk, bg: colors.butter, title: 'Break' },
-  returned: { icon: 'map-marker-check-outline', color: colors.sage, bg: colors.sageSoft, title: 'Back' },
-  left: { icon: 'logout', color: colors.textMuted, bg: colors.sunken, title: 'Finished' },
+// Event dots alternate the two tints; the icon says what happened.
+const EVENT: Record<TimelineEvent['kind'], { icon: IconName; bg: string; title: string }> = {
+  started: { icon: 'play', bg: colors.primaryTint, title: 'Shift opened' },
+  arrived: { icon: 'login', bg: colors.secondaryTint, title: 'Arrived' },
+  stepped_out: { icon: 'break', bg: colors.primaryTint, title: 'Break' },
+  returned: { icon: 'pinCheck', bg: colors.secondaryTint, title: 'Back' },
+  left: { icon: 'logout', bg: colors.line, title: 'Finished' },
 };
 
 type View3 = 'timeline' | 'breaks' | 'active';
@@ -61,33 +62,33 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
 
       <ScrollView
         contentContainerStyle={styles.container}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.secondary} />}
       >
         {!shift ? (
           error ? <ErrorState message={`Couldn't load this shift. ${error}`} onRetry={load} /> : <Loading label="Loading the shift" />
         ) : (
           <>
-            <Card tint={shift.phase === 'active' ? 'sage' : stillOut ? 'butter' : 'surface'} raised>
+            <Card tint="primary">
               <View style={styles.who}>
                 <View style={styles.pair}>
-                  <Avatar name={shift.caretaker} size={40} ring={colors.surface} />
-                  <View style={{ marginLeft: -12 }}>
-                    <Avatar name={shift.elderly} size={40} ring={colors.surface} />
+                  <Avatar name={shift.caretaker} size={40} solid />
+                  <View style={styles.overlap}>
+                    <Avatar name={shift.elderly} size={40} />
                   </View>
                 </View>
                 <Text style={[text.bodyStrong, { flex: 1 }]} numberOfLines={2}>
                   {shift.caretaker.split(' ')[0]} · {shift.elderly.split(' ')[0]}
                 </Text>
-                {st && <StatusPill label={st.text} tone={st.tone} live={shift.status === 'on_shift'} />}
+                {st && <StatusPill label={st.text} tone={st.tone} />}
               </View>
 
               <View
-                style={{ marginTop: spacing.md }}
+                style={{ marginTop: space.m }}
                 accessible
                 accessibilityLabel={`Active ${fmtDuration(shift.minutes)}. Only time within 15 metres of the elderly person counts.`}
               >
-                <Text style={text.number}>{fmtDuration(shift.minutes)}</Text>
-                <Text style={text.small}>
+                <Text style={text.display}>{fmtDuration(shift.minutes)}</Text>
+                <Text style={text.caption}>
                   {[
                     'active',
                     shift.arrived ? `${fmtTime(shift.arrived)} – ${shift.end ? fmtTime(shift.end) : stillOut ? 'out' : 'now'}` : 'not arrived',
@@ -99,19 +100,13 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
               </View>
 
               <View style={styles.stats}>
-                <Stat icon="coffee-outline" value={fmtDuration(shift.break_minutes)} label={`${shift.breaks} break${shift.breaks === 1 ? '' : 's'}`} />
-                <Stat
-                  icon={shift.source === 'auto' ? 'map-marker-radius-outline' : 'gesture-tap'}
-                  value={shift.source === 'auto' ? 'Auto' : 'Manual'}
-                  label="Start"
-                />
-                {shift.chores_total > 0 && (
-                  <Stat icon="checkbox-marked-circle-outline" value={`${shift.chores_done}/${shift.chores_total}`} label="Chores" />
-                )}
+                <Stat icon="break" value={fmtDuration(shift.break_minutes)} label={`${shift.breaks} break${shift.breaks === 1 ? '' : 's'}`} />
+                <Stat icon={shift.source === 'auto' ? 'pinCheck' : 'play'} value={shift.source === 'auto' ? 'Auto' : 'Manual'} label="Start" />
+                {shift.chores_total > 0 && <Stat icon="chores" value={`${shift.chores_done}/${shift.chores_total}`} label="Tasks" />}
               </View>
             </Card>
 
-            <View style={{ marginTop: spacing.lg }}>
+            <View style={{ marginTop: space.l }}>
               <Segmented<View3>
                 options={[
                   { key: 'timeline', label: 'Timeline' },
@@ -126,7 +121,7 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
             {view === 'timeline' && (
               <Card>
                 {shift.timeline.length === 0 ? (
-                  <Text style={text.small}>Nothing yet today.</Text>
+                  <Text style={text.caption}>Nothing yet today.</Text>
                 ) : (
                   shift.timeline.map((e, i) => {
                     const v = EVENT[e.kind];
@@ -141,16 +136,16 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
                       .join(' · ');
                     return (
                       <View key={`${e.kind}-${e.at}`} style={styles.event} accessible accessibilityLabel={`${fmtTime(e.at)}: ${title}. ${sub}`}>
-                        <Text style={styles.time}>{fmtTime(e.at)}</Text>
+                        <Text style={[text.captionStrong, styles.time]}>{fmtTime(e.at)}</Text>
                         <View style={styles.rail}>
                           <View style={[styles.dot, { backgroundColor: v.bg }]}>
-                            <Icon name={v.icon} size={16} color={v.color} />
+                            <Icon name={v.icon} size={icon.xs} />
                           </View>
                           {!isLast && <View style={styles.line} />}
                         </View>
-                        <View style={{ flex: 1, paddingBottom: isLast ? 0 : spacing.lg, paddingTop: 6 }}>
+                        <View style={[styles.eventBody, !isLast && { paddingBottom: space.l }]}>
                           <Text style={text.bodyStrong}>{title}</Text>
-                          {!!sub && <Text style={text.small}>{sub}</Text>}
+                          {!!sub && <Text style={text.caption}>{sub}</Text>}
                         </View>
                       </View>
                     );
@@ -160,17 +155,17 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
             )}
 
             {view === 'breaks' && (
-              <Card padded={false} style={{ paddingHorizontal: spacing.md }}>
+              <Card padded={false} style={styles.list}>
                 {shift.breaks_list.length === 0 ? (
-                  <Row first leading={<Icon name="coffee-off-outline" size={iconSize.inline} color={colors.textMuted} />} title="No breaks" />
+                  <Row first leading={<Icon name="break" color={colors.inkMuted} />} title="No breaks" />
                 ) : (
                   shift.breaks_list.map((b, i) => (
                     <Row
                       key={b.start}
                       first={i === 0}
-                      leading={<Icon name="coffee-outline" size={iconSize.inline} color={colors.butterInk} />}
+                      leading={<Icon name="break" />}
                       title={`${fmtTime(b.start)} – ${b.end ? fmtTime(b.end) : 'now'}`}
-                      trailing={<Text style={styles.value}>{fmtDuration(b.minutes)}</Text>}
+                      trailing={<Text style={text.bodyStrong}>{fmtDuration(b.minutes)}</Text>}
                     />
                   ))
                 )}
@@ -178,42 +173,44 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
             )}
 
             {view === 'active' && (
-              <Card padded={false} style={{ paddingHorizontal: spacing.md }}>
+              <Card padded={false} style={styles.list}>
                 {shift.segments.length === 0 ? (
-                  <Row first leading={<Icon name="map-marker-question-outline" size={iconSize.inline} color={colors.textMuted} />} title="Not in range yet" />
+                  <Row first leading={<Icon name="pin" color={colors.inkMuted} />} title="Not in range yet" />
                 ) : (
                   shift.segments.map((s, i) => (
                     <Row
                       key={s.start}
                       first={i === 0}
-                      leading={<Icon name="map-marker-check-outline" size={iconSize.inline} color={colors.sage} />}
+                      leading={<Icon name="pinCheck" color={colors.success} />}
                       title={`${fmtTime(s.start)} – ${s.end ? fmtTime(s.end) : 'now'}`}
-                      trailing={<Text style={styles.value}>{fmtDuration(s.minutes)}</Text>}
+                      trailing={<Text style={text.bodyStrong}>{fmtDuration(s.minutes)}</Text>}
                     />
                   ))
                 )}
               </Card>
             )}
 
-            <Section title="Chores" />
-            <Card tint={shift.chores.length && shift.chores_done === shift.chores_total ? 'sage' : 'surface'}>
+            <Section title="Tasks" />
+            <Card tint="secondary">
               {shift.chores.length === 0 ? (
-                <Text style={text.small}>None this day.</Text>
+                <Text style={text.caption}>None this day.</Text>
               ) : (
                 <>
                   <View style={styles.choreHead}>
-                    <Ring value={shift.chores_done} total={shift.chores_total} size={52} stroke={6} track={colors.sunken}>
-                      <Text style={styles.ringText}>
+                    <Ring value={shift.chores_done} total={shift.chores_total} size={56}>
+                      <Text style={text.captionStrong}>
                         {shift.chores_done}/{shift.chores_total}
                       </Text>
                     </Ring>
-                    <Text style={text.h2}>{shift.chores_done === shift.chores_total ? 'All done' : `${shift.chores_total - shift.chores_done} left`}</Text>
+                    <Text style={text.heading}>{shift.chores_done === shift.chores_total ? 'All done' : `${shift.chores_total - shift.chores_done} left`}</Text>
                   </View>
                   {shift.chores.map((c, i) => (
                     <View key={`${c.description}-${i}`} style={styles.chore}>
-                      <Icon name={c.is_done ? 'check-circle' : 'circle-outline'} size={22} color={c.is_done ? colors.sage : colors.borderStrong} />
-                      <Text style={[text.body, { flex: 1 }, !c.is_done && { color: colors.textMuted }]}>{c.description}</Text>
-                      {c.done_at && <Text style={text.small}>{fmtTime(c.done_at)}</Text>}
+                      <View style={[styles.tick, c.is_done && { backgroundColor: colors.success, borderColor: colors.success }]}>
+                        {c.is_done && <Icon name="check" size={icon.xs} color={on.success} />}
+                      </View>
+                      <Text style={[text.body, { flex: 1 }, !c.is_done && { color: colors.inkMuted }]}>{c.description}</Text>
+                      {c.done_at && <Text style={text.caption}>{fmtTime(c.done_at)}</Text>}
                     </View>
                   ))}
                 </>
@@ -224,7 +221,7 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
               <>
                 <Section title="Voice tone" />
                 {!!shift.tone_timeline?.length && (
-                  <Card style={{ marginBottom: spacing.ms }}>
+                  <Card style={{ marginBottom: space.s }}>
                     <ToneChart points={shift.tone_timeline} bucketMinutes={15} />
                   </Card>
                 )}
@@ -238,11 +235,11 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
   );
 }
 
-function Stat({ icon, value, label }: { icon: IconName; value: string; label: string }) {
+function Stat({ icon: glyph, value, label }: { icon: IconName; value: string; label: string }) {
   return (
     <View style={styles.stat} accessible accessibilityLabel={`${label}: ${value}`}>
-      <Icon name={icon} size={18} color={colors.textMuted} />
-      <Text style={styles.statValue} numberOfLines={1} adjustsFontSizeToFit>
+      <Icon name={glyph} color={colors.inkMuted} />
+      <Text style={text.bodyStrong} numberOfLines={1} adjustsFontSizeToFit>
         {value}
       </Text>
       <Text style={text.caption}>{label}</Text>
@@ -252,19 +249,20 @@ function Stat({ icon, value, label }: { icon: IconName; value: string; label: st
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
-  container: { padding: spacing.md, paddingBottom: spacing.xxl },
-  who: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  container: { padding: space.m, paddingBottom: space.xxl },
+  who: { flexDirection: 'row', alignItems: 'center', gap: space.s },
   pair: { flexDirection: 'row' },
-  stats: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.lg },
-  stat: { flex: 1, backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.ms, gap: 2 },
-  statValue: { fontFamily: fonts.display, fontSize: type.body + 1, color: colors.text },
+  overlap: { marginLeft: -space.m },
+  stats: { flexDirection: 'row', gap: space.s, marginTop: space.l },
+  stat: { flex: 1, backgroundColor: colors.surface, borderRadius: radius.small, padding: space.s },
+  list: { paddingHorizontal: space.m },
   event: { flexDirection: 'row' },
-  time: { width: 64, fontFamily: fonts.bodyBold, fontSize: type.small, color: colors.textMuted, paddingTop: 9 },
-  rail: { alignItems: 'center', width: 36, marginRight: spacing.ms },
-  dot: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center' },
-  line: { flex: 1, width: 2, backgroundColor: colors.border, marginVertical: 2 },
-  value: { fontFamily: fonts.display, fontSize: type.body, color: colors.text },
-  choreHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms, marginBottom: spacing.sm },
-  ringText: { fontFamily: fonts.display, fontSize: type.caption + 1, color: colors.text },
-  chore: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms, paddingVertical: spacing.sm },
+  time: { width: 64, paddingTop: space.s, color: colors.inkMuted },
+  rail: { alignItems: 'center', width: 32, marginRight: space.m },
+  dot: { width: 32, height: 32, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  line: { flex: 1, width: 2, backgroundColor: colors.line },
+  eventBody: { flex: 1 },
+  choreHead: { flexDirection: 'row', alignItems: 'center', gap: space.m, marginBottom: space.s },
+  chore: { flexDirection: 'row', alignItems: 'center', gap: space.m, paddingVertical: space.s },
+  tick: { width: 24, height: 24, borderRadius: radius.pill, borderWidth: 2, borderColor: colors.inkMuted, alignItems: 'center', justifyContent: 'center' },
 });

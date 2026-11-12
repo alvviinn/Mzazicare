@@ -6,7 +6,7 @@ import { AuthFrame } from '../components/AuthFrame';
 import { CodeStep } from '../components/CodeStep';
 import { GoogleButton } from '../components/GoogleButton';
 import { Button, ErrorText, Field } from '../components/ui';
-import { colors, fonts, spacing, TAP, text } from '../theme';
+import { colors, space, TAP, text } from '../theme';
 import { AuthResult, CodeChallenge } from '../types';
 
 type Props = { onLoggedIn: (s: Session) => void; onRegister: () => void };
@@ -55,7 +55,7 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
     <AuthFrame title="Sign in">
       <Field
         label="Email"
-        icon="email-outline"
+        icon="mail"
         value={email}
         onChangeText={setEmail}
         placeholder="you@example.com"
@@ -67,7 +67,7 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
       <Field
         ref={passwordRef}
         label="Password"
-        icon="lock-outline"
+        icon="lock"
         secure
         value={password}
         onChangeText={setPassword}
@@ -90,6 +90,6 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
 }
 
 const styles = StyleSheet.create({
-  switch: { alignItems: 'center', justifyContent: 'center', marginTop: spacing.md, minHeight: TAP },
-  link: { fontFamily: fonts.bodyBold, color: colors.primaryInk },
+  switch: { alignItems: 'center', justifyContent: 'center', marginTop: space.m, minHeight: TAP },
+  link: { ...text.bodyStrong, color: colors.secondary },
 });

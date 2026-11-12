@@ -5,7 +5,7 @@ import { Icon } from '../components/Icon';
 import { Avatar, haptic, Loading, PressScale, ScreenHeader } from '../components/ui';
 import { fmtTime } from '../format';
 import { NETWORK_ERROR } from '../net';
-import { colors, fonts, iconSize, radius, spacing, text, type } from '../theme';
+import { colors, icon, on, radius, space, text } from '../theme';
 import { ChatMessage } from '../types';
 
 type Props = { token: string; peer: { name: string; email: string }; onBack: () => void };
@@ -59,14 +59,14 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
 
       {!!error && (
         <View style={styles.error} accessibilityLiveRegion="polite">
-          <Icon name="alert-circle-outline" size={18} color={colors.danger} />
-          <Text style={[text.small, { color: colors.danger, flex: 1 }]}>{error}</Text>
+          <Icon name="alert" color={colors.error} />
+          <Text style={[text.caption, { color: colors.error, flex: 1 }]}>{error}</Text>
         </View>
       )}
 
       <FlatList
         style={styles.flex}
-        contentContainerStyle={{ padding: spacing.md, flexGrow: 1, justifyContent: 'flex-end' }}
+        contentContainerStyle={styles.list}
         data={[...messages].reverse()}
         inverted
         keyExtractor={(m) => String(m.id)}
@@ -74,7 +74,7 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
           loaded ? (
             <View style={styles.empty}>
               <Avatar name={peer.name} size={72} />
-              <Text style={[text.h2, { marginTop: spacing.sm }]}>{`Say hi to ${first}`}</Text>
+              <Text style={text.heading}>{`Say hi to ${first}`}</Text>
             </View>
           ) : (
             <View style={{ transform: [{ scaleY: -1 }] }}>
@@ -84,8 +84,8 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
         }
         renderItem={({ item }) => (
           <View style={[styles.bubble, item.mine ? styles.mine : styles.theirs]}>
-            <Text style={[text.body, item.mine && { color: colors.onPrimary }]}>{item.body}</Text>
-            <Text style={[styles.time, item.mine && { color: colors.primarySoft }]}>{fmtTime(item.created_at)}</Text>
+            <Text style={[text.body, item.mine && { color: on.secondary }]}>{item.body}</Text>
+            <Text style={[text.caption, styles.time, item.mine && { color: on.secondary }]}>{fmtTime(item.created_at)}</Text>
           </View>
         )}
       />
@@ -97,20 +97,19 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
           onChangeText={setDraft}
           placeholder="Message"
           accessibilityLabel={`Message to ${peer.name}`}
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={colors.inkMuted}
           multiline
           maxLength={2000}
         />
         <PressScale
           onPress={send}
           disabled={sending || !draft.trim()}
-          scaleTo={0.9}
           style={[styles.send, !draft.trim() && styles.sendOff]}
           accessibilityRole="button"
           accessibilityLabel="Send message"
           accessibilityState={{ disabled: sending || !draft.trim(), busy: sending }}
         >
-          {sending ? <ActivityIndicator color={colors.onPrimary} /> : <Icon name="arrow-up" size={iconSize.inline} color={colors.onPrimary} />}
+          {sending ? <ActivityIndicator color={on.primary} /> : <Icon name="send" size={icon.m} color={!draft.trim() ? colors.inkMuted : on.primary} />}
         </PressScale>
       </View>
     </KeyboardAvoidingView>
@@ -119,27 +118,28 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
-  error: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, backgroundColor: colors.dangerSoft },
-  empty: { alignItems: 'center', transform: [{ scaleY: -1 }], marginTop: spacing.xl },
-  bubble: { maxWidth: '80%', borderRadius: radius.lg, paddingHorizontal: spacing.md, paddingVertical: spacing.ms, marginBottom: spacing.sm },
-  mine: { alignSelf: 'flex-end', backgroundColor: colors.primary, borderBottomRightRadius: 6 },
-  theirs: { alignSelf: 'flex-start', backgroundColor: colors.surface, borderBottomLeftRadius: 6 },
-  time: { fontFamily: fonts.body, fontSize: type.caption, color: colors.textMuted, marginTop: 2, alignSelf: 'flex-end' },
-  composer: { flexDirection: 'row', alignItems: 'flex-end', padding: spacing.md, paddingTop: spacing.sm, gap: spacing.sm },
+  list: { padding: space.m, flexGrow: 1, justifyContent: 'flex-end' },
+  error: { flexDirection: 'row', alignItems: 'center', gap: space.s, paddingHorizontal: space.m, paddingVertical: space.s, backgroundColor: colors.surface },
+  empty: { alignItems: 'center', gap: space.s, transform: [{ scaleY: -1 }], marginTop: space.xl },
+  bubble: { maxWidth: '80%', borderRadius: radius.card, paddingHorizontal: space.m, paddingVertical: space.s, marginBottom: space.s },
+  mine: { alignSelf: 'flex-end', backgroundColor: colors.secondary },
+  theirs: { alignSelf: 'flex-start', backgroundColor: colors.surface },
+  time: { alignSelf: 'flex-end' },
+  composer: { flexDirection: 'row', alignItems: 'flex-end', padding: space.m, paddingTop: space.s, gap: space.s },
   input: {
     flex: 1,
     maxHeight: 120,
-    minHeight: 52,
-    borderRadius: radius.lg,
-    paddingHorizontal: spacing.md + 2,
-    paddingVertical: spacing.ms + 2,
-    fontFamily: fonts.body,
-    fontSize: type.body,
-    color: colors.text,
+    minHeight: 56,
+    borderRadius: radius.card,
+    paddingHorizontal: space.m,
+    paddingVertical: space.m,
+    fontFamily: text.body.fontFamily,
+    fontSize: text.body.fontSize,
+    color: colors.ink,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.line,
   },
-  send: { backgroundColor: colors.primary, borderRadius: 26, width: 52, height: 52, alignItems: 'center', justifyContent: 'center' },
-  sendOff: { backgroundColor: colors.textDisabled },
+  send: { backgroundColor: colors.primary, borderRadius: radius.pill, width: 56, height: 56, alignItems: 'center', justifyContent: 'center' },
+  sendOff: { backgroundColor: colors.line },
 });

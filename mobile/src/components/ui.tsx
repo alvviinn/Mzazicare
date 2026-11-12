@@ -1,4 +1,4 @@
-// The component kit. Every screen is built from these; colours, type and sizes come from theme.ts only.
+// The component kit. Every screen is built from these; every value comes from theme.ts.
 import * as Haptics from 'expo-haptics';
 import { forwardRef, useEffect, useState } from 'react';
 import {
@@ -25,7 +25,7 @@ import {
 import Svg, { Circle } from 'react-native-svg';
 import { useOnline } from '../net';
 import { t } from '../strings';
-import { colors, fonts, iconSize, motion, radius, shadow, spacing, stripe, TAP, text, TOP_INSET, type } from '../theme';
+import { colors, fonts, icon, motion, on, radius, shade, shadow, size, space, TAP, text, TOP_INSET } from '../theme';
 import { Icon, IconName } from './Icon';
 
 // ---------- feel ----------
@@ -36,6 +36,10 @@ AccessibilityInfo.isReduceMotionEnabled()
   .catch(() => {});
 AccessibilityInfo.addEventListener('reduceMotionChanged', (v) => (reduceMotion = v));
 
+// Every animation: the one easing curve and one of the two durations.
+const animate = (v: Animated.Value, toValue: number, duration: number, done?: () => void) =>
+  Animated.timing(v, { toValue, duration: reduceMotion ? 0 : duration, easing: motion.easing, useNativeDriver: true }).start(done);
+
 export const haptic = {
   tap: () => Haptics.selectionAsync().catch(() => {}),
   press: () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}),
@@ -43,31 +47,25 @@ export const haptic = {
   warn: () => Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {}),
 };
 
-// A Pressable that sinks slightly under the finger. Used for every tappable card, tile and button.
-// One animated element, so layout styles (flex, margins) apply exactly as on a plain View.
+// A Pressable that sinks slightly under the finger. One animated element, so layout styles apply as on a View.
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 export function PressScale({
   style,
   children,
   onPressIn,
   onPressOut,
-  scaleTo = 0.97,
   ...props
-}: PressableProps & { style?: StyleProp<ViewStyle>; children: React.ReactNode; scaleTo?: number }) {
+}: PressableProps & { style?: StyleProp<ViewStyle>; children: React.ReactNode }) {
   const [scale] = useState(() => new Animated.Value(1));
-  const to = (v: number) =>
-    reduceMotion
-      ? undefined
-      : Animated.spring(scale, { toValue: v, useNativeDriver: true, speed: 40, bounciness: v === 1 ? 6 : 0 }).start();
   return (
     <AnimatedPressable
       {...props}
       onPressIn={(e) => {
-        to(scaleTo);
+        animate(scale, 0.97, motion.fast);
         onPressIn?.(e);
       }}
       onPressOut={(e) => {
-        to(1);
+        animate(scale, 1, motion.fast);
         onPressOut?.(e);
       }}
       style={[style, { transform: [{ scale }] }]}
@@ -79,15 +77,12 @@ export function PressScale({
 
 // ---------- buttons ----------
 
-type ButtonVariant = 'primary' | 'secondary' | 'quiet' | 'danger' | 'sage' | 'ink';
-
+type ButtonVariant = 'primary' | 'secondary' | 'soft' | 'danger';
 const BUTTON: Record<ButtonVariant, { bg: string; fg: string }> = {
-  primary: { bg: colors.primary, fg: colors.onPrimary },
-  sage: { bg: colors.sage, fg: colors.onPrimary },
-  danger: { bg: colors.danger, fg: colors.onPrimary },
-  ink: { bg: colors.text, fg: colors.surface },
-  secondary: { bg: colors.primarySoft, fg: colors.primaryInk },
-  quiet: { bg: colors.sunken, fg: colors.text },
+  primary: { bg: colors.primary, fg: on.primary }, // the ONE main action on a screen
+  secondary: { bg: colors.secondary, fg: on.secondary },
+  soft: { bg: colors.primaryTint, fg: colors.ink },
+  danger: { bg: colors.error, fg: on.error },
 };
 
 export function Button({
@@ -96,8 +91,7 @@ export function Button({
   loading,
   disabled,
   variant = 'primary',
-  icon,
-  size = 'lg',
+  icon: iconName,
   accessibilityLabel,
   accessibilityHint,
 }: {
@@ -107,13 +101,12 @@ export function Button({
   disabled?: boolean;
   variant?: ButtonVariant;
   icon?: IconName;
-  size?: 'lg' | 'md';
   accessibilityLabel?: string;
   accessibilityHint?: string;
 }) {
   const v = BUTTON[variant];
   const off = disabled || loading;
-  const fg = disabled && !loading ? colors.textDisabled : v.fg;
+  const fg = disabled && !loading ? colors.inkMuted : v.fg;
   return (
     <PressScale
       onPress={() => {
@@ -125,18 +118,14 @@ export function Button({
       accessibilityLabel={accessibilityLabel ?? title}
       accessibilityHint={accessibilityHint}
       accessibilityState={{ disabled: !!off, busy: !!loading }}
-      style={[
-        styles.button,
-        size === 'md' && styles.buttonMd,
-        { backgroundColor: disabled && !loading ? colors.sunken : v.bg },
-      ]}
+      style={[styles.button, { backgroundColor: disabled && !loading ? colors.line : v.bg }]}
     >
       {loading ? (
         <ActivityIndicator color={v.fg} />
       ) : (
-        <View style={styles.buttonInner}>
-          {icon && <Icon name={icon} size={iconSize.inline} color={fg} />}
-          <Text style={[styles.buttonText, { color: fg }]} numberOfLines={1}>
+        <View style={styles.row8}>
+          {iconName && <Icon name={iconName} size={icon.s} color={fg} />}
+          <Text style={[text.bodyStrong, { color: fg }]} numberOfLines={1}>
             {title}
           </Text>
         </View>
@@ -147,47 +136,43 @@ export function Button({
 
 // A round icon-only button. Always has a spoken label.
 export function IconButton({
-  icon,
+  icon: iconName,
   label,
   onPress,
   tone = 'plain',
-  size = TAP,
   disabled,
 }: {
   icon: IconName;
   label: string;
   onPress: () => void;
-  tone?: 'plain' | 'soft' | 'primary' | 'danger';
-  size?: number;
+  tone?: 'plain' | 'surface' | 'primary' | 'secondary';
   disabled?: boolean;
 }) {
-  const bg = { plain: 'transparent', soft: colors.sunken, primary: colors.primary, danger: colors.danger }[tone];
-  const fg = tone === 'primary' || tone === 'danger' ? colors.onPrimary : colors.text;
+  const bg = { plain: 'transparent', surface: colors.surface, primary: colors.primary, secondary: colors.secondary }[tone];
+  const fg = tone === 'secondary' ? on.secondary : colors.ink;
   return (
     <PressScale
       onPress={onPress}
       disabled={disabled}
-      scaleTo={0.9}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityState={{ disabled: !!disabled }}
-      style={[styles.iconBtn, { width: Math.max(size, TAP), height: Math.max(size, TAP) }]}
+      style={[styles.iconBtn, { backgroundColor: disabled ? colors.line : bg }]}
     >
-      <View style={[styles.iconBtnFace, { width: size, height: size, backgroundColor: disabled ? colors.sunken : bg }]}>
-        <Icon name={icon} size={iconSize.inline} color={disabled ? colors.textDisabled : fg} />
-      </View>
+      <Icon name={iconName} size={icon.s} color={disabled ? colors.inkMuted : fg} />
     </PressScale>
   );
 }
 
 // ---------- chips and segmented control ----------
 
+// Unselected: outlined. Selected: marigold tint with a tick. `danger`: a brick fill for the one risky answer.
 export function Chip({
   label,
   onPress,
   selected,
-  icon,
-  tone = 'plain',
+  icon: iconName,
+  danger,
   disabled,
   accessibilityLabel,
 }: {
@@ -195,13 +180,11 @@ export function Chip({
   onPress?: () => void;
   selected?: boolean;
   icon?: IconName;
-  tone?: 'plain' | 'danger';
+  danger?: boolean;
   disabled?: boolean;
   accessibilityLabel?: string;
 }) {
-  const on = selected || tone === 'danger';
-  const bg = tone === 'danger' ? colors.danger : selected ? colors.text : colors.surface;
-  const fg = on ? colors.onPrimary : colors.text;
+  const fg = danger ? on.error : colors.ink;
   return (
     <PressScale
       onPress={() => {
@@ -212,10 +195,14 @@ export function Chip({
       accessibilityRole={selected === undefined ? 'button' : 'radio'}
       accessibilityState={{ selected: !!selected, disabled: !!disabled }}
       accessibilityLabel={accessibilityLabel ?? label}
-      style={[styles.chip, { backgroundColor: bg, opacity: disabled ? 0.5 : 1 }, !on && styles.chipLine]}
+      style={[
+        styles.chip,
+        danger ? { backgroundColor: colors.error } : selected ? { backgroundColor: colors.primaryTint } : styles.chipOutline,
+        disabled && { opacity: 0.5 },
+      ]}
     >
-      {icon && <Icon name={icon} size={18} color={fg} />}
-      <Text style={[styles.chipText, { color: fg }]}>{label}</Text>
+      {selected ? <Icon name="check" size={icon.s} color={fg} /> : iconName ? <Icon name={iconName} size={icon.s} color={fg} /> : null}
+      <Text style={[text.captionStrong, { color: fg }]}>{label}</Text>
     </PressScale>
   );
 }
@@ -232,7 +219,7 @@ export function Segmented<K extends string>({
   return (
     <View style={styles.segment} accessibilityRole="tablist">
       {options.map((o) => {
-        const on = o.key === value;
+        const sel = o.key === value;
         return (
           <Pressable
             key={o.key}
@@ -240,12 +227,12 @@ export function Segmented<K extends string>({
               haptic.tap();
               onChange(o.key);
             }}
-            style={[styles.segmentItem, on && styles.segmentOn]}
+            style={[styles.segmentItem, sel && styles.segmentOn]}
             accessibilityRole="tab"
-            accessibilityState={{ selected: on }}
+            accessibilityState={{ selected: sel }}
             accessibilityLabel={o.label}
           >
-            <Text style={[styles.segmentText, on && { color: colors.text }]}>{o.label}</Text>
+            <Text style={[text.captionStrong, { color: sel ? colors.ink : colors.inkMuted }]}>{o.label}</Text>
           </Pressable>
         );
       })}
@@ -255,58 +242,34 @@ export function Segmented<K extends string>({
 
 // ---------- surfaces ----------
 
-export type Tint = 'surface' | 'peach' | 'sage' | 'butter' | 'danger' | 'sunken';
-export const TINT: Record<Tint, string> = {
-  surface: colors.surface,
-  peach: colors.primarySoft,
-  sage: colors.sageSoft,
-  butter: colors.butter,
-  danger: colors.dangerSoft,
-  sunken: colors.sunken,
-};
+export type Tint = 'surface' | 'primary' | 'secondary';
+export const TINT: Record<Tint, string> = { surface: colors.surface, primary: colors.primaryTint, secondary: colors.secondaryTint };
 
-// A soft panel. `raised` adds the one floating shadow (hero cards only). No borders.
+// A soft panel. Cards sit on tints, never on shadows or borders.
 export function Card({
   children,
   tint = 'surface',
-  raised,
   padded = true,
   style,
 }: {
   children: React.ReactNode;
   tint?: Tint;
-  raised?: boolean;
   padded?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
-  return (
-    <View style={[styles.card, { backgroundColor: TINT[tint] }, padded && styles.cardPad, raised && shadow.float, style]}>
-      {children}
-    </View>
-  );
+  return <View style={[styles.card, { backgroundColor: TINT[tint] }, padded && { padding: space.m }, style]}>{children}</View>;
 }
 
-// The kanga-cloth band: the app's signature. Decorative, hidden from screen readers.
-export function Stripe({ height = 6, style }: { height?: number; style?: StyleProp<ViewStyle> }) {
-  return (
-    <View style={[styles.stripe, { height }, style]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      {stripe.map((c, i) => (
-        <View key={i} style={{ flex: i === 0 ? 3 : i === 2 ? 2 : 1, backgroundColor: c }} />
-      ))}
-    </View>
-  );
-}
-
-// Section heading with an optional action on the right ("See all").
+// Section heading with an optional link on the right ("See all").
 export function Section({ title, action, onAction }: { title: string; action?: string; onAction?: () => void }) {
   return (
     <View style={styles.section}>
-      <Text style={text.h2} accessibilityRole="header">
+      <Text style={text.heading} accessibilityRole="header">
         {title}
       </Text>
       {action && onAction && (
         <Pressable onPress={onAction} style={styles.sectionAction} accessibilityRole="button" accessibilityLabel={action}>
-          <Text style={styles.link}>{action}</Text>
+          <Text style={[text.captionStrong, { color: colors.secondary }]}>{action}</Text>
         </Pressable>
       )}
     </View>
@@ -338,18 +301,18 @@ export function Row({
   const body = (
     <>
       {leading}
-      <View style={{ flex: 1 }}>
+      <View style={styles.flex}>
         <Text style={[text.bodyStrong, strike && styles.strike]} numberOfLines={2}>
           {title}
         </Text>
         {!!subtitle && (
-          <Text style={text.small} numberOfLines={2}>
+          <Text style={text.caption} numberOfLines={2}>
             {subtitle}
           </Text>
         )}
       </View>
       {trailing}
-      {onPress && !trailing && <Icon name="chevron-right" size={iconSize.inline} color={colors.textMuted} />}
+      {onPress && !trailing && <Icon name="chevron" size={icon.s} color={colors.inkMuted} />}
     </>
   );
   const style = [styles.row, !first && styles.rowLine];
@@ -371,126 +334,80 @@ export function Row({
 }
 
 // Initial in a tinted circle. The tint comes from the name, so a person keeps their colour everywhere.
-const AVATAR_TINTS = [
-  { bg: colors.primarySoft, fg: colors.primaryInk },
-  { bg: colors.sageSoft, fg: colors.sage },
-  { bg: colors.butter, fg: colors.butterInk },
-];
-export function Avatar({ name, size = 44, ring }: { name: string; size?: number; ring?: string }) {
+export function Avatar({ name, size: d = 48, solid }: { name: string; size?: number; solid?: boolean }) {
   const n = [...name].reduce((a, c) => a + c.charCodeAt(0), 0);
-  const tint = AVATAR_TINTS[n % AVATAR_TINTS.length];
+  const tint = solid
+    ? { bg: colors.secondary, fg: on.secondary }
+    : n % 2
+      ? { bg: colors.secondaryTint, fg: colors.secondary }
+      : { bg: colors.primaryTint, fg: colors.ink };
   return (
     <View
-      style={[
-        styles.avatar,
-        { width: size, height: size, borderRadius: size / 2, backgroundColor: tint.bg },
-        ring ? { borderWidth: 2.5, borderColor: ring } : null,
-      ]}
+      style={[styles.center, { width: d, height: d, borderRadius: radius.pill, backgroundColor: tint.bg }]}
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
     >
-      <Text style={{ fontFamily: fonts.display, fontSize: size * 0.42, color: tint.fg }}>{name.trim().charAt(0).toUpperCase()}</Text>
+      <Text style={[d >= 64 ? text.display : text.heading, { color: tint.fg }]}>{name.trim().charAt(0).toUpperCase()}</Text>
     </View>
   );
 }
 
-// A status in words with a dot, never colour alone.
-export function StatusPill({
-  label,
-  tone,
-  live,
-}: {
-  label: string;
-  tone: 'sage' | 'butter' | 'danger' | 'quiet' | 'peach';
-  live?: boolean;
-}) {
-  const map = {
-    sage: { bg: colors.sageSoft, fg: colors.sage },
-    butter: { bg: colors.butter, fg: colors.butterInk },
-    danger: { bg: colors.dangerSoft, fg: colors.danger },
-    quiet: { bg: colors.sunken, fg: colors.textMuted },
-    peach: { bg: colors.primarySoft, fg: colors.primaryInk },
-  }[tone];
+// A status in words with a dot, never colour alone. Sits on `surface` so it reads on any tint.
+export type PillTone = 'success' | 'ink' | 'muted' | 'error' | 'secondary';
+const PILL: Record<PillTone, string> = {
+  success: colors.success,
+  ink: colors.ink,
+  muted: colors.inkMuted,
+  error: colors.error,
+  secondary: colors.secondary,
+};
+export function StatusPill({ label, tone }: { label: string; tone: PillTone }) {
+  const c = PILL[tone];
   return (
-    <View style={[styles.pill, { backgroundColor: map.bg }]}>
-      {live ? <LiveDot color={map.fg} /> : <View style={[styles.dot, { backgroundColor: map.fg }]} />}
-      <Text style={[styles.pillText, { color: map.fg }]} numberOfLines={1}>
+    <View style={styles.pill}>
+      <View style={[styles.dot, { backgroundColor: c }]} />
+      <Text style={[text.captionStrong, { color: c }]} numberOfLines={1}>
         {label}
       </Text>
     </View>
   );
 }
 
-// A softly pulsing dot for "live" states.
-export function LiveDot({ color = colors.sage }: { color?: string }) {
-  const pulse = useState(() => new Animated.Value(0))[0];
-  useEffect(() => {
-    if (reduceMotion) return;
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulse, { toValue: 1, duration: 900, useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 0, duration: 900, useNativeDriver: true }),
-      ]),
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [pulse]);
-  return (
-    <View style={{ width: 10, height: 10, alignItems: 'center', justifyContent: 'center' }}>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          backgroundColor: color,
-          opacity: pulse.interpolate({ inputRange: [0, 1], outputRange: [0.35, 0] }),
-          transform: [{ scale: pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 2.2] }) }],
-        }}
-      />
-      <View style={[styles.dot, { backgroundColor: color }]} />
-    </View>
-  );
-}
-
 // ---------- data visuals ----------
 
-// A progress ring with the figure in the middle.
+// A progress ring in mulberry (7.7:1, readable on its own) with the figure or an icon in the middle.
 export function Ring({
   value,
   total,
-  size = 64,
-  stroke = 7,
-  color = colors.sage,
+  size: d = 64,
   track = colors.surface,
   children,
 }: {
   value: number;
   total: number;
   size?: number;
-  stroke?: number;
-  color?: string;
   track?: string;
   children?: React.ReactNode;
 }) {
-  const r = (size - stroke) / 2;
+  const stroke = d >= 80 ? 8 : 6;
+  const r = (d - stroke) / 2;
   const c = 2 * Math.PI * r;
   const share = total > 0 ? Math.min(1, value / total) : 0;
   return (
-    <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
-      <Svg width={size} height={size} style={StyleSheet.absoluteFill}>
-        <Circle cx={size / 2} cy={size / 2} r={r} stroke={track} strokeWidth={stroke} fill="none" />
+    <View style={[styles.center, { width: d, height: d }]}>
+      <Svg width={d} height={d} style={StyleSheet.absoluteFill}>
+        <Circle cx={d / 2} cy={d / 2} r={r} stroke={track} strokeWidth={stroke} fill="none" />
         {share > 0 && (
           <Circle
-            cx={size / 2}
-            cy={size / 2}
+            cx={d / 2}
+            cy={d / 2}
             r={r}
-            stroke={color}
+            stroke={colors.secondary}
             strokeWidth={stroke}
             fill="none"
             strokeLinecap="round"
             strokeDasharray={`${c * share} ${c}`}
-            transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            transform={`rotate(-90 ${d / 2} ${d / 2})`}
           />
         )}
       </Svg>
@@ -499,36 +416,25 @@ export function Ring({
   );
 }
 
-// Live progress through a day, like an order tracker: done steps filled, the current one ringed.
-export function Stepper({ steps, current, color = colors.sage }: { steps: string[]; current: number; color?: string }) {
+// Live progress through a day, like an order tracker: done steps ticked, the current one ringed.
+export function Stepper({ steps, current }: { steps: string[]; current: number }) {
   return (
-    <View
-      style={styles.stepper}
-      accessible
-      accessibilityLabel={`${steps[Math.max(0, current)] ?? ''}. Step ${current + 1} of ${steps.length}`}
-    >
+    <View style={styles.stepper} accessible accessibilityLabel={`${steps[Math.max(0, current)] ?? ''}. Step ${current + 1} of ${steps.length}`}>
       {steps.map((s, i) => {
         const done = i < current;
         const now = i === current;
         return (
           <View key={s} style={styles.step}>
             <View style={styles.stepTrack}>
-              <View style={[styles.stepLine, { backgroundColor: i === 0 ? 'transparent' : i <= current ? color : colors.border }]} />
+              <View style={[styles.stepLine, { backgroundColor: i === 0 ? 'transparent' : i <= current ? colors.secondary : colors.line }]} />
+              <View style={[styles.stepDot, done && styles.stepDone, now && styles.stepNow]}>
+                {done && <Icon name="check" size={icon.xs} color={on.secondary} />}
+              </View>
               <View
-                style={[
-                  styles.stepDot,
-                  done && { backgroundColor: color, borderColor: color },
-                  now && { borderColor: color, borderWidth: 4, backgroundColor: colors.surface },
-                ]}
-              />
-              <View
-                style={[
-                  styles.stepLine,
-                  { backgroundColor: i === steps.length - 1 ? 'transparent' : i < current ? color : colors.border },
-                ]}
+                style={[styles.stepLine, { backgroundColor: i === steps.length - 1 ? 'transparent' : i < current ? colors.secondary : colors.line }]}
               />
             </View>
-            <Text style={[styles.stepText, (done || now) && { color: colors.text }]} numberOfLines={1}>
+            <Text style={[text.caption, (done || now) && { color: colors.ink, fontFamily: fonts.bodyBold }]} numberOfLines={1}>
               {s}
             </Text>
           </View>
@@ -538,31 +444,22 @@ export function Stepper({ steps, current, color = colors.sage }: { steps: string
   );
 }
 
-// A slim horizontal progress bar.
-export function Bar({ share, color = colors.sage, track = colors.sunken }: { share: number; color?: string; track?: string }) {
-  return (
-    <View style={[styles.bar, { backgroundColor: track }]}>
-      <View style={[styles.barFill, { width: `${Math.max(0, Math.min(100, share * 100))}%`, backgroundColor: color }]} />
-    </View>
-  );
-}
-
 // ---------- inputs ----------
 
 type FieldProps = TextInputProps & { label: string; secure?: boolean; icon?: IconName };
 
-// Filled input with its label above. `secure` adds a show/hide eye.
-export const Field = forwardRef<TextInputInstance, FieldProps>(({ label, secure, icon, style, ...props }, ref) => {
+// Input on surface with a line border; mulberry border while typing. `secure` adds a show/hide eye.
+export const Field = forwardRef<TextInputInstance, FieldProps>(function Field({ label, secure, icon: iconName, style, ...props }, ref) {
   const [hidden, setHidden] = useState(true);
   const [focus, setFocus] = useState(false);
   return (
-    <View style={{ marginBottom: spacing.md }}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={[styles.inputWrap, focus && styles.inputFocus]}>
-        {icon && <Icon name={icon} size={iconSize.inline} color={colors.textMuted} />}
+    <View style={{ marginBottom: space.m }}>
+      <Text style={[text.captionStrong, { marginBottom: space.s }]}>{label}</Text>
+      <View style={[styles.inputWrap, focus && { borderColor: colors.secondary }]}>
+        {iconName && <Icon name={iconName} size={icon.s} color={colors.inkMuted} />}
         <TextInput
           ref={ref}
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={colors.inkMuted}
           autoCapitalize="none"
           accessibilityLabel={label}
           {...props}
@@ -584,7 +481,7 @@ export const Field = forwardRef<TextInputInstance, FieldProps>(({ label, secure,
             accessibilityRole="button"
             accessibilityLabel={hidden ? t.common.showPassword : t.common.hidePassword}
           >
-            <Icon name={hidden ? 'eye-outline' : 'eye-off-outline'} size={iconSize.inline} color={colors.textMuted} />
+            <Icon name={hidden ? 'eye' : 'eyeOff'} size={icon.s} color={colors.inkMuted} />
           </Pressable>
         )}
       </View>
@@ -594,32 +491,32 @@ export const Field = forwardRef<TextInputInstance, FieldProps>(({ label, secure,
 
 export function ErrorText({ children }: { children?: string }) {
   return children ? (
-    <View style={styles.errorRow} accessibilityLiveRegion="polite">
-      <Icon name="alert-circle-outline" size={18} color={colors.danger} />
-      <Text style={styles.error}>{children}</Text>
+    <View style={[styles.row8, styles.errorRow]} accessibilityLiveRegion="polite">
+      <Icon name="alert" size={icon.s} color={colors.error} />
+      <Text style={[text.caption, { flex: 1, color: colors.error }]}>{children}</Text>
     </View>
   ) : null;
 }
 
 // ---------- states ----------
 
-// A skeleton while data loads: the shape of what is coming, gently breathing.
+// A skeleton while data loads: the shape of what is coming, in line colour, gently breathing.
 export function Loading({ label, lines = 3 }: { label: string; lines?: number }) {
-  const fade = useState(() => new Animated.Value(0.5))[0];
+  const [fade] = useState(() => new Animated.Value(1));
   useEffect(() => {
     if (reduceMotion) return;
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(fade, { toValue: 1, duration: 700, useNativeDriver: true }),
-        Animated.timing(fade, { toValue: 0.5, duration: 700, useNativeDriver: true }),
+        Animated.timing(fade, { toValue: 0.5, duration: motion.slow, easing: motion.easing, useNativeDriver: true }),
+        Animated.timing(fade, { toValue: 1, duration: motion.slow, easing: motion.easing, useNativeDriver: true }),
       ]),
     );
     loop.start();
     return () => loop.stop();
   }, [fade]);
   return (
-    <Animated.View style={{ opacity: fade, gap: spacing.ms }} accessible accessibilityLabel={label} accessibilityLiveRegion="polite">
-      <View style={[styles.skel, { height: 132 }]} />
+    <Animated.View style={{ opacity: fade, gap: space.s }} accessible accessibilityLabel={label} accessibilityLiveRegion="polite">
+      <View style={[styles.skel, { height: 128 }]} />
       {Array.from({ length: lines - 1 }, (_, i) => (
         <View key={i} style={[styles.skel, { height: 64, width: i % 2 ? '70%' : '100%' }]} />
       ))}
@@ -630,21 +527,25 @@ export function Loading({ label, lines = 3 }: { label: string; lines?: number })
 // What went wrong and a way to try again.
 export function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
-    <Card tint="danger">
+    <Card>
       <View style={styles.state} accessibilityLiveRegion="polite">
-        <View style={[styles.stateIcon, { backgroundColor: colors.surface }]}>
-          <Icon name="wifi-strength-alert-outline" size={iconSize.large} color={colors.danger} />
+        <View style={[styles.stateIcon, { backgroundColor: colors.primaryTint }]}>
+          <Icon name="wifiOff" size={icon.m} color={colors.error} />
         </View>
         <Text style={[text.body, { textAlign: 'center' }]}>{message}</Text>
-        {onRetry && <Button title={t.common.tryAgain} variant="quiet" size="md" icon="refresh" onPress={onRetry} />}
+        {onRetry && (
+          <View style={{ alignSelf: 'stretch' }}>
+            <Button title={t.common.tryAgain} variant="soft" icon="refresh" onPress={onRetry} />
+          </View>
+        )}
       </View>
     </Card>
   );
 }
 
-// An empty list: a friendly icon, a short title, at most one line, and the action that fills it.
+// An empty list: an icon, a short title, at most one line, and the action that fills it.
 export function Empty({
-  icon,
+  icon: iconName,
   title,
   body,
   action,
@@ -661,14 +562,14 @@ export function Empty({
   return (
     <Card tint={tint}>
       <View style={styles.state}>
-        <View style={styles.stateIcon}>
-          <Icon name={icon} size={iconSize.large} color={colors.primaryInk} />
+        <View style={[styles.stateIcon, { backgroundColor: tint === 'surface' ? colors.secondaryTint : colors.surface }]}>
+          <Icon name={iconName} size={icon.m} />
         </View>
-        <Text style={[text.h2, { textAlign: 'center' }]}>{title}</Text>
-        {!!body && <Text style={[text.small, { textAlign: 'center' }]}>{body}</Text>}
+        <Text style={[text.heading, { textAlign: 'center' }]}>{title}</Text>
+        {!!body && <Text style={[text.caption, { textAlign: 'center' }]}>{body}</Text>}
         {action && onAction && (
-          <View style={{ alignSelf: 'stretch', marginTop: spacing.xs }}>
-            <Button title={action} variant="secondary" size="md" onPress={onAction} />
+          <View style={{ alignSelf: 'stretch' }}>
+            <Button title={action} variant="secondary" onPress={onAction} />
           </View>
         )}
       </View>
@@ -676,14 +577,14 @@ export function Empty({
   );
 }
 
-// Slim strip shown while the server can't be reached.
+// Slim strip shown while the server can't be reached: attention = marigold tint, ink text, an icon.
 export function OfflineBanner() {
   const online = useOnline();
   if (online) return null;
   return (
     <View style={styles.offline} accessibilityLiveRegion="polite" accessibilityRole="alert" accessibilityLabel={t.common.offlineLong}>
-      <Icon name="cloud-off-outline" size={18} color={colors.butterInk} />
-      <Text style={styles.offlineText}>{t.common.offline}</Text>
+      <Icon name="offline" size={icon.s} />
+      <Text style={text.captionStrong}>{t.common.offline}</Text>
     </View>
   );
 }
@@ -702,24 +603,22 @@ export function Toast({
   onHide: () => void;
   ms?: number;
 }) {
-  const y = useState(() => new Animated.Value(reduceMotion ? 0 : 40))[0];
-  const fade = useState(() => new Animated.Value(0))[0];
+  const [y] = useState(() => new Animated.Value(space.xl));
+  const [fade] = useState(() => new Animated.Value(0));
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fade, { toValue: 1, duration: motion.base, useNativeDriver: true }),
-      Animated.spring(y, { toValue: 0, useNativeDriver: true, speed: 18, bounciness: 6 }),
-    ]).start();
+    animate(fade, 1, motion.slow);
+    animate(y, 0, motion.slow);
     const id = setTimeout(onHide, ms);
     return () => clearTimeout(id);
   }, [message, ms, onHide, fade, y]);
   return (
     <Animated.View
-      style={[styles.toast, { opacity: fade, transform: [{ translateY: y }] }]}
+      style={[styles.toast, shadow.float, { opacity: fade, transform: [{ translateY: y }] }]}
       accessibilityLiveRegion="polite"
       accessibilityRole="alert"
     >
-      <Icon name="check-circle" size={iconSize.inline} color={colors.butter} />
-      <Text style={styles.toastText}>{message}</Text>
+      <Icon name="checkCircle" size={icon.s} color={on.secondary} />
+      <Text style={[text.body, { flex: 1, color: on.secondary }]}>{message}</Text>
       {actionLabel && onAction && (
         <Pressable
           onPress={() => {
@@ -730,7 +629,7 @@ export function Toast({
           accessibilityRole="button"
           accessibilityLabel={actionLabel}
         >
-          <Text style={styles.toastActionText}>{actionLabel}</Text>
+          <Text style={[text.bodyStrong, { color: colors.primaryTint }]}>{actionLabel}</Text>
         </Pressable>
       )}
     </Animated.View>
@@ -740,9 +639,9 @@ export function Toast({
 // A small "Not synced" mark for items waiting to be sent.
 export function PendingTag() {
   return (
-    <View style={styles.pending} accessibilityLabel={t.common.notSynced}>
-      <Icon name="cloud-upload-outline" size={14} color={colors.butterInk} />
-      <Text style={styles.pendingText}>{t.common.notSynced}</Text>
+    <View style={styles.row8} accessibilityLabel={t.common.notSynced}>
+      <Icon name="upload" size={icon.s} color={colors.inkMuted} />
+      <Text style={text.caption}>{t.common.notSynced}</Text>
     </View>
   );
 }
@@ -761,8 +660,8 @@ export function ScreenHeader({ title, onBack, right }: { title: string; onBack: 
   return (
     <View style={{ backgroundColor: colors.background }}>
       <View style={styles.header}>
-        <IconButton icon="arrow-left" label={t.common.back} onPress={onBack} tone="soft" size={44} />
-        <Text style={[text.h2, { flex: 1 }]} numberOfLines={1} accessibilityRole="header">
+        <IconButton icon="back" label={t.common.back} onPress={onBack} tone="surface" />
+        <Text style={[text.heading, styles.flex]} numberOfLines={1} accessibilityRole="header">
           {title}
         </Text>
         {right}
@@ -772,53 +671,45 @@ export function ScreenHeader({ title, onBack, right }: { title: string; onBack: 
   );
 }
 
-// Fixed area at the bottom of a screen for its one main action, within thumb reach.
-export function BottomAction({ children }: { children: React.ReactNode }) {
-  return <View style={styles.bottom}>{children}</View>;
-}
-
-// A bottom sheet: slides up, drag the handle down (or tap outside) to close. Used for every form.
+// A bottom sheet: slides up; drag the handle down, tap outside or press back to close. Used for every form.
 export function Sheet({
   visible,
   onClose,
   title,
   children,
-  scroll = true,
 }: {
   visible: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  scroll?: boolean;
 }) {
-  const y = useState(() => new Animated.Value(600))[0];
+  const [y] = useState(() => new Animated.Value(600));
   const [mounted, setMounted] = useState(visible);
-  // Mount as soon as it should show (state adjusted during render, not in an effect); unmount after the slide-out.
+  // Mount as soon as it should show (state adjusted during render); unmount after the slide-out.
   if (visible && !mounted) setMounted(true);
 
   useEffect(() => {
     if (visible) {
-      y.setValue(reduceMotion ? 0 : 600);
-      Animated.spring(y, { toValue: 0, useNativeDriver: true, speed: 16, bounciness: 4 }).start();
+      y.setValue(600);
+      animate(y, 0, motion.slow);
     } else if (mounted) {
-      Animated.timing(y, { toValue: 600, duration: motion.fast + 60, useNativeDriver: true }).start(() => setMounted(false));
+      animate(y, 600, motion.slow, () => setMounted(false));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
   const [pan] = useState(() =>
     PanResponder.create({
-      onMoveShouldSetPanResponder: (_, g) => g.dy > 6,
+      onMoveShouldSetPanResponder: (_, g) => g.dy > space.s,
       onPanResponderMove: (_, g) => g.dy > 0 && y.setValue(g.dy),
       onPanResponderRelease: (_, g) => {
         if (g.dy > 110 || g.vy > 1.2) onClose();
-        else Animated.spring(y, { toValue: 0, useNativeDriver: true, speed: 20 }).start();
+        else animate(y, 0, motion.fast);
       },
     }),
   );
 
   if (!mounted) return null;
-  const Body = scroll ? ScrollView : View;
   return (
     <Modal transparent visible animationType="fade" onRequestClose={onClose} statusBarTranslucent>
       <Pressable style={styles.scrim} onPress={onClose} accessibilityRole="button" accessibilityLabel={t.common.close} />
@@ -827,19 +718,17 @@ export function Sheet({
           <View {...pan.panHandlers} style={styles.sheetGrab}>
             <View style={styles.handle} />
             {!!title && (
-              <View style={styles.sheetHead}>
-                <Text style={[text.h1, { flex: 1 }]} accessibilityRole="header">
+              <View style={[styles.row8, { marginBottom: space.m }]}>
+                <Text style={[text.heading, styles.flex]} accessibilityRole="header">
                   {title}
                 </Text>
-                <IconButton icon="close" label={t.common.close} onPress={onClose} tone="soft" size={40} />
+                <IconButton icon="close" label={t.common.close} onPress={onClose} />
               </View>
             )}
           </View>
-          <Body
-            {...(scroll ? { keyboardShouldPersistTaps: 'handled' as const, contentContainerStyle: styles.sheetBody } : { style: styles.sheetBody })}
-          >
+          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.sheetBody}>
             {children}
-          </Body>
+          </ScrollView>
         </Animated.View>
       </KeyboardAvoidingView>
     </Modal>
@@ -847,182 +736,125 @@ export function Sheet({
 }
 
 const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  center: { alignItems: 'center', justifyContent: 'center' },
+  row8: { flexDirection: 'row', alignItems: 'center', gap: space.s },
+
   button: {
     minHeight: 56,
     borderRadius: radius.pill,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: space.l,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
   },
-  buttonMd: { minHeight: TAP },
-  buttonInner: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  buttonText: { fontFamily: fonts.bodyBold, fontSize: type.body },
-  iconBtn: { alignItems: 'center', justifyContent: 'center' },
-  iconBtnFace: { borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  iconBtn: { width: TAP, height: TAP, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
 
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    minHeight: 44,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.pill,
-  },
-  chipLine: { borderWidth: 1, borderColor: colors.border },
-  chipText: { fontFamily: fonts.bodyBold, fontSize: type.small },
+  chip: { flexDirection: 'row', alignItems: 'center', gap: space.s, minHeight: TAP, paddingHorizontal: space.m, borderRadius: radius.pill },
+  chipOutline: { borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface },
 
-  segment: { flexDirection: 'row', backgroundColor: colors.sunken, borderRadius: radius.pill, padding: 4, marginBottom: spacing.md },
-  segmentItem: { flex: 1, minHeight: 44, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
-  segmentOn: { backgroundColor: colors.surface, ...shadow.float },
-  segmentText: { fontFamily: fonts.bodyBold, fontSize: type.small, color: colors.textMuted },
+  segment: { flexDirection: 'row', backgroundColor: colors.line, borderRadius: radius.pill, padding: space.s, marginBottom: space.m },
+  segmentItem: { flex: 1, minHeight: 40, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  segmentOn: { backgroundColor: colors.surface },
 
-  card: { borderRadius: radius.lg },
-  cardPad: { padding: spacing.md + 4 },
-  stripe: { flexDirection: 'row', borderRadius: radius.pill, overflow: 'hidden' },
+  card: { borderRadius: radius.card },
 
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: spacing.lg,
-    marginBottom: spacing.ms,
-  },
-  sectionAction: { minHeight: TAP, justifyContent: 'center', paddingLeft: spacing.md },
-  link: { fontFamily: fonts.bodyBold, fontSize: type.small, color: colors.primaryInk },
+  section: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: space.l, marginBottom: space.s },
+  sectionAction: { minHeight: TAP, justifyContent: 'center', paddingLeft: space.m },
 
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms, minHeight: 64, paddingVertical: spacing.sm },
-  rowLine: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  strike: { textDecorationLine: 'line-through', color: colors.textMuted },
-
-  avatar: { alignItems: 'center', justifyContent: 'center' },
+  row: { flexDirection: 'row', alignItems: 'center', gap: space.m, minHeight: 64, paddingVertical: space.s },
+  rowLine: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.line },
+  strike: { textDecorationLine: 'line-through', color: colors.inkMuted },
 
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: space.s,
     borderRadius: radius.pill,
-    paddingHorizontal: spacing.ms,
-    paddingVertical: 6,
+    paddingHorizontal: space.m,
+    minHeight: 32,
     alignSelf: 'flex-start',
     flexShrink: 1,
-  },
-  pillText: { fontFamily: fonts.bodyBold, fontSize: type.small },
-  dot: { width: 8, height: 8, borderRadius: 4 },
-
-  stepper: { flexDirection: 'row' },
-  step: { flex: 1, alignItems: 'center' },
-  stepTrack: { flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch' },
-  stepLine: { flex: 1, height: 3, borderRadius: 2 },
-  stepDot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: colors.borderStrong,
     backgroundColor: colors.surface,
   },
-  stepText: { ...text.caption, marginTop: 6 },
+  dot: { width: space.s, height: space.s, borderRadius: radius.pill },
 
-  bar: { height: 8, borderRadius: 4, overflow: 'hidden', alignSelf: 'stretch' },
-  barFill: { height: '100%', borderRadius: 4 },
+  stepper: { flexDirection: 'row' },
+  step: { flex: 1, alignItems: 'center', gap: space.s },
+  stepTrack: { flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch' },
+  stepLine: { flex: 1, height: 3 },
+  stepDot: {
+    width: 20,
+    height: 20,
+    borderRadius: radius.pill,
+    borderWidth: 2,
+    borderColor: colors.line,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepDone: { backgroundColor: colors.secondary, borderColor: colors.secondary },
+  stepNow: { borderColor: colors.secondary, borderWidth: 6 },
 
-  label: { ...text.smallStrong, marginBottom: 6 },
   inputWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: space.s,
     minHeight: 56,
-    borderRadius: radius.md,
-    backgroundColor: colors.sunken,
-    paddingLeft: spacing.md,
+    borderRadius: radius.small,
+    backgroundColor: colors.surface,
+    paddingLeft: space.m,
     borderWidth: 1.5,
-    borderColor: 'transparent',
+    borderColor: colors.line,
   },
-  inputFocus: { borderColor: colors.primary, backgroundColor: colors.surface },
   input: {
     flex: 1,
     minHeight: 52,
-    paddingRight: spacing.md,
-    paddingVertical: spacing.ms,
+    paddingRight: space.m,
+    paddingVertical: space.s,
     fontFamily: fonts.body,
-    fontSize: type.body,
-    color: colors.text,
-    ...(Platform.OS === 'web' ? { outlineWidth: 0 } : null), // the filled box shows focus instead
+    fontSize: size.body,
+    color: colors.ink,
+    ...(Platform.OS === 'web' ? { outlineWidth: 0 } : null), // the border shows focus instead
   },
-  eye: { width: TAP + 4, height: TAP, alignItems: 'center', justifyContent: 'center' },
-  errorRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, marginBottom: spacing.md },
-  error: { flex: 1, fontFamily: fonts.bodyMedium, fontSize: type.small, color: colors.danger },
+  eye: { width: TAP, height: TAP, alignItems: 'center', justifyContent: 'center' },
+  errorRow: { alignItems: 'flex-start', marginBottom: space.m },
 
-  skel: { borderRadius: radius.lg, backgroundColor: colors.sunken },
-  state: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.sm },
-  stateIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: colors.primarySoft,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing.xs,
-  },
+  skel: { borderRadius: radius.card, backgroundColor: colors.line },
+  state: { alignItems: 'center', gap: space.s, paddingVertical: space.s },
+  stateIcon: { width: 64, height: 64, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
 
   offline: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.sm,
-    backgroundColor: colors.butter,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 6,
+    gap: space.s,
+    backgroundColor: colors.primaryTint,
+    paddingHorizontal: space.m,
+    paddingVertical: space.s,
   },
-  offlineText: { fontFamily: fonts.bodyBold, fontSize: type.small, color: colors.butterInk },
 
   toast: {
     position: 'absolute',
-    left: spacing.md,
-    right: spacing.md,
-    bottom: spacing.md,
+    left: space.m,
+    right: space.m,
+    bottom: space.m,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    backgroundColor: colors.text,
+    gap: space.s,
+    backgroundColor: colors.secondary,
     borderRadius: radius.pill,
-    paddingLeft: spacing.md + 2,
+    paddingLeft: space.m,
     minHeight: 56,
-    ...shadow.float,
   },
-  toastText: { flex: 1, fontFamily: fonts.bodyMedium, color: colors.onPrimary, fontSize: type.body, paddingVertical: spacing.ms },
-  toastAction: { minWidth: TAP + 24, height: 56, alignItems: 'center', justifyContent: 'center', paddingRight: spacing.sm },
-  toastActionText: { fontFamily: fonts.bodyBold, color: colors.butter, fontSize: type.body },
+  toastAction: { minWidth: TAP + space.l, height: 56, alignItems: 'center', justifyContent: 'center', paddingRight: space.s },
 
-  pending: { flexDirection: 'row', alignItems: 'center', gap: 3 },
-  pendingText: { fontFamily: fonts.bodyBold, fontSize: type.caption, color: colors.butterInk },
+  header: { flexDirection: 'row', alignItems: 'center', gap: space.s, paddingTop: TOP_INSET, paddingHorizontal: space.m, paddingBottom: space.s },
 
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingTop: TOP_INSET,
-    paddingHorizontal: spacing.ms,
-    paddingBottom: spacing.sm,
-  },
-  bottom: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.ms,
-    paddingBottom: spacing.md,
-    backgroundColor: colors.background,
-  },
-
-  scrim: { ...StyleSheet.absoluteFill, backgroundColor: colors.scrim },
+  scrim: { ...StyleSheet.absoluteFill, backgroundColor: shade.scrim },
   sheetWrap: { flex: 1, justifyContent: 'flex-end' },
-  sheet: {
-    backgroundColor: colors.background,
-    borderTopLeftRadius: radius.lg + 4,
-    borderTopRightRadius: radius.lg + 4,
-    maxHeight: '92%',
-  },
-  sheetGrab: { paddingTop: spacing.sm, paddingHorizontal: spacing.lg },
-  handle: { alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: colors.borderStrong, marginBottom: spacing.sm },
-  sheetHead: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
-  sheetBody: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
+  sheet: { backgroundColor: colors.surface, borderTopLeftRadius: radius.card, borderTopRightRadius: radius.card, maxHeight: '92%' },
+  sheetGrab: { paddingTop: space.s, paddingHorizontal: space.l },
+  handle: { alignSelf: 'center', width: 48, height: 4, borderRadius: radius.pill, backgroundColor: colors.line, marginBottom: space.s },
+  sheetBody: { paddingHorizontal: space.l, paddingBottom: space.xl },
 });

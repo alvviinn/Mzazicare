@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { t } from '../strings';
-import { colors, spacing, TAP, text, TOP_INSET } from '../theme';
+import { colors, space, TAP, text, TOP_INSET } from '../theme';
 import { Profile } from '../types';
 import { Icon } from './Icon';
 import { Avatar, Button, Card, OfflineBanner, Row, Sheet } from './ui';
 
-// Common frame for the caretaker and family homes: greeting, avatar (opens the account sheet), content, footer.
+// Common frame for the caretaker and family homes: title, avatar (opens the account sheet), content, footer.
 export function HomeShell({
   profile,
   onSignOut,
@@ -39,14 +39,14 @@ export function HomeShell({
           contentContainerStyle={styles.container}
           refreshControl={
             onRefresh ? (
-              <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} />
+              <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.secondary} colors={[colors.secondary]} />
             ) : undefined
           }
         >
           <View style={styles.header}>
-            <View style={{ flex: 1 }}>
-              <Text style={text.small}>{title ? t.roles[profile.role] : day}</Text>
-              <Text style={text.h1} accessibilityRole="header" numberOfLines={1}>
+            <View style={styles.flex}>
+              <Text style={text.caption}>{title ? t.roles[profile.role] : day}</Text>
+              <Text style={text.display} accessibilityRole="header" numberOfLines={1}>
                 {title ?? t.common.hello(first)}
               </Text>
             </View>
@@ -56,7 +56,7 @@ export function HomeShell({
               accessibilityRole="button"
               accessibilityLabel={`${t.common.account}: ${profile.name}`}
             >
-              <Avatar name={profile.name} size={46} />
+              <Avatar name={profile.name} size={48} />
             </Pressable>
           </View>
           {children}
@@ -91,22 +91,22 @@ function AccountSheet({
     <Sheet visible={visible} onClose={onClose}>
       <View style={styles.meHead}>
         <Avatar name={profile.name} size={72} />
-        <Text style={[text.h1, { marginTop: spacing.sm }]}>{profile.name}</Text>
-        <Text style={text.small}>
+        <Text style={text.heading}>{profile.name}</Text>
+        <Text style={text.caption}>
           {t.roles[profile.role]} · {profile.email}
         </Text>
       </View>
-      <Text style={[text.h2, { marginTop: spacing.lg, marginBottom: spacing.xs }]}>{t.common.circle}</Text>
+      <Text style={[text.heading, styles.circleTitle]}>{t.common.circle}</Text>
       <FamilyCard profile={profile} />
-      <View style={{ marginTop: spacing.lg }}>
-        <Button title={t.common.signOut} icon="logout" variant="quiet" onPress={confirmSignOut} />
+      <View style={{ marginTop: space.l }}>
+        <Button title={t.common.signOut} icon="logout" variant="soft" onPress={confirmSignOut} />
       </View>
     </Sheet>
   );
 }
 
 // The people linked through the same family account, as avatar rows.
-export function FamilyCard({ profile, tint = 'surface' }: { profile: Profile; tint?: 'surface' | 'sunken' }) {
+export function FamilyCard({ profile }: { profile: Profile }) {
   const rows: { label: string; name: string; sub: string; pending?: boolean }[] = [];
   if (profile.sponsor) rows.push({ label: t.roles.user, name: profile.sponsor.name, sub: profile.sponsor.email });
   profile.caretakers.forEach((m) =>
@@ -117,9 +117,9 @@ export function FamilyCard({ profile, tint = 'surface' }: { profile: Profile; ti
   );
 
   return (
-    <Card tint={tint} padded={false} style={{ paddingHorizontal: spacing.md }}>
+    <Card tint="secondary" padded={false} style={{ paddingHorizontal: space.m }}>
       {rows.length === 0 ? (
-        <Row first leading={<Icon name="account-multiple-plus-outline" size={24} color={colors.textMuted} />} title={t.common.nobodyLinked} />
+        <Row first leading={<Icon name="personAdd" color={colors.inkMuted} />} title={t.common.nobodyLinked} />
       ) : (
         rows.map((r, i) => (
           <Row
@@ -138,8 +138,9 @@ export function FamilyCard({ profile, tint = 'surface' }: { profile: Profile; ti
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
-  container: { paddingHorizontal: spacing.md, paddingTop: TOP_INSET, paddingBottom: spacing.xl },
-  header: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md, gap: spacing.ms },
+  container: { paddingHorizontal: space.m, paddingTop: TOP_INSET, paddingBottom: space.xl },
+  header: { flexDirection: 'row', alignItems: 'center', marginBottom: space.l, gap: space.m },
   me: { minWidth: TAP, minHeight: TAP, alignItems: 'center', justifyContent: 'center' },
-  meHead: { alignItems: 'center', paddingTop: spacing.sm },
+  meHead: { alignItems: 'center', gap: space.s, paddingTop: space.s },
+  circleTitle: { marginTop: space.l, marginBottom: space.s },
 });

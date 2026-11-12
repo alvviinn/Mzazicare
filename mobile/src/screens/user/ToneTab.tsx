@@ -3,18 +3,18 @@ import { StyleSheet, Text, View } from 'react-native';
 import { getLiveTone } from '../../api/client';
 import { Icon, IconName, TONE_ICON } from '../../components/Icon';
 import { TensionStrip, ToneCard, ToneChart } from '../../components/ToneChart';
-import { Card, Empty, ErrorState, Loading, Ring, Section, StatusPill } from '../../components/ui';
+import { Card, Empty, ErrorState, Loading, PillTone, Ring, Section, StatusPill } from '../../components/ui';
 import { fmtTime, timeAgo } from '../../format';
-import { colors, fonts, iconSize, radius, spacing, text, toneColors, type } from '../../theme';
+import { colors, icon, radius, space, TAP, text } from '../../theme';
 import { LiveTone } from '../../types';
 
 const REFRESH_MS = 5000; // the chart follows the conversation: new speech shows within a few seconds
 
-const STATE: Record<LiveTone['state'], { text: string; tone: 'sage' | 'butter' | 'quiet' }> = {
-  live: { text: 'Live', tone: 'sage' },
-  needs_consent: { text: 'Needs consent', tone: 'butter' },
-  listening: { text: 'Listening', tone: 'butter' },
-  idle: { text: 'Off', tone: 'quiet' },
+const STATE: Record<LiveTone['state'], { text: string; tone: PillTone }> = {
+  live: { text: 'Live', tone: 'success' },
+  needs_consent: { text: 'Needs consent', tone: 'ink' },
+  listening: { text: 'Listening', tone: 'ink' },
+  idle: { text: 'Off', tone: 'muted' },
 };
 
 const weekday = (date: string) => new Date(`${date}T12:00:00`).toLocaleDateString([], { weekday: 'short' });
@@ -44,7 +44,7 @@ export default function ToneTab({ token }: { token: string }) {
   const now = data.current;
   const today = data.today;
 
-  // The privacy promise stays, as one line read in full by screen readers.
+  // The privacy promise stays, as one line.
   const why =
     data.state === 'needs_consent'
       ? `Waiting for ${data.waiting_for.join(' and ')}`
@@ -58,26 +58,26 @@ export default function ToneTab({ token }: { token: string }) {
     const diff = tense - today.usual_tension;
     compare =
       diff > 5
-        ? { icon: 'trending-up', label: `Tenser than usual · ${tense}% vs ${today.usual_tension}%`, color: colors.danger }
+        ? { icon: 'up', label: `Tenser than usual · ${tense}% vs ${today.usual_tension}%`, color: colors.error }
         : diff < -5
-          ? { icon: 'trending-down', label: `Calmer than usual · ${tense}% vs ${today.usual_tension}%`, color: colors.sage }
-          : { icon: 'trending-neutral', label: `As usual · ${tense}% tense`, color: colors.textMuted };
+          ? { icon: 'down', label: `Calmer than usual · ${tense}% vs ${today.usual_tension}%`, color: colors.success }
+          : { icon: 'flat', label: `As usual · ${tense}% tense`, color: colors.inkMuted };
   }
 
   return (
     <>
-      <Card tint={now ? 'sage' : 'surface'} raised>
+      <Card tint="primary">
         <View style={styles.heroTop}>
-          <StatusPill label={st.text} tone={st.tone} live={data.state === 'live'} />
-          <Text style={text.small}>{data.last_heard ? timeAgo(data.last_heard) : 'Nothing today'}</Text>
+          <StatusPill label={st.text} tone={st.tone} />
+          <Text style={text.caption}>{data.last_heard ? timeAgo(data.last_heard) : 'Nothing today'}</Text>
         </View>
         <View style={styles.hero}>
           <View style={styles.face}>
-            <Icon name={now ? TONE_ICON[now.dominant] : 'microphone-outline'} size={56} color={now ? toneColors[now.dominant] : colors.borderStrong} />
+            <Icon name={now ? TONE_ICON[now.dominant] : 'mic'} size={icon.l} color={now ? colors.ink : colors.inkMuted} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={[text.h1, { textTransform: 'capitalize' }]}>{now ? now.dominant : 'Quiet'}</Text>
-            {now && <Text style={text.small}>{now.tension}% tense · last 5 min</Text>}
+            <Text style={[text.display, { textTransform: 'capitalize' }]}>{now ? now.dominant : 'Quiet'}</Text>
+            {now && <Text style={text.caption}>{now.tension}% tense · last 5 min</Text>}
           </View>
         </View>
         {now && (now.by_source.caretaker || now.by_source.elderly) && (
@@ -86,9 +86,9 @@ export default function ToneTab({ token }: { token: string }) {
               const s = now.by_source[who];
               return s ? (
                 <View key={who} style={styles.source}>
-                  <Icon name={TONE_ICON[s.dominant]} size={20} color={toneColors[s.dominant]} />
-                  <Text style={[text.smallStrong, { textTransform: 'capitalize' }]}>
-                    {who === 'caretaker' ? 'Carer' : 'Elder'} · {s.dominant}
+                  <Icon name={TONE_ICON[s.dominant]} />
+                  <Text style={[text.captionStrong, { textTransform: 'capitalize' }]}>
+                    {who === 'caretaker' ? 'Caretaker' : 'Elder'} · {s.dominant}
                   </Text>
                 </View>
               ) : null;
@@ -96,18 +96,18 @@ export default function ToneTab({ token }: { token: string }) {
           </View>
         )}
         <View style={styles.why}>
-          <Icon name="shield-lock-outline" size={16} color={colors.textMuted} />
-          <Text style={[text.small, { flex: 1 }]}>{why}</Text>
+          <Icon name="shield" size={icon.xs} color={colors.inkMuted} />
+          <Text style={[text.caption, { flex: 1 }]}>{why}</Text>
         </View>
       </Card>
 
       <Section title="Through the day" />
       {data.series.length === 0 ? (
-        <Empty icon="chart-bar" title="No speech yet" body="Fills in during today's visit." />
+        <Empty icon="chart" title="No speech yet" body="Fills in during today's visit." />
       ) : (
         <Card>
           <ToneChart points={data.series} bucketMinutes={data.bucket_minutes} />
-          <Text style={[text.smallStrong, { marginTop: spacing.lg, marginBottom: spacing.sm }]}>Tension</Text>
+          <Text style={[text.captionStrong, styles.stripTitle]}>Tension</Text>
           <TensionStrip points={data.series} bucketMinutes={data.bucket_minutes} />
         </Card>
       )}
@@ -116,36 +116,32 @@ export default function ToneTab({ token }: { token: string }) {
         <>
           <Section title="Today" />
           <View style={styles.tiles}>
-            <View style={[styles.tile, { backgroundColor: colors.sageSoft, flexDirection: 'row', alignItems: 'center', gap: spacing.ms, flex: 1.4 }]}>
-              <Ring value={today.positive_percent ?? 0} total={100} size={60} stroke={7} color={colors.sage} track={colors.surface}>
-                <Text style={styles.ringText}>{today.positive_percent ?? 0}%</Text>
+            <View style={[styles.tile, styles.tileWide, { backgroundColor: colors.secondaryTint }]}>
+              <Ring value={today.positive_percent ?? 0} total={100} size={64}>
+                <Text style={text.captionStrong}>{today.positive_percent ?? 0}%</Text>
               </Ring>
-              <Text style={[text.smallStrong, { flex: 1, color: colors.sage }]}>Happy or calm</Text>
+              <Text style={[text.captionStrong, { flex: 1 }]}>Happy or calm</Text>
             </View>
-            <View style={[styles.tile, { backgroundColor: colors.butter }]} accessible accessibilityLabel={`${today.speech_minutes} minutes of speech heard`}>
-              <Text style={styles.tileNum}>{today.speech_minutes}</Text>
-              <Text style={[text.small, { color: colors.butterInk }]}>min heard</Text>
+            <View style={[styles.tile, { backgroundColor: colors.primaryTint }]} accessible accessibilityLabel={`${today.speech_minutes} minutes of speech heard`}>
+              <Text style={text.display}>{today.speech_minutes}</Text>
+              <Text style={text.caption}>min heard</Text>
             </View>
           </View>
-          <View style={[styles.tiles, { marginTop: spacing.ms }]}>
-            <Moment icon="weather-sunny" label="Calmest" time={fmtTime(today.calmest.start)} pct={today.calmest.tension} />
-            <Moment icon="weather-lightning" label="Tensest" time={fmtTime(today.tensest.start)} pct={today.tensest.tension} />
+          <View style={[styles.tiles, { marginTop: space.s }]}>
+            <Moment glyph="sun" label="Calmest" time={fmtTime(today.calmest.start)} pct={today.calmest.tension} />
+            <Moment glyph="storm" label="Tensest" time={fmtTime(today.tensest.start)} pct={today.tensest.tension} />
           </View>
 
           <View style={styles.facts}>
             {compare && (
               <View style={styles.fact}>
-                <Icon name={compare.icon} size={iconSize.inline} color={compare.color} />
-                <Text style={[text.smallStrong, { flex: 1 }]}>{compare.label}</Text>
+                <Icon name={compare.icon} color={compare.color} />
+                <Text style={[text.captionStrong, { flex: 1 }]}>{compare.label}</Text>
               </View>
             )}
             <View style={styles.fact}>
-              <Icon
-                name={today.raised_voice_clips ? 'volume-high' : 'volume-low'}
-                size={iconSize.inline}
-                color={today.raised_voice_clips ? colors.danger : colors.sage}
-              />
-              <Text style={[text.smallStrong, { flex: 1 }]}>
+              <Icon name={today.raised_voice_clips ? 'warning' : 'checkCircle'} color={today.raised_voice_clips ? colors.error : colors.success} />
+              <Text style={[text.captionStrong, { flex: 1 }]}>
                 {today.raised_voice_clips === 0
                   ? 'No raised voices'
                   : `Raised voices · ${today.raised_voice_clips}${today.vocal_alerts ? ` · ${today.vocal_alerts} alert${today.vocal_alerts === 1 ? '' : 's'}` : ''}`}
@@ -162,26 +158,22 @@ export default function ToneTab({ token }: { token: string }) {
         <>
           <Section title="Earlier days" />
           <Card>
-            <View style={styles.days} accessible accessibilityLabel={`How tense each day was: ${data.earlier_days.map((d) => `${weekday(d.date)} ${d.tension}%`).join(', ')}. Lower is calmer.`}>
+            <View
+              style={styles.days}
+              accessible
+              accessibilityLabel={`How tense each day was: ${data.earlier_days.map((d) => `${weekday(d.date)} ${d.tension}%`).join(', ')}. Lower is calmer.`}
+            >
               {data.earlier_days.map((d) => (
                 <View key={d.date} style={styles.day}>
-                  <Text style={text.caption}>{d.tension}%</Text>
+                  <Text style={text.captionStrong}>{d.tension}%</Text>
                   <View style={styles.dayTrack}>
-                    <View
-                      style={[
-                        styles.dayFill,
-                        {
-                          height: `${Math.max(4, d.tension)}%`,
-                          backgroundColor: d.tension <= 15 ? colors.sage : d.tension <= 30 ? toneColors.stressed : colors.danger,
-                        },
-                      ]}
-                    />
+                    <View style={[styles.dayFill, { height: `${Math.max(4, d.tension)}%`, backgroundColor: d.tension > 30 ? colors.secondary : colors.primary }]} />
                   </View>
                   <Text style={text.caption}>{weekday(d.date)}</Text>
                 </View>
               ))}
             </View>
-            <Text style={[text.small, { marginTop: spacing.sm }]}>% tense · lower is calmer</Text>
+            <Text style={[text.caption, { marginTop: space.s }]}>% tense · lower is calmer</Text>
           </Card>
         </>
       )}
@@ -189,12 +181,12 @@ export default function ToneTab({ token }: { token: string }) {
   );
 }
 
-function Moment({ icon, label, time, pct }: { icon: IconName; label: string; time: string; pct: number }) {
+function Moment({ glyph, label, time, pct }: { glyph: IconName; label: string; time: string; pct: number }) {
   return (
     <View style={[styles.tile, { backgroundColor: colors.surface }]} accessible accessibilityLabel={`${label} time ${time}, ${pct}% tense`}>
-      <Icon name={icon} size={iconSize.inline} color={colors.textMuted} />
-      <Text style={styles.tileNum}>{time}</Text>
-      <Text style={text.small}>
+      <Icon name={glyph} color={colors.inkMuted} />
+      <Text style={text.heading}>{time}</Text>
+      <Text style={text.caption}>
         {label} · {pct}%
       </Text>
     </View>
@@ -203,19 +195,19 @@ function Moment({ icon, label, time, pct }: { icon: IconName; label: string; tim
 
 const styles = StyleSheet.create({
   heroTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  hero: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: spacing.md },
-  face: { width: 80, height: 80, borderRadius: 40, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
-  sources: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
-  source: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.surface, borderRadius: radius.pill, paddingHorizontal: spacing.ms, paddingVertical: 6 },
-  why: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: spacing.md },
-  tiles: { flexDirection: 'row', gap: spacing.ms },
-  tile: { flex: 1, borderRadius: radius.lg, padding: spacing.md, minHeight: 96, justifyContent: 'space-between' },
-  tileNum: { fontFamily: fonts.display, fontSize: 26, lineHeight: 30, color: colors.text },
-  ringText: { fontFamily: fonts.display, fontSize: type.small, color: colors.text },
-  facts: { gap: spacing.sm, marginTop: spacing.ms },
-  fact: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, backgroundColor: colors.surface, borderRadius: radius.pill, paddingHorizontal: spacing.md, minHeight: 44 },
+  hero: { flexDirection: 'row', alignItems: 'center', gap: space.m, marginTop: space.m },
+  face: { width: 80, height: 80, borderRadius: radius.pill, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  sources: { flexDirection: 'row', flexWrap: 'wrap', gap: space.s, marginTop: space.m },
+  source: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.surface, borderRadius: radius.pill, paddingHorizontal: space.m, minHeight: 40 },
+  why: { flexDirection: 'row', alignItems: 'center', gap: space.s, marginTop: space.m },
+  stripTitle: { marginTop: space.l, marginBottom: space.s },
+  tiles: { flexDirection: 'row', gap: space.s },
+  tile: { flex: 1, borderRadius: radius.card, padding: space.m, minHeight: 104, justifyContent: 'space-between' },
+  tileWide: { flex: 1.4, flexDirection: 'row', alignItems: 'center', gap: space.m },
+  facts: { gap: space.s, marginTop: space.s },
+  fact: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.surface, borderRadius: radius.pill, paddingHorizontal: space.m, minHeight: TAP },
   days: { flexDirection: 'row', justifyContent: 'space-between' },
-  day: { flex: 1, alignItems: 'center', gap: 4 },
-  dayTrack: { width: 18, height: 84, borderRadius: 9, backgroundColor: colors.sunken, justifyContent: 'flex-end', overflow: 'hidden' },
-  dayFill: { width: '100%', borderRadius: 9 },
+  day: { flex: 1, alignItems: 'center', gap: space.s },
+  dayTrack: { width: 16, height: 88, borderRadius: radius.pill, backgroundColor: colors.line, justifyContent: 'flex-end', overflow: 'hidden' },
+  dayFill: { width: '100%', borderRadius: radius.pill },
 });

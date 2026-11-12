@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { addMedicine, addMember, assignTask, deleteMedicine, deleteTask } from '../../api/client';
-import { Icon } from '../../components/Icon';
+import { Icon, IconName } from '../../components/Icon';
 import { ProofPhoto } from '../../components/ProofPhoto';
 import {
   Avatar,
@@ -19,7 +19,7 @@ import {
   Sheet,
 } from '../../components/ui';
 import { fmtTime } from '../../format';
-import { colors, fonts, iconSize, radius, spacing, text, type } from '../../theme';
+import { colors, icon, on, radius, space, text } from '../../theme';
 import { Dashboard, Medicine, Profile, TodayTask } from '../../types';
 
 type Props = {
@@ -47,9 +47,9 @@ export default function PeopleTab({ token, profile, dash, onChanged, onMedicines
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.circle}>
         <PressScale onPress={() => setOpen('person')} style={styles.person} accessibilityRole="button" accessibilityLabel="Add a person">
           <View style={styles.addCircle}>
-            <Icon name="plus" size={iconSize.large} color={colors.onPrimary} />
+            <Icon name="plus" size={icon.l} color={on.primary} />
           </View>
-          <Text style={text.smallStrong}>Add</Text>
+          <Text style={text.captionStrong}>Add</Text>
         </PressScale>
         {people.map((p) => (
           <View key={p.email} style={styles.person} accessible accessibilityLabel={`${p.name ?? p.email}, ${p.role}${p.status === 'pending' ? ', invited' : ''}`}>
@@ -57,11 +57,11 @@ export default function PeopleTab({ token, profile, dash, onChanged, onMedicines
               <Avatar name={p.name ?? p.email} size={64} />
               {p.status === 'pending' && (
                 <View style={styles.pendingDot}>
-                  <Icon name="clock-outline" size={12} color={colors.butterInk} />
+                  <Icon name="clock" size={icon.xs} />
                 </View>
               )}
             </View>
-            <Text style={text.smallStrong} numberOfLines={1}>
+            <Text style={text.captionStrong} numberOfLines={1}>
               {(p.name ?? p.email).split(/[ @]/)[0]}
             </Text>
             <Text style={text.caption}>{p.status === 'pending' ? 'Invited' : p.role}</Text>
@@ -118,8 +118,8 @@ function MedicineList({ token, dash, onChanged, onAdd }: { token: string; dash: 
     ]);
   }
 
-  if (!dash.elderly.length) return <Hint icon="human-cane" label="Link an elder first" />;
-  if (!dash.medicines.items.length) return <AddCard icon="pill" label="Add a reminder" tint={colors.primarySoft} ink={colors.primaryInk} onPress={onAdd} />;
+  if (!dash.elderly.length) return <Hint glyph="elder" label="Link an elder first" />;
+  if (!dash.medicines.items.length) return <AddCard glyph="pill" label="Add a reminder" tint={colors.primaryTint} onPress={onAdd} />;
 
   return (
     <Card padded={false} style={styles.list}>
@@ -128,13 +128,13 @@ function MedicineList({ token, dash, onChanged, onAdd }: { token: string; dash: 
           key={m.id}
           first={i === 0}
           leading={
-            <View style={[styles.time, { backgroundColor: colors.primarySoft }]}>
-              <Text style={styles.timeText}>{m.time}</Text>
+            <View style={styles.time}>
+              <Text style={text.bodyStrong}>{m.time}</Text>
             </View>
           }
           title={m.dose ? `${m.name} · ${m.dose}` : m.name}
           subtitle={`${m.elderly.split(' ')[0]} · daily`}
-          trailing={<IconButton icon="trash-can-outline" label={`Delete reminder ${m.name}`} onPress={() => remove(m)} size={40} />}
+          trailing={<IconButton icon="trash" label={`Delete reminder ${m.name}`} onPress={() => remove(m)} />}
         />
       ))}
     </Card>
@@ -161,8 +161,8 @@ function TaskList({ token, dash, onChanged, onAdd }: { token: string; dash: Dash
     ]);
   }
 
-  if (!dash.caretakers.length) return <Hint icon="account-heart-outline" label="Link a caretaker first" />;
-  if (!mine.length) return <AddCard icon="clipboard-plus-outline" label="Give a task" tint={colors.sageSoft} ink={colors.sage} onPress={onAdd} />;
+  if (!dash.caretakers.length) return <Hint glyph="carer" label="Link a caretaker first" />;
+  if (!mine.length) return <AddCard glyph="clipboardPlus" label="Give a task" tint={colors.secondaryTint} onPress={onAdd} />;
 
   return (
     <Card padded={false} style={styles.list}>
@@ -170,13 +170,13 @@ function TaskList({ token, dash, onChanged, onAdd }: { token: string; dash: Dash
         <Row
           key={t.id}
           first={i === 0}
-          leading={<Icon name={t.is_done ? 'check-circle' : 'circle-outline'} size={26} color={t.is_done ? colors.sage : colors.borderStrong} />}
+          leading={<Icon name={t.is_done ? 'checkCircle' : 'circle'} size={icon.m} color={t.is_done ? colors.success : colors.inkMuted} />}
           title={t.description}
           subtitle={[t.caretaker.split(' ')[0], t.recurring ? 'weekdays' : 'once', t.done_at ? `done ${fmtTime(t.done_at)}` : null].filter(Boolean).join(' · ')}
           trailing={
             <View style={styles.trail}>
               {t.completion_id !== null && <ProofPhoto token={token} completionId={t.completion_id} caption={`${t.description} · ${t.caretaker}`} size={40} />}
-              <IconButton icon="trash-can-outline" label={`Delete task ${t.description}`} onPress={() => remove(t)} size={40} />
+              <IconButton icon="trash" label={`Delete task ${t.description}`} onPress={() => remove(t)} />
             </View>
           }
         />
@@ -185,37 +185,25 @@ function TaskList({ token, dash, onChanged, onAdd }: { token: string; dash: Dash
   );
 }
 
-function Hint({ icon, label }: { icon: React.ComponentProps<typeof Icon>['name']; label: string }) {
+function Hint({ glyph, label }: { glyph: IconName; label: string }) {
   return (
-    <Card tint="sunken">
+    <Card>
       <View style={styles.hint}>
-        <Icon name={icon} size={iconSize.inline} color={colors.textMuted} />
-        <Text style={text.small}>{label}</Text>
+        <Icon name={glyph} color={colors.inkMuted} />
+        <Text style={text.caption}>{label}</Text>
       </View>
     </Card>
   );
 }
 
-function AddCard({
-  icon,
-  label,
-  tint,
-  ink,
-  onPress,
-}: {
-  icon: React.ComponentProps<typeof Icon>['name'];
-  label: string;
-  tint: string;
-  ink: string;
-  onPress: () => void;
-}) {
+function AddCard({ glyph, label, tint, onPress }: { glyph: IconName; label: string; tint: string; onPress: () => void }) {
   return (
     <PressScale onPress={onPress} style={[styles.addCard, { backgroundColor: tint }]} accessibilityRole="button" accessibilityLabel={label}>
       <View style={styles.addIcon}>
-        <Icon name={icon} size={iconSize.large} color={ink} />
+        <Icon name={glyph} size={icon.m} />
       </View>
-      <Text style={[text.bodyStrong, { flex: 1, color: ink }]}>{label}</Text>
-      <Icon name="plus" size={iconSize.inline} color={ink} />
+      <Text style={[text.bodyStrong, { flex: 1 }]}>{label}</Text>
+      <Icon name="plus" />
     </PressScale>
   );
 }
@@ -248,12 +236,12 @@ function AddPerson({ token, onChanged, onDone }: { token: string; onChanged: () 
   return (
     <>
       <View style={styles.roles}>
-        <RoleTile on={role === 'caretaker'} icon="account-heart-outline" label="Caretaker" onPress={() => setRole('caretaker')} />
-        <RoleTile on={role === 'elderly'} icon="human-cane" label="Elder" onPress={() => setRole('elderly')} />
+        <RoleTile selected={role === 'caretaker'} glyph="carer" label="Caretaker" onPress={() => setRole('caretaker')} />
+        <RoleTile selected={role === 'elderly'} glyph="elder" label="Elder" onPress={() => setRole('elderly')} />
       </View>
       <Field
         label="Their email"
-        icon="email-outline"
+        icon="mail"
         value={email}
         onChangeText={setEmail}
         placeholder="name@example.com"
@@ -263,25 +251,26 @@ function AddPerson({ token, onChanged, onDone }: { token: string; onChanged: () 
         accessibilityHint="If they have no account yet, they are linked when they register."
       />
       <ErrorText>{error}</ErrorText>
-      <Button title={role === 'caretaker' ? 'Add caretaker' : 'Add elder'} icon="account-plus-outline" onPress={submit} loading={loading} />
+      <Button title={role === 'caretaker' ? 'Add caretaker' : 'Add elder'} icon="personAdd" onPress={submit} loading={loading} />
     </>
   );
 }
 
-function RoleTile({ on, icon, label, onPress }: { on: boolean; icon: React.ComponentProps<typeof Icon>['name']; label: string; onPress: () => void }) {
+// Choosing a role: category tiles in mulberry tint; the chosen one turns marigold tint with a tick.
+function RoleTile({ selected, glyph, label, onPress }: { selected: boolean; glyph: IconName; label: string; onPress: () => void }) {
   return (
     <PressScale
       onPress={() => {
         haptic.tap();
         onPress();
       }}
-      style={[styles.role, on && styles.roleOn]}
+      style={[styles.role, { backgroundColor: selected ? colors.primaryTint : colors.secondaryTint }]}
       accessibilityRole="radio"
-      accessibilityState={{ selected: on }}
+      accessibilityState={{ selected }}
       accessibilityLabel={label}
     >
-      <Icon name={icon} size={iconSize.large} color={on ? colors.onPrimary : colors.text} />
-      <Text style={[text.bodyStrong, on && { color: colors.onPrimary }]}>{label}</Text>
+      <Icon name={selected ? 'checkCircle' : glyph} size={icon.l} />
+      <Text style={text.bodyStrong}>{label}</Text>
     </PressScale>
   );
 }
@@ -332,7 +321,7 @@ function AddMedicine({ token, dash, onChanged, onDone }: { token: string; dash: 
         <View style={{ flex: 1 }}>
           <Field
             label="Time (24 h)"
-            icon="clock-outline"
+            icon="clock"
             value={time}
             onChangeText={setTime}
             placeholder="08:00"
@@ -348,7 +337,7 @@ function AddMedicine({ token, dash, onChanged, onDone }: { token: string; dash: 
         ))}
       </View>
       <ErrorText>{error}</ErrorText>
-      <Button title="Add reminder" icon="bell-plus-outline" onPress={add} loading={loading} />
+      <Button title="Add reminder" icon="bellPlus" onPress={add} loading={loading} />
     </>
   );
 }
@@ -400,12 +389,12 @@ function AddTask({ token, dash, onChanged, onDone }: { token: string; dash: Dash
         accessibilityHint="The caretaker ticks it off with a photo, which you can see here."
       />
       <View style={styles.chips}>
-        <Chip label="Just today" icon="calendar-today" selected={!recurring} onPress={() => setRecurring(false)} />
+        <Chip label="Just today" icon="calendarToday" selected={!recurring} onPress={() => setRecurring(false)} />
         <Chip label="Every weekday" icon="repeat" selected={recurring} onPress={() => setRecurring(true)} />
       </View>
       <View style={styles.photoNote}>
-        <Icon name="camera-outline" size={18} color={colors.textMuted} />
-        <Text style={text.small}>Done = photo proof</Text>
+        <Icon name="camera" color={colors.inkMuted} />
+        <Text style={text.caption}>Ticked off with a photo</Text>
       </View>
       <ErrorText>{error}</ErrorText>
       <Button title="Give task" icon="send" onPress={add} loading={loading} />
@@ -414,33 +403,31 @@ function AddTask({ token, dash, onChanged, onDone }: { token: string; dash: Dash
 }
 
 const styles = StyleSheet.create({
-  circle: { gap: spacing.md, paddingVertical: spacing.xs, paddingRight: spacing.md },
-  person: { width: 72, alignItems: 'center', gap: 4 },
-  addCircle: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
+  circle: { gap: space.m, paddingVertical: space.s, paddingRight: space.m },
+  person: { width: 72, alignItems: 'center', gap: space.s },
+  addCircle: { width: 64, height: 64, borderRadius: radius.pill, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
   pendingDot: {
     position: 'absolute',
-    right: -2,
-    bottom: -2,
+    right: 0,
+    bottom: 0,
     width: 24,
     height: 24,
-    borderRadius: 12,
-    backgroundColor: colors.butter,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primaryTint,
     borderWidth: 2,
     borderColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  list: { paddingHorizontal: spacing.md },
-  time: { width: 60, height: 40, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-  timeText: { fontFamily: fonts.display, fontSize: type.body, color: colors.primaryInk },
+  list: { paddingHorizontal: space.m },
+  time: { width: 64, height: 40, borderRadius: radius.small, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
   trail: { flexDirection: 'row', alignItems: 'center' },
-  hint: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  addCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms, borderRadius: radius.lg, padding: spacing.md, minHeight: 76 },
-  addIcon: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
-  roles: { flexDirection: 'row', gap: spacing.ms, marginBottom: spacing.lg },
-  role: { flex: 1, alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.surface },
-  roleOn: { backgroundColor: colors.text },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
-  pair: { flexDirection: 'row', gap: spacing.ms },
-  photoNote: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: spacing.md },
+  hint: { flexDirection: 'row', alignItems: 'center', gap: space.s },
+  addCard: { flexDirection: 'row', alignItems: 'center', gap: space.m, borderRadius: radius.card, padding: space.m, minHeight: 80 },
+  addIcon: { width: 48, height: 48, borderRadius: radius.pill, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  roles: { flexDirection: 'row', gap: space.s, marginBottom: space.l },
+  role: { flex: 1, alignItems: 'center', gap: space.s, paddingVertical: space.l, borderRadius: radius.small },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.s, marginBottom: space.m },
+  pair: { flexDirection: 'row', gap: space.s },
+  photoNote: { flexDirection: 'row', alignItems: 'center', gap: space.s, marginBottom: space.m },
 });

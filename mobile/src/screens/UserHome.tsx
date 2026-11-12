@@ -63,11 +63,11 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
   const openAlerts = dash ? dash.alerts.filter((a) => a.status === 'open').length : 0;
   const unread = dash ? [...dash.caretakers, ...dash.elderly].reduce((n, p) => n + p.unread, 0) : 0;
   const tabs: TabDef<Tab>[] = [
-    { key: 'overview', label: 'Home', icon: 'home-outline', activeIcon: 'home', badge: openAlerts },
-    { key: 'shifts', label: 'Shifts', icon: 'calendar-blank-outline', activeIcon: 'calendar' },
+    { key: 'overview', label: 'Home', icon: 'home', badge: openAlerts },
+    { key: 'shifts', label: 'Shifts', icon: 'calendar' },
     { key: 'tone', label: 'Tone', icon: 'waveform' },
-    { key: 'chats', label: 'Chats', icon: 'message-text-outline', activeIcon: 'message-text', badge: unread },
-    { key: 'people', label: 'People', icon: 'account-group-outline', activeIcon: 'account-group' },
+    { key: 'chats', label: 'Chats', icon: 'chat', badge: unread },
+    { key: 'people', label: 'People', icon: 'people' },
   ];
 
   return (
@@ -90,6 +90,7 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
           onGoShifts={() => setTab('shifts')}
           onGoTone={() => setTab('tone')}
           onOpenShift={setShiftId}
+          onChat={setChatPeer}
         />
       )}
       {tab === 'shifts' && <ShiftsTab token={token} onOpenShift={setShiftId} />}

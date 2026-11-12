@@ -14,7 +14,7 @@ import {
 import { askFirstAid } from '../../api/client';
 import { Icon, IconName } from '../../components/Icon';
 import { Chip, haptic, OfflineBanner, PressScale } from '../../components/ui';
-import { colors, fonts, iconSize, radius, spacing, TAP, text, TOP_INSET, type } from '../../theme';
+import { colors, icon, on, radius, space, TAP, text, TOP_INSET } from '../../theme';
 import { FirstAidReply } from '../../types';
 
 export type FirstAidEntry =
@@ -34,28 +34,28 @@ type Props = {
 // The first four are the life-threatening ones: big tiles. The rest are chips.
 const QUICK: Record<'en' | 'sw', { label: string; topic: string; icon: IconName }[]> = {
   en: [
-    { label: 'Not breathing', topic: 'cpr', icon: 'heart-pulse' },
-    { label: 'Choking', topic: 'choking_severe', icon: 'lungs' },
-    { label: 'Chest pain', topic: 'heart_attack', icon: 'heart-flash' },
-    { label: 'Stroke signs', topic: 'stroke', icon: 'head-alert-outline' },
-    { label: 'A fall', topic: 'fall', icon: 'human-cane' },
-    { label: 'Heavy bleeding', topic: 'severe_bleeding', icon: 'water-alert-outline' },
-    { label: 'Burn', topic: 'burns', icon: 'fire' },
-    { label: 'Low sugar', topic: 'low_blood_sugar', icon: 'spoon-sugar' },
-    { label: 'Fit / seizure', topic: 'seizure', icon: 'flash-alert-outline' },
-    { label: 'Fainted', topic: 'fainting', icon: 'sleep' },
+    { label: 'Not breathing', topic: 'cpr', icon: 'cpr' },
+    { label: 'Choking', topic: 'choking_severe', icon: 'choking' },
+    { label: 'Chest pain', topic: 'heart_attack', icon: 'chestPain' },
+    { label: 'Stroke signs', topic: 'stroke', icon: 'stroke' },
+    { label: 'A fall', topic: 'fall', icon: 'fall' },
+    { label: 'Heavy bleeding', topic: 'severe_bleeding', icon: 'bleeding' },
+    { label: 'Burn', topic: 'burns', icon: 'burn' },
+    { label: 'Low sugar', topic: 'low_blood_sugar', icon: 'sugar' },
+    { label: 'Fit / seizure', topic: 'seizure', icon: 'seizure' },
+    { label: 'Fainted', topic: 'fainting', icon: 'faint' },
   ],
   sw: [
-    { label: 'Hapumui', topic: 'cpr', icon: 'heart-pulse' },
-    { label: 'Amekabwa', topic: 'choking_severe', icon: 'lungs' },
-    { label: 'Maumivu ya kifua', topic: 'heart_attack', icon: 'heart-flash' },
-    { label: 'Dalili za kiharusi', topic: 'stroke', icon: 'head-alert-outline' },
-    { label: 'Ameanguka', topic: 'fall', icon: 'human-cane' },
-    { label: 'Damu nyingi', topic: 'severe_bleeding', icon: 'water-alert-outline' },
-    { label: 'Kuungua', topic: 'burns', icon: 'fire' },
-    { label: 'Sukari imeshuka', topic: 'low_blood_sugar', icon: 'spoon-sugar' },
-    { label: 'Kifafa', topic: 'seizure', icon: 'flash-alert-outline' },
-    { label: 'Amezirai', topic: 'fainting', icon: 'sleep' },
+    { label: 'Hapumui', topic: 'cpr', icon: 'cpr' },
+    { label: 'Amekabwa', topic: 'choking_severe', icon: 'choking' },
+    { label: 'Maumivu ya kifua', topic: 'heart_attack', icon: 'chestPain' },
+    { label: 'Dalili za kiharusi', topic: 'stroke', icon: 'stroke' },
+    { label: 'Ameanguka', topic: 'fall', icon: 'fall' },
+    { label: 'Damu nyingi', topic: 'severe_bleeding', icon: 'bleeding' },
+    { label: 'Kuungua', topic: 'burns', icon: 'burn' },
+    { label: 'Sukari imeshuka', topic: 'low_blood_sugar', icon: 'sugar' },
+    { label: 'Kifafa', topic: 'seizure', icon: 'seizure' },
+    { label: 'Amezirai', topic: 'fainting', icon: 'faint' },
   ],
 };
 
@@ -141,7 +141,7 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.header}>
-        <Text style={[text.h1, { flex: 1 }]} numberOfLines={1} accessibilityRole="header">
+        <Text style={[text.display, { flex: 1 }]} numberOfLines={1} accessibilityRole="header">
           {w.title}
         </Text>
         <Pressable
@@ -150,19 +150,19 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
           accessibilityRole="button"
           accessibilityLabel={chat.lang === 'en' ? 'Language: English. Switch to Kiswahili' : 'Lugha: Kiswahili. Badilisha kuwa Kiingereza'}
         >
-          <Text style={[styles.langText, chat.lang === 'en' && styles.langOn]}>EN</Text>
-          <Text style={[styles.langText, chat.lang === 'sw' && styles.langOn]}>SW</Text>
+          <Text style={[text.captionStrong, styles.langItem, chat.lang === 'en' ? styles.langOn : styles.langOff]}>EN</Text>
+          <Text style={[text.captionStrong, styles.langItem, chat.lang === 'sw' ? styles.langOn : styles.langOff]}>SW</Text>
         </Pressable>
         <PressScale onPress={call999} style={styles.callBtn} accessibilityRole="button" accessibilityLabel={w.call}>
-          <Icon name="phone" size={iconSize.inline} color={colors.onPrimary} />
-          <Text style={styles.callText}>999</Text>
+          <Icon name="phone" color={on.error} />
+          <Text style={[text.bodyStrong, { color: on.error }]}>999</Text>
         </PressScale>
       </View>
       <OfflineBanner />
 
       <FlatList
         style={styles.flex}
-        contentContainerStyle={{ padding: spacing.md, flexGrow: 1, justifyContent: 'flex-end' }}
+        contentContainerStyle={styles.list}
         data={[...chat.entries].reverse()}
         inverted
         keyboardShouldPersistTaps="handled"
@@ -170,28 +170,29 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
         ListHeaderComponent={
           busy ? (
             <View style={[styles.bubble, styles.theirs, styles.row]}>
-              <ActivityIndicator color={colors.primary} />
-              <Text style={text.small}> {w.thinking}</Text>
+              <ActivityIndicator color={colors.secondary} />
+              <Text style={text.caption}>{w.thinking}</Text>
             </View>
           ) : undefined
         }
         ListFooterComponent={
           <View style={styles.welcome}>
             <Text style={text.body}>{w.intro}</Text>
+            {/* the four life-threatening situations: big tiles, alternating the two tints, ink icons */}
             <View style={styles.grid}>
-              {quick.slice(0, 4).map((q) => (
+              {quick.slice(0, 4).map((q, i) => (
                 <PressScale
                   key={q.topic}
                   onPress={() => {
                     haptic.press();
                     ask({ topic: q.topic }, q.label);
                   }}
-                  style={styles.tile}
+                  style={[styles.tile, { backgroundColor: i % 3 === 0 ? colors.primaryTint : colors.secondaryTint }]}
                   accessibilityRole="button"
                   accessibilityLabel={`${w.urgentNow}: ${q.label}`}
                 >
                   <View style={styles.tileIcon}>
-                    <Icon name={q.icon} size={iconSize.large} color={colors.danger} />
+                    <Icon name={q.icon} size={icon.m} />
                   </View>
                   <Text style={text.bodyStrong} numberOfLines={2}>
                     {q.label}
@@ -199,22 +200,22 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
                 </PressScale>
               ))}
             </View>
-            <Text style={[text.smallStrong, { marginTop: spacing.xs }]}>{w.more}</Text>
+            <Text style={text.captionStrong}>{w.more}</Text>
             <View style={styles.chips}>
               {quick.slice(4).map((q) => (
                 <Chip key={q.topic} label={q.label} icon={q.icon} onPress={() => ask({ topic: q.topic }, q.label)} />
               ))}
             </View>
-            <View style={styles.source}>
-              <Icon name="shield-check-outline" size={16} color={colors.textMuted} />
-              <Text style={text.small}>{w.source}</Text>
+            <View style={styles.row}>
+              <Icon name="shield" size={icon.xs} color={colors.inkMuted} />
+              <Text style={text.caption}>{w.source}</Text>
             </View>
           </View>
         }
         renderItem={({ item }) =>
           item.from === 'me' ? (
             <View style={[styles.bubble, styles.mine]}>
-              <Text style={[text.body, { color: colors.onPrimary }]}>{item.text}</Text>
+              <Text style={[text.body, { color: on.secondary }]}>{item.text}</Text>
             </View>
           ) : (
             <GuideBubble
@@ -233,8 +234,8 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
 
       {!!error && (
         <View style={styles.error} accessibilityLiveRegion="polite">
-          <Icon name="alert-circle-outline" size={18} color={colors.danger} />
-          <Text style={[text.small, { color: colors.danger, flex: 1 }]}>{error}</Text>
+          <Icon name="alert" color={colors.error} />
+          <Text style={[text.caption, { color: colors.error, flex: 1 }]}>{error}</Text>
         </View>
       )}
       <View style={styles.composer}>
@@ -243,7 +244,7 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
           value={draft}
           onChangeText={setDraft}
           placeholder={w.placeholder}
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={colors.inkMuted}
           multiline
           maxLength={500}
           autoFocus={autoFocus}
@@ -252,13 +253,12 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
         <PressScale
           onPress={send}
           disabled={busy || !draft.trim()}
-          scaleTo={0.9}
           style={[styles.send, (!draft.trim() || busy) && styles.sendOff]}
           accessibilityRole="button"
           accessibilityLabel={chat.lang === 'sw' ? 'Tuma' : 'Send'}
           accessibilityState={{ disabled: busy || !draft.trim(), busy }}
         >
-          {busy ? <ActivityIndicator color={colors.onPrimary} /> : <Icon name="arrow-up" size={iconSize.inline} color={colors.onPrimary} />}
+          {busy ? <ActivityIndicator color={on.primary} /> : <Icon name="send" color={!draft.trim() ? colors.inkMuted : on.primary} />}
         </PressScale>
       </View>
       {footer}
@@ -266,15 +266,15 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
   );
 }
 
-// A red band that calls 999 when tapped: for emergencies and for the danger banner above advice.
+// A brick band that calls 999 when tapped: for emergencies and for the danger banner above advice.
 function Urgent({ message, callLabel }: { message: string; callLabel: string }) {
   return (
     <Pressable onPress={call999} style={styles.urgent} accessibilityRole="button" accessibilityLabel={`${message} ${callLabel}`}>
-      <Icon name="alert" size={iconSize.inline} color={colors.danger} />
-      <Text style={styles.urgentText}>{message}</Text>
+      <Icon name="warning" color={on.error} />
+      <Text style={[text.bodyStrong, styles.urgentText]}>{message}</Text>
       <View style={styles.urgentCall}>
-        <Icon name="phone" size={16} color={colors.onPrimary} />
-        <Text style={styles.urgentCallText}>{callLabel}</Text>
+        <Icon name="phone" size={icon.xs} color={colors.error} />
+        <Text style={[text.captionStrong, { color: colors.error }]}>{callLabel}</Text>
       </View>
     </Pressable>
   );
@@ -298,65 +298,64 @@ function GuideBubble({
       {!reply.emergency && !!reply.danger_banner && <Urgent message={reply.danger_banner} callLabel={words.callNow} />}
       {answer ? (
         <>
-          {!!reply.title && <Text style={text.h2}>{reply.title}</Text>}
+          {!!reply.title && <Text style={text.heading}>{reply.title}</Text>}
           {!!reply.opener && <Text style={text.bodyStrong}>{reply.opener}</Text>}
-          {!reply.emergency && !!reply.urgent && <Text style={styles.warn}>{reply.urgent}</Text>}
+          {!reply.emergency && !!reply.urgent && (
+            <View style={styles.attention}>
+              <Icon name="warning" />
+              <Text style={[text.captionStrong, { flex: 1 }]}>{reply.urgent}</Text>
+            </View>
+          )}
           {!!reply.intro && <Text style={text.body}>{reply.intro}</Text>}
-          <Text style={styles.heading}>{words.steps}</Text>
+          <Text style={text.captionStrong}>{words.steps}</Text>
           {reply.steps?.map((s, i) => (
             <View key={i} style={styles.step}>
               <View style={styles.stepNo}>
-                <Text style={styles.stepNoText}>{i + 1}</Text>
+                <Text style={text.captionStrong}>{i + 1}</Text>
               </View>
               <Text style={[text.body, styles.flex1]}>{s}</Text>
             </View>
           ))}
-          {!!reply.avoid?.length && <Text style={[styles.heading, { color: colors.danger }]}>{words.avoid}</Text>}
+          {!!reply.avoid?.length && <Text style={[text.captionStrong, { color: colors.error }]}>{words.avoid}</Text>}
           {reply.avoid?.map((s, i) => (
             <View key={i} style={styles.step}>
-              <Icon name="close-circle" size={20} color={colors.danger} />
+              <Icon name="circleX" color={colors.error} />
               <Text style={[text.body, styles.flex1]}>{s}</Text>
             </View>
           ))}
           {!!reply.after && (
             <View style={styles.after}>
-              <Icon name="information-outline" size={18} color={colors.sage} />
+              <Icon name="info" color={colors.secondary} />
               <Text style={[text.body, styles.flex1]}>{reply.after}</Text>
             </View>
           )}
         </>
       ) : reply.kind === 'check' ? (
         <View style={styles.row}>
-          <Icon name="alert" size={iconSize.inline} color={colors.danger} />
-          <Text style={[text.bodyStrong, styles.flex1, { marginLeft: spacing.sm }]}>{reply.text}</Text>
+          <Icon name="warning" color={colors.error} />
+          <Text style={[text.bodyStrong, styles.flex1]}>{reply.text}</Text>
         </View>
       ) : (
         <Text style={text.body}>{reply.kind === 'clarify' ? reply.followup?.question : reply.text}</Text>
       )}
       {!!reply.followup && (
         <>
-          {answer && <Text style={[text.bodyStrong, { marginTop: spacing.xs }]}>{reply.followup.question}</Text>}
+          {answer && <Text style={text.bodyStrong}>{reply.followup.question}</Text>}
           <View style={styles.chips}>
             {reply.followup.options.map((o) => (
-              <Chip
-                key={o.topic + o.label}
-                label={o.label}
-                onPress={() => onPick(o)}
-                disabled={!latest}
-                tone={o.topic === CHECK_YES ? 'danger' : 'plain'}
-              />
+              <Chip key={o.topic + o.label} label={o.label} onPress={() => onPick(o)} disabled={!latest} danger={o.topic === CHECK_YES} />
             ))}
           </View>
         </>
       )}
       {reply.kind === 'check' && (
         <Pressable onPress={call999} style={styles.checkCall} accessibilityRole="button" accessibilityLabel={words.callNow}>
-          <Icon name="phone" size={16} color={colors.danger} />
-          <Text style={styles.checkCallText}>{words.callNow}</Text>
+          <Icon name="phone" color={colors.error} />
+          <Text style={[text.bodyStrong, { color: colors.error }]}>{words.callNow}</Text>
         </Pressable>
       )}
-      {reply.kind === 'clarify' && !!reply.hint && <Text style={text.small}>{reply.hint}</Text>}
-      {answer && <Text style={[text.small, { marginTop: spacing.xs }]}>{reply.note}</Text>}
+      {reply.kind === 'clarify' && !!reply.hint && <Text style={text.caption}>{reply.hint}</Text>}
+      {answer && <Text style={text.caption}>{reply.note}</Text>}
     </View>
   );
 }
@@ -364,109 +363,51 @@ function GuideBubble({
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   flex1: { flex: 1 },
-  row: { flexDirection: 'row', alignItems: 'center' },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingTop: TOP_INSET,
-    paddingBottom: spacing.sm,
-  },
-  lang: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.sunken,
-    borderRadius: radius.pill,
-    padding: 4,
-    minHeight: TAP - 4,
-  },
-  langText: {
-    fontFamily: fonts.bodyBold,
-    fontSize: type.small,
-    color: colors.textMuted,
-    paddingHorizontal: spacing.ms,
-    paddingVertical: 6,
-    borderRadius: radius.pill,
-    overflow: 'hidden',
-  },
-  langOn: { color: colors.text, backgroundColor: colors.surface },
-  callBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: colors.danger,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.md,
-    minHeight: TAP,
-  },
-  callText: { fontFamily: fonts.display, color: colors.onPrimary, fontSize: type.body + 2 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: space.s },
+  header: { flexDirection: 'row', alignItems: 'center', gap: space.s, paddingHorizontal: space.m, paddingTop: TOP_INSET, paddingBottom: space.s },
+  lang: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.line, borderRadius: radius.pill, padding: space.s },
+  langItem: { paddingHorizontal: space.m, paddingVertical: space.s, borderRadius: radius.pill, overflow: 'hidden' },
+  langOn: { color: colors.ink, backgroundColor: colors.surface },
+  langOff: { color: colors.inkMuted },
+  callBtn: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.error, borderRadius: radius.pill, paddingHorizontal: space.m, minHeight: TAP },
 
-  welcome: { marginBottom: spacing.md, gap: spacing.ms },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  tile: {
-    flexGrow: 1,
-    flexBasis: '45%',
-    minHeight: 104,
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    justifyContent: 'space-between',
-  },
-  tileIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  source: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  list: { padding: space.m, flexGrow: 1, justifyContent: 'flex-end' },
+  welcome: { marginBottom: space.m, gap: space.m },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.s },
+  tile: { flexGrow: 1, flexBasis: '45%', minHeight: 104, borderRadius: radius.card, padding: space.m, justifyContent: 'space-between' },
+  tileIcon: { width: TAP, height: TAP, borderRadius: radius.pill, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.s },
 
-  bubble: { maxWidth: '86%', borderRadius: radius.lg, padding: spacing.md, marginBottom: spacing.sm },
-  mine: { alignSelf: 'flex-end', backgroundColor: colors.primary, borderBottomRightRadius: 6 },
-  theirs: { alignSelf: 'flex-start', backgroundColor: colors.surface, borderBottomLeftRadius: 6 },
-  guide: { maxWidth: '96%', gap: spacing.sm },
-  warn: { fontFamily: fonts.bodyBold, fontSize: type.small, color: colors.butterInk },
-  heading: { ...text.smallStrong, marginTop: spacing.xs },
-  step: { flexDirection: 'row', gap: spacing.ms, alignItems: 'flex-start' },
-  stepNo: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' },
-  stepNoText: { fontFamily: fonts.display, fontSize: type.small, color: colors.primaryInk },
-  after: { flexDirection: 'row', gap: spacing.sm, backgroundColor: colors.sageSoft, borderRadius: radius.md, padding: spacing.ms },
+  bubble: { maxWidth: '86%', borderRadius: radius.card, padding: space.m, marginBottom: space.s },
+  mine: { alignSelf: 'flex-end', backgroundColor: colors.secondary },
+  theirs: { alignSelf: 'flex-start', backgroundColor: colors.surface },
+  guide: { maxWidth: '96%', gap: space.s },
+  attention: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.primaryTint, borderRadius: radius.small, padding: space.s },
+  step: { flexDirection: 'row', gap: space.m, alignItems: 'flex-start' },
+  stepNo: { width: 24, height: 24, borderRadius: radius.pill, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
+  after: { flexDirection: 'row', gap: space.s, backgroundColor: colors.secondaryTint, borderRadius: radius.small, padding: space.m },
 
-  urgent: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: spacing.sm,
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.md,
-    padding: spacing.ms,
-  },
-  urgentText: { flex: 1, minWidth: 160, fontFamily: fonts.bodyBold, fontSize: type.body, color: colors.danger },
-  urgentCall: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: colors.danger,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.ms,
-    minHeight: TAP - 8,
-  },
-  urgentCallText: { fontFamily: fonts.bodyBold, fontSize: type.small, color: colors.onPrimary },
-  checkCall: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: TAP, alignSelf: 'flex-start' },
-  checkCallText: { fontFamily: fonts.bodyBold, fontSize: type.body, color: colors.danger },
+  urgent: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: space.s, backgroundColor: colors.error, borderRadius: radius.small, padding: space.m },
+  urgentText: { flex: 1, minWidth: 160, color: on.error },
+  urgentCall: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.surface, borderRadius: radius.pill, paddingHorizontal: space.m, minHeight: 40 },
+  checkCall: { flexDirection: 'row', alignItems: 'center', gap: space.s, minHeight: TAP, alignSelf: 'flex-start' },
 
-  error: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, backgroundColor: colors.dangerSoft },
-  composer: { flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: spacing.md, paddingTop: spacing.sm, gap: spacing.sm },
+  error: { flexDirection: 'row', alignItems: 'center', gap: space.s, paddingHorizontal: space.m, paddingVertical: space.s, backgroundColor: colors.surface },
+  composer: { flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: space.m, paddingTop: space.s, gap: space.s },
   input: {
     flex: 1,
     maxHeight: 120,
-    minHeight: 52,
-    borderRadius: radius.lg,
-    paddingHorizontal: spacing.md + 2,
-    paddingVertical: spacing.ms + 2,
-    fontFamily: fonts.body,
-    fontSize: type.body,
-    color: colors.text,
+    minHeight: 56,
+    borderRadius: radius.card,
+    paddingHorizontal: space.m,
+    paddingVertical: space.m,
+    fontFamily: text.body.fontFamily,
+    fontSize: text.body.fontSize,
+    color: colors.ink,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.line,
   },
-  send: { backgroundColor: colors.primary, borderRadius: 26, width: 52, height: 52, alignItems: 'center', justifyContent: 'center' },
-  sendOff: { backgroundColor: colors.textDisabled },
+  send: { backgroundColor: colors.primary, borderRadius: radius.pill, width: 56, height: 56, alignItems: 'center', justifyContent: 'center' },
+  sendOff: { backgroundColor: colors.line },
 });

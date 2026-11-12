@@ -3,9 +3,8 @@ import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { googleSignIn } from '../api/client';
-import { colors, fonts, radius, spacing, type } from '../theme';
+import { colors, radius, space, text } from '../theme';
 import { AuthResult } from '../types';
-import { Icon } from './Icon';
 
 WebBrowser.maybeCompleteAuthSession(); // finishes the Google sign-in when the browser hands back to the app
 
@@ -59,7 +58,7 @@ function GoogleButtonInner({
     <>
       <View style={styles.or}>
         <View style={styles.line} />
-        <Text style={styles.orText}>or</Text>
+        <Text style={[text.caption, { marginHorizontal: space.s }]}>or</Text>
         <View style={styles.line} />
       </View>
       <Pressable
@@ -73,27 +72,25 @@ function GoogleButtonInner({
         accessibilityLabel="Continue with Google"
         accessibilityState={{ disabled: !request || busy, busy }}
       >
-        {busy ? <ActivityIndicator color={colors.text} /> : <Icon name="google" size={20} color={colors.text} />}
-        <Text style={styles.text}>Continue with Google</Text>
+        {busy ? <ActivityIndicator color={colors.ink} /> : <Text style={[text.heading, { color: colors.secondary }]}>G</Text>}
+        <Text style={text.bodyStrong}>Continue with Google</Text>
       </Pressable>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  or: { flexDirection: 'row', alignItems: 'center', marginVertical: spacing.md },
-  line: { flex: 1, height: 1, backgroundColor: colors.border },
-  orText: { marginHorizontal: spacing.sm, color: colors.textMuted, fontFamily: fonts.body, fontSize: type.small },
+  or: { flexDirection: 'row', alignItems: 'center', marginVertical: space.m },
+  line: { flex: 1, height: 1, backgroundColor: colors.line },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.sm,
+    gap: space.s,
     borderRadius: radius.pill,
     minHeight: 56,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.line,
   },
-  text: { fontFamily: fonts.bodyBold, fontSize: type.body, color: colors.text },
 });

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { proofPhotoSource } from '../api/client';
 import { t } from '../strings';
-import { colors, fonts, iconSize, radius, spacing, TAP, type } from '../theme';
+import { colors, icon, on, radius, shade, space, TAP, text } from '../theme';
 import { Icon } from './Icon';
 
 // A thumbnail of the photo a caretaker took as proof; tap it to see it full screen.
@@ -21,7 +21,6 @@ export function ProofPhoto({
   const [failed, setFailed] = useState(false);
   const source = proofPhotoSource(token, completionId);
   const box = Math.max(size, TAP);
-  const round = size > 60 ? radius.md : radius.sm;
 
   return (
     <>
@@ -32,20 +31,20 @@ export function ProofPhoto({
         accessibilityLabel={t.photo.open(caption)}
       >
         {failed ? (
-          <View style={[styles.thumb, styles.missing, { width: size, height: size, borderRadius: round }]} accessibilityLabel={t.photo.missing}>
-            <Icon name="image-off-outline" size={iconSize.inline} color={colors.textMuted} />
+          <View style={[styles.thumb, styles.missing, { width: size, height: size }]} accessibilityLabel={t.photo.missing}>
+            <Icon name="imageOff" size={icon.s} color={colors.inkMuted} />
           </View>
         ) : (
-          <Image source={source} style={[styles.thumb, { width: size, height: size, borderRadius: round }]} onError={() => setFailed(true)} />
+          <Image source={source} style={[styles.thumb, { width: size, height: size }]} onError={() => setFailed(true)} />
         )}
       </Pressable>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)} statusBarTranslucent>
         <Pressable style={styles.backdrop} onPress={() => setOpen(false)} accessibilityRole="button" accessibilityLabel={t.photo.close}>
           <Image source={source} style={styles.full} resizeMode="contain" />
-          {!!caption && <Text style={styles.caption}>{caption}</Text>}
+          {!!caption && <Text style={[text.bodyStrong, styles.light]}>{caption}</Text>}
           <View style={styles.close}>
-            <Icon name="close" size={iconSize.inline} color={colors.onOverlay} />
-            <Text style={styles.closeText}>{t.photo.closeHint}</Text>
+            <Icon name="close" size={icon.s} color={on.secondary} />
+            <Text style={[text.caption, styles.light]}>{t.photo.closeHint}</Text>
           </View>
         </Pressable>
       </Modal>
@@ -54,11 +53,10 @@ export function ProofPhoto({
 }
 
 const styles = StyleSheet.create({
-  thumb: { backgroundColor: colors.sunken },
+  thumb: { backgroundColor: colors.line, borderRadius: radius.small },
   missing: { alignItems: 'center', justifyContent: 'center' },
-  backdrop: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'center', padding: spacing.md },
-  full: { width: '100%', height: '72%', borderRadius: radius.lg },
-  caption: { fontFamily: fonts.bodyBold, color: colors.onOverlay, fontSize: type.body, textAlign: 'center', marginTop: spacing.md },
-  close: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: spacing.md },
-  closeText: { fontFamily: fonts.body, color: colors.onOverlay, fontSize: type.small },
+  backdrop: { flex: 1, backgroundColor: shade.photo, justifyContent: 'center', padding: space.m, gap: space.m },
+  full: { width: '100%', height: '72%', borderRadius: radius.card },
+  light: { color: on.secondary, textAlign: 'center' },
+  close: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.s },
 });

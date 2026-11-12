@@ -21,10 +21,10 @@ type Props = { token: string; profile: Profile; onSignOut: () => void };
 type Tab = 'shift' | 'tasks' | 'hours' | 'firstaid';
 
 const TABS: TabDef<Tab>[] = [
-  { key: 'shift', label: t.tabs.shift, icon: 'home-outline', activeIcon: 'home' },
-  { key: 'tasks', label: t.tabs.tasks, icon: 'checkbox-marked-circle-outline', activeIcon: 'checkbox-marked-circle' },
-  { key: 'hours', label: t.tabs.hours, icon: 'clock-outline', activeIcon: 'clock' },
-  { key: 'firstaid', label: t.tabs.firstAid, icon: 'medical-bag' },
+  { key: 'shift', label: t.tabs.shift, icon: 'home' },
+  { key: 'tasks', label: t.tabs.tasks, icon: 'tasks' },
+  { key: 'hours', label: t.tabs.hours, icon: 'clock' },
+  { key: 'firstaid', label: t.tabs.firstAid, icon: 'firstAid' },
 ];
 
 export type Notice = { message: string; actionLabel?: string; onAction?: () => void };

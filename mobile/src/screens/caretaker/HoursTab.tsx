@@ -5,7 +5,7 @@ import { DayStrip, ShiftRow } from '../../components/ShiftRow';
 import { Card, Empty, ErrorState, Loading, Section } from '../../components/ui';
 import { fmtDuration } from '../../format';
 import { t } from '../../strings';
-import { colors, fonts, radius, spacing, text, type } from '../../theme';
+import { colors, radius, space, text } from '../../theme';
 import { Hours } from '../../types';
 
 const h = t.hours;
@@ -37,10 +37,10 @@ export default function HoursTab({ token, onOpenShift }: { token: string; onOpen
   return (
     <>
       {/* The week is the figure that matters; the others sit underneath as a quiet row. */}
-      <Card tint="butter" raised>
+      <Card tint="primary">
         <View accessible accessibilityLabel={`${h.week}: ${fmtDuration(hours.week)}. ${h.countsLabel(RADIUS_M)}`}>
-          <Text style={[text.small, { color: colors.butterInk }]}>{h.week}</Text>
-          <Text style={text.number}>{fmtDuration(hours.week)}</Text>
+          <Text style={text.caption}>{h.week}</Text>
+          <Text style={text.display}>{fmtDuration(hours.week)}</Text>
         </View>
         <View style={styles.stats}>
           <Stat label={h.today} value={hours.today} />
@@ -50,8 +50,8 @@ export default function HoursTab({ token, onOpenShift }: { token: string; onOpen
       </Card>
 
       {hours.recent.length === 0 ? (
-        <View style={{ marginTop: spacing.md }}>
-          <Empty icon="calendar-clock" title={h.emptyTitle} body={h.emptyBody} />
+        <View style={{ marginTop: space.m }}>
+          <Empty icon="calendar" title={h.emptyTitle} body={h.emptyBody} />
         </View>
       ) : (
         <>
@@ -59,7 +59,7 @@ export default function HoursTab({ token, onOpenShift }: { token: string; onOpen
           <DayStrip shifts={hours.recent} onOpen={onOpenShift} />
 
           <Section title={h.shifts} />
-          <Card padded={false} style={{ paddingHorizontal: spacing.md }}>
+          <Card padded={false} style={{ paddingHorizontal: space.m }}>
             {hours.recent.map((s, i) => (
               <ShiftRow key={s.id} shift={s} first={i === 0} onPress={() => onOpenShift(s.id)} />
             ))}
@@ -73,16 +73,15 @@ export default function HoursTab({ token, onOpenShift }: { token: string; onOpen
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <View style={styles.stat} accessible accessibilityLabel={`${label}: ${fmtDuration(value)}`}>
-      <Text style={styles.statValue} numberOfLines={1} adjustsFontSizeToFit>
+      <Text style={text.bodyStrong} numberOfLines={1} adjustsFontSizeToFit>
         {fmtDuration(value)}
       </Text>
-      <Text style={[text.caption, { color: colors.butterInk }]}>{label}</Text>
+      <Text style={text.caption}>{label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  stats: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  stat: { flex: 1, backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.ms },
-  statValue: { fontFamily: fonts.display, fontSize: type.body, color: colors.text },
+  stats: { flexDirection: 'row', gap: space.s, marginTop: space.m },
+  stat: { flex: 1, backgroundColor: colors.surface, borderRadius: radius.small, padding: space.s },
 });

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Avatar, Card, Empty, Loading, Row, Section } from '../../components/ui';
-import { colors, fonts, radius, spacing, type } from '../../theme';
+import { colors, on, radius, space, text } from '../../theme';
 import { ChatPerson, Dashboard } from '../../types';
 
 type Props = { dash: Dashboard | null; onOpen: (p: { name: string; email: string }) => void; onGoPeople: () => void };
@@ -9,7 +9,7 @@ type Props = { dash: Dashboard | null; onOpen: (p: { name: string; email: string
 export default function ChatsTab({ dash, onOpen, onGoPeople }: Props) {
   if (!dash) return <Loading label="Loading chats" />;
   if (!dash.caretakers.length && !dash.elderly.length) {
-    return <Empty icon="message-text-outline" title="No chats yet" body="Add people to start talking." action="Add people" onAction={onGoPeople} tint="peach" />;
+    return <Empty icon="chat" title="No chats yet" body="Add people to start talking." action="Add people" onAction={onGoPeople} tint="primary" />;
   }
   return (
     <>
@@ -23,7 +23,7 @@ function Group({ title, list, onOpen }: { title: string; list: ChatPerson[]; onO
   return (
     <>
       <Section title={title} />
-      <Card padded={false} style={{ paddingHorizontal: spacing.md }}>
+      <Card padded={false} style={{ paddingHorizontal: space.m }}>
         {list.map((p, i) => (
           <Row
             key={p.email}
@@ -36,7 +36,7 @@ function Group({ title, list, onOpen }: { title: string; list: ChatPerson[]; onO
             trailing={
               p.unread > 0 ? (
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{p.unread}</Text>
+                  <Text style={[text.captionStrong, { color: on.secondary }]}>{p.unread}</Text>
                 </View>
               ) : undefined
             }
@@ -49,13 +49,12 @@ function Group({ title, list, onOpen }: { title: string; list: ChatPerson[]; onO
 
 const styles = StyleSheet.create({
   badge: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.secondary,
     borderRadius: radius.pill,
-    minWidth: 26,
-    height: 26,
-    paddingHorizontal: 8,
+    minWidth: 24,
+    height: 24,
+    paddingHorizontal: space.s,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  badgeText: { color: colors.onPrimary, fontFamily: fonts.bodyBold, fontSize: type.small },
 });

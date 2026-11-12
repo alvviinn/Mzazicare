@@ -12,9 +12,9 @@
     },
     "android": {
       "package": "com.mzazicare.app",
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
-        "backgroundColor": "#1F6F5F",
+        "backgroundColor": "#7A3E5D",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -32,7 +32,7 @@
           "image": "./assets/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#F8F6F1"
+          "backgroundColor": "#FBF6EE"
         }
       ],
       [

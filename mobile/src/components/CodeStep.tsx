@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, TextInputInstance, View } from 'react-native';
 import { resendCode, verifyCode } from '../api/client';
-import { colors, fonts, radius, spacing, TAP, text } from '../theme';
+import { colors, radius, space, TAP, text } from '../theme';
 import { AuthResult, CodeChallenge } from '../types';
 import { Icon } from './Icon';
 import { Button, ErrorText } from './ui';
@@ -65,18 +65,18 @@ export function CodeStep({
   return (
     <View>
       <View style={styles.to}>
-        <Icon name="email-fast-outline" size={22} color={colors.primaryInk} />
+        <Icon name="mailSent" />
         <Text style={[text.body, { flex: 1 }]} numberOfLines={1}>
           {challenge.sent_to}
         </Text>
-        <Text style={text.small}>{Math.round(challenge.expires_in / 60)} min</Text>
+        <Text style={text.caption}>{Math.round(challenge.expires_in / 60)} min</Text>
       </View>
 
       {/* six visible boxes over one real input */}
       <Pressable onPress={() => input.current?.focus()} style={styles.boxes} accessible={false}>
         {Array.from({ length: LEN }, (_, i) => (
           <View key={i} style={[styles.box, i === digits.length && styles.boxNow, !!digits[i] && styles.boxFull]}>
-            <Text style={styles.digit}>{digits[i] ?? ''}</Text>
+            <Text style={text.display}>{digits[i] ?? ''}</Text>
           </View>
         ))}
         <TextInput
@@ -98,7 +98,7 @@ export function CodeStep({
       </Pressable>
 
       <ErrorText>{error}</ErrorText>
-      {!!note && <Text style={[text.small, { color: colors.sage, marginBottom: spacing.md }]}>{note}</Text>}
+      {!!note && <Text style={[text.caption, { color: colors.ink, marginBottom: space.m }]}>{note}</Text>}
       <Button title="Continue" onPress={() => submit()} loading={loading} />
       <Pressable
         onPress={resend}
@@ -107,12 +107,12 @@ export function CodeStep({
         accessibilityRole="button"
         accessibilityState={{ disabled: wait > 0 }}
       >
-        <Text style={[styles.linkText, wait > 0 && { color: colors.textMuted }]}>
+        <Text style={[text.bodyStrong, { color: wait > 0 ? colors.inkMuted : colors.secondary }]}>
           {wait > 0 ? `Resend in ${wait}s` : 'Resend code'}
         </Text>
       </Pressable>
       <Pressable onPress={onCancel} style={styles.link} accessibilityRole="button" accessibilityLabel="Back to sign in">
-        <Text style={text.small}>Back</Text>
+        <Text style={text.caption}>Back</Text>
       </Pressable>
     </View>
   );
@@ -122,28 +122,26 @@ const styles = StyleSheet.create({
   to: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.md,
-    padding: spacing.ms,
-    marginBottom: spacing.lg,
+    gap: space.s,
+    backgroundColor: colors.secondaryTint,
+    borderRadius: radius.small,
+    padding: space.m,
+    marginBottom: space.l,
   },
-  boxes: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
+  boxes: { flexDirection: 'row', gap: space.s, marginBottom: space.m },
   box: {
     flex: 1,
-    aspectRatio: 0.82,
+    aspectRatio: 0.8,
     maxHeight: 64,
-    borderRadius: radius.sm,
-    backgroundColor: colors.sunken,
+    borderRadius: radius.small,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: 'transparent',
+    borderColor: colors.line,
   },
-  boxNow: { borderColor: colors.primary, backgroundColor: colors.surface },
-  boxFull: { backgroundColor: colors.surface },
-  digit: { fontFamily: fonts.display, fontSize: 26, color: colors.text },
+  boxNow: { borderColor: colors.secondary },
+  boxFull: { borderColor: colors.ink },
   hidden: { position: 'absolute', opacity: 0, width: '100%', height: '100%' },
-  link: { alignItems: 'center', justifyContent: 'center', marginTop: spacing.xs, minHeight: TAP },
-  linkText: { fontFamily: fonts.bodyBold, color: colors.primaryInk, fontSize: 16 },
+  link: { alignItems: 'center', justifyContent: 'center', marginTop: space.s, minHeight: TAP },
 });

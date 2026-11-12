@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SharingStatus } from '../location/useLocationSharing';
-import { colors, fonts, iconSize, radius, spacing, type } from '../theme';
+import { colors, icon, radius, scaled, space, text } from '../theme';
 import { Icon } from './Icon';
 
 // Short on screen; the full sentence is read out by screen readers.
@@ -9,7 +9,7 @@ const MESSAGES: Record<'en' | 'sw', Record<SharingStatus, { text: string; long: 
     starting: { text: 'Starting location…', long: 'Starting location sharing.', ok: true },
     sharing: { text: 'Location on', long: 'Location sharing is on. Keep MzaziCare open during visits.', ok: true },
     denied: {
-      text: 'Location is off · turn on in Settings',
+      text: 'Location off · turn on in Settings',
       long: 'Location permission is off. Turn it on in your phone settings so visits can be verified.',
       ok: false,
     },
@@ -27,26 +27,18 @@ const MESSAGES: Record<'en' | 'sw', Record<SharingStatus, { text: string; long: 
   },
 };
 
-export function SharingBanner({
-  status,
-  lang = 'en',
-  scale = 1,
-}: {
-  status: SharingStatus;
-  lang?: 'en' | 'sw';
-  scale?: number;
-}) {
+// Location status. Fine: a quiet surface pill. A problem: attention = marigold tint, ink text, an icon.
+export function SharingBanner({ status, lang = 'en', scale = 1 }: { status: SharingStatus; lang?: 'en' | 'sw'; scale?: number }) {
   const m = MESSAGES[lang][status];
-  const color = m.ok ? colors.sage : colors.butterInk;
   return (
     <View
-      style={[styles.box, { backgroundColor: m.ok ? colors.sageSoft : colors.butter }]}
+      style={[styles.box, { backgroundColor: m.ok ? colors.surface : colors.primaryTint }]}
       accessible
       accessibilityLabel={m.long}
       accessibilityRole={m.ok ? undefined : 'alert'}
     >
-      <Icon name={m.ok ? 'map-marker-radius-outline' : 'map-marker-off-outline'} size={iconSize.inline * scale} color={color} />
-      <Text style={[styles.text, { color, fontSize: type.small * scale }]}>{m.text}</Text>
+      <Icon name={m.ok ? 'pinCheck' : 'pinOff'} size={icon.s * scale} color={m.ok ? colors.success : colors.ink} />
+      <Text style={[scaled(text.captionStrong, scale), { flexShrink: 1 }]}>{m.text}</Text>
     </View>
   );
 }
@@ -55,12 +47,11 @@ const styles = StyleSheet.create({
   box: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: space.s,
     borderRadius: radius.pill,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.ms,
-    marginTop: spacing.ms,
+    paddingVertical: space.s,
+    paddingHorizontal: space.m,
+    marginTop: space.m,
     alignSelf: 'flex-start',
   },
-  text: { fontFamily: fonts.bodyBold, flexShrink: 1 },
 });

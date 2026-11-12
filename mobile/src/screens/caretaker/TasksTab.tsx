@@ -3,7 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { addTask, completeTask, deleteTask, getTasks, updateTask } from '../../api/client';
-import { Icon } from '../../components/Icon';
+import { Icon, IconName } from '../../components/Icon';
 import { ProofPhoto } from '../../components/ProofPhoto';
 import { TaskHistory } from '../../components/TaskHistory';
 import {
@@ -28,7 +28,7 @@ import { fmtTime } from '../../format';
 import { isOnline, NETWORK_ERROR } from '../../net';
 import { clearProblem, enqueue, keepPhoto, TaskOp, useTaskQueue, withPending } from '../../offline/taskQueue';
 import { t } from '../../strings';
-import { colors, fonts, iconSize, radius, spacing, TAP, text, type } from '../../theme';
+import { colors, icon, on, radius, space, TAP, text } from '../../theme';
 import { TaskItem } from '../../types';
 import type { Notice } from '../CaretakerHome';
 
@@ -266,32 +266,25 @@ export default function TasksTab({
       ) : server === null ? (
         <ErrorState message={`${x.loadError} ${loadError}`} onRetry={load} />
       ) : tasks.length === 0 ? (
-        <Empty icon="clipboard-check-outline" title={x.emptyTitle} body={x.emptyBody} action={x.add} onAction={() => setAddOpen(true)} tint="peach" />
+        <Empty icon="chores" title={x.emptyTitle} body={x.emptyBody} action={x.add} onAction={() => setAddOpen(true)} tint="primary" />
       ) : (
         <>
-          {/* Hero: progress at a glance, and the add button in reach. */}
-          <Card tint={todo.length === 0 ? 'sage' : 'peach'} raised>
+          {/* Hero: progress at a glance, and the screen's one primary action. */}
+          <Card tint="primary">
             <View style={styles.hero}>
-              <Ring
-                value={done.length}
-                total={tasks.length}
-                size={84}
-                stroke={9}
-                color={todo.length === 0 ? colors.sage : colors.primary}
-                track={colors.surface}
-              >
-                <Text style={styles.ringNum}>{x.of(done.length, tasks.length)}</Text>
+              <Ring value={done.length} total={tasks.length} size={88}>
+                <Text style={text.heading}>{x.of(done.length, tasks.length)}</Text>
               </Ring>
               <View style={{ flex: 1 }}>
-                <Text style={text.h1}>{todo.length === 0 ? x.allDoneTitle : x.left(todo.length)}</Text>
+                <Text style={text.display}>{todo.length === 0 ? x.allDoneTitle : x.left(todo.length)}</Text>
                 <View style={styles.tip}>
-                  <Icon name="camera-outline" size={16} color={colors.textMuted} />
-                  <Text style={text.small}>{todo.length === 0 ? x.allDoneBody : x.photoTip}</Text>
+                  <Icon name={todo.length === 0 ? 'checkCircle' : 'camera'} color={todo.length === 0 ? colors.success : colors.inkMuted} />
+                  <Text style={text.caption}>{todo.length === 0 ? x.allDoneBody : x.photoTip}</Text>
                 </View>
               </View>
             </View>
-            <View style={{ marginTop: spacing.md }}>
-              <Button title={x.add} icon="plus" variant={todo.length === 0 ? 'sage' : 'primary'} size="md" onPress={() => setAddOpen(true)} />
+            <View style={{ marginTop: space.m }}>
+              <Button title={x.add} icon="plus" onPress={() => setAddOpen(true)} />
             </View>
           </Card>
 
@@ -328,7 +321,7 @@ export default function TasksTab({
           autoFocus
         />
         <View style={styles.chips}>
-          <Chip label={x.once} icon="calendar-today" selected={!recurring} onPress={() => setRecurring(false)} />
+          <Chip label={x.once} icon="calendarToday" selected={!recurring} onPress={() => setRecurring(false)} />
           <Chip label={x.repeat} icon="repeat" selected={recurring} onPress={() => setRecurring(true)} />
         </View>
         <ErrorText>{error}</ErrorText>
@@ -340,9 +333,9 @@ export default function TasksTab({
           <>
             <Row
               first
-              leading={<Icon name="repeat" size={iconSize.inline} color={colors.text} />}
+              leading={<Icon name="repeat" />}
               title={x.repeat}
-              trailing={<Icon name={menu.recurring ? 'toggle-switch' : 'toggle-switch-off-outline'} size={36} color={menu.recurring ? colors.sage : colors.borderStrong} />}
+              trailing={<Icon name={menu.recurring ? 'toggleOn' : 'toggleOff'} size={32} color={menu.recurring ? colors.secondary : colors.inkMuted} />}
               onPress={() => {
                 change(menu, { recurring: !menu.recurring });
                 setMenu({ ...menu, recurring: !menu.recurring });
@@ -350,7 +343,7 @@ export default function TasksTab({
               accessibilityLabel={x.repeatLabel(menu.title, menu.recurring)}
             />
             <Row
-              leading={<Icon name="trash-can-outline" size={iconSize.inline} color={colors.danger} />}
+              leading={<Icon name="trash" color={colors.error} />}
               title={t.common.delete}
               onPress={() => remove(menu)}
               accessibilityLabel={x.deleteLabel(menu.title)}
@@ -359,6 +352,15 @@ export default function TasksTab({
         )}
       </Sheet>
     </>
+  );
+}
+
+function Tag({ glyph, label }: { glyph: IconName; label: string }) {
+  return (
+    <View style={styles.tag}>
+      <Icon name={glyph} size={icon.xs} />
+      <Text style={text.captionStrong}>{label}</Text>
+    </View>
   );
 }
 
@@ -393,79 +395,62 @@ function TaskRow({
       >
         <View style={[styles.tick, task.is_done && styles.tickDone]}>
           {sending ? (
-            <ActivityIndicator size="small" color={colors.primary} />
+            <ActivityIndicator size="small" color={colors.secondary} />
           ) : task.is_done ? (
-            <Icon name="check-bold" size={iconSize.inline} color={colors.onPrimary} />
+            <Icon name="check" color={on.success} />
           ) : (
-            <Icon name="camera-outline" size={iconSize.inline} color={colors.primaryInk} />
+            <Icon name="camera" />
           )}
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, gap: space.s }}>
           <Text style={[text.bodyStrong, task.is_done && styles.strike]}>{task.title}</Text>
           <View style={styles.meta}>
-            {sending && <Text style={text.small}>{x.sending}</Text>}
-            {task.done_at && (
-              <View style={styles.tag}>
-                <Icon name="check" size={13} color={colors.sage} />
-                <Text style={[styles.tagText, { color: colors.sage }]}>{x.doneAt(fmtTime(task.done_at))}</Text>
-              </View>
-            )}
-            {task.recurring && (
-              <View style={styles.tag}>
-                <Icon name="repeat" size={13} color={colors.textMuted} />
-                <Text style={styles.tagText}>{x.everyDay}</Text>
-              </View>
-            )}
-            {fromFamily && (
-              <View style={[styles.tag, { backgroundColor: colors.butter }]}>
-                <Icon name="account-heart-outline" size={13} color={colors.butterInk} />
-                <Text style={[styles.tagText, { color: colors.butterInk }]}>{x.from(task.assigned_by!.split(' ')[0])}</Text>
-              </View>
-            )}
+            {sending && <Text style={text.caption}>{x.sending}</Text>}
+            {task.done_at && <Tag glyph="check" label={x.doneAt(fmtTime(task.done_at))} />}
+            {task.recurring && <Tag glyph="repeat" label={x.everyDay} />}
+            {fromFamily && <Tag glyph="carer" label={x.from(task.assigned_by!.split(' ')[0])} />}
             {pending && <PendingTag />}
           </View>
         </View>
       </Pressable>
 
-      {task.completion_id !== null && <ProofPhoto token={token} completionId={task.completion_id} caption={task.title} size={44} />}
+      {task.completion_id !== null && <ProofPhoto token={token} completionId={task.completion_id} caption={task.title} size={48} />}
 
       {/* a task the family assigned can be ticked off, but only they can change or remove it */}
-      {!fromFamily && <IconButton icon="dots-vertical" label={`Options for ${task.title}`} onPress={() => onMenu(task)} size={40} />}
+      {!fromFamily && <IconButton icon="more" label={`Options for ${task.title}`} onPress={() => onMenu(task)} />}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  hero: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  ringNum: { fontFamily: fonts.display, fontSize: type.h2, color: colors.text },
-  tip: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 },
-  list: { paddingLeft: spacing.ms, paddingRight: spacing.xs },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.lg },
+  hero: { flexDirection: 'row', alignItems: 'center', gap: space.m },
+  tip: { flexDirection: 'row', alignItems: 'center', gap: space.s },
+  list: { paddingLeft: space.m },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.s, marginBottom: space.l },
 
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  rowLine: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  tickArea: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.ms, minHeight: TAP + 24, paddingVertical: spacing.ms },
+  row: { flexDirection: 'row', alignItems: 'center' },
+  rowLine: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.line },
+  tickArea: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.m, minHeight: TAP + space.l, paddingVertical: space.m },
   tick: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: TAP,
+    height: TAP,
+    borderRadius: radius.pill,
     borderWidth: 2,
-    borderColor: colors.primary,
+    borderColor: colors.secondary,
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tickDone: { backgroundColor: colors.sage, borderColor: colors.sage, borderStyle: 'solid' },
-  strike: { textDecorationLine: 'line-through', color: colors.textMuted },
-  meta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, marginTop: 4 },
+  tickDone: { backgroundColor: colors.success, borderColor: colors.success, borderStyle: 'solid' },
+  strike: { textDecorationLine: 'line-through', color: colors.inkMuted },
+  meta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: space.s },
   tag: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-    backgroundColor: colors.sunken,
+    gap: space.s,
+    backgroundColor: colors.secondaryTint,
     borderRadius: radius.pill,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
+    paddingHorizontal: space.s,
+    minHeight: 24,
   },
-  tagText: { fontFamily: fonts.bodyBold, fontSize: type.caption, color: colors.textMuted },
 });

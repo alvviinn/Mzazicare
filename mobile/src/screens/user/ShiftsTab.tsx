@@ -4,7 +4,7 @@ import { getShifts } from '../../api/client';
 import { DayStrip, ShiftRow } from '../../components/ShiftRow';
 import { Card, Empty, ErrorState, Loading, Section } from '../../components/ui';
 import { fmtDuration } from '../../format';
-import { colors, spacing, text } from '../../theme';
+import { space, text } from '../../theme';
 import { ShiftSummary } from '../../types';
 
 type Props = { token: string; onOpenShift: (id: number) => void };
@@ -32,17 +32,17 @@ export default function ShiftsTab({ token, onOpenShift }: Props) {
   if (!shifts) return error ? <ErrorState message={`Couldn't load the shifts. ${error}`} onRetry={load} /> : <Loading label="Loading shifts" />;
 
   if (shifts.length === 0) {
-    return <Empty icon="calendar-clock" title="No shifts yet" body="One appears each day your caretaker arrives." />;
+    return <Empty icon="calendar" title="No shifts yet" body="One appears each day your caretaker arrives." />;
   }
 
   const total = shifts.reduce((n, s) => n + s.minutes, 0);
   return (
     <>
-      <Card tint="butter" raised>
+      <Card tint="primary">
         <View accessible accessibilityLabel={`Last 30 days: ${fmtDuration(total)} active over ${shifts.length} days`}>
-          <Text style={[text.small, { color: colors.butterInk }]}>30 days</Text>
-          <Text style={text.number}>{fmtDuration(total)}</Text>
-          <Text style={[text.small, { color: colors.butterInk }]}>
+          <Text style={text.caption}>30 days</Text>
+          <Text style={text.display}>{fmtDuration(total)}</Text>
+          <Text style={text.caption}>
             {shifts.length} day{shifts.length === 1 ? '' : 's'} worked
           </Text>
         </View>
@@ -62,5 +62,5 @@ export default function ShiftsTab({ token, onOpenShift }: Props) {
 }
 
 const styles = StyleSheet.create({
-  list: { paddingHorizontal: spacing.md },
+  list: { paddingHorizontal: space.m },
 });

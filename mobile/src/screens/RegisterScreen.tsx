@@ -6,7 +6,7 @@ import { AuthFrame } from '../components/AuthFrame';
 import { CodeStep } from '../components/CodeStep';
 import { GoogleButton } from '../components/GoogleButton';
 import { Button, ErrorText, Field } from '../components/ui';
-import { colors, fonts, spacing, TAP, text } from '../theme';
+import { colors, space, TAP, text } from '../theme';
 import { AuthResult, CodeChallenge } from '../types';
 
 type Props = { onLoggedIn: (s: Session) => void; onBack: () => void };
@@ -61,7 +61,7 @@ export default function RegisterScreen({ onLoggedIn, onBack }: Props) {
     <AuthFrame title="Create account">
       <Field
         label="Full name"
-        icon="account-outline"
+        icon="person"
         value={name}
         onChangeText={setName}
         placeholder="Your name"
@@ -73,7 +73,7 @@ export default function RegisterScreen({ onLoggedIn, onBack }: Props) {
       <Field
         ref={emailRef}
         label="Email"
-        icon="email-outline"
+        icon="mail"
         value={email}
         onChangeText={setEmail}
         placeholder="you@example.com"
@@ -85,7 +85,7 @@ export default function RegisterScreen({ onLoggedIn, onBack }: Props) {
       <Field
         ref={passwordRef}
         label="Password"
-        icon="lock-outline"
+        icon="lock"
         secure
         value={password}
         onChangeText={setPassword}
@@ -96,7 +96,7 @@ export default function RegisterScreen({ onLoggedIn, onBack }: Props) {
       <Field
         ref={confirmRef}
         label="Confirm password"
-        icon="lock-check-outline"
+        icon="lock"
         secure
         value={confirm}
         onChangeText={setConfirm}
@@ -118,6 +118,6 @@ export default function RegisterScreen({ onLoggedIn, onBack }: Props) {
 }
 
 const styles = StyleSheet.create({
-  switch: { alignItems: 'center', justifyContent: 'center', marginTop: spacing.md, minHeight: TAP },
-  link: { fontFamily: fonts.bodyBold, color: colors.primaryInk },
+  switch: { alignItems: 'center', justifyContent: 'center', marginTop: space.m, minHeight: TAP },
+  link: { ...text.bodyStrong, color: colors.secondary },
 });

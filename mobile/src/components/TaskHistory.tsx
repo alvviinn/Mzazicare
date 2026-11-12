@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { getTaskHistory } from '../api/client';
 import { fmtDay, fmtTime } from '../format';
 import { t } from '../strings';
-import { colors, spacing, text } from '../theme';
+import { colors, radius, space, text } from '../theme';
 import { TaskRecord } from '../types';
 import { ProofPhoto } from './ProofPhoto';
 import { Card, Chip, Empty, ErrorState, Loading } from './ui';
@@ -52,10 +52,10 @@ export function TaskHistory({ token, showCaretaker = false }: { token: string; s
         <Empty icon="history" title={h.emptyTitle} body={h.emptyBody(days)} />
       ) : (
         groups.map((g) => (
-          <View key={g.day} style={{ marginBottom: spacing.ms }}>
+          <View key={g.day} style={{ marginBottom: space.m }}>
             <View style={styles.dayHead}>
-              <Text style={text.h2}>{g.day}</Text>
-              <Text style={text.small}>{h.count(g.items.length)}</Text>
+              <Text style={text.heading}>{g.day}</Text>
+              <Text style={text.caption}>{h.count(g.items.length)}</Text>
             </View>
             {/* photos first: a grid you can scan, captions underneath */}
             <Card padded={false} style={styles.grid}>
@@ -65,12 +65,12 @@ export function TaskHistory({ token, showCaretaker = false }: { token: string; s
                     token={token}
                     completionId={r.id}
                     caption={`${r.title} · ${fmtDay(r.done_at)} ${fmtTime(r.done_at)}`}
-                    size={92}
+                    size={96}
                   />
-                  <Text style={[text.smallStrong, styles.caption]} numberOfLines={2}>
+                  <Text style={[text.captionStrong, styles.caption]} numberOfLines={2}>
                     {r.title}
                   </Text>
-                  <Text style={[text.caption, styles.caption]} numberOfLines={1}>
+                  <Text style={text.caption} numberOfLines={1}>
                     {[fmtTime(r.done_at), showCaretaker ? r.caretaker.split(' ')[0] : null, r.assigned_by ? h.setBy(r.assigned_by.split(' ')[0]) : null]
                       .filter(Boolean)
                       .join(' · ')}
@@ -86,9 +86,9 @@ export function TaskHistory({ token, showCaretaker = false }: { token: string; s
 }
 
 const styles = StyleSheet.create({
-  ranges: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
-  dayHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: spacing.sm },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', padding: spacing.sm, gap: spacing.xs },
-  cell: { width: 100, padding: 4, alignItems: 'flex-start' },
-  caption: { marginTop: 4, color: colors.text },
+  ranges: { flexDirection: 'row', gap: space.s, marginBottom: space.m },
+  dayHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: space.s },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', padding: space.s, gap: space.s, borderRadius: radius.card },
+  cell: { width: 96, alignItems: 'flex-start' },
+  caption: { marginTop: space.s, color: colors.ink },
 });

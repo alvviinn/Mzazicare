@@ -1,8 +1,4 @@
-import {
-  AtkinsonHyperlegibleNext_400Regular,
-  AtkinsonHyperlegibleNext_500Medium,
-  AtkinsonHyperlegibleNext_700Bold,
-} from '@expo-google-fonts/atkinson-hyperlegible-next';
+import { AtkinsonHyperlegibleNext_400Regular, AtkinsonHyperlegibleNext_700Bold } from '@expo-google-fonts/atkinson-hyperlegible-next';
 import { BricolageGrotesque_600SemiBold, BricolageGrotesque_700Bold } from '@expo-google-fonts/bricolage-grotesque';
 import { useFonts } from 'expo-font';
 import { useCallback, useEffect, useState } from 'react';
@@ -17,7 +13,7 @@ import ElderlyHome from './src/screens/ElderlyHome';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import UserHome from './src/screens/UserHome';
-import { colors, spacing } from './src/theme';
+import { colors, space } from './src/theme';
 import { Profile } from './src/types';
 
 // Keep the splash screen up until the saved session (and role) has loaded.
@@ -34,7 +30,6 @@ export default function App() {
     BricolageGrotesque_600SemiBold,
     BricolageGrotesque_700Bold,
     AtkinsonHyperlegibleNext_400Regular,
-    AtkinsonHyperlegibleNext_500Medium,
     AtkinsonHyperlegibleNext_700Bold,
   });
 
@@ -79,7 +74,7 @@ export default function App() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color={colors.primary} />
+        <ActivityIndicator color={colors.secondary} />
       </View>
     );
   }
@@ -95,10 +90,10 @@ export default function App() {
   } else if (!profile) {
     content = (
       <View style={styles.center}>
-        <View style={{ alignSelf: 'stretch', gap: spacing.ms }}>
-          <Empty icon="wifi-strength-alert-outline" title="Can't reach MzaziCare" body={loadError} />
+        <View style={{ alignSelf: 'stretch', gap: space.s }}>
+          <Empty icon="wifiOff" title="Can't reach MzaziCare" body={loadError} />
           <Button title="Try again" icon="refresh" onPress={() => refresh(session)} />
-          <Button title="Sign out" variant="quiet" onPress={signOut} />
+          <Button title="Sign out" variant="soft" onPress={signOut} />
         </View>
       </View>
     );
@@ -126,6 +121,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.background,
-    padding: spacing.lg,
+    padding: space.l,
   },
 });

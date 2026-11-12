@@ -1,8 +1,7 @@
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { colors, fonts, radius, spacing, text, TOP_INSET } from '../theme';
-import { Stripe } from './ui';
+import { colors, on, radius, space, text, TOP_INSET } from '../theme';
 
-// The frame for sign in, register and the emailed code: brand on a peach band, the form on a raised sheet.
+// The frame for sign in, register and the emailed code: brand on a marigold-tint band, the form below.
 export function AuthFrame({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -10,15 +9,14 @@ export function AuthFrame({ title, children }: { title: string; children: React.
         <View style={styles.band}>
           <View style={styles.brandRow}>
             <View style={styles.mark}>
-              <Text style={styles.markText}>M</Text>
+              <Text style={[text.heading, { color: on.secondary }]}>M</Text>
             </View>
-            <Text style={styles.word}>MzaziCare</Text>
+            <Text style={text.heading}>MzaziCare</Text>
           </View>
-          <Text style={styles.tagline}>Care for Mzazi, from anywhere.</Text>
-          <Stripe height={8} style={{ marginTop: spacing.lg, width: 132 }} />
+          <Text style={[text.display, styles.tagline]}>Care for Mzazi, from anywhere.</Text>
         </View>
         <View style={styles.sheet}>
-          <Text style={[text.h1, { marginBottom: spacing.lg }]} accessibilityRole="header">
+          <Text style={[text.display, { marginBottom: space.l }]} accessibilityRole="header">
             {title}
           </Text>
           {children}
@@ -29,27 +27,18 @@ export function AuthFrame({ title, children }: { title: string; children: React.
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: colors.primarySoft },
+  flex: { flex: 1, backgroundColor: colors.primaryTint },
   scroll: { flexGrow: 1 },
-  band: { paddingTop: TOP_INSET + spacing.lg, paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
-  brandRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.ms },
-  mark: {
-    width: 48,
-    height: 48,
-    borderRadius: radius.sm + 2,
-    backgroundColor: colors.sage,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  markText: { fontFamily: fonts.display, fontSize: 26, color: colors.onPrimary },
-  word: { fontFamily: fonts.display, fontSize: 22, color: colors.text },
-  tagline: { fontFamily: fonts.display, fontSize: 34, lineHeight: 38, color: colors.text, marginTop: spacing.xl, letterSpacing: -0.8 },
+  band: { paddingTop: TOP_INSET + space.l, paddingHorizontal: space.l, paddingBottom: space.xl },
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: space.m },
+  mark: { width: 48, height: 48, borderRadius: radius.small, backgroundColor: colors.secondary, alignItems: 'center', justifyContent: 'center' },
+  tagline: { marginTop: space.xl },
   sheet: {
     flexGrow: 1,
     backgroundColor: colors.background,
-    borderTopLeftRadius: radius.lg + 8,
-    borderTopRightRadius: radius.lg + 8,
-    padding: spacing.lg,
-    paddingBottom: spacing.xxl,
+    borderTopLeftRadius: radius.card,
+    borderTopRightRadius: radius.card,
+    padding: space.l,
+    paddingBottom: space.xxl,
   },
 });
