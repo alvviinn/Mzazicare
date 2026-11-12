@@ -256,3 +256,14 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['created_at']
+
+
+class PushDevice(models.Model):
+    """A phone that wants push notifications: its Firebase token, tied to the signed-in account."""
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='push_devices')
+    token = models.CharField(max_length=512, unique=True)  # the phone's Firebase (FCM) registration token
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user} · {self.token[:24]}…'

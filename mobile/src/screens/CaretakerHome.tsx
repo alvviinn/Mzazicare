@@ -8,6 +8,7 @@ import { Toast } from '../components/ui';
 import { VoiceCard } from '../components/VoiceCard';
 import { useLocationSharing } from '../location/useLocationSharing';
 import { flush, loadQueue, startAutoSync } from '../offline/taskQueue';
+import { usePushTap } from '../push';
 import { t } from '../strings';
 import { Profile, ShiftState } from '../types';
 import ChatScreen from './ChatScreen';
@@ -91,6 +92,17 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
   const notify = useCallback((message: string) => setNotice({ message }), []);
   const hide = useCallback(() => setNotice(null), []);
   const action = useShiftAction(token, load, notify);
+
+  // Tapping a notification: a message opens the family chat, an emergency opens Today (with its banner).
+  usePushTap((tap) => {
+    setShiftId(null);
+    if (tap.type === 'chat') setChatOpen(true);
+    else {
+      setChatOpen(false);
+      setTab('shift');
+      load();
+    }
+  });
 
   async function refresh() {
     setRefreshing(true);

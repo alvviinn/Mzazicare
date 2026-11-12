@@ -10,8 +10,13 @@ os.environ.setdefault('DJANGO_SECRET_KEY', 'test-only-not-a-real-secret-' + 'x' 
 os.environ.setdefault('DB_NAME', 'unused')
 os.environ.setdefault('DB_USER', 'unused')
 os.environ.setdefault('DB_PASSWORD', 'unused')
+# Tests never use a real Firebase key, even when backend/.env names one (empty values win over .env).
+os.environ['FIREBASE_CREDENTIALS_FILE'] = ''
+os.environ['FIREBASE_CREDENTIALS_B64'] = ''
 
 from .settings import *  # noqa: E402,F401,F403
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ':memory:'}}
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']  # fast; tests only
+
+PUSH_ENABLED = False  # tests never call the Expo push service (test_push switches it on with a mock)

@@ -47,3 +47,10 @@ backend/staticfiles/
 # first-aid model: 118 MB, over GitHub's 100 MB limit. Kept on disk (scripts/deploy-azure.ps1 copies it) and backed up
 # in C:/mzazicare-data/firstaid/models. The word models (*.npz, ignored above) live there too.
 ml/firstaid/artifacts/intent.onnx
+
+# ---- Firebase (push notifications): keep these out of Git. They live in %LOCALAPPDATA%\mzazicare-deploy ----
+google-services.json
+GoogleService-Info.plist
+*firebase-adminsdk*.json
+firebase-service-account*.json
+*service-account*.json

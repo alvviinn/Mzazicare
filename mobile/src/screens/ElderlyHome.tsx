@@ -10,6 +10,7 @@ import { Lang, t } from '../elder/i18n';
 import { SCALES, useElderPrefs } from '../elder/prefs';
 import { fmtTime } from '../format';
 import { useLocationSharing } from '../location/useLocationSharing';
+import { usePushTap } from '../push';
 import { colors, icon, on, radius, scaled, space, TAP, text, TOP_INSET } from '../theme';
 import { ElderHome, Medicine, Mood, Profile } from '../types';
 import ChatScreen from './ChatScreen';
@@ -129,6 +130,11 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
       },
     ]);
   }
+
+  // Tapping a message notification opens the chat with the family.
+  usePushTap((tap) => {
+    if (tap.type === 'chat') setChatOpen(true);
+  });
 
   if (chatOpen && profile.sponsor) {
     return <ChatScreen token={token} peer={profile.sponsor} onBack={() => setChatOpen(false)} />;

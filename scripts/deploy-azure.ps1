@@ -139,6 +139,13 @@ if ($Only -in 'all', 'api') {
             if ($line -match '^(GOOGLE_CLIENT_IDS|EMAIL_HOST|EMAIL_PORT|EMAIL_HOST_USER|EMAIL_HOST_PASSWORD|EMAIL_USE_TLS|EMAIL_FROM)=(.+)$') { $settings += $line }
         }
     }
+    # Push notifications: the Firebase key is kept outside the project; Azure gets it as a secret setting.
+    $firebaseKey = Join-Path $stateDir 'firebase-service-account.json'
+    if (Test-Path $firebaseKey) {
+        $settings += "FIREBASE_CREDENTIALS_B64=$([Convert]::ToBase64String([IO.File]::ReadAllBytes($firebaseKey)))"
+    } else {
+        Write-Host "  (no $firebaseKey - push notifications stay off)"
+    }
     Step 'Saving the API settings'
     Az webapp config appsettings set -n $state.api -g $state.group --settings @settings -o none | Out-Null
 

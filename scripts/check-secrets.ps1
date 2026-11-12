@@ -13,6 +13,7 @@ foreach ($f in (git ls-files)) {
     $name = Split-Path $f -Leaf
     if ($name -match '^\.env(\..+)?$' -and $name -ne '.env.example') { $problems.Add("tracked environment file: $f") }
     if ($name -match '\.(pem|key|p12|jks)$') { $problems.Add("tracked key/certificate file: $f") }
+    if ($name -match '^(google-services\.json|GoogleService-Info\.plist)$|firebase-adminsdk|service-account.*\.json$') { $problems.Add("tracked Firebase file: $f") }
 }
 
 # 2. Suspicious content in tracked text files.
@@ -20,6 +21,8 @@ $patterns = @(
     @{ Name = 'private key block';        Regex = '-----BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----' },
     @{ Name = 'AWS access key id';        Regex = 'AKIA[0-9A-Z]{16}' },
     @{ Name = 'GitHub token';             Regex = 'gh[pousr]_[A-Za-z0-9]{30,}' },
+    @{ Name = 'Google/Firebase API key';  Regex = '(?<![0-9A-Za-z_\-])AIza[0-9A-Za-z_\-]{35}(?![0-9A-Za-z_\-])' },
+    @{ Name = 'service account key';      Regex = '"private_key_id"\s*:\s*"[0-9a-f]{20,}"' },
     @{ Name = 'hard-coded credential';    Regex = '(?i)(password|passwd|secret_key|api[_-]?key|auth[_-]?token)\s*[=:]\s*[''"][^''"\s]{12,}[''"]' }
 )
 $skipExt = '\.(png|jpg|jpeg|gif|ico|onnx|pt|npz|wav|flac|zip|gz|lock|woff2?|ttf)$'
@@ -32,7 +35,8 @@ foreach ($f in $files) {
         $lineNo++
         if ($line -match 'os\.environ|change-me|example|placeholder|<your') { continue }
         foreach ($p in $patterns) {
-            if ($line -match $p.Regex) { $problems.Add("$($p.Name) in ${f}:$lineNo") }
+            # case-sensitive: real keys have a fixed case (AKIA..., AIza...); patterns that should ignore case say (?i)
+            if ($line -cmatch $p.Regex) { $problems.Add("$($p.Name) in ${f}:$lineNo") }
         }
     }
 }

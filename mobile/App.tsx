@@ -1,12 +1,13 @@
 import { AtkinsonHyperlegibleNext_400Regular, AtkinsonHyperlegibleNext_700Bold } from '@expo-google-fonts/atkinson-hyperlegible-next';
 import { BricolageGrotesque_600SemiBold, BricolageGrotesque_700Bold } from '@expo-google-fonts/bricolage-grotesque';
 import { useFonts } from 'expo-font';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { getProfile, SESSION_EXPIRED } from './src/api/client';
 import { clearSession, loadSession, Session } from './src/auth/session';
+import { registerForPush, unregisterForPush } from './src/push';
 import { Button, Empty } from './src/components/ui';
 import CaretakerHome from './src/screens/CaretakerHome';
 import ElderlyHome from './src/screens/ElderlyHome';
@@ -33,7 +34,13 @@ export default function App() {
     AtkinsonHyperlegibleNext_700Bold,
   });
 
+  const sessionRef = useRef<Session | null>(null);
+  useEffect(() => {
+    sessionRef.current = session;
+  }, [session]);
+
   const signOut = useCallback(async () => {
+    if (sessionRef.current) await unregisterForPush(sessionRef.current.token); // no notifications for a signed-out account
     await clearSession();
     setSession(null);
     setProfile(null);
@@ -64,6 +71,12 @@ export default function App() {
   useEffect(() => {
     if (session) refresh(session);
   }, [session, refresh]);
+
+  // Once signed in (role known), let this phone receive notifications for new alerts and messages.
+  const signedInToken = profile ? session?.token : undefined;
+  useEffect(() => {
+    if (signedInToken) registerForPush(signedInToken);
+  }, [signedInToken]);
 
   const loading = !ready || (!fontsLoaded && !fontError) || (session && !profile && !loadError);
 

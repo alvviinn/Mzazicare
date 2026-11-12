@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getDashboard } from '../api/client';
 import { HomeShell } from '../components/HomeShell';
 import { TabBar, TabDef } from '../components/TabBar';
+import { usePushTap } from '../push';
 import { Dashboard, Profile } from '../types';
 import ChatScreen from './ChatScreen';
 import ShiftDetailScreen from './ShiftDetailScreen';
@@ -46,6 +47,17 @@ export default function UserHome({ token, profile, onChanged, onSignOut }: Props
     const id = setInterval(load, 15000);
     return () => clearInterval(id);
   }, [load, chatPeer, shiftId, profile]);
+
+  // Tapping a notification: a message opens that chat, an alert opens Home (where alerts are handled).
+  usePushTap((tap) => {
+    setShiftId(null);
+    if (tap.type === 'chat') setChatPeer({ name: tap.name, email: tap.from });
+    else {
+      setChatPeer(null);
+      setTab('overview');
+      load();
+    }
+  });
 
   async function refresh() {
     setRefreshing(true);

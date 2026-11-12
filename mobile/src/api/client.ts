@@ -199,6 +199,13 @@ export const proofPhotoSource = (token: string, completionId: number) => ({
   headers: { Authorization: `Bearer ${token}` },
 });
 
+// ---- Push notifications: this phone's Expo push token, for new alerts and chat messages ----
+export const registerPushToken = (token: string, pushToken: string): Promise<{ ok: boolean }> =>
+  request('/api/push/', { ...post({ token: pushToken }), token });
+
+export const unregisterPushToken = (token: string, pushToken: string): Promise<unknown> =>
+  request('/api/push/', { method: 'DELETE', body: JSON.stringify({ token: pushToken }), token });
+
 // ---- First-aid assistant (caretakers). Messages are answered and not stored. ----
 export const askFirstAid = (
   token: string,
