@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-import { startShift, stopShift } from '../../api/client';
+import { stopShift } from '../../api/client';
 import { Icon, IconName } from '../../components/Icon';
 import { SharingBanner } from '../../components/SharingBanner';
 import { Avatar, Button, Card, Empty, ErrorState, haptic, Loading, PressScale, Ring, StatusPill, Stepper } from '../../components/ui';
@@ -13,7 +13,8 @@ import { ShiftState } from '../../types';
 
 const s = t.shift;
 
-// Start / end, with loading, success and error feedback. Used by the fixed button at the bottom.
+// End, with loading, success and error feedback. Used by the fixed button at the bottom.
+// There is no Start: a shift only starts by itself when the caretaker's phone is in range of the elder's.
 export function useShiftAction(token: string, onChanged: () => Promise<void>, notify: (message: string) => void) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -37,7 +38,6 @@ export function useShiftAction(token: string, onChanged: () => Promise<void>, no
   return {
     busy,
     error,
-    start: () => run(() => startShift(token), s.started),
     end: () =>
       Alert.alert(s.endTitle, s.endBody, [
         { text: s.endKeep, style: 'cancel' },
@@ -46,11 +46,20 @@ export function useShiftAction(token: string, onChanged: () => Promise<void>, no
   };
 }
 
-// The screen's one primary action (marigold), fixed at the bottom within thumb reach.
+// The screen's one primary action (marigold), fixed at the bottom within thumb reach. Before the shift, a note instead.
 export function ShiftActionBar({ state, action }: { state: ShiftState | null; action: ReturnType<typeof useShiftAction> }) {
   const online = useOnline();
   if (!state?.elderly) return null;
-  const canStart = state.phase === 'none' || state.phase === 'ended';
+  if (state.phase === 'none' || state.phase === 'ended') {
+    return (
+      <View style={styles.bar} accessibilityLiveRegion="polite">
+        <View style={styles.autoNote}>
+          <Icon name="pin" color={colors.inkMuted} />
+          <Text style={[text.caption, { flex: 1 }]}>{s.autoStart(state.range.radius_m, state.elderly.name.split(' ')[0])}</Text>
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={styles.bar}>
       {!!action.error && (
@@ -59,12 +68,11 @@ export function ShiftActionBar({ state, action }: { state: ShiftState | null; ac
         </Text>
       )}
       <Button
-        title={!online ? s.offlineAction : canStart ? (state.phase === 'ended' ? s.continue : s.start) : s.end}
-        icon={!online ? 'offline' : canStart ? 'play' : 'stop'}
-        onPress={canStart ? action.start : action.end}
+        title={!online ? s.offlineAction : s.end}
+        icon={!online ? 'offline' : 'stop'}
+        onPress={action.end}
         loading={action.busy}
         disabled={!online}
-        accessibilityHint={canStart ? s.startHint : undefined}
       />
     </View>
   );
@@ -310,4 +318,5 @@ const styles = StyleSheet.create({
   chatBtn: { width: TAP, height: TAP, borderRadius: radius.pill, backgroundColor: colors.secondary, alignItems: 'center', justifyContent: 'center' },
 
   bar: { paddingHorizontal: space.m, paddingTop: space.s, gap: space.s, backgroundColor: colors.background },
+  autoNote: { flexDirection: 'row', alignItems: 'center', gap: space.s, minHeight: TAP, paddingBottom: space.s },
 });

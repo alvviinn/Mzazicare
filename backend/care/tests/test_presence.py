@@ -111,7 +111,7 @@ class PresenceEngineTests(FamilyTestCase):
 
     def test_phase_goes_waiting_active_break_away(self):
         self.tick(0, 100)
-        manual = presence.start_manual(self.caretaker, self.at(0))
+        manual = Shift.objects.create(caretaker=self.caretaker, elderly=self.elder, start_time=self.at(0), source='manual')  # an old manual-start row (manual start was removed)
         self.assertEqual(presence.phase_of(manual, self.at(0)), 'waiting')
         self.tick(5, 4)
         self.assertEqual(presence.phase_of(self.fresh(manual), self.at(5)), 'active')
@@ -150,13 +150,13 @@ class PresenceEngineTests(FamilyTestCase):
         self.assertEqual(old.end_time, self.at(900))  # not counted for the unseen hour
         self.assertEqual(self.worked(old), 900)
 
-    def test_a_manual_shift_that_never_reached_the_elder_is_discarded_when_the_day_closes(self):
+    def test_an_old_manual_shift_that_never_reached_the_elder_is_discarded_when_the_day_closes(self):
         self.tick(0, 100)
-        shift = presence.start_manual(self.caretaker, self.at(0))
+        shift = Shift.objects.create(caretaker=self.caretaker, elderly=self.elder, start_time=self.at(0), source='manual')
         presence.evaluate(self.caretaker, self.at(24 * 60 + 5))  # next morning
         self.assertFalse(Shift.objects.filter(pk=shift.pk).exists())
 
-    # ---- manual start and stop ----
+    # ---- manual stop (there is no manual start) ----
     def test_manual_stop_ends_the_days_shift_and_keeps_verified_time(self):
         shift = self.tick(0, 10)
         self.tick(10, 5)
@@ -176,42 +176,6 @@ class PresenceEngineTests(FamilyTestCase):
         self.assertEqual(self.shifts().count(), 1)
         shift = self.fresh(first)
         self.assertEqual((shift.end_time, shift.ended_by, shift.segments.count()), (None, '', 2))
-
-    def test_tapping_start_after_ending_continues_todays_shift(self):
-        first = self.tick(0, 10)
-        self.tick(5, 5)
-        presence.stop_manual(self.caretaker, self.at(5))
-        self.tick(10, 100)
-        again = presence.start_manual(self.caretaker, self.at(10))
-        self.assertEqual(again.pk, first.pk)
-        self.assertEqual(self.shifts().count(), 1)
-        self.tick(15, 4)
-        self.assertIsNotNone(presence.open_segment(self.fresh(first)))
-
-    def test_manual_start_away_from_the_elder_counts_nothing_until_in_range(self):
-        self.tick(0, 100)
-        shift = presence.start_manual(self.caretaker, self.at(0))
-        self.assertEqual((shift.source, presence.open_segment(shift), self.worked(shift, 0)), ('manual', None, 0))
-        self.tick(5, 4)
-        self.tick(10, 4)
-        self.assertEqual(self.worked(shift, 10), 5)  # only the 5 minutes verified in range
-
-    def test_cannot_start_a_second_shift(self):
-        self.tick(0, 10)
-        with self.assertRaises(ValueError):
-            presence.start_manual(self.caretaker, self.at(1))
-
-    def test_cannot_start_while_on_a_break(self):
-        self.tick(0, 10)
-        self.tick(5, 5)
-        self.tick(10, 100)
-        with self.assertRaises(ValueError):
-            presence.start_manual(self.caretaker, self.at(20))  # the day's shift is already open
-
-    def test_manual_start_needs_a_linked_elderly_person(self):
-        self.elder.delete()
-        with self.assertRaises(ValueError):
-            presence.start_manual(self.caretaker, self.at(0))
 
     # ---- trust ----
     def test_fake_gps_location_is_never_counted(self):

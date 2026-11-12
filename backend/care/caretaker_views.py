@@ -139,14 +139,13 @@ class ShiftStateView(APIView):
 
 
 class ShiftStartView(APIView):
+    """Manual start was removed (it let a shift open away from the elderly person). Kept only so older app
+    versions, which still show a Start button, get a clear answer instead of an error page."""
+
     def post(self, request):
         require_caretaker(request.user)
-        now = timezone.now()
-        try:
-            presence.start_manual(request.user, now)
-        except ValueError as e:
-            raise ValidationError({'detail': str(e)})
-        return Response(state_json(request.user, now), status=201)
+        raise ValidationError({'detail': f'Shifts start by themselves when you are within {presence.ENTER_RADIUS_M} m '
+                                         f'of the person you care for. Please update the app.'})
 
 
 class ShiftStopView(APIView):

@@ -15,19 +15,20 @@ class ShiftApiTests(FamilyTestCase):
         state = self.caretaker_api.get('/api/shift/state/').data
         self.assertEqual((state['status'], state['range']['state']), ('none', 'unknown'))
 
-    def test_manual_start_and_stop(self):
-        self.put_in_range(100)  # not near the elderly person yet, so nothing has started automatically
-        started = self.caretaker_api.post('/api/shift/start/')
-        self.assertEqual((started.status_code, started.data['status']), (201, 'waiting'))  # open, but nothing counted yet
-        self.assertEqual(self.caretaker_api.post('/api/shift/start/').status_code, 400)  # already running
+    def test_manual_start_is_gone(self):
+        """Shifts only start by themselves (in range). Older apps still call start: they get a clear refusal."""
+        self.put_in_range(100)  # away from the elderly person
+        r = self.caretaker_api.post('/api/shift/start/')
+        self.assertEqual(r.status_code, 400)
+        self.assertIn('start by themselves', r.data['detail'])
+        self.assertEqual(Shift.objects.count(), 0)
+
+    def test_manual_stop(self):
+        self.put_in_range(5)
+        self.caretaker_api.get('/api/shift/state/')  # in range: the shift starts automatically
         stopped = self.caretaker_api.post('/api/shift/stop/').data
         self.assertEqual(stopped['status'], 'none')
         self.assertEqual(self.caretaker_api.post('/api/shift/stop/').status_code, 400)  # nothing to stop
-
-    def test_manual_start_is_refused_when_the_shift_already_started_by_itself(self):
-        self.put_in_range(5)
-        self.caretaker_api.get('/api/shift/state/')  # in range: the shift starts automatically
-        self.assertEqual(self.caretaker_api.post('/api/shift/start/').status_code, 400)
 
     def test_hours_summary(self):
         self.put_in_range()

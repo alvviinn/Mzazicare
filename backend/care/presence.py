@@ -253,31 +253,6 @@ def evaluate(caretaker, now=None):
     return current_shift(caretaker, now)
 
 
-def start_manual(caretaker, now=None):
-    """Caretaker taps Start. Today's shift opens (or continues), but only in-range time is counted."""
-    now = now or timezone.now()
-    elders = list(User.objects.filter(sponsor_id=caretaker.sponsor_id, role=Role.ELDERLY).order_by('date_joined'))
-    if not elders:
-        raise ValueError("You can't start a shift yet: nobody is linked to you. Ask the family to add you and the person you care for.")
-    if evaluate(caretaker, now):
-        raise ValueError('Your shift has already started. Nothing more to do: your time is being counted.')
-
-    cloc = Location.objects.filter(user=caretaker).first()
-    ranked = []
-    for e in elders:
-        _, d = measure(cloc, Location.objects.filter(user=e).first(), now, ENTER_RADIUS_M)
-        ranked.append((d if d is not None else float('inf'), e.pk, e))
-    elder = min(ranked)[2]
-
-    earlier = next((s for s in todays_shifts(caretaker, now) if s.elderly_id == elder.pk), None)
-    if earlier:
-        _reopen(earlier)  # tapped Start after ending earlier today: carry on today's shift
-    else:
-        shift = Shift.objects.create(caretaker=caretaker, elderly=elder, start_time=now, source='manual')
-        snapshot_tasks(shift)
-    return evaluate(caretaker, now)
-
-
 def stop_manual(caretaker, now=None):
     """Caretaker taps End: finished for now. If they come back the same day, the same shift continues."""
     now = now or timezone.now()
