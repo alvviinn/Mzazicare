@@ -170,7 +170,7 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
         ListHeaderComponent={
           busy ? (
             <View style={[styles.bubble, styles.theirs, styles.row]}>
-              <ActivityIndicator color={colors.secondary} />
+              <ActivityIndicator color={colors.primary} />
               <Text style={text.caption}>{w.thinking}</Text>
             </View>
           ) : undefined
@@ -266,7 +266,7 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
   );
 }
 
-// A brick band that calls 999 when tapped: for emergencies and for the danger banner above advice.
+// A red band that calls 999 when tapped: for emergencies and for the danger banner above advice.
 function Urgent({ message, callLabel }: { message: string; callLabel: string }) {
   return (
     <Pressable onPress={call999} style={styles.urgent} accessibilityRole="button" accessibilityLabel={`${message} ${callLabel}`}>
@@ -302,7 +302,7 @@ function GuideBubble({
           {!!reply.opener && <Text style={text.bodyStrong}>{reply.opener}</Text>}
           {!reply.emergency && !!reply.urgent && (
             <View style={styles.attention}>
-              <Icon name="warning" />
+              <Icon name="warning" color={colors.warning} />
               <Text style={[text.captionStrong, { flex: 1 }]}>{reply.urgent}</Text>
             </View>
           )}
@@ -325,7 +325,7 @@ function GuideBubble({
           ))}
           {!!reply.after && (
             <View style={styles.after}>
-              <Icon name="info" color={colors.secondary} />
+              <Icon name="info" color={colors.primary} />
               <Text style={[text.body, styles.flex1]}>{reply.after}</Text>
             </View>
           )}
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
   mine: { alignSelf: 'flex-end', backgroundColor: colors.secondary },
   theirs: { alignSelf: 'flex-start', backgroundColor: colors.surface },
   guide: { maxWidth: '96%', gap: space.s },
-  attention: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.primaryTint, borderRadius: radius.small, padding: space.s },
+  attention: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.warningTint, borderRadius: radius.small, padding: space.s },
   step: { flexDirection: 'row', gap: space.m, alignItems: 'flex-start' },
   stepNo: { width: 24, height: 24, borderRadius: radius.pill, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
   after: { flexDirection: 'row', gap: space.s, backgroundColor: colors.secondaryTint, borderRadius: radius.small, padding: space.m },

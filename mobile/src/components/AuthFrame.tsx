@@ -1,7 +1,7 @@
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { colors, on, radius, space, text, TOP_INSET } from '../theme';
+import { colors, on, radius, space, text, textOnInk, TOP_INSET } from '../theme';
 
-// The frame for sign in, register and the emailed code: brand on a marigold-tint band, the form below.
+// The frame for sign in, register and the emailed code: brand on the ink hero band (white text, cornflower mark), the form below.
 export function AuthFrame({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -11,9 +11,9 @@ export function AuthFrame({ title, children }: { title: string; children: React.
             <View style={styles.mark}>
               <Text style={[text.heading, { color: on.secondary }]}>M</Text>
             </View>
-            <Text style={text.heading}>MzaziCare</Text>
+            <Text style={textOnInk.heading}>MzaziCare</Text>
           </View>
-          <Text style={[text.display, styles.tagline]}>Care for Mzazi, from anywhere.</Text>
+          <Text style={[textOnInk.display, styles.tagline]}>Care for Mzazi, from anywhere.</Text>
         </View>
         <View style={styles.sheet}>
           <Text style={[text.display, { marginBottom: space.l }]} accessibilityRole="header">
@@ -27,7 +27,7 @@ export function AuthFrame({ title, children }: { title: string; children: React.
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: colors.primaryTint },
+  flex: { flex: 1, backgroundColor: colors.ink },
   scroll: { flexGrow: 1 },
   band: { paddingTop: TOP_INSET + space.l, paddingHorizontal: space.l, paddingBottom: space.xl },
   brandRow: { flexDirection: 'row', alignItems: 'center', gap: space.m },

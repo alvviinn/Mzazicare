@@ -11,7 +11,7 @@ import { SCALES, useElderPrefs } from '../elder/prefs';
 import { fmtTime } from '../format';
 import { useLocationSharing } from '../location/useLocationSharing';
 import { usePushTap } from '../push';
-import { colors, icon, on, radius, scaled, space, TAP, text, TOP_INSET } from '../theme';
+import { colors, icon, on, radius, scaled, space, TAP, text, textOnInk, TOP_INSET } from '../theme';
 import { ElderHome, Medicine, Mood, Profile } from '../types';
 import ChatScreen from './ChatScreen';
 
@@ -162,7 +162,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
       <ScrollView
         style={styles.flex}
         contentContainerStyle={styles.container}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.secondary} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
       >
         <View style={styles.header}>
           <View style={{ flex: 1 }}>
@@ -185,19 +185,19 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
           <Card style={{ marginBottom: space.m }}>
             <View style={styles.rowGap}>
               <Icon name="wifiOff" color={colors.error} />
-              <Text style={[T.bodyStrong, { flex: 1, color: colors.error }]}>{t(lang, 'load_error')}</Text>
+              <Text style={[T.bodyStrong, { flex: 1 }]}>{t(lang, 'load_error')}</Text>
             </View>
           </Card>
         )}
 
         {/* Right now: is my caretaker here? */}
         {ct && (
-          <Card tint="primary" style={{ marginBottom: space.m }}>
+          <Card tint="ink" style={{ marginBottom: space.m }}>
             <View style={styles.rowGap} accessible accessibilityLabel={caretakerLine}>
               <View style={styles.heroIcon}>
                 <Icon name={CARETAKER_ICON[ct.status].icon} size={icon.l} color={CARETAKER_ICON[ct.status].color} />
               </View>
-              <Text style={[T.heading, { flex: 1 }]}>{caretakerLine}</Text>
+              <Text style={[scaled(textOnInk.heading, scale), { flex: 1 }]}>{caretakerLine}</Text>
             </View>
           </Card>
         )}
@@ -232,7 +232,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
                 </Text>
               </View>
               <Pressable onPress={() => setPickingMood(true)} style={styles.change} accessibilityRole="button" accessibilityLabel={t(lang, 'change')}>
-                <Text style={[T.captionStrong, { color: colors.secondary }]}>{t(lang, 'change')}</Text>
+                <Text style={[T.captionStrong, { color: colors.primary }]}>{t(lang, 'change')}</Text>
               </Pressable>
             </View>
           )}
@@ -254,7 +254,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={T.bodyStrong}>{m.name}</Text>
-                      <Text style={[T.caption, m.state === 'missed' && { color: colors.error }]}>
+                      <Text style={due ? scaled(text.captionInk, scale) : T.caption}>
                         {[m.dose || null, m.state === 'later' ? t(lang, 'later_at', clock12(m.time)) : t(lang, m.state === 'taken' ? 'taken' : m.state === 'due' ? 'due_now' : 'missed')]
                           .filter(Boolean)
                           .join(' · ')}

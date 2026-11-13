@@ -119,5 +119,5 @@ export default function RegisterScreen({ onLoggedIn, onBack }: Props) {
 
 const styles = StyleSheet.create({
   switch: { alignItems: 'center', justifyContent: 'center', marginTop: space.m, minHeight: TAP },
-  link: { ...text.bodyStrong, color: colors.secondary },
+  link: { ...text.bodyStrong, color: colors.primary },
 });

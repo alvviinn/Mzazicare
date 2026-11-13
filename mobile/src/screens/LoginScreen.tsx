@@ -91,5 +91,5 @@ export default function LoginScreen({ onLoggedIn, onRegister }: Props) {
 
 const styles = StyleSheet.create({
   switch: { alignItems: 'center', justifyContent: 'center', marginTop: space.m, minHeight: TAP },
-  link: { ...text.bodyStrong, color: colors.secondary },
+  link: { ...text.bodyStrong, color: colors.primary },
 });

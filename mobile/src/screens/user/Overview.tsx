@@ -5,25 +5,9 @@ import { Icon, IconName, MOOD_ICON, TONE_ICON } from '../../components/Icon';
 import { ProofPhoto } from '../../components/ProofPhoto';
 import { ShiftRow } from '../../components/ShiftRow';
 import { TaskHistory } from '../../components/TaskHistory';
-import {
-  Avatar,
-  Button,
-  Card,
-  ErrorState,
-  haptic,
-  Loading,
-  PillTone,
-  PressScale,
-  Ring,
-  Row,
-  Section,
-  Segmented,
-  Sheet,
-  StatusPill,
-  Stepper,
-} from '../../components/ui';
+import { Avatar, Button, Card, ErrorState, ErrorText, haptic, Loading, PillTone, PressScale, Ring, Row, Section, Segmented, Sheet, StatusPill, Stepper } from '../../components/ui';
 import { fmtDuration, fmtTime, timeAgo } from '../../format';
-import { colors, icon, on, radius, space, TAP, text } from '../../theme';
+import { colors, icon, on, radius, space, TAP, text, textOnInk } from '../../theme';
 import { AlertItem, Dashboard, Profile } from '../../types';
 
 type Props = {
@@ -94,7 +78,7 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
           </Ring>
           <View style={styles.flex}>
             <Text style={text.display}>{meds.total ? `${meds.taken}/${meds.total}` : '–'}</Text>
-            <Text style={text.caption}>Medicines</Text>
+            <Text style={text.captionInk}>Medicines</Text>
           </View>
         </PressScale>
         <PressScale
@@ -138,7 +122,7 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
           </Ring>
           <View style={styles.flex}>
             <Text style={text.display}>{chores.length ? `${doneChores}/${chores.length}` : '0'}</Text>
-            <Text style={text.caption}>Tasks</Text>
+            <Text style={text.captionInk}>Tasks</Text>
           </View>
         </PressScale>
       </View>
@@ -293,7 +277,7 @@ function Onboarding({ profile, onGoPeople }: { profile: Profile; onGoPeople: () 
   return (
     <Card tint="primary">
       <Text style={text.display}>Set up your circle</Text>
-      <Text style={text.caption}>Two people, then this fills up.</Text>
+      <Text style={text.captionInk}>Two people, then this fills up.</Text>
       <View style={styles.setup}>
         {steps.map((s) => (
           <View key={s.title} style={styles.setupStep}>
@@ -338,14 +322,14 @@ function TodayCard({
   const carer = s ? dash.caretakers.find((c) => c.name === s.caretaker) ?? dash.caretakers[0] : dash.caretakers[0];
 
   return (
-    <Card tint="primary" style={{ marginBottom: space.s }}>
+    <Card tint="ink" style={{ marginBottom: space.s }}>
       <View style={styles.todayTop}>
         <Avatar name={s ? s.caretaker : carer?.name ?? '?'} size={48} solid />
         <View style={styles.flex}>
-          <Text style={text.heading} numberOfLines={1}>
+          <Text style={textOnInk.heading} numberOfLines={1}>
             {s ? s.caretaker.split(' ')[0] : 'Today'}
           </Text>
-          <Text style={text.caption} numberOfLines={1}>
+          <Text style={textOnInk.caption} numberOfLines={1}>
             {s ? `with ${s.elderly.split(' ')[0]}${since ? ` · ${since}` : ''}` : 'Nobody has arrived'}
           </Text>
         </View>
@@ -353,12 +337,12 @@ function TodayCard({
       </View>
       {s && (
         <View style={{ marginTop: space.m }} accessible accessibilityLabel={`Active ${fmtDuration(s.minutes)} today`}>
-          <Text style={text.display}>{fmtDuration(s.minutes)}</Text>
-          <Text style={text.caption}>{['active today', s.breaks ? `${s.breaks} break${s.breaks === 1 ? '' : 's'}` : null].filter(Boolean).join(' · ')}</Text>
+          <Text style={textOnInk.display}>{fmtDuration(s.minutes)}</Text>
+          <Text style={textOnInk.caption}>{['active today', s.breaks ? `${s.breaks} break${s.breaks === 1 ? '' : 's'}` : null].filter(Boolean).join(' · ')}</Text>
         </View>
       )}
       <View style={{ marginTop: space.l }}>
-        <Stepper steps={['Arrive', 'On shift', 'Done']} current={step} />
+        <Stepper steps={['Arrive', 'On shift', 'Done']} current={step} onInk />
       </View>
       {s && (
         <Pressable
@@ -368,7 +352,7 @@ function TodayCard({
           accessibilityLabel="Today's timeline"
         >
           <Icon name="clock" color={colors.secondary} />
-          <Text style={[text.captionStrong, styles.flex, { color: colors.secondary }]}>Timeline</Text>
+          <Text style={[textOnInk.accent, styles.flex]}>Timeline</Text>
           <Icon name="chevron" color={colors.secondary} />
         </Pressable>
       )}
@@ -387,7 +371,7 @@ const SEVERITY: Record<number, { text: string; tone: PillTone }> = {
   1: { text: 'Check', tone: 'muted' },
 };
 
-// Attention = marigold tint with ink text and an icon. The evidence comes before the decision.
+// Attention = warning tint with ink text and an amber (or red, for SOS) icon. The evidence comes before the decision.
 function AlertCard({ alert, token, onChanged }: { alert: AlertItem; token: string; onChanged: () => void }) {
   const [busy, setBusy] = useState<'confirmed' | 'dismissed' | null>(null);
   const [error, setError] = useState('');
@@ -410,10 +394,10 @@ function AlertCard({ alert, token, onChanged }: { alert: AlertItem; token: strin
   const no = sos ? 'False alarm' : 'Dismiss';
   const pos = alert.position;
   return (
-    <Card tint="primary" style={{ marginBottom: space.s }}>
+    <Card tint="warning" style={{ marginBottom: space.s }}>
       <View accessibilityRole={sos ? 'alert' : undefined}>
         <View style={styles.alertHead}>
-          <Icon name={sos ? 'siren' : 'bellRing'} color={sos ? colors.error : colors.ink} />
+          <Icon name={sos ? 'siren' : 'bellRing'} color={sos ? colors.error : colors.warning} />
           <StatusPill label={sev.text} tone={sev.tone} />
           <Text style={[text.caption, { marginLeft: 'auto' }]}>{timeAgo(alert.created_at)}</Text>
         </View>
@@ -431,8 +415,8 @@ function AlertCard({ alert, token, onChanged }: { alert: AlertItem; token: strin
               accessibilityRole="link"
               accessibilityLabel={`Open the position in Maps. GPS accuracy ${pos.accuracy !== null ? `${Math.round(pos.accuracy)} metres` : 'unknown'}`}
             >
-              <Icon name="pin" color={colors.secondary} />
-              <Text style={[text.captionStrong, { color: colors.secondary }]}>Map{pos.accuracy !== null ? ` · ±${Math.round(pos.accuracy)} m` : ''}</Text>
+              <Icon name="pin" color={colors.primary} />
+              <Text style={[text.captionStrong, { color: colors.primary }]}>Map{pos.accuracy !== null ? ` · ±${Math.round(pos.accuracy)} m` : ''}</Text>
             </Pressable>
           )}
           {alert.confidence !== null && (
@@ -444,7 +428,11 @@ function AlertCard({ alert, token, onChanged }: { alert: AlertItem; token: strin
         </View>
       )}
 
-      {!!error && <Text style={[text.caption, { color: colors.error, marginTop: space.s }]}>{error}</Text>}
+      {!!error && (
+        <View style={{ marginTop: space.s }}>
+          <ErrorText>{error}</ErrorText>
+        </View>
+      )}
       <View style={styles.alertActions}>
         <View style={styles.flex}>
           <Button title={yes} variant={sos ? 'danger' : 'secondary'} onPress={() => act('confirmed')} loading={busy === 'confirmed'} disabled={busy !== null} />
@@ -481,7 +469,7 @@ const styles = StyleSheet.create({
     minHeight: TAP,
     marginTop: space.m,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.line,
+    borderTopColor: colors.primary, // a quiet divider on the ink hero
   },
 
   alertHead: { flexDirection: 'row', alignItems: 'center', gap: space.s },

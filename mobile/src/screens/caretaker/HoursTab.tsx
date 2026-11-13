@@ -5,7 +5,7 @@ import { DayStrip, ShiftRow } from '../../components/ShiftRow';
 import { Card, Empty, ErrorState, Loading, Section } from '../../components/ui';
 import { fmtDuration } from '../../format';
 import { t } from '../../strings';
-import { colors, radius, space, text } from '../../theme';
+import { colors, radius, space, text, textOnInk } from '../../theme';
 import { Hours } from '../../types';
 
 const h = t.hours;
@@ -37,10 +37,10 @@ export default function HoursTab({ token, onOpenShift }: { token: string; onOpen
   return (
     <>
       {/* The week is the figure that matters; the others sit underneath as a quiet row. */}
-      <Card tint="primary">
+      <Card tint="ink">
         <View accessible accessibilityLabel={`${h.week}: ${fmtDuration(hours.week)}. ${h.countsLabel(RADIUS_M)}`}>
-          <Text style={text.caption}>{h.week}</Text>
-          <Text style={text.display}>{fmtDuration(hours.week)}</Text>
+          <Text style={textOnInk.caption}>{h.week}</Text>
+          <Text style={textOnInk.display}>{fmtDuration(hours.week)}</Text>
         </View>
         <View style={styles.stats}>
           <Stat label={h.today} value={hours.today} />

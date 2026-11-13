@@ -60,7 +60,7 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
       {!!error && (
         <View style={styles.error} accessibilityLiveRegion="polite">
           <Icon name="alert" color={colors.error} />
-          <Text style={[text.caption, { color: colors.error, flex: 1 }]}>{error}</Text>
+          <Text style={[text.captionStrong, { flex: 1 }]}>{error}</Text>
         </View>
       )}
 

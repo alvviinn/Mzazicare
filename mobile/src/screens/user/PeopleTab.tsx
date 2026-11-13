@@ -256,7 +256,7 @@ function AddPerson({ token, onChanged, onDone }: { token: string; onChanged: () 
   );
 }
 
-// Choosing a role: category tiles in mulberry tint; the chosen one turns marigold tint with a tick.
+// Choosing a role: category tiles in cornflower tint; the chosen one turns cobalt tint with a tick.
 function RoleTile({ selected, glyph, label, onPress }: { selected: boolean; glyph: IconName; label: string; onPress: () => void }) {
   return (
     <PressScale

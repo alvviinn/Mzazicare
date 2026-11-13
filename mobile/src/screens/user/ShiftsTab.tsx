@@ -4,7 +4,7 @@ import { getShifts } from '../../api/client';
 import { DayStrip, ShiftRow } from '../../components/ShiftRow';
 import { Card, Empty, ErrorState, Loading, Section } from '../../components/ui';
 import { fmtDuration } from '../../format';
-import { space, text } from '../../theme';
+import { space, textOnInk } from '../../theme';
 import { ShiftSummary } from '../../types';
 
 type Props = { token: string; onOpenShift: (id: number) => void };
@@ -38,11 +38,11 @@ export default function ShiftsTab({ token, onOpenShift }: Props) {
   const total = shifts.reduce((n, s) => n + s.minutes, 0);
   return (
     <>
-      <Card tint="primary">
+      <Card tint="ink">
         <View accessible accessibilityLabel={`Last 30 days: ${fmtDuration(total)} active over ${shifts.length} days`}>
-          <Text style={text.caption}>30 days</Text>
-          <Text style={text.display}>{fmtDuration(total)}</Text>
-          <Text style={text.caption}>
+          <Text style={textOnInk.caption}>30 days</Text>
+          <Text style={textOnInk.display}>{fmtDuration(total)}</Text>
+          <Text style={textOnInk.caption}>
             {shifts.length} day{shifts.length === 1 ? '' : 's'} worked
           </Text>
         </View>

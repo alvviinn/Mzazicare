@@ -6,7 +6,7 @@ import { STATUS_LABEL } from '../components/ShiftRow';
 import { ToneCard, ToneChart } from '../components/ToneChart';
 import { Avatar, Card, ErrorState, Loading, Ring, Row, ScreenHeader, Section, Segmented, StatusPill } from '../components/ui';
 import { fmtDuration, fmtShiftDayLong, fmtTime } from '../format';
-import { colors, icon, on, radius, space, text } from '../theme';
+import { colors, icon, on, radius, space, text, textOnInk } from '../theme';
 import { ShiftDetail, TimelineEvent } from '../types';
 
 type Props = { token: string; shiftId: number; onBack: () => void };
@@ -62,13 +62,13 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
 
       <ScrollView
         contentContainerStyle={styles.container}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.secondary} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
       >
         {!shift ? (
           error ? <ErrorState message={`Couldn't load this shift. ${error}`} onRetry={load} /> : <Loading label="Loading the shift" />
         ) : (
           <>
-            <Card tint="primary">
+            <Card tint="ink">
               <View style={styles.who}>
                 <View style={styles.pair}>
                   <Avatar name={shift.caretaker} size={40} solid />
@@ -76,7 +76,7 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
                     <Avatar name={shift.elderly} size={40} />
                   </View>
                 </View>
-                <Text style={[text.bodyStrong, { flex: 1 }]} numberOfLines={2}>
+                <Text style={[textOnInk.bodyStrong, { flex: 1 }]} numberOfLines={2}>
                   {shift.caretaker.split(' ')[0]} · {shift.elderly.split(' ')[0]}
                 </Text>
                 {st && <StatusPill label={st.text} tone={st.tone} />}
@@ -87,8 +87,8 @@ export default function ShiftDetailScreen({ token, shiftId, onBack }: Props) {
                 accessible
                 accessibilityLabel={`Active ${fmtDuration(shift.minutes)}. Only time within 15 metres of the elderly person counts.`}
               >
-                <Text style={text.display}>{fmtDuration(shift.minutes)}</Text>
-                <Text style={text.caption}>
+                <Text style={textOnInk.display}>{fmtDuration(shift.minutes)}</Text>
+                <Text style={textOnInk.caption}>
                   {[
                     'active',
                     shift.arrived ? `${fmtTime(shift.arrived)} – ${shift.end ? fmtTime(shift.end) : stillOut ? 'out' : 'now'}` : 'not arrived',

@@ -131,11 +131,11 @@ export function VoiceCard({ voice, lang = 'en', scale = 1 }: { voice: Voice; lan
         </View>
         <View style={{ flex: 1 }}>
           <Text style={scaled(text.bodyStrong, scale)}>{x.title}</Text>
-          <Text style={scaled(text.caption, scale)}>{status}</Text>
-          {voice.micDenied && <Text style={[scaled(text.captionStrong, scale), { color: colors.error }]}>{x.mic}</Text>}
+          <Text style={scaled(voice.recording ? text.captionInk : text.caption, scale)}>{status}</Text>
+          {voice.micDenied && <Text style={scaled(text.captionStrong, scale)}>{x.mic}</Text>}
         </View>
         <Pressable onPress={confirmOff} disabled={busy} style={styles.off} accessibilityRole="button" accessibilityLabel={`${x.off}: ${x.title}`}>
-          <Text style={[scaled(text.captionStrong, scale), { color: colors.secondary }]}>{x.off}</Text>
+          <Text style={[scaled(text.captionStrong, scale), { color: colors.primary }]}>{x.off}</Text>
         </Pressable>
       </View>
     </Card>

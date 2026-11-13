@@ -72,7 +72,7 @@ function GoogleButtonInner({
         accessibilityLabel="Continue with Google"
         accessibilityState={{ disabled: !request || busy, busy }}
       >
-        {busy ? <ActivityIndicator color={colors.ink} /> : <Text style={[text.heading, { color: colors.secondary }]}>G</Text>}
+        {busy ? <ActivityIndicator color={colors.ink} /> : <Text style={[text.heading, { color: colors.primary }]}>G</Text>}
         <Text style={text.bodyStrong}>Continue with Google</Text>
       </Pressable>
     </>

@@ -107,7 +107,7 @@ export function CodeStep({
         accessibilityRole="button"
         accessibilityState={{ disabled: wait > 0 }}
       >
-        <Text style={[text.bodyStrong, { color: wait > 0 ? colors.inkMuted : colors.secondary }]}>
+        <Text style={[text.bodyStrong, { color: wait > 0 ? colors.inkMuted : colors.primary }]}>
           {wait > 0 ? `Resend in ${wait}s` : 'Resend code'}
         </Text>
       </Pressable>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.line,
   },
-  boxNow: { borderColor: colors.secondary },
+  boxNow: { borderColor: colors.primary },
   boxFull: { borderColor: colors.ink },
   hidden: { position: 'absolute', opacity: 0, width: '100%', height: '100%' },
   link: { alignItems: 'center', justifyContent: 'center', marginTop: space.s, minHeight: TAP },

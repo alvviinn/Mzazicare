@@ -28,7 +28,7 @@ import { fmtTime } from '../../format';
 import { isOnline, NETWORK_ERROR } from '../../net';
 import { clearProblem, enqueue, keepPhoto, TaskOp, useTaskQueue, withPending } from '../../offline/taskQueue';
 import { t } from '../../strings';
-import { colors, icon, on, radius, space, TAP, text } from '../../theme';
+import { colors, icon, on, radius, space, TAP, text, textOnInk } from '../../theme';
 import { TaskItem } from '../../types';
 import type { Notice } from '../CaretakerHome';
 
@@ -270,16 +270,16 @@ export default function TasksTab({
       ) : (
         <>
           {/* Hero: progress at a glance, and the screen's one primary action. */}
-          <Card tint="primary">
+          <Card tint="ink">
             <View style={styles.hero}>
-              <Ring value={done.length} total={tasks.length} size={88}>
-                <Text style={text.heading}>{x.of(done.length, tasks.length)}</Text>
+              <Ring value={done.length} total={tasks.length} size={88} onInk>
+                <Text style={textOnInk.heading}>{x.of(done.length, tasks.length)}</Text>
               </Ring>
               <View style={{ flex: 1 }}>
-                <Text style={text.display}>{todo.length === 0 ? x.allDoneTitle : x.left(todo.length)}</Text>
+                <Text style={textOnInk.display}>{todo.length === 0 ? x.allDoneTitle : x.left(todo.length)}</Text>
                 <View style={styles.tip}>
-                  <Icon name={todo.length === 0 ? 'checkCircle' : 'camera'} color={todo.length === 0 ? colors.success : colors.inkMuted} />
-                  <Text style={text.caption}>{todo.length === 0 ? x.allDoneBody : x.photoTip}</Text>
+                  <Icon name={todo.length === 0 ? 'checkCircle' : 'camera'} color={todo.length === 0 ? colors.secondary : on.ink} />
+                  <Text style={[textOnInk.caption, { flex: 1 }]}>{todo.length === 0 ? x.allDoneBody : x.photoTip}</Text>
                 </View>
               </View>
             </View>
@@ -335,7 +335,7 @@ export default function TasksTab({
               first
               leading={<Icon name="repeat" />}
               title={x.repeat}
-              trailing={<Icon name={menu.recurring ? 'toggleOn' : 'toggleOff'} size={32} color={menu.recurring ? colors.secondary : colors.inkMuted} />}
+              trailing={<Icon name={menu.recurring ? 'toggleOn' : 'toggleOff'} size={32} color={menu.recurring ? colors.primary : colors.inkMuted} />}
               onPress={() => {
                 change(menu, { recurring: !menu.recurring });
                 setMenu({ ...menu, recurring: !menu.recurring });
@@ -395,7 +395,7 @@ function TaskRow({
       >
         <View style={[styles.tick, task.is_done && styles.tickDone]}>
           {sending ? (
-            <ActivityIndicator size="small" color={colors.secondary} />
+            <ActivityIndicator size="small" color={colors.primary} />
           ) : task.is_done ? (
             <Icon name="check" color={on.success} />
           ) : (
@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
     height: TAP,
     borderRadius: radius.pill,
     borderWidth: 2,
-    borderColor: colors.secondary,
+    borderColor: colors.primary,
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',

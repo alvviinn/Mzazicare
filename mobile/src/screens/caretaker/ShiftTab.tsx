@@ -3,12 +3,12 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { stopShift } from '../../api/client';
 import { Icon, IconName } from '../../components/Icon';
 import { SharingBanner } from '../../components/SharingBanner';
-import { Avatar, Button, Card, Empty, ErrorState, haptic, Loading, PressScale, Ring, StatusPill, Stepper } from '../../components/ui';
+import { Avatar, Button, Card, Empty, ErrorState, ErrorText, haptic, Loading, PressScale, Ring, StatusPill, Stepper } from '../../components/ui';
 import { fmtDuration, fmtTime } from '../../format';
 import { SharingStatus } from '../../location/useLocationSharing';
 import { useOnline } from '../../net';
 import { t } from '../../strings';
-import { colors, icon, on, radius, space, TAP, text } from '../../theme';
+import { colors, icon, on, radius, space, TAP, text, textOnInk } from '../../theme';
 import { ShiftState } from '../../types';
 
 const s = t.shift;
@@ -46,7 +46,7 @@ export function useShiftAction(token: string, onChanged: () => Promise<void>, no
   };
 }
 
-// The screen's one primary action (marigold), fixed at the bottom within thumb reach. Before the shift, a note instead.
+// The screen's one primary action (cobalt), fixed at the bottom within thumb reach. Before the shift, a note instead.
 export function ShiftActionBar({ state, action }: { state: ShiftState | null; action: ReturnType<typeof useShiftAction> }) {
   const online = useOnline();
   if (!state?.elderly) return null;
@@ -62,11 +62,7 @@ export function ShiftActionBar({ state, action }: { state: ShiftState | null; ac
   }
   return (
     <View style={styles.bar}>
-      {!!action.error && (
-        <Text style={[text.caption, { color: colors.error, textAlign: 'center' }]} accessibilityLiveRegion="polite">
-          {action.error}
-        </Text>
-      )}
+      <ErrorText>{action.error}</ErrorText>
       <Button
         title={!online ? s.offlineAction : s.end}
         icon={!online ? 'offline' : 'stop'}
@@ -112,7 +108,7 @@ export default function ShiftTab({
   // The search-style bar at the top: the fastest way into the first-aid guide.
   const askBar = (
     <PressScale onPress={onAsk} style={styles.ask} accessibilityRole="search" accessibilityLabel={s.askLabel}>
-      <Icon name="firstAid" color={colors.secondary} />
+      <Icon name="firstAid" color={colors.primary} />
       <Text style={[text.muted, { flex: 1 }]}>{s.ask}</Text>
       <View style={styles.askGo}>
         <Icon name="go" color={on.secondary} />
@@ -149,10 +145,10 @@ export default function ShiftTab({
 
   // Geofence: icon + words, never colour alone.
   let geo: { icon: IconName; color: string; label: string };
-  if (range.state === 'in') geo = { icon: 'pinCheck', color: colors.success, label: s.inRange(range.distance_m) };
-  else if (range.state === 'out') geo = { icon: 'pin', color: colors.ink, label: s.outRange(range.distance_m) };
-  else if (!range.elder_sharing) geo = { icon: 'pinOff', color: colors.ink, label: s.noElderGps(name) };
-  else geo = { icon: 'location', color: colors.inkMuted, label: s.locating };
+  if (range.state === 'in') geo = { icon: 'pinCheck', color: colors.secondary, label: s.inRange(range.distance_m) };
+  else if (range.state === 'out') geo = { icon: 'pin', color: on.ink, label: s.outRange(range.distance_m) };
+  else if (!range.elder_sharing) geo = { icon: 'pinOff', color: on.ink, label: s.noElderGps(name) };
+  else geo = { icon: 'location', color: on.ink, label: s.locating };
 
   const meta = [
     today?.arrived ? s.arrived(fmtTime(today.arrived)) : null,
@@ -160,23 +156,23 @@ export default function ShiftTab({
   ].filter(Boolean);
 
   const hero = (
-    <Card tint="primary">
+    <Card tint="ink">
       <View style={styles.heroTop}>
         <StatusPill label={headline} tone={live ? 'success' : paused ? 'ink' : 'muted'} />
         <Avatar name={state.elderly.name} size={40} solid />
       </View>
 
       <View style={styles.heroMain} accessible accessibilityLabel={`${fmtDuration(minutes)} ${s.activeToday}. ${meta.join(', ')}`}>
-        <Text style={text.display}>{fmtDuration(minutes)}</Text>
-        <Text style={text.caption}>{[s.activeToday, ...meta].join(' · ')}</Text>
+        <Text style={textOnInk.display}>{fmtDuration(minutes)}</Text>
+        <Text style={textOnInk.caption}>{[s.activeToday, ...meta].join(' · ')}</Text>
       </View>
 
-      <Stepper steps={s.steps} current={step} />
+      <Stepper steps={s.steps} current={step} onInk />
 
       <View style={styles.geo} accessible accessibilityLabel={s.geoLabel(geo.label, range.radius_m, name)}>
         <Icon name={geo.icon} color={geo.color} />
-        <Text style={[text.captionStrong, { flex: 1 }]}>{geo.label}</Text>
-        {today && <Text style={[text.captionStrong, { color: colors.secondary }]}>{s.timeline}</Text>}
+        <Text style={[textOnInk.captionStrong, { flex: 1 }]}>{geo.label}</Text>
+        {today && <Text style={textOnInk.accent}>{s.timeline}</Text>}
         {today && <Icon name="chevron" color={colors.secondary} />}
       </View>
     </Card>
@@ -237,7 +233,7 @@ export default function ShiftTab({
           <Text style={text.display} numberOfLines={1} adjustsFontSizeToFit>
             {weekMinutes === null ? '–' : `${Math.round((weekMinutes / 60) * 10) / 10}h`}
           </Text>
-          <Text style={text.caption}>{s.hoursTile}</Text>
+          <Text style={text.captionInk}>{s.hoursTile}</Text>
         </PressScale>
       </View>
 
@@ -287,7 +283,7 @@ const styles = StyleSheet.create({
     marginTop: space.l,
     paddingTop: space.m,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.line,
+    borderTopColor: colors.primary,
   },
 
   emergency: {

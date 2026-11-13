@@ -5,7 +5,7 @@ import { Icon, IconName, TONE_ICON } from '../../components/Icon';
 import { TensionStrip, ToneCard, ToneChart } from '../../components/ToneChart';
 import { Card, Empty, ErrorState, Loading, PillTone, Ring, Section, StatusPill } from '../../components/ui';
 import { fmtTime, timeAgo } from '../../format';
-import { colors, icon, radius, space, TAP, text } from '../../theme';
+import { colors, icon, on, radius, space, TAP, text, textOnInk } from '../../theme';
 import { LiveTone } from '../../types';
 
 const REFRESH_MS = 5000; // the chart follows the conversation: new speech shows within a few seconds
@@ -58,7 +58,7 @@ export default function ToneTab({ token }: { token: string }) {
     const diff = tense - today.usual_tension;
     compare =
       diff > 5
-        ? { icon: 'up', label: `Tenser than usual · ${tense}% vs ${today.usual_tension}%`, color: colors.error }
+        ? { icon: 'up', label: `Tenser than usual · ${tense}% vs ${today.usual_tension}%`, color: colors.warning }
         : diff < -5
           ? { icon: 'down', label: `Calmer than usual · ${tense}% vs ${today.usual_tension}%`, color: colors.success }
           : { icon: 'flat', label: `As usual · ${tense}% tense`, color: colors.inkMuted };
@@ -66,18 +66,18 @@ export default function ToneTab({ token }: { token: string }) {
 
   return (
     <>
-      <Card tint="primary">
+      <Card tint="ink">
         <View style={styles.heroTop}>
           <StatusPill label={st.text} tone={st.tone} />
-          <Text style={text.caption}>{data.last_heard ? timeAgo(data.last_heard) : 'Nothing today'}</Text>
+          <Text style={textOnInk.caption}>{data.last_heard ? timeAgo(data.last_heard) : 'Nothing today'}</Text>
         </View>
         <View style={styles.hero}>
           <View style={styles.face}>
             <Icon name={now ? TONE_ICON[now.dominant] : 'mic'} size={icon.l} color={now ? colors.ink : colors.inkMuted} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={[text.display, { textTransform: 'capitalize' }]}>{now ? now.dominant : 'Quiet'}</Text>
-            {now && <Text style={text.caption}>{now.tension}% tense · last 5 min</Text>}
+            <Text style={[textOnInk.display, { textTransform: 'capitalize' }]}>{now ? now.dominant : 'Quiet'}</Text>
+            {now && <Text style={textOnInk.caption}>{now.tension}% tense · last 5 min</Text>}
           </View>
         </View>
         {now && (now.by_source.caretaker || now.by_source.elderly) && (
@@ -96,8 +96,8 @@ export default function ToneTab({ token }: { token: string }) {
           </View>
         )}
         <View style={styles.why}>
-          <Icon name="shield" size={icon.xs} color={colors.inkMuted} />
-          <Text style={[text.caption, { flex: 1 }]}>{why}</Text>
+          <Icon name="shield" size={icon.xs} color={on.ink} />
+          <Text style={[textOnInk.caption, { flex: 1 }]}>{why}</Text>
         </View>
       </Card>
 
@@ -124,7 +124,7 @@ export default function ToneTab({ token }: { token: string }) {
             </View>
             <View style={[styles.tile, { backgroundColor: colors.primaryTint }]} accessible accessibilityLabel={`${today.speech_minutes} minutes of speech heard`}>
               <Text style={text.display}>{today.speech_minutes}</Text>
-              <Text style={text.caption}>min heard</Text>
+              <Text style={text.captionInk}>min heard</Text>
             </View>
           </View>
           <View style={[styles.tiles, { marginTop: space.s }]}>
@@ -140,7 +140,7 @@ export default function ToneTab({ token }: { token: string }) {
               </View>
             )}
             <View style={styles.fact}>
-              <Icon name={today.raised_voice_clips ? 'warning' : 'checkCircle'} color={today.raised_voice_clips ? colors.error : colors.success} />
+              <Icon name={today.raised_voice_clips ? 'warning' : 'checkCircle'} color={today.raised_voice_clips ? colors.warning : colors.success} />
               <Text style={[text.captionStrong, { flex: 1 }]}>
                 {today.raised_voice_clips === 0
                   ? 'No raised voices'

@@ -37,7 +37,7 @@ export function ShiftRow({ shift: s, showCaretaker, first, onPress }: Props) {
     >
       <View style={[styles.date, { backgroundColor: live ? colors.primaryTint : colors.secondaryTint }]}>
         <Text style={text.heading}>{d.getDate()}</Text>
-        <Text style={text.caption}>{d.toLocaleDateString([], { weekday: 'short' })}</Text>
+        <Text style={text.captionInk}>{d.toLocaleDateString([], { weekday: 'short' })}</Text>
       </View>
       <View style={styles.flex}>
         <Text style={text.bodyStrong} numberOfLines={1}>
@@ -67,7 +67,7 @@ export function ShiftRow({ shift: s, showCaretaker, first, onPress }: Props) {
   );
 }
 
-// A horizontal strip of recent days: one marigold bar per day, the hours printed above it. Tap a day to open it.
+// A horizontal strip of recent days: one cobalt bar per day, the hours printed above it. Tap a day to open it.
 export function DayStrip({ shifts, days = 14, onOpen }: { shifts: ShiftSummary[]; days?: number; onOpen: (id: number) => void }) {
   const scroll = useRef<ScrollViewInstance>(null);
   const byDate = new Map<string, { minutes: number; id: number }>();

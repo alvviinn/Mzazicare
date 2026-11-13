@@ -43,7 +43,7 @@ export function ProofPhoto({
           <Image source={source} style={styles.full} resizeMode="contain" />
           {!!caption && <Text style={[text.bodyStrong, styles.light]}>{caption}</Text>}
           <View style={styles.close}>
-            <Icon name="close" size={icon.s} color={on.secondary} />
+            <Icon name="close" size={icon.s} color={on.ink} />
             <Text style={[text.caption, styles.light]}>{t.photo.closeHint}</Text>
           </View>
         </Pressable>
@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
   missing: { alignItems: 'center', justifyContent: 'center' },
   backdrop: { flex: 1, backgroundColor: shade.photo, justifyContent: 'center', padding: space.m, gap: space.m },
   full: { width: '100%', height: '72%', borderRadius: radius.card },
-  light: { color: on.secondary, textAlign: 'center' },
+  light: { color: on.ink, textAlign: 'center' },
   close: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.s },
 });

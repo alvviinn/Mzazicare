@@ -87,7 +87,7 @@ export default function App() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color={colors.secondary} />
+        <ActivityIndicator color={colors.primary} />
       </View>
     );
   }
@@ -122,7 +122,8 @@ export default function App() {
 
   return (
     <>
-      <StatusBar style="dark" />
+      {/* light status-bar icons over the ink band of the sign-in screens */}
+      <StatusBar style={session ? 'dark' : 'light'} />
       {content}
     </>
   );

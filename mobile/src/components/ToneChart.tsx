@@ -6,7 +6,7 @@ import { Dashboard, Tone, TonePoint } from '../types';
 import { Icon, TONE_ICON } from './Icon';
 import { Card, haptic, PillTone, StatusPill } from './ui';
 
-// Charts use only marigold, mulberry and their tints, so the five tones are drawn as three bands.
+// Charts use only cobalt, cornflower and their tints, so the five tones are drawn as three bands.
 // The exact share of each tone is always written next to the chart (legend and the tapped column).
 type Band = 'positive' | 'neutral' | 'tense';
 const BANDS: { key: Band; label: string; color: string; tones: Tone[] }[] = [
@@ -101,7 +101,7 @@ export function ToneChart({ points, bucketMinutes }: { points: TonePoint[]; buck
   );
 }
 
-// A small bar per bucket: how tense the voices were. Mulberry above the 30% line, marigold below.
+// A small bar per bucket: how tense the voices were. Cornflower above the 30% line, cobalt below.
 export function TensionStrip({ points, bucketMinutes }: { points: TonePoint[]; bucketMinutes: number }) {
   if (!points.length) return null;
   const step = bucketMinutes * 60000;

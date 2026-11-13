@@ -25,7 +25,7 @@ import {
 import Svg, { Circle } from 'react-native-svg';
 import { useOnline } from '../net';
 import { t } from '../strings';
-import { colors, fonts, icon, motion, on, radius, shade, shadow, size, space, TAP, text, TOP_INSET } from '../theme';
+import { colors, fonts, icon, motion, on, radius, shade, shadow, size, space, TAP, text, textOnInk, TOP_INSET } from '../theme';
 import { Icon, IconName } from './Icon';
 
 // ---------- feel ----------
@@ -77,12 +77,13 @@ export function PressScale({
 
 // ---------- buttons ----------
 
-type ButtonVariant = 'primary' | 'secondary' | 'soft' | 'danger';
+type ButtonVariant = 'primary' | 'secondary' | 'soft' | 'danger' | 'light';
 const BUTTON: Record<ButtonVariant, { bg: string; fg: string }> = {
-  primary: { bg: colors.primary, fg: on.primary }, // the ONE main action on a screen
-  secondary: { bg: colors.secondary, fg: on.secondary },
+  primary: { bg: colors.primary, fg: on.primary }, // cobalt, white text: the ONE main action on a screen
+  secondary: { bg: colors.secondary, fg: on.secondary }, // cornflower, ink text
   soft: { bg: colors.primaryTint, fg: colors.ink },
   danger: { bg: colors.error, fg: on.error },
+  light: { bg: colors.surface, fg: colors.ink }, // a white button, for use on the ink hero
 };
 
 export function Button({
@@ -149,7 +150,7 @@ export function IconButton({
   disabled?: boolean;
 }) {
   const bg = { plain: 'transparent', surface: colors.surface, primary: colors.primary, secondary: colors.secondary }[tone];
-  const fg = tone === 'secondary' ? on.secondary : colors.ink;
+  const fg = tone === 'primary' ? on.primary : tone === 'secondary' ? on.secondary : colors.ink;
   return (
     <PressScale
       onPress={onPress}
@@ -166,7 +167,7 @@ export function IconButton({
 
 // ---------- chips and segmented control ----------
 
-// Unselected: outlined. Selected: marigold tint with a tick. `danger`: a brick fill for the one risky answer.
+// Unselected: outlined. Selected: cobalt tint with a tick. `danger`: a red fill for the one risky answer.
 export function Chip({
   label,
   onPress,
@@ -242,8 +243,14 @@ export function Segmented<K extends string>({
 
 // ---------- surfaces ----------
 
-export type Tint = 'surface' | 'primary' | 'secondary';
-export const TINT: Record<Tint, string> = { surface: colors.surface, primary: colors.primaryTint, secondary: colors.secondaryTint };
+export type Tint = 'surface' | 'primary' | 'secondary' | 'ink' | 'warning';
+export const TINT: Record<Tint, string> = {
+  surface: colors.surface,
+  primary: colors.primaryTint,
+  secondary: colors.secondaryTint,
+  ink: colors.ink, // the hero: at most one per screen, white text (textOnInk)
+  warning: colors.warningTint, // attention: ink text and an amber or red icon
+};
 
 // A soft panel. Cards sit on tints, never on shadows or borders.
 export function Card({
@@ -269,7 +276,7 @@ export function Section({ title, action, onAction }: { title: string; action?: s
       </Text>
       {action && onAction && (
         <Pressable onPress={onAction} style={styles.sectionAction} accessibilityRole="button" accessibilityLabel={action}>
-          <Text style={[text.captionStrong, { color: colors.secondary }]}>{action}</Text>
+          <Text style={[text.captionStrong, { color: colors.primary }]}>{action}</Text>
         </Pressable>
       )}
     </View>
@@ -339,7 +346,7 @@ export function Avatar({ name, size: d = 48, solid }: { name: string; size?: num
   const tint = solid
     ? { bg: colors.secondary, fg: on.secondary }
     : n % 2
-      ? { bg: colors.secondaryTint, fg: colors.secondary }
+      ? { bg: colors.secondaryTint, fg: colors.ink }
       : { bg: colors.primaryTint, fg: colors.ink };
   return (
     <View
@@ -352,21 +359,23 @@ export function Avatar({ name, size: d = 48, solid }: { name: string; size?: num
   );
 }
 
-// A status in words with a dot, never colour alone. Sits on `surface` so it reads on any tint.
-export type PillTone = 'success' | 'ink' | 'muted' | 'error' | 'secondary';
-const PILL: Record<PillTone, string> = {
-  success: colors.success,
-  ink: colors.ink,
-  muted: colors.inkMuted,
-  error: colors.error,
-  secondary: colors.secondary,
+// A status in words with a dot, never colour alone. Sits on `surface` so it reads on any tint and on the hero.
+// The dot carries the status colour; the words are ink (green, amber and cornflower fail as small text).
+export type PillTone = 'success' | 'ink' | 'muted' | 'error' | 'secondary' | 'warning';
+const PILL: Record<PillTone, { dot: string; text: string }> = {
+  success: { dot: colors.success, text: colors.ink },
+  ink: { dot: colors.ink, text: colors.ink },
+  muted: { dot: colors.inkMuted, text: colors.inkMuted },
+  error: { dot: colors.error, text: colors.error },
+  secondary: { dot: colors.secondary, text: colors.ink },
+  warning: { dot: colors.warning, text: colors.ink },
 };
 export function StatusPill({ label, tone }: { label: string; tone: PillTone }) {
   const c = PILL[tone];
   return (
     <View style={styles.pill}>
-      <View style={[styles.dot, { backgroundColor: c }]} />
-      <Text style={[text.captionStrong, { color: c }]} numberOfLines={1}>
+      <View style={[styles.dot, { backgroundColor: c.dot }]} />
+      <Text style={[text.captionStrong, { color: c.text }]} numberOfLines={1}>
         {label}
       </Text>
     </View>
@@ -375,18 +384,21 @@ export function StatusPill({ label, tone }: { label: string; tone: PillTone }) {
 
 // ---------- data visuals ----------
 
-// A progress ring in mulberry (7.7:1, readable on its own) with the figure or an icon in the middle.
+// A progress ring with the figure or an icon in the middle. Cobalt arc on light cards (6.8:1, readable on its own);
+// `onInk` for the hero: a cornflower arc on a cobalt track.
 export function Ring({
   value,
   total,
   size: d = 64,
   track = colors.surface,
+  onInk,
   children,
 }: {
   value: number;
   total: number;
   size?: number;
   track?: string;
+  onInk?: boolean;
   children?: React.ReactNode;
 }) {
   const stroke = d >= 80 ? 8 : 6;
@@ -396,13 +408,13 @@ export function Ring({
   return (
     <View style={[styles.center, { width: d, height: d }]}>
       <Svg width={d} height={d} style={StyleSheet.absoluteFill}>
-        <Circle cx={d / 2} cy={d / 2} r={r} stroke={track} strokeWidth={stroke} fill="none" />
+        <Circle cx={d / 2} cy={d / 2} r={r} stroke={onInk ? colors.primary : track} strokeWidth={stroke} fill="none" />
         {share > 0 && (
           <Circle
             cx={d / 2}
             cy={d / 2}
             r={r}
-            stroke={colors.secondary}
+            stroke={onInk ? colors.secondary : colors.primary}
             strokeWidth={stroke}
             fill="none"
             strokeLinecap="round"
@@ -417,7 +429,12 @@ export function Ring({
 }
 
 // Live progress through a day, like an order tracker: done steps ticked, the current one ringed.
-export function Stepper({ steps, current }: { steps: string[]; current: number }) {
+// `onInk` for the hero: cornflower progress and white labels; otherwise cobalt progress.
+export function Stepper({ steps, current, onInk }: { steps: string[]; current: number; onInk?: boolean }) {
+  const accent = onInk ? colors.secondary : colors.primary;
+  const rest = onInk ? colors.primary : colors.line;
+  const label = onInk ? textOnInk.caption : text.caption;
+  const strong = onInk ? textOnInk.captionStrong : text.captionStrong;
   return (
     <View style={styles.stepper} accessible accessibilityLabel={`${steps[Math.max(0, current)] ?? ''}. Step ${current + 1} of ${steps.length}`}>
       {steps.map((s, i) => {
@@ -426,15 +443,22 @@ export function Stepper({ steps, current }: { steps: string[]; current: number }
         return (
           <View key={s} style={styles.step}>
             <View style={styles.stepTrack}>
-              <View style={[styles.stepLine, { backgroundColor: i === 0 ? 'transparent' : i <= current ? colors.secondary : colors.line }]} />
-              <View style={[styles.stepDot, done && styles.stepDone, now && styles.stepNow]}>
-                {done && <Icon name="check" size={icon.xs} color={on.secondary} />}
+              <View style={[styles.stepLine, { backgroundColor: i === 0 ? 'transparent' : i <= current ? accent : rest }]} />
+              <View
+                style={[
+                  styles.stepDot,
+                  { borderColor: rest, backgroundColor: onInk ? colors.ink : colors.surface },
+                  done && { backgroundColor: accent, borderColor: accent },
+                  now && { borderColor: accent, borderWidth: 6 },
+                ]}
+              >
+                {done && <Icon name="check" size={icon.xs} color={onInk ? on.secondary : on.primary} />}
               </View>
               <View
-                style={[styles.stepLine, { backgroundColor: i === steps.length - 1 ? 'transparent' : i < current ? colors.secondary : colors.line }]}
+                style={[styles.stepLine, { backgroundColor: i === steps.length - 1 ? 'transparent' : i < current ? accent : rest }]}
               />
             </View>
-            <Text style={[text.caption, (done || now) && { color: colors.ink, fontFamily: fonts.bodyBold }]} numberOfLines={1}>
+            <Text style={done || now ? strong : label} numberOfLines={1}>
               {s}
             </Text>
           </View>
@@ -448,14 +472,14 @@ export function Stepper({ steps, current }: { steps: string[]; current: number }
 
 type FieldProps = TextInputProps & { label: string; secure?: boolean; icon?: IconName };
 
-// Input on surface with a line border; mulberry border while typing. `secure` adds a show/hide eye.
+// Input on surface with a line border; cobalt border while typing. `secure` adds a show/hide eye.
 export const Field = forwardRef<TextInputInstance, FieldProps>(function Field({ label, secure, icon: iconName, style, ...props }, ref) {
   const [hidden, setHidden] = useState(true);
   const [focus, setFocus] = useState(false);
   return (
     <View style={{ marginBottom: space.m }}>
       <Text style={[text.captionStrong, { marginBottom: space.s }]}>{label}</Text>
-      <View style={[styles.inputWrap, focus && { borderColor: colors.secondary }]}>
+      <View style={[styles.inputWrap, focus && { borderColor: colors.primary }]}>
         {iconName && <Icon name={iconName} size={icon.s} color={colors.inkMuted} />}
         <TextInput
           ref={ref}
@@ -493,7 +517,7 @@ export function ErrorText({ children }: { children?: string }) {
   return children ? (
     <View style={[styles.row8, styles.errorRow]} accessibilityLiveRegion="polite">
       <Icon name="alert" size={icon.s} color={colors.error} />
-      <Text style={[text.caption, { flex: 1, color: colors.error }]}>{children}</Text>
+      <Text style={[text.captionStrong, { flex: 1 }]}>{children}</Text>
     </View>
   ) : null;
 }
@@ -566,7 +590,7 @@ export function Empty({
           <Icon name={iconName} size={icon.m} />
         </View>
         <Text style={[text.heading, { textAlign: 'center' }]}>{title}</Text>
-        {!!body && <Text style={[text.caption, { textAlign: 'center' }]}>{body}</Text>}
+        {!!body && <Text style={[tint === 'surface' ? text.caption : text.captionInk, { textAlign: 'center' }]}>{body}</Text>}
         {action && onAction && (
           <View style={{ alignSelf: 'stretch' }}>
             <Button title={action} variant="secondary" onPress={onAction} />
@@ -577,13 +601,13 @@ export function Empty({
   );
 }
 
-// Slim strip shown while the server can't be reached: attention = marigold tint, ink text, an icon.
+// Slim strip shown while the server can't be reached: warning tint, ink text, an amber icon.
 export function OfflineBanner() {
   const online = useOnline();
   if (online) return null;
   return (
     <View style={styles.offline} accessibilityLiveRegion="polite" accessibilityRole="alert" accessibilityLabel={t.common.offlineLong}>
-      <Icon name="offline" size={icon.s} />
+      <Icon name="offline" size={icon.s} color={colors.warning} />
       <Text style={text.captionStrong}>{t.common.offline}</Text>
     </View>
   );
@@ -629,7 +653,7 @@ export function Toast({
           accessibilityRole="button"
           accessibilityLabel={actionLabel}
         >
-          <Text style={[text.bodyStrong, { color: colors.primaryTint }]}>{actionLabel}</Text>
+          <Text style={[text.bodyStrong, { color: on.secondary, textDecorationLine: 'underline' }]}>{actionLabel}</Text>
         </Pressable>
       )}
     </Animated.View>
@@ -788,13 +812,9 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: radius.pill,
     borderWidth: 2,
-    borderColor: colors.line,
-    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepDone: { backgroundColor: colors.secondary, borderColor: colors.secondary },
-  stepNow: { borderColor: colors.secondary, borderWidth: 6 },
 
   inputWrap: {
     flexDirection: 'row',
@@ -829,7 +849,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: space.s,
-    backgroundColor: colors.primaryTint,
+    backgroundColor: colors.warningTint,
     paddingHorizontal: space.m,
     paddingVertical: space.s,
   },

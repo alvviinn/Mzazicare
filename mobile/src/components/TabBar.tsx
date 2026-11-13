@@ -5,7 +5,7 @@ import { haptic } from './ui';
 
 export type TabDef<K extends string> = { key: K; label: string; icon: IconName; badge?: number };
 
-// A floating bar. The active item is the marigold capsule; every item keeps its label.
+// A floating bar. The active item is the cobalt capsule with a white icon; every item keeps its label.
 export function TabBar<K extends string>({
   tabs,
   active,

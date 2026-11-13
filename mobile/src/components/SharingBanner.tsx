@@ -27,17 +27,17 @@ const MESSAGES: Record<'en' | 'sw', Record<SharingStatus, { text: string; long: 
   },
 };
 
-// Location status. Fine: a quiet surface pill. A problem: attention = marigold tint, ink text, an icon.
+// Location status. Fine: a quiet surface pill. A problem: warning tint, ink text, an amber icon.
 export function SharingBanner({ status, lang = 'en', scale = 1 }: { status: SharingStatus; lang?: 'en' | 'sw'; scale?: number }) {
   const m = MESSAGES[lang][status];
   return (
     <View
-      style={[styles.box, { backgroundColor: m.ok ? colors.surface : colors.primaryTint }]}
+      style={[styles.box, { backgroundColor: m.ok ? colors.surface : colors.warningTint }]}
       accessible
       accessibilityLabel={m.long}
       accessibilityRole={m.ok ? undefined : 'alert'}
     >
-      <Icon name={m.ok ? 'pinCheck' : 'pinOff'} size={icon.s * scale} color={m.ok ? colors.success : colors.ink} />
+      <Icon name={m.ok ? 'pinCheck' : 'pinOff'} size={icon.s * scale} color={m.ok ? colors.success : colors.warning} />
       <Text style={[scaled(text.captionStrong, scale), { flexShrink: 1 }]}>{m.text}</Text>
     </View>
   );

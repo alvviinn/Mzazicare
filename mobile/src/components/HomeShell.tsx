@@ -39,7 +39,7 @@ export function HomeShell({
           contentContainerStyle={styles.container}
           refreshControl={
             onRefresh ? (
-              <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.secondary} colors={[colors.secondary]} />
+              <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} />
             ) : undefined
           }
         >
