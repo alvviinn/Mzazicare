@@ -34,6 +34,18 @@ def _softmax(z):
     return e / e.sum(axis=1, keepdims=True)
 
 
+_VOCABS = {}
+
+
+def _shared_vocab(words, chars):
+    """Term -> column lookups. The three word models share one vocabulary, so it is built (and held in memory) once:
+    about 60 MB less per server process. Read-only after creation, so safe to share between threads."""
+    key = (len(words), len(chars), hash(tuple(words)), hash(tuple(chars)))
+    if key not in _VOCABS:
+        _VOCABS[key] = ({t: i for i, t in enumerate(words)}, {t: i for i, t in enumerate(chars)})
+    return _VOCABS[key]
+
+
 class LinearText:
     """Same features as scikit-learn's TfidfVectorizer(sublinear_tf=True) for words and char_wb, then a linear layer."""
 
@@ -45,8 +57,7 @@ class LinearText:
         self.temperature = float(meta.get('temperature', 1.0))
         self.wn = tuple(meta['word_ngrams'])
         self.cn = tuple(meta['char_ngrams'])
-        self.vw = {t: i for i, t in enumerate(meta['words'])}
-        self.vc = {t: i for i, t in enumerate(meta['chars'])}
+        self.vw, self.vc = _shared_vocab(meta['words'], meta['chars'])
         self.idf_w, self.idf_c = w['idf_words'], w['idf_chars']
         self.coef = w['coef'].astype(np.float32) * w['scale']  # classes x features
         self.intercept = w['intercept']

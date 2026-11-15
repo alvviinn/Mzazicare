@@ -115,7 +115,9 @@ if ($Only -in 'all', 'api') {
     }
     Az webapp update -n $state.api -g $state.group --https-only true -o none | Out-Null
     Az webapp config set -n $state.api -g $state.group --always-on true --http20-enabled true `
-        --startup-file 'python manage.py migrate --noinput && gunicorn config.wsgi --bind=0.0.0.0:8000 --workers 2 --timeout 120' -o none | Out-Null
+        --startup-file 'python manage.py migrate --noinput && gunicorn config.wsgi --bind=0.0.0.0:8000 --workers 1 --threads 4 --timeout 120' -o none | Out-Null
+    # One process with 4 threads, not 2 processes: the B1 plan has one CPU and 1.75 GB, and each process holds its own
+    # ~0.4 GB copy of the first-aid model. Two processes ran out of memory and Azure kept restarting the site.
 
     # Settings (secrets stay in Azure; nothing is written into the code).
     $settings = @(
