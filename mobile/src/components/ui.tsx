@@ -1,18 +1,19 @@
 // The component kit. Every screen is built from these; every value comes from theme.ts.
 import * as Haptics from 'expo-haptics';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import {
   AccessibilityInfo,
   ActivityIndicator,
   Animated,
   BackHandler,
-  KeyboardAvoidingView,
+  Keyboard,
   Modal,
   PanResponder,
   Platform,
   Pressable,
   PressableProps,
   ScrollView,
+  StatusBar,
   StyleProp,
   StyleSheet,
   Text,
@@ -602,11 +603,21 @@ export function Empty({
 }
 
 // Slim strip shown while the server can't be reached: warning tint, ink text, an amber icon.
-export function OfflineBanner() {
+// A background-coloured strip behind the phone's status bar, so scrolled content never runs under the clock.
+// Draw it last in a screen's root view (it sits on top). Android only: iOS screens here keep their own top space.
+export function StatusBarStrip() {
+  const online = useOnline();
+  if (Platform.OS !== 'android' || !online) return null; // offline, the banner (atTop) fills that space instead
+  return <View style={[styles.statusStrip, { height: StatusBar.currentHeight ?? 24 }]} pointerEvents="none" />;
+}
+
+// `atTop` when it is the first thing on the screen: it then starts below the phone's status bar.
+export function OfflineBanner({ atTop }: { atTop?: boolean }) {
   const online = useOnline();
   if (online) return null;
   return (
-    <View style={styles.offline} accessibilityLiveRegion="polite" accessibilityRole="alert" accessibilityLabel={t.common.offlineLong}>
+    <View
+      style={[styles.offline, atTop && Platform.OS === 'android' && { paddingTop: (StatusBar.currentHeight ?? 24) + space.s }]} accessibilityLiveRegion="polite" accessibilityRole="alert" accessibilityLabel={t.common.offlineLong}>
       <Icon name="offline" size={icon.s} color={colors.warning} />
       <Text style={text.captionStrong}>{t.common.offline}</Text>
     </View>
@@ -695,6 +706,54 @@ export function ScreenHeader({ title, onBack, right }: { title: string; onBack: 
   );
 }
 
+// The keyboard. Android draws edge to edge (the screen no longer shrinks when the keyboard opens), so anything with a
+// text box sits in KeyboardAvoid: it measures where it really is on the screen and pads its bottom by exactly the
+// part the keyboard covers, so the box being typed in stays in view. Works the same in a tab, a full screen or a sheet.
+const KB_SHOW = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+const KB_HIDE = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+export function useKeyboardOpen() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const s = Keyboard.addListener(KB_SHOW, () => setOpen(true));
+    const h = Keyboard.addListener(KB_HIDE, () => setOpen(false));
+    return () => {
+      s.remove();
+      h.remove();
+    };
+  }, []);
+  return open;
+}
+
+export function KeyboardAvoid({
+  style,
+  pointerEvents,
+  children,
+}: {
+  style?: StyleProp<ViewStyle>;
+  pointerEvents?: 'box-none' | 'auto';
+  children: React.ReactNode;
+}) {
+  const ref = useRef<React.ComponentRef<typeof View>>(null);
+  const [pad, setPad] = useState(0);
+  useEffect(() => {
+    const s = Keyboard.addListener(KB_SHOW, (e) => {
+      const top = e.endCoordinates.screenY;
+      ref.current?.measureInWindow((_x, y, _w, h) => setPad(Math.max(0, Math.round(y + h - top))));
+    });
+    const h = Keyboard.addListener(KB_HIDE, () => setPad(0));
+    return () => {
+      s.remove();
+      h.remove();
+    };
+  }, []);
+  return (
+    <View ref={ref} style={[style, { paddingBottom: pad }]} pointerEvents={pointerEvents}>
+      {children}
+    </View>
+  );
+}
+
 // A bottom sheet: slides up; drag the handle down, tap outside or press back to close. Used for every form.
 export function Sheet({
   visible,
@@ -737,7 +796,7 @@ export function Sheet({
   return (
     <Modal transparent visible animationType="fade" onRequestClose={onClose} statusBarTranslucent>
       <Pressable style={styles.scrim} onPress={onClose} accessibilityRole="button" accessibilityLabel={t.common.close} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.sheetWrap} pointerEvents="box-none">
+      <KeyboardAvoid style={styles.sheetWrap} pointerEvents="box-none">
         <Animated.View style={[styles.sheet, shadow.float, { transform: [{ translateY: y }] }]}>
           <View {...pan.panHandlers} style={styles.sheetGrab}>
             <View style={styles.handle} />
@@ -754,13 +813,14 @@ export function Sheet({
             {children}
           </ScrollView>
         </Animated.View>
-      </KeyboardAvoidingView>
+      </KeyboardAvoid>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  statusStrip: { position: 'absolute', top: 0, left: 0, right: 0, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center' },
   row8: { flexDirection: 'row', alignItems: 'center', gap: space.s },
 

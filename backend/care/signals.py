@@ -23,15 +23,17 @@ def alert_created(sender, instance, created, **kwargs):
     if not created or instance.is_demo:
         return
     people = [instance.sponsor]
-    if instance.kind == Alert.Kind.SOS:  # an emergency also reaches the caretakers in the circle
+    sos = instance.kind == Alert.Kind.SOS
+    if sos:  # an emergency also reaches the caretakers in the circle, on the alarm-style channel
         people += list(User.objects.filter(sponsor_id=instance.sponsor_id, role=Role.CARETAKER))
+    who = instance.patient.name if instance.patient else None
     push.notify(
         people,
-        ALERT_TITLE.get(instance.kind, 'Alert'),
+        f'EMERGENCY: {who} needs help' if sos and who else ALERT_TITLE.get(instance.kind, 'Alert'),
         instance.message,
         {'type': 'alert', 'id': instance.pk, 'kind': instance.kind},
-        'alerts',
-        urgent=instance.severity >= 2,
+        'emergency' if sos else 'alerts',
+        urgent=sos or instance.severity >= 2,
     )
 
 

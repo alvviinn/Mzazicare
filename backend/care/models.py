@@ -189,6 +189,11 @@ class Alert(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     accuracy = models.FloatField(null=True, blank=True)  # GPS accuracy in metres
     confidence = models.FloatField(null=True, blank=True)  # model confidence 0-1 (voice alerts)
+    # Emergencies: the first person (family or caretaker) who said "I'm handling it", shown to everyone else.
+    handled_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+    )
+    handled_at = models.DateTimeField(null=True, blank=True)
 
     # How urgent each kind is, for sorting on the dashboard (higher first).
     SEVERITY = {'sos': 3, 'vocal_distress': 2, 'unwell': 2, 'geofence': 1, 'missed_chore': 1, 'short_visit': 1}

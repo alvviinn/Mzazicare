@@ -121,7 +121,17 @@ TWO_FACTOR_ECHO_CODE = DEBUG and not (EMAIL_HOST or ACS_EMAIL_CONNECTION_STRING)
 
 # ---- Acoustic tone AI ----
 # The model code lives in <repo>/ml/voice. Audio sent for analysis is held in memory only: never saved.
-VOICE_AI_ROOT = Path(os.environ.get('VOICE_AI_ROOT', BASE_DIR.parent / 'ml'))
+def _ml_root():
+    """The ml folder: <repo>/ml locally, <app>/ml in the deploy package. Azure runs the app from a temporary folder
+    (not /home/site/wwwroot), so a fixed VOICE_AI_ROOT can point nowhere: fall back to the folders that exist."""
+    configured = os.environ.get('VOICE_AI_ROOT')
+    for candidate in (configured, BASE_DIR / 'ml', BASE_DIR.parent / 'ml'):
+        if candidate and Path(candidate).is_dir():
+            return Path(candidate)
+    return Path(configured) if configured else BASE_DIR.parent / 'ml'
+
+
+VOICE_AI_ROOT = _ml_root()
 VOICE_AUDIO_MAX_BYTES = 3_000_000  # ~90 s of 16 kHz mono; clips from the app are far shorter
 FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.MemoryFileUploadHandler']  # never spool uploads to disk
 

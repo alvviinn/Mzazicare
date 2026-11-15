@@ -9,7 +9,7 @@ import { SharingStatus } from '../../location/useLocationSharing';
 import { useOnline } from '../../net';
 import { t } from '../../strings';
 import { colors, icon, on, radius, space, TAP, text, textOnInk } from '../../theme';
-import { ShiftState } from '../../types';
+import { Contact, ShiftState } from '../../types';
 
 const s = t.shift;
 
@@ -78,11 +78,11 @@ type Props = {
   state: ShiftState | null;
   error: string;
   sharing: SharingStatus;
-  sponsorName: string | null;
+  contacts: Contact[]; // everyone else in the circle: family and the people cared for
   tasks: { done: number; total: number } | null;
   weekMinutes: number | null;
   onRetry: () => void;
-  onChat: () => void;
+  onChat: (peer: { name: string; email: string }) => void;
   onOpenShift: (id: number) => void;
   onAsk: () => void;
   onTasks: () => void;
@@ -94,7 +94,7 @@ export default function ShiftTab({
   state,
   error,
   sharing,
-  sponsorName,
+  contacts,
   tasks,
   weekMinutes,
   onRetry,
@@ -186,6 +186,9 @@ export default function ShiftTab({
           <View style={{ flex: 1 }}>
             <Text style={[text.heading, { color: on.error }]}>{s.emergency}</Text>
             <Text style={[text.body, { color: on.error }]}>{s.emergencyBody(state.emergency.message)}</Text>
+            {!!state.emergency.handled_by && (
+              <Text style={[text.bodyStrong, { color: on.error }]}>{`${state.emergency.handled_by} is handling it.`}</Text>
+            )}
           </View>
         </View>
       )}
@@ -237,23 +240,25 @@ export default function ShiftTab({
         </PressScale>
       </View>
 
-      {sponsorName && (
+      {/* Message anyone in the circle: the family and the people you care for */}
+      {contacts.map((c) => (
         <Pressable
-          onPress={onChat}
+          key={c.email}
+          onPress={() => onChat({ name: c.name, email: c.email })}
           style={({ pressed }) => [styles.chat, pressed && { opacity: 0.7 }]}
           accessibilityRole="button"
-          accessibilityLabel={s.messageFamily(sponsorName)}
+          accessibilityLabel={`${s.messageFamily(c.name)}${c.unread ? `, ${c.unread} unread` : ''}`}
         >
-          <Avatar name={sponsorName} size={48} />
+          <Avatar name={c.name} size={48} />
           <View style={{ flex: 1 }}>
-            <Text style={text.bodyStrong}>{sponsorName}</Text>
-            <Text style={text.caption}>{t.roles.user}</Text>
+            <Text style={text.bodyStrong}>{c.name}</Text>
+            <Text style={text.caption}>{c.unread ? `${c.unread} new · ${t.roles[c.role]}` : t.roles[c.role]}</Text>
           </View>
           <View style={styles.chatBtn}>
             <Icon name="chat" color={on.secondary} />
           </View>
         </Pressable>
-      )}
+      ))}
 
       {voiceCard}
     </>

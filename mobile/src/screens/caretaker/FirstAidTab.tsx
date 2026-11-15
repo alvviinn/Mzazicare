@@ -2,9 +2,7 @@ import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  KeyboardAvoidingView,
   Linking,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -13,7 +11,7 @@ import {
 } from 'react-native';
 import { askFirstAid } from '../../api/client';
 import { Icon, IconName } from '../../components/Icon';
-import { Chip, haptic, OfflineBanner, PressScale } from '../../components/ui';
+import { Chip, haptic, KeyboardAvoid, OfflineBanner, PressScale, useKeyboardOpen } from '../../components/ui';
 import { colors, icon, on, radius, space, TAP, text, TOP_INSET } from '../../theme';
 import { FirstAidReply } from '../../types';
 
@@ -137,9 +135,10 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
     onChange({ ...chat, lang: chat.lang === 'en' ? 'sw' : 'en' });
   };
   const quick = QUICK[chat.lang];
+  const typing = useKeyboardOpen(); // the tab bar steps aside while typing, so the box sits right on the keyboard
 
   return (
-    <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoid style={styles.flex}>
       <View style={styles.header}>
         <Text style={[text.display, { flex: 1 }]} numberOfLines={1} accessibilityRole="header">
           {w.title}
@@ -261,8 +260,8 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
           {busy ? <ActivityIndicator color={on.primary} /> : <Icon name="send" color={!draft.trim() ? colors.inkMuted : on.primary} />}
         </PressScale>
       </View>
-      {footer}
-    </KeyboardAvoidingView>
+      {!typing && footer}
+    </KeyboardAvoid>
   );
 }
 

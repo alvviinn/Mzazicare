@@ -113,7 +113,9 @@ def state_json(user, now):
         created_at__gte=now - timedelta(minutes=30),
     ).first()
     return {
-        'emergency': {'message': sos.message, 'at': sos.created_at.isoformat()} if sos else None,
+        'emergency': {'message': sos.message, 'at': sos.created_at.isoformat(),
+                      'handled_by': (sos.handled_by.name or sos.handled_by.email) if sos.handled_by else None}
+        if sos else None,
         'status': 'none' if not shift else 'active' if seg else 'waiting',
         # what the screen says: none | waiting (not arrived yet) | active | break | away (long break) | ended
         'phase': presence.phase_of(shift, now) if shift else ('ended' if todays else 'none'),

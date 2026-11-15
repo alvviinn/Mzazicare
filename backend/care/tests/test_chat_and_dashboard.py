@@ -21,9 +21,18 @@ class ChatTests(FamilyTestCase):
         self.assertEqual([m['body'] for m in with_cara], ['Morning Cara'])
         self.assertEqual([m['body'] for m in with_ella], ['Hi Mama'])
 
-    def test_caretaker_and_elderly_cannot_chat_with_each_other(self):
-        self.assertEqual(self.send(self.caretaker_api, 'elder@example.com').status_code, 403)
-        self.assertEqual(self.caretaker_api.get('/api/chat/?with=elder@example.com').status_code, 403)
+    def test_anyone_in_the_circle_can_chat_with_anyone_else_in_it(self):
+        self.assertEqual(self.send(self.caretaker_api, 'elder@example.com', 'Coming at 9').status_code, 201)
+        self.assertEqual(self.send(self.elder_api, 'care@example.com', 'Thank you').status_code, 201)
+        thread = self.caretaker_api.get('/api/chat/?with=elder@example.com').data
+        self.assertEqual([(m['body'], m['mine']) for m in thread], [('Coming at 9', True), ('Thank you', False)])
+        self.assertEqual(self.send(self.elder_api, 'elder@example.com').status_code, 403)  # not with yourself
+
+    def test_another_familys_people_stay_out_of_reach(self):
+        other = make_user('other@example.com', 'Other Family')
+        make_user('othercare@example.com', 'Other Care', Role.CARETAKER, other)
+        self.assertEqual(self.send(self.caretaker_api, 'othercare@example.com').status_code, 403)
+        self.assertEqual(self.send(self.elder_api, 'other@example.com').status_code, 403)
 
     def test_outsiders_cannot_chat_with_the_family(self):
         stranger = client_for(make_user('stranger@example.com', 'Stranger'))

@@ -41,11 +41,20 @@ const STRINGS: Record<string, { en: Str; sw: Str }> = {
   msg_family: { en: (n) => `Message ${n}`, sw: (n) => `Mwandikie ${n}` },
   help_button: { en: 'I need help', sw: 'Nahitaji msaada' },
   help_title: { en: 'Call for help?', sw: 'Omba msaada?' },
-  help_body: { en: 'Your family will be told right away.', sw: 'Familia yako itaarifiwa mara moja.' },
+  help_body: {
+    en: 'Your family and your caretaker will be alerted right away.',
+    sw: 'Familia yako na mlezi wako wataarifiwa mara moja.',
+  },
   yes_send: { en: 'Yes, send', sw: 'Ndiyo, tuma' },
   no: { en: 'No', sw: 'Hapana' },
   sent: { en: 'Sent', sw: 'Imetumwa' },
-  help_sent:{ en: 'Your family has been told.', sw: 'Familia yako imeambiwa.' },
+  help_sent: { en: 'Your family and your caretaker have been alerted.', sw: 'Familia yako na mlezi wako wamearifiwa.' },
+  sos_waiting: {
+    en: 'Help requested. Your family and caretaker have been alerted.',
+    sw: 'Umeomba msaada. Familia yako na mlezi wako wamearifiwa.',
+  },
+  sos_coming: { en: (n) => `Help is coming: ${n} has seen your call.`, sw: (n) => `Msaada unakuja: ${n} ameona ombi lako.` },
+  unread: { en: (n) => `${n} new`, sw: (n) => `${n} mpya` },
   help_failed: {
     en: 'Could not send. Please call your family now.',
     sw: 'Imeshindwa kutuma. Tafadhali piga simu kwa familia yako sasa.',

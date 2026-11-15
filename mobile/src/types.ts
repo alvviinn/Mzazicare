@@ -30,6 +30,22 @@ export type Tone = 'happy' | 'calm' | 'neutral' | 'stressed' | 'angry';
 
 export type ChatPerson = { email: string; name: string; unread: number };
 
+// Anyone in the same care circle (family, caretakers, elderly) can message anyone else in it.
+export type Contact = ChatPerson & { role: Role };
+
+// An open "I need help" from an elderly person: shown full screen to the family and caretakers until someone
+// says they are handling it.
+export type Emergency = {
+  id: number;
+  patient: { name: string; email: string } | null;
+  message: string;
+  at: string;
+  position: { latitude: number; longitude: number; accuracy: number | null } | null;
+  handled_by: string | null; // name of the first person who responded
+  handled_by_me: boolean;
+  handled_at: string | null;
+};
+
 // A shift is one DAY of work. Stepping out of range is a break; the same shift continues when the caretaker returns.
 export type ShiftStatus = 'on_shift' | 'paused' | 'away' | 'waiting' | 'ended';
 
@@ -183,7 +199,7 @@ export type ShiftState = {
   started_at: string | null;
   shift_minutes: number;
   today_minutes: number;
-  emergency: { message: string; at: string } | null; // an open emergency from the elderly person
+  emergency: { message: string; at: string; handled_by: string | null } | null; // an open emergency from the elderly person
   elderly: { name: string; email: string } | null;
   range: {
     state: 'in' | 'out' | 'unknown';

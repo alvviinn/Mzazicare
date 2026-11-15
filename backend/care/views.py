@@ -59,9 +59,15 @@ def shift_json(s):
     return {**shift_card(s), 'dominant_tone': top}
 
 
+def circle_of(user):
+    """The care circle a user belongs to, named by its family account's id (None if not linked yet)."""
+    return user.pk if user.role == Role.USER else user.sponsor_id
+
+
 def can_chat(a, b):
-    """Chats exist only between a family account and the people it linked."""
-    return (a.role == Role.USER and b.sponsor_id == a.pk) or (b.role == Role.USER and a.sponsor_id == b.pk)
+    """Anyone in a care circle (family, caretakers, elderly) can chat with anyone else in the same circle."""
+    circle = circle_of(a)
+    return circle is not None and a.pk != b.pk and circle == circle_of(b)
 
 
 def alert_json(a):

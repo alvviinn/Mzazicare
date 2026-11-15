@@ -130,7 +130,8 @@ class CheckInView(APIView):
 
 
 class SosView(APIView):
-    """The big red button. Alerts the family and sends them a chat message."""
+    """The big red button: an emergency alert (alarm-style push) to the family and every caretaker in the circle,
+    plus a chat message to each of them."""
 
     def post(self, request):
         me = request.user
@@ -149,7 +150,11 @@ class SosView(APIView):
                 patient=me,
                 **alert_position(me),
             )
-            Message.objects.create(sender=me, recipient_id=me.sponsor_id, body='I need help. Please call me now.')
+            responders = [me.sponsor_id] + list(
+                User.objects.filter(sponsor_id=me.sponsor_id, role=Role.CARETAKER).values_list('pk', flat=True)
+            )
+            for pk in responders:
+                Message.objects.create(sender=me, recipient_id=pk, body='I need help. Please call me now.')
         return Response({'detail': 'ok'}, status=201)
 
 

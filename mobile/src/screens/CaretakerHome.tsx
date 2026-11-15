@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { getHours, getShiftState, getTasks } from '../api/client';
+import { getContacts, getHours, getShiftState, getTasks } from '../api/client';
 import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
 import { HomeShell } from '../components/HomeShell';
 import { TabBar, TabDef } from '../components/TabBar';
@@ -10,7 +10,7 @@ import { useLocationSharing } from '../location/useLocationSharing';
 import { flush, loadQueue, startAutoSync } from '../offline/taskQueue';
 import { usePushTap } from '../push';
 import { t } from '../strings';
-import { Profile, ShiftState } from '../types';
+import { Contact, Profile, ShiftState } from '../types';
 import ChatScreen from './ChatScreen';
 import ShiftDetailScreen from './ShiftDetailScreen';
 import FirstAidTab, { FirstAidChat } from './caretaker/FirstAidTab';
@@ -35,7 +35,8 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
   const [state, setState] = useState<ShiftState | null>(null);
   const [error, setError] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
+  const [chatPeer, setChatPeer] = useState<{ name: string; email: string } | null>(null);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [shiftId, setShiftId] = useState<number | null>(null); // the day's shift being looked at
   const [firstAid, setFirstAid] = useState<FirstAidChat>({ entries: [], lang: 'en' }); // kept while switching tabs
   const [askFocus, setAskFocus] = useState(false); // opened from the "What's happening?" bar
@@ -63,7 +64,8 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
 
   // The two numbers on the Today tiles. Failures leave a dash; the tabs themselves show the errors.
   const loadSummary = useCallback(async () => {
-    const [tasks, hours] = await Promise.allSettled([getTasks(token), getHours(token)]);
+    const [tasks, hours, people] = await Promise.allSettled([getTasks(token), getHours(token), getContacts(token)]);
+    if (people.status === 'fulfilled') setContacts(people.value);
     setSummary({
       tasks: tasks.status === 'fulfilled' ? { done: tasks.value.filter((x) => x.is_done).length, total: tasks.value.length } : null,
       week: hours.status === 'fulfilled' ? hours.value.week : null,
@@ -93,12 +95,12 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
   const hide = useCallback(() => setNotice(null), []);
   const action = useShiftAction(token, load, notify);
 
-  // Tapping a notification: a message opens the family chat, an emergency opens Today (with its banner).
+  // Tapping a notification: a message opens that person's chat, an emergency opens Today (with its banner).
   usePushTap((tap) => {
     setShiftId(null);
-    if (tap.type === 'chat') setChatOpen(true);
+    if (tap.type === 'chat') setChatPeer({ name: tap.name, email: tap.from });
     else {
-      setChatOpen(false);
+      setChatPeer(null);
       setTab('shift');
       load();
     }
@@ -110,8 +112,12 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
     setRefreshing(false);
   }
 
-  if (chatOpen && profile.sponsor) {
-    return <ChatScreen token={token} peer={profile.sponsor} onBack={() => setChatOpen(false)} />;
+  if (chatPeer) {
+    const close = () => {
+      setChatPeer(null);
+      loadSummary(); // unread counts
+    };
+    return <ChatScreen token={token} peer={chatPeer} onBack={close} />;
   }
   if (shiftId !== null) {
     return <ShiftDetailScreen token={token} shiftId={shiftId} onBack={() => setShiftId(null)} />;
@@ -146,11 +152,11 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
           state={state}
           error={error}
           sharing={sharing.status}
-          sponsorName={profile.sponsor?.name ?? null}
+          contacts={contacts}
           tasks={summary.tasks}
           weekMinutes={summary.week}
           onRetry={load}
-          onChat={() => setChatOpen(true)}
+          onChat={setChatPeer}
           onOpenShift={setShiftId}
           onAsk={() => {
             setAskFocus(true);

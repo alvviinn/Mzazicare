@@ -3,8 +3,10 @@ import {
   AuthResult,
   ChatMessage,
   CodeChallenge,
+  Contact,
   Dashboard,
   ElderHome,
+  Emergency,
   FirstAidReply,
   Hours,
   LiveTone,
@@ -86,6 +88,14 @@ export const getMessages = (token: string, withEmail: string): Promise<ChatMessa
 
 export const sendMessage = (token: string, to: string, body: string): Promise<ChatMessage> =>
   request('/api/chat/', { ...post({ to, body }), token });
+
+// Everyone else in my care circle, with unread counts.
+export const getContacts = (token: string): Promise<Contact[]> => request('/api/chat/contacts/', { token });
+
+// Open "I need help" alerts in my circle, and "I'm handling it".
+export const getEmergencies = (token: string): Promise<Emergency[]> => request('/api/emergency/', { token });
+export const handleEmergency = (token: string, id: number): Promise<Emergency> =>
+  request(`/api/emergency/${id}/handle/`, { ...post(), token });
 
 export const addMedicine = (
   token: string,

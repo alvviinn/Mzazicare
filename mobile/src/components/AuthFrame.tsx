@@ -1,10 +1,11 @@
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoid } from './ui';
 import { colors, on, radius, space, text, textOnInk, TOP_INSET } from '../theme';
 
 // The frame for sign in, register and the emailed code: brand on the ink hero band (white text, cornflower mark), the form below.
 export function AuthFrame({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoid style={styles.flex}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.band}>
           <View style={styles.brandRow}>
@@ -22,7 +23,7 @@ export function AuthFrame({ title, children }: { title: string; children: React.
           {children}
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardAvoid>
   );
 }
 

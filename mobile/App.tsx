@@ -8,6 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { getProfile, SESSION_EXPIRED } from './src/api/client';
 import { clearSession, loadSession, Session } from './src/auth/session';
 import { registerForPush, unregisterForPush } from './src/push';
+import { EmergencyAlert } from './src/components/EmergencyAlert';
 import { Button, Empty } from './src/components/ui';
 import CaretakerHome from './src/screens/CaretakerHome';
 import ElderlyHome from './src/screens/ElderlyHome';
@@ -125,6 +126,10 @@ export default function App() {
       {/* light status-bar icons over the ink band of the sign-in screens */}
       <StatusBar style={session ? 'dark' : 'light'} />
       {content}
+      {/* "I need help" from an elderly person takes over the screen for the family and caretakers */}
+      {session && profile && (profile.role === 'user' || profile.role === 'caretaker') && (
+        <EmergencyAlert token={session.token} />
+      )}
     </>
   );
 }

@@ -1,12 +1,16 @@
 from django.urls import path
 
-from . import audio_views, caretaker_views, elder_views, firstaid_views, push_views, shift_views, tone_live, views
+from . import audio_views, caretaker_views, circle_views, elder_views, firstaid_views, push_views, shift_views, tone_live, views
 
 urlpatterns = [
     # family
     path('dashboard/', views.DashboardView.as_view()),
     path('alerts/<int:pk>/', views.AlertView.as_view()),
     path('chat/', views.ChatView.as_view()),
+    # anyone in the care circle
+    path('chat/contacts/', circle_views.ContactsView.as_view()),  # who I can message, with unread counts
+    path('emergency/', circle_views.EmergencyListView.as_view()),  # open "I need help" alerts
+    path('emergency/<int:pk>/handle/', circle_views.EmergencyHandleView.as_view()),  # "I'm handling it"
     path('push/', push_views.PushDeviceView.as_view()),  # any role: register / unregister this phone for notifications
     # shifts (one per day): caretaker and family
     path('shifts/', shift_views.ShiftListView.as_view()),

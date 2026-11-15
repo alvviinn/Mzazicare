@@ -1,5 +1,10 @@
 import * as Notifications from 'expo-notifications';
-import { AndroidImportance } from 'expo-notifications';
+import {
+  AndroidAudioContentType,
+  AndroidAudioUsage,
+  AndroidImportance,
+  AndroidNotificationVisibility,
+} from 'expo-notifications';
 import { useEffect, useRef } from 'react';
 import { Platform } from 'react-native';
 import { registerPushToken, unregisterPushToken } from './api/client';
@@ -39,6 +44,36 @@ async function createChannels() {
     name: 'Messages',
     importance: AndroidImportance.DEFAULT,
   });
+  // "I need help" from an elderly person: the loudest Android allows. Alarm audio, long vibration, shown on the lock
+  // screen and through Do Not Disturb (where the phone permits it).
+  await Notifications.setNotificationChannelAsync('emergency', {
+    name: 'Emergencies',
+    description: 'When the person you care for presses "I need help"',
+    importance: AndroidImportance.MAX,
+    bypassDnd: true,
+    lockscreenVisibility: AndroidNotificationVisibility.PUBLIC,
+    sound: 'default',
+    audioAttributes: { usage: AndroidAudioUsage.ALARM, contentType: AndroidAudioContentType.SONIFICATION },
+    enableVibrate: true,
+    vibrationPattern: [0, 1000, 500, 1000, 500, 1000, 500, 1000],
+    lightColor: colors.error,
+  });
+}
+
+// Calls `onEmergency` when an emergency notification arrives while the app is open, so the alarm screen shows at once.
+export function useEmergencyPush(onEmergency: () => void) {
+  const handler = useRef(onEmergency);
+  useEffect(() => {
+    handler.current = onEmergency;
+  });
+  useEffect(() => {
+    if (!supported) return;
+    const sub = Notifications.addNotificationReceivedListener((n) => {
+      const kind = n.request.content.data?.kind;
+      if (typeof kind === 'string' && kind.startsWith('sos')) handler.current();
+    });
+    return () => sub.remove();
+  }, []);
 }
 
 // Ask once for permission and tell the server where to reach this phone. Safe to call on every sign-in.

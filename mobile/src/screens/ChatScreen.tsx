@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { getMessages, sendMessage } from '../api/client';
 import { Icon } from '../components/Icon';
-import { Avatar, haptic, Loading, PressScale, ScreenHeader } from '../components/ui';
+import { Avatar, haptic, KeyboardAvoid, Loading, PressScale, ScreenHeader } from '../components/ui';
 import { fmtTime } from '../format';
 import { NETWORK_ERROR } from '../net';
 import { colors, icon, on, radius, space, text } from '../theme';
@@ -54,7 +54,7 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoid style={styles.flex}>
       <ScreenHeader title={peer.name} onBack={onBack} right={<Avatar name={peer.name} size={40} />} />
 
       {!!error && (
@@ -64,24 +64,26 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
         </View>
       )}
 
+      {/* Empty and loading states sit outside the inverted list: Android flips an inverted list's empty component
+          on both axes, which mirrored its text. */}
+      {messages.length === 0 ? (
+        loaded ? (
+          <View style={[styles.flex, styles.empty]}>
+            <Avatar name={peer.name} size={72} />
+            <Text style={text.heading}>{`Say hi to ${first}`}</Text>
+          </View>
+        ) : (
+          <View style={[styles.flex, styles.list]}>
+            <Loading label="Loading messages" lines={2} />
+          </View>
+        )
+      ) : (
       <FlatList
         style={styles.flex}
         contentContainerStyle={styles.list}
         data={[...messages].reverse()}
         inverted
         keyExtractor={(m) => String(m.id)}
-        ListEmptyComponent={
-          loaded ? (
-            <View style={styles.empty}>
-              <Avatar name={peer.name} size={72} />
-              <Text style={text.heading}>{`Say hi to ${first}`}</Text>
-            </View>
-          ) : (
-            <View style={{ transform: [{ scaleY: -1 }] }}>
-              <Loading label="Loading messages" lines={2} />
-            </View>
-          )
-        }
         renderItem={({ item }) => (
           <View style={[styles.bubble, item.mine ? styles.mine : styles.theirs]}>
             <Text style={[text.body, item.mine && { color: on.secondary }]}>{item.body}</Text>
@@ -89,6 +91,7 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
           </View>
         )}
       />
+      )}
 
       <View style={styles.composer}>
         <TextInput
@@ -112,7 +115,7 @@ export default function ChatScreen({ token, peer, onBack }: Props) {
           {sending ? <ActivityIndicator color={on.primary} /> : <Icon name="send" size={icon.m} color={!draft.trim() ? colors.inkMuted : on.primary} />}
         </PressScale>
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardAvoid>
   );
 }
 
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   list: { padding: space.m, flexGrow: 1, justifyContent: 'flex-end' },
   error: { flexDirection: 'row', alignItems: 'center', gap: space.s, paddingHorizontal: space.m, paddingVertical: space.s, backgroundColor: colors.surface },
-  empty: { alignItems: 'center', gap: space.s, transform: [{ scaleY: -1 }], marginTop: space.xl },
+  empty: { alignItems: 'center', justifyContent: 'center', gap: space.s, padding: space.m },
   bubble: { maxWidth: '80%', borderRadius: radius.card, paddingHorizontal: space.m, paddingVertical: space.s, marginBottom: space.s },
   mine: { alignSelf: 'flex-end', backgroundColor: colors.secondary },
   theirs: { alignSelf: 'flex-start', backgroundColor: colors.surface },

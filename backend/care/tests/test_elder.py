@@ -25,8 +25,9 @@ class ElderEndpointsTests(FamilyTestCase):
         self.elder_api.post('/api/elder/sos/')
         self.elder_api.post('/api/elder/sos/')  # an accidental double tap
         self.assertEqual(Alert.objects.filter(kind=Alert.Kind.SOS).count(), 1)
-        message = Message.objects.get()
-        self.assertEqual((message.sender, message.recipient), (self.elder, self.sponsor))
+        # the family AND the caretaker each get one message (not two, despite the double tap)
+        sent = sorted((m.sender.email, m.recipient.email) for m in Message.objects.all())
+        self.assertEqual(sent, [('elder@example.com', 'care@example.com'), ('elder@example.com', 'family@example.com')])
 
     def test_only_the_elderly_can_use_elder_endpoints(self):
         for api in (self.sponsor_api, self.caretaker_api):

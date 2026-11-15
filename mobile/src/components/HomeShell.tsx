@@ -4,7 +4,7 @@ import { t } from '../strings';
 import { colors, space, TAP, text, TOP_INSET } from '../theme';
 import { Profile } from '../types';
 import { Icon } from './Icon';
-import { Avatar, Button, Card, OfflineBanner, Row, Sheet } from './ui';
+import { Avatar, Button, Card, OfflineBanner, Row, Sheet, StatusBarStrip } from './ui';
 
 // Common frame for the caretaker and family homes: title, avatar (opens the account sheet), content, footer.
 export function HomeShell({
@@ -32,7 +32,7 @@ export function HomeShell({
 
   return (
     <View style={styles.flex}>
-      <OfflineBanner />
+      <OfflineBanner atTop />
       <View style={styles.flex}>
         <ScrollView
           style={styles.flex}
@@ -62,6 +62,7 @@ export function HomeShell({
           {children}
         </ScrollView>
         {overlay}
+        <StatusBarStrip />
       </View>
       {footer}
 

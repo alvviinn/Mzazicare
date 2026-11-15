@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { getElderHome, sendCheckIn, sendSos, takeMedicine } from '../api/client';
+import { getContacts, getElderHome, getEmergencies, sendCheckIn, sendSos, takeMedicine } from '../api/client';
 import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
 import { Icon, IconName, MOOD_ICON } from '../components/Icon';
 import { SharingBanner } from '../components/SharingBanner';
-import { Avatar, Button, Card, haptic, OfflineBanner, PressScale, Sheet } from '../components/ui';
+import { Avatar, Button, Card, haptic, OfflineBanner, PressScale, Sheet, StatusBarStrip } from '../components/ui';
 import { VoiceCard } from '../components/VoiceCard';
 import { Lang, t } from '../elder/i18n';
 import { SCALES, useElderPrefs } from '../elder/prefs';
@@ -12,7 +12,7 @@ import { fmtTime } from '../format';
 import { useLocationSharing } from '../location/useLocationSharing';
 import { usePushTap } from '../push';
 import { colors, icon, on, radius, scaled, space, TAP, text, textOnInk, TOP_INSET } from '../theme';
-import { ElderHome, Medicine, Mood, Profile } from '../types';
+import { ElderHome, Emergency, Medicine, Mood, Profile } from '../types';
 import ChatScreen from './ChatScreen';
 
 type Props = { token: string; profile: Profile; onSignOut: () => void };
@@ -62,7 +62,9 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   const [home, setHome] = useState<ElderHome | null>(null);
   const [error, setError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
+  const [chatPeer, setChatPeer] = useState<{ name: string; email: string } | null>(null);
+  const [unread, setUnread] = useState<Record<string, number>>({}); // by email
+  const [sos, setSos] = useState<Emergency | null>(null); // my open "I need help", to show who is coming
   const [pickingMood, setPickingMood] = useState(false);
   const [settings, setSettings] = useState(false);
 
@@ -77,6 +79,10 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
     } catch {
       setError(true);
     }
+    // Extras: unread messages and my open call for help. A failure here just leaves them as they were.
+    const [contacts, open] = await Promise.allSettled([getContacts(token), getEmergencies(token)]);
+    if (contacts.status === 'fulfilled') setUnread(Object.fromEntries(contacts.value.map((c) => [c.email, c.unread])));
+    if (open.status === 'fulfilled') setSos(open.value[0] ?? null);
   }, [token]);
 
   useEffect(() => {
@@ -123,6 +129,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
           try {
             await sendSos(token);
             Alert.alert(t(lang, 'sent'), t(lang, 'help_sent'));
+            load(); // shows "Help requested", then who is coming
           } catch {
             Alert.alert(t(lang, 'help_failed'));
           }
@@ -131,13 +138,18 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
     ]);
   }
 
-  // Tapping a message notification opens the chat with the family.
+  // Tapping a message notification opens the chat with whoever sent it; "help is coming" refreshes the screen.
   usePushTap((tap) => {
-    if (tap.type === 'chat') setChatOpen(true);
+    if (tap.type === 'chat') setChatPeer({ name: tap.name, email: tap.from });
+    else load();
   });
 
-  if (chatOpen && profile.sponsor) {
-    return <ChatScreen token={token} peer={profile.sponsor} onBack={() => setChatOpen(false)} />;
+  if (chatPeer) {
+    const close = () => {
+      setChatPeer(null);
+      load(); // unread counts
+    };
+    return <ChatScreen token={token} peer={chatPeer} onBack={close} />;
   }
 
   const hour = new Date().getHours();
@@ -152,13 +164,16 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   const caretakerLine = ct ? (ct.status === 'none' ? t(lang, 'caretaker_none') : t(lang, `caretaker_${ct.status}`, ctName)) : '';
 
   // Everyone linked to this person.
-  const people: { name: string; role: string; invited: boolean }[] = [];
-  if (profile.sponsor) people.push({ name: profile.sponsor.name, role: t(lang, 'family'), invited: false });
-  profile.caretakers.forEach((c) => people.push({ name: c.name ?? c.email, role: t(lang, 'caretaker'), invited: c.status === 'pending' }));
+  // Everyone linked to this person; tap anyone to message them.
+  const people: { name: string; email: string; role: string; invited: boolean }[] = [];
+  if (profile.sponsor) people.push({ ...profile.sponsor, role: t(lang, 'family'), invited: false });
+  profile.caretakers.forEach((c) =>
+    people.push({ name: c.name ?? c.email, email: c.email, role: t(lang, 'caretaker'), invited: c.status === 'pending' }),
+  );
 
   return (
     <View style={styles.flex}>
-      <OfflineBanner />
+      <OfflineBanner atTop />
       <ScrollView
         style={styles.flex}
         contentContainerStyle={styles.container}
@@ -278,9 +293,19 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
           </>
         )}
 
+        {/* After "I need help": who has seen it */}
+        {sos && (
+          <View style={[styles.sosStatus, sos.handled_by ? styles.sosComing : null]} accessibilityLiveRegion="polite">
+            <Icon name={sos.handled_by ? 'checkCircle' : 'siren'} size={icon.m} color={sos.handled_by ? colors.success : colors.error} />
+            <Text style={[T.bodyStrong, { flex: 1 }]}>
+              {sos.handled_by ? t(lang, 'sos_coming', sos.handled_by.split(' ')[0]) : t(lang, 'sos_waiting')}
+            </Text>
+          </View>
+        )}
+
         {/* Stay in touch */}
         {profile.sponsor && (
-          <PressScale style={styles.msg} onPress={() => setChatOpen(true)} accessibilityRole="button" accessibilityLabel={t(lang, 'msg_family', familyName)}>
+          <PressScale style={styles.msg} onPress={() => profile.sponsor && setChatPeer(profile.sponsor)} accessibilityRole="button" accessibilityLabel={t(lang, 'msg_family', familyName)}>
             <Avatar name={profile.sponsor.name} size={48} />
             <Text style={[T.bodyStrong, { flex: 1, color: on.secondary }]}>{t(lang, 'msg_family', familyName)}</Text>
             <Icon name="chat" size={icon.m} color={on.secondary} />
@@ -289,21 +314,40 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
 
         {people.length > 0 && (
           <View style={styles.people}>
-            {people.map((p, i) => (
-              <View key={`${p.name}-${i}`} style={styles.person} accessible accessibilityLabel={`${p.name}, ${p.role}${p.invited ? `, ${t(lang, 'invited')}` : ''}`}>
-                <Avatar name={p.name} size={56} />
-                <Text style={T.captionStrong} numberOfLines={1}>
-                  {p.name.split(' ')[0]}
-                </Text>
-                <Text style={T.caption}>{p.invited ? t(lang, 'invited') : p.role}</Text>
-              </View>
-            ))}
+            {people.map((p, i) => {
+              const n = unread[p.email] ?? 0;
+              const label = `${t(lang, 'msg_family', p.name)}, ${p.role}${p.invited ? `, ${t(lang, 'invited')}` : ''}${n ? `, ${t(lang, 'unread', String(n))}` : ''}`;
+              return (
+                <PressScale
+                  key={`${p.email}-${i}`}
+                  style={styles.person}
+                  disabled={p.invited}
+                  onPress={() => setChatPeer({ name: p.name, email: p.email })}
+                  accessibilityRole="button"
+                  accessibilityLabel={label}
+                >
+                  <View>
+                    <Avatar name={p.name} size={56} />
+                    {n > 0 && (
+                      <View style={styles.unreadDot}>
+                        <Text style={[text.captionStrong, { color: on.error }]}>{n}</Text>
+                      </View>
+                    )}
+                  </View>
+                  <Text style={T.captionStrong} numberOfLines={1}>
+                    {p.name.split(' ')[0]}
+                  </Text>
+                  <Text style={T.caption}>{p.invited ? t(lang, 'invited') : p.role}</Text>
+                </PressScale>
+              );
+            })}
           </View>
         )}
 
         <VoiceCard voice={voice} lang={lang} scale={scale} />
         <SharingBanner status={sharing.status} lang={lang} scale={scale} />
       </ScrollView>
+      <StatusBarStrip />
 
       {/* Always on screen: the emergency button */}
       <View style={styles.sosBar}>
@@ -394,6 +438,28 @@ const styles = StyleSheet.create({
 
   people: { flexDirection: 'row', flexWrap: 'wrap', gap: space.m, marginTop: space.l },
   person: { width: 80, alignItems: 'center', gap: space.s },
+  unreadDot: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 24,
+    height: 24,
+    paddingHorizontal: 6,
+    borderRadius: radius.pill,
+    backgroundColor: colors.error,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sosStatus: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.m,
+    padding: space.m,
+    borderRadius: radius.card,
+    backgroundColor: colors.warningTint,
+    marginTop: space.m,
+  },
+  sosComing: { backgroundColor: colors.primaryTint },
 
   sosBar: { paddingHorizontal: space.m, paddingTop: space.s, paddingBottom: space.m, backgroundColor: colors.background },
   sos: {

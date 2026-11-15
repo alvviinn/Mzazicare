@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 SCOPE = 'https://www.googleapis.com/auth/firebase.messaging'
 SEND_URL = 'https://fcm.googleapis.com/v1/projects/{project}/messages:send'
 TOKEN_RE = re.compile(r'^[A-Za-z0-9_\-:.]{32,512}$')  # an FCM registration token
-CHANNELS = {'alerts', 'messages'}  # created by the app; Android does not show a message for an unknown channel
+CHANNELS = {'alerts', 'messages', 'emergency'}  # created by the app; Android does not show a message for an unknown channel
 
 _lock = threading.Lock()
 _credentials = None
