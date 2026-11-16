@@ -263,11 +263,11 @@ export type FirstAidReply = {
   // 'check': the safety question "Is someone in danger right now?" with Yes / No options
   kind: 'answer' | 'clarify' | 'check' | 'greeting' | 'out_of_scope' | 'general_medical';
   check_message?: string; // for 'check': the message to send back with the answer
-  danger_banner?: string; // advice shown at once under a red "anyone in danger right now? call 999" banner
+  danger_banner?: string; // advice shown at once under a red "anyone in danger right now? call 922" banner
   topic: string | null;
   title?: string;
   lang: 'en' | 'sw';
-  emergency: boolean; // show "call 999 or 112" first
+  emergency: boolean; // show "call 922 or 999" first
   confidence: number | null;
   opener?: string;
   urgent?: string | null;

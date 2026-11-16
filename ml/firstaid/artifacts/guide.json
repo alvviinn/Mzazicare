@@ -6,8 +6,10 @@
   "keywords": [
    "ambulance",
    "emergency number",
+   "call 922",
    "call 999",
    "call 112",
+   "922",
    "who do i call",
    "which number",
    "gari la wagonjwa",
@@ -45,7 +47,7 @@
      "Send someone to the gate or road to show the ambulance the way, and unlock the door."
     ],
     "avoid": [],
-    "intro": "In Kenya you can call 999 or 112 for an ambulance, free from any phone, even without airtime. The Kenya Red Cross emergency line is 1199.",
+    "intro": "In Kenya call 922 for an ambulance: the national medical emergency line, free from any network, even without airtime. 999 and 112 (police and general emergencies) also work, and the Kenya Red Cross line is 1199.",
     "after": "Keep the person's medicine list and ID ready for the paramedics, and tell the family."
    },
    "sw": {
@@ -58,7 +60,7 @@
      "Mtume mtu asimame langoni au barabarani kuonyesha gari la wagonjwa njia, na ufungue mlango."
     ],
     "avoid": [],
-    "intro": "Nchini Kenya unaweza kupiga 999 au 112 kuita gari la wagonjwa, bure kutoka simu yoyote, hata bila salio. Nambari ya dharura ya Kenya Red Cross ni 1199.",
+    "intro": "Nchini Kenya piga 922 kuita gari la wagonjwa: nambari ya kitaifa ya dharura za matibabu, bure kutoka mtandao wowote, hata bila salio. 999 na 112 (polisi na dharura nyingine) pia zinafanya kazi, na nambari ya Kenya Red Cross ni 1199.",
     "after": "Weka tayari orodha ya dawa za mgonjwa na kitambulisho chake kwa wahudumu wa afya, na uijulishe familia."
    }
   },
@@ -124,7 +126,7 @@
      "Do not put a pillow under their head while they lie on their back, it can block the airway."
     ],
     "intro": "Someone who does not respond but is breathing needs their airway kept open.",
-    "urgent": "Call 999 or 112 now, or ask someone else to call while you help.",
+    "urgent": "Call 922 or 999 now, or ask someone else to call while you help.",
     "after": "Keep them warm with a blanket and tell the paramedics how long they were unresponsive."
    },
    "sw": {
@@ -142,7 +144,7 @@
      "Usiweke mto chini ya kichwa chake akiwa amelala chali, unaweza kuziba njia ya hewa."
     ],
     "intro": "Mtu asiyejibu lakini anapumua anahitaji njia yake ya hewa iwe wazi.",
-    "urgent": "Piga 999 au 112 sasa hivi, au mwombe mtu mwingine apige wakati wewe unasaidia.",
+    "urgent": "Piga 922 au 999 sasa hivi, au mwombe mtu mwingine apige wakati wewe unasaidia.",
     "after": "Mfunike kwa blanketi apate joto na uwaambie wahudumu wa afya muda gani hakujitambua."
    }
   },
@@ -233,7 +235,7 @@
      "These steps are for adults. For a child or baby, give 5 rescue breaths first, then push about one third of the depth of the chest (two fingers for a baby), 30 pushes to 2 breaths."
     ],
     "intro": "If someone is unresponsive and not breathing normally, their heart has probably stopped. CPR keeps blood flowing to the brain until help arrives.",
-    "urgent": "Call 999 or 112 now and put the phone on speaker. If there is a defibrillator (AED) nearby and someone else can fetch it, send them. If you are alone, do not leave the person to look for one: AEDs are rare in Kenya, just keep doing CPR.",
+    "urgent": "Call 922 or 999 now and put the phone on speaker. If there is a defibrillator (AED) nearby and someone else can fetch it, send them. If you are alone, do not leave the person to look for one: AEDs are rare in Kenya, just keep doing CPR.",
     "after": "If they start breathing normally, put them in the recovery position and keep watching their breathing."
    },
    "sw": {
@@ -252,7 +254,7 @@
      "Hatua hizi ni za watu wazima. Kwa mtoto au mtoto mchanga, mpe pumzi 5 kwanza, kisha bonyeza karibu theluthi moja ya kina cha kifua (vidole viwili kwa mtoto mchanga), mabonyezo 30 kwa pumzi 2."
     ],
     "intro": "Mtu asiyejibu na asiyepumua kawaida, huenda moyo wake umesimama. CPR husaidia damu kuendelea kufika kwenye ubongo mpaka msaada ufike.",
-    "urgent": "Piga 999 au 112 sasa hivi na uweke simu kwenye spika. Kama kuna mashine ya kushtua moyo (AED) karibu na kuna mtu mwingine wa kuileta, mtume. Kama uko peke yako, usimwache mgonjwa kwenda kuitafuta: AED ni chache Kenya, endelea tu na CPR.",
+    "urgent": "Piga 922 au 999 sasa hivi na uweke simu kwenye spika. Kama kuna mashine ya kushtua moyo (AED) karibu na kuna mtu mwingine wa kuileta, mtume. Kama uko peke yako, usimwache mgonjwa kwenda kuitafuta: AED ni chache Kenya, endelea tu na CPR.",
     "after": "Akianza kupumua kawaida, mlaze katika mkao wa kupona na uendelee kuangalia anavyopumua."
    }
   },
@@ -310,15 +312,15 @@
      "Give up to 5 firm back blows between the shoulder blades with the heel of your hand. Check after each one whether the object has come out.",
      "If it has not cleared, give up to 5 abdominal thrusts: stand behind them, put your fist just above the belly button, hold it with your other hand, and pull sharply inwards and upwards.",
      "Keep repeating 5 back blows and 5 abdominal thrusts until the object comes out or help arrives.",
-     "If they become unresponsive, lower them carefully to the floor, call 999 or 112 if nobody has, and start CPR."
+     "If they become unresponsive, lower them carefully to the floor, call 922 or 999 if nobody has, and start CPR."
     ],
     "avoid": [
      "Do not put your fingers in their mouth to feel for the object, you can push it deeper. Only remove something you can clearly see.",
      "Do not give water while they are choking.",
-     "Do not give abdominal thrusts to a baby under 1. For a baby, give up to 5 back blows with the baby face down along your forearm, then up to 5 chest thrusts with two fingers on the breastbone, and call 999 or 112."
+     "Do not give abdominal thrusts to a baby under 1. For a baby, give up to 5 back blows with the baby face down along your forearm, then up to 5 chest thrusts with two fingers on the breastbone, and call 922 or 999."
     ],
     "intro": "Choking happens when something blocks the airway. If the person cannot cough, speak or breathe, act straight away.",
-    "urgent": "Ask someone to call 999 or 112 while you start. If you are alone and it has not cleared after 5 back blows and 5 abdominal thrusts, call 999 or 112 yourself straight away on speaker, then keep going.",
+    "urgent": "Ask someone to call 922 or 999 while you start. If you are alone and it has not cleared after 5 back blows and 5 abdominal thrusts, call 922 or 999 yourself straight away on speaker, then keep going.",
     "after": "Anyone who has had abdominal thrusts must see a doctor the same day, as they can cause internal injury."
    },
    "sw": {
@@ -328,15 +330,15 @@
      "Mpige makofi hadi 5 kwa nguvu katikati ya mabega kwa kisigino cha kiganja. Angalia baada ya kila kofi kama kitu kimetoka.",
      "Kisipotoka, fanya mibano ya tumbo hadi 5: simama nyuma yake, weka ngumi juu kidogo ya kitovu, ishike kwa mkono mwingine, na uvute kwa nguvu ndani na juu.",
      "Endelea kurudia makofi 5 na mibano ya tumbo 5 mpaka kitu kitoke au msaada ufike.",
-     "Akiacha kujitambua, mlaze sakafuni kwa uangalifu, piga 999 au 112 kama hakuna aliyepiga, na uanze CPR."
+     "Akiacha kujitambua, mlaze sakafuni kwa uangalifu, piga 922 au 999 kama hakuna aliyepiga, na uanze CPR."
     ],
     "avoid": [
      "Usiingize vidole mdomoni kutafuta kitu, unaweza kukisukuma ndani zaidi. Toa tu kitu unachokiona waziwazi.",
      "Usimpe maji wakati amekabwa.",
-     "Usimpe mtoto mchanga (chini ya mwaka 1) mibano ya tumbo. Kwa mtoto mchanga, mpe makofi hadi 5 mgongoni akiwa amelala kifudifudi juu ya mkono wako, kisha mibano hadi 5 ya kifua kwa vidole viwili juu ya mfupa wa kifua, na upige 999 au 112."
+     "Usimpe mtoto mchanga (chini ya mwaka 1) mibano ya tumbo. Kwa mtoto mchanga, mpe makofi hadi 5 mgongoni akiwa amelala kifudifudi juu ya mkono wako, kisha mibano hadi 5 ya kifua kwa vidole viwili juu ya mfupa wa kifua, na upige 922 au 999."
     ],
     "intro": "Kukabwa hutokea kitu kinapoziba njia ya hewa. Kama mtu hawezi kukohoa, kuongea wala kupumua, chukua hatua mara moja.",
-    "urgent": "Mwombe mtu apige 999 au 112 wakati wewe unaanza. Kama uko peke yako na kitu hakijatoka baada ya makofi 5 na mibano ya tumbo 5, piga 999 au 112 wewe mwenyewe mara moja kwa spika, kisha uendelee.",
+    "urgent": "Mwombe mtu apige 922 au 999 wakati wewe unaanza. Kama uko peke yako na kitu hakijatoka baada ya makofi 5 na mibano ya tumbo 5, piga 922 au 999 wewe mwenyewe mara moja kwa spika, kisha uendelee.",
     "after": "Mtu yeyote aliyefanyiwa mibano ya tumbo lazima amwone daktari siku hiyo hiyo, kwani inaweza kusababisha jeraha la ndani."
    }
   },
@@ -475,7 +477,7 @@
      "Do not wait to see if the pain goes away."
     ],
     "intro": "Chest pain, pressure or tightness that may spread to the arm, jaw, neck or back, often with breathlessness, sweating or feeling sick, can be a heart attack. Older people, women and people with diabetes may only feel tired, breathless or unwell.",
-    "urgent": "Call 999 or 112 now. Treat it as a heart attack until a doctor says otherwise.",
+    "urgent": "Call 922 or 999 now. Treat it as a heart attack until a doctor says otherwise.",
     "after": "Write down when the pain started and what medicine they took, and give this to the paramedics."
    },
    "sw": {
@@ -493,7 +495,7 @@
      "Usisubiri kuona kama maumivu yataisha."
     ],
     "intro": "Maumivu, mgandamizo au kubana kifuani kunakoweza kuenea mkononi, tayani, shingoni au mgongoni, mara nyingi pamoja na kukosa pumzi, kutokwa jasho au kichefuchefu, kunaweza kuwa mshtuko wa moyo. Wazee, wanawake na watu wenye kisukari wanaweza kuhisi uchovu tu, kukosa pumzi au kujisikia vibaya.",
-    "urgent": "Piga 999 au 112 sasa hivi. Lichukulie kama mshtuko wa moyo mpaka daktari aseme vinginevyo.",
+    "urgent": "Piga 922 au 999 sasa hivi. Lichukulie kama mshtuko wa moyo mpaka daktari aseme vinginevyo.",
     "after": "Andika saa ambayo maumivu yalianza na dawa alizotumia, uwape wahudumu wa afya."
    }
   },
@@ -558,7 +560,7 @@
      "Face: ask them to smile. Does one side of the face droop?",
      "Arms: ask them to lift both arms. Does one drift down or feel weak?",
      "Speech: is their speech slurred, strange or are they unable to speak or understand?",
-     "Time: call 999 or 112 straight away and note the exact time the signs started, doctors need this.",
+     "Time: call 922 or 999 straight away and note the exact time the signs started, doctors need this.",
      "Also watch for sudden loss of balance, sudden loss of vision, a sudden very bad headache or sudden confusion.",
      "Keep them comfortable, sitting or lying with head and shoulders slightly raised, and reassure them.",
      "If they become unresponsive but are breathing, put them in the recovery position."
@@ -568,7 +570,7 @@
      "Do not let them sleep it off or wait to see if it improves."
     ],
     "intro": "A stroke is when blood stops reaching part of the brain. Every minute counts. Use the FAST check.",
-    "urgent": "Call 999 or 112 now if you see any of these signs, even if they go away.",
+    "urgent": "Call 922 or 999 now if you see any of these signs, even if they go away.",
     "after": "If the signs disappeared within minutes, it may have been a mini-stroke (TIA). They still need to see a doctor urgently today."
    },
    "sw": {
@@ -576,7 +578,7 @@
      "Uso: mwambie atabasamu. Je, upande mmoja wa uso umeshuka?",
      "Mikono: mwambie ainue mikono yote miwili. Je, mmoja unashuka au ni dhaifu?",
      "Kuongea: je, maneno yake hayatoki vizuri, ni ya ajabu, au hawezi kuongea wala kuelewa?",
-     "Muda: piga 999 au 112 mara moja na uandike saa hasa dalili zilipoanza, madaktari wanahitaji hili.",
+     "Muda: piga 922 au 999 mara moja na uandike saa hasa dalili zilipoanza, madaktari wanahitaji hili.",
      "Pia angalia kupoteza usawa ghafla, kupoteza uwezo wa kuona ghafla, maumivu makali sana ya kichwa ghafla au kuchanganyikiwa ghafla.",
      "Mtulize akiwa amekaa au amelala na kichwa na mabega yameinuliwa kidogo.",
      "Akiacha kujitambua lakini anapumua, mlaze katika mkao wa kupona."
@@ -586,7 +588,7 @@
      "Usimwache alale ili ipite wala usisubiri kuona kama itaboreka."
     ],
     "intro": "Kiharusi ni pale damu inapoacha kufika sehemu ya ubongo. Kila dakika ni muhimu. Tumia kipimo cha FAST.",
-    "urgent": "Piga 999 au 112 sasa hivi ukiona dalili yoyote kati ya hizi, hata kama zitaisha.",
+    "urgent": "Piga 922 au 999 sasa hivi ukiona dalili yoyote kati ya hizi, hata kama zitaisha.",
     "after": "Kama dalili ziliisha ndani ya dakika chache, huenda ilikuwa kiharusi kidogo (TIA). Bado anahitaji kumwona daktari haraka leo."
    }
   },
@@ -652,7 +654,7 @@
      "Do not remove something stuck in the wound. Press around it instead."
     ],
     "intro": "Heavy bleeding must be stopped quickly. Firm, direct pressure is the most important thing you can do.",
-    "urgent": "Call 999 or 112 now, or ask someone else to call.",
+    "urgent": "Call 922 or 999 now, or ask someone else to call.",
     "after": "Tell the paramedics if the person takes blood thinners, such as warfarin or aspirin, as they will bleed more."
    },
    "sw": {
@@ -669,7 +671,7 @@
      "Usitoe kitu kilichokwama ndani ya jeraha. Bonyeza kuzunguka kitu hicho."
     ],
     "intro": "Damu nyingi lazima isimamishwe haraka. Kubonyeza kwa nguvu moja kwa moja kwenye jeraha ndiyo jambo muhimu zaidi unaloweza kufanya.",
-    "urgent": "Piga 999 au 112 sasa hivi, au mwombe mtu mwingine apige.",
+    "urgent": "Piga 922 au 999 sasa hivi, au mwombe mtu mwingine apige.",
     "after": "Waambie wahudumu wa afya kama mtu anatumia dawa za kupunguza kuganda kwa damu, kama warfarin au aspirini, kwani atatokwa na damu zaidi."
    }
   },
@@ -753,7 +755,7 @@
      "Do not let them stand up or walk suddenly, even if they feel better."
     ],
     "intro": "A severe allergic reaction (anaphylaxis) can follow a sting, food or medicine. Signs include swelling of the lips, tongue or throat, wheezing or difficulty breathing, a hoarse voice, feeling faint, and often a rash.",
-    "urgent": "Call 999 or 112 now.",
+    "urgent": "Call 922 or 999 now.",
     "after": "They must go to hospital even if the adrenaline works, because the reaction can come back."
    },
    "sw": {
@@ -769,7 +771,7 @@
      "Usimwache asimame wala atembee ghafla, hata akijisikia vizuri."
     ],
     "intro": "Mzio mkali (anaphylaxis) unaweza kufuata kuumwa na mdudu, chakula au dawa. Dalili ni kuvimba midomo, ulimi au koo, kupumua kwa shida au kwa mluzi, sauti kukwaruza, kuhisi kuzimia, na mara nyingi vipele.",
-    "urgent": "Piga 999 au 112 sasa hivi.",
+    "urgent": "Piga 922 au 999 sasa hivi.",
     "after": "Lazima aende hospitali hata kama adrenaline imesaidia, kwa sababu mzio unaweza kurudi."
    }
   },
@@ -831,7 +833,7 @@
      "Do not give food or drink until they are fully alert."
     ],
     "intro": "During a seizure a person may fall, go stiff and jerk. Most seizures stop on their own within a few minutes. Your job is to keep them safe.",
-    "urgent": "Call 999 or 112 if it lasts more than 5 minutes, it is their first seizure or the cause is unknown, another one follows, they are injured, they have trouble breathing afterwards, it happened in water, or they are not awake 10 minutes after it stops.",
+    "urgent": "Call 922 or 999 if it lasts more than 5 minutes, it is their first seizure or the cause is unknown, another one follows, they are injured, they have trouble breathing afterwards, it happened in water, or they are not awake 10 minutes after it stops.",
     "after": "Write down how long it lasted and what happened, and tell their doctor and the family."
    },
    "sw": {
@@ -848,7 +850,7 @@
      "Usimpe chakula wala kinywaji mpaka azinduke kabisa."
     ],
     "intro": "Wakati wa kifafa mtu anaweza kuanguka, kukakamaa na kurusha viungo. Vifafa vingi huisha vyenyewe ndani ya dakika chache. Kazi yako ni kumweka salama.",
-    "urgent": "Piga 999 au 112 kama kinachukua zaidi ya dakika 5, ni mara yake ya kwanza au chanzo hakijulikani, kingine kinafuata, ameumia, anapumua kwa shida baadaye, kilitokea majini, au hajazinduka dakika 10 baada ya kuisha.",
+    "urgent": "Piga 922 au 999 kama kinachukua zaidi ya dakika 5, ni mara yake ya kwanza au chanzo hakijulikani, kingine kinafuata, ameumia, anapumua kwa shida baadaye, kilitokea majini, au hajazinduka dakika 10 baada ya kuisha.",
     "after": "Andika muda kilichodumu na kilichotokea, uwaambie daktari wake na familia."
    }
   },
@@ -898,7 +900,7 @@
      "Do not leave them alone."
     ],
     "intro": "Shock means not enough blood is reaching the organs, for example after heavy bleeding, burns, severe vomiting or diarrhoea, a serious infection or an allergic reaction. Signs are pale, cold, clammy skin, a fast weak pulse, fast breathing, dizziness and confusion.",
-    "urgent": "Call 999 or 112 now.",
+    "urgent": "Call 922 or 999 now.",
     "after": "Tell the paramedics what caused it and any changes you noticed."
    },
    "sw": {
@@ -914,7 +916,7 @@
      "Usimwache peke yake."
     ],
     "intro": "Mshtuko (shock) maana yake damu haitoshi kufika kwenye viungo, kwa mfano baada ya kutokwa damu nyingi, kuungua, kutapika au kuhara sana, maambukizi makali au mzio. Dalili ni ngozi nyeupe, baridi na yenye jasho, mapigo ya haraka na dhaifu, kupumua haraka, kizunguzungu na kuchanganyikiwa.",
-    "urgent": "Piga 999 au 112 sasa hivi.",
+    "urgent": "Piga 922 au 999 sasa hivi.",
     "after": "Waambie wahudumu wa afya kilichosababisha na mabadiliko uliyoyaona."
    }
   },
@@ -967,7 +969,7 @@
      "Do not press on the belly to push water out, it wastes time and can cause vomiting."
     ],
     "intro": "A person pulled from water may have stopped breathing. Your safety comes first.",
-    "urgent": "Call 999 or 112 now.",
+    "urgent": "Call 922 or 999 now.",
     "after": "Anyone who was under water must go to hospital, even if they seem fine, as breathing problems can start hours later."
    },
    "sw": {
@@ -982,7 +984,7 @@
      "Usibonyeze tumbo kutoa maji, inapoteza muda na inaweza kusababisha kutapika."
     ],
     "intro": "Mtu aliyetolewa majini huenda ameacha kupumua. Usalama wako ni wa kwanza.",
-    "urgent": "Piga 999 au 112 sasa hivi.",
+    "urgent": "Piga 922 au 999 sasa hivi.",
     "after": "Mtu yeyote aliyekuwa chini ya maji lazima aende hospitali, hata kama anaonekana mzima, kwani matatizo ya kupumua yanaweza kuanza saa kadhaa baadaye."
    }
   },
@@ -1034,7 +1036,7 @@
      "Do not use anything metal or wet to move them."
     ],
     "intro": "Electricity can stop the heart and cause deep burns. Make it safe before you touch them.",
-    "urgent": "Call 999 or 112 now.",
+    "urgent": "Call 922 or 999 now.",
     "after": "Everyone who has had an electric shock should see a doctor, because it can affect the heart rhythm."
    },
    "sw": {
@@ -1050,7 +1052,7 @@
      "Usitumie kitu cha chuma au chenye unyevu kumsogeza."
     ],
     "intro": "Umeme unaweza kusimamisha moyo na kusababisha kuungua kwa ndani. Hakikisha ni salama kabla ya kumgusa.",
-    "urgent": "Piga 999 au 112 sasa hivi.",
+    "urgent": "Piga 922 au 999 sasa hivi.",
     "after": "Kila aliyeshtuliwa na umeme amwone daktari, kwa sababu unaweza kuathiri mapigo ya moyo."
    }
   },
@@ -1120,7 +1122,7 @@
      "Do not give food or drink if they might have a broken bone, in case they need surgery."
     ],
     "intro": "After a fall, an older person can be badly hurt without it being obvious. Do not rush to lift them.",
-    "urgent": "Call 999 or 112 if they hit their head, were knocked out even briefly, take blood thinners, cannot move a leg, have severe pain in the hip, back or neck, are confused, or cannot get up.",
+    "urgent": "Call 922 or 999 if they hit their head, were knocked out even briefly, take blood thinners, cannot move a leg, have severe pain in the hip, back or neck, are confused, or cannot get up.",
     "after": "Tell the family and their doctor about every fall, even if they seem fine. Falls can be a sign of illness, low blood pressure or medicine side effects."
    },
    "sw": {
@@ -1137,7 +1139,7 @@
      "Usimpe chakula wala kinywaji kama huenda amevunjika mfupa, kwa kuwa anaweza kuhitaji upasuaji."
     ],
     "intro": "Baada ya kuanguka, mzee anaweza kuwa ameumia vibaya bila kuonekana wazi. Usikimbilie kumwinua.",
-    "urgent": "Piga 999 au 112 kama aligonga kichwa, alipoteza fahamu hata kwa muda mfupi, anatumia dawa za kupunguza kuganda kwa damu, hawezi kusogeza mguu, ana maumivu makali kiunoni, mgongoni au shingoni, amechanganyikiwa, au hawezi kuinuka.",
+    "urgent": "Piga 922 au 999 kama aligonga kichwa, alipoteza fahamu hata kwa muda mfupi, anatumia dawa za kupunguza kuganda kwa damu, hawezi kusogeza mguu, ana maumivu makali kiunoni, mgongoni au shingoni, amechanganyikiwa, au hawezi kuinuka.",
     "after": "Iambie familia na daktari wake kuhusu kila anguko, hata kama anaonekana mzima. Kuanguka kunaweza kuwa ishara ya ugonjwa, shinikizo la chini la damu au madhara ya dawa."
    }
   },
@@ -1230,7 +1232,7 @@
      "Do not move them if you suspect a hip, back or neck injury, unless they are in danger."
     ],
     "intro": "Signs of a broken bone are pain, swelling, bruising, a limb at a strange angle, or not being able to move or put weight on it.",
-    "urgent": "Call 999 or 112 for a suspected broken hip, thigh, pelvis, neck or back, a bone poking through the skin, or a limb that is cold, pale or numb below the injury. For other breaks, take them to hospital.",
+    "urgent": "Call 922 or 999 for a suspected broken hip, thigh, pelvis, neck or back, a bone poking through the skin, or a limb that is cold, pale or numb below the injury. For other breaks, take them to hospital.",
     "after": "Older people often break a hip or wrist in a fall. Even if they can still walk, persistent pain needs an X-ray."
    },
    "sw": {
@@ -1247,7 +1249,7 @@
      "Usimsogeze ukishuku nyonga, mgongo au shingo imeumia, isipokuwa yuko hatarini."
     ],
     "intro": "Dalili za kuvunjika mfupa ni maumivu, uvimbe, michubuko, kiungo kilichopinda isivyo kawaida, au kushindwa kukisogeza au kukiwekea uzito.",
-    "urgent": "Piga 999 au 112 ukishuku nyonga, paja, fupanyonga, shingo au mgongo umevunjika, mfupa umetoboa ngozi, au kiungo ni baridi, cheupe au hakihisi chini ya jeraha. Kwa mivunjiko mingine, mpeleke hospitali.",
+    "urgent": "Piga 922 au 999 ukishuku nyonga, paja, fupanyonga, shingo au mgongo umevunjika, mfupa umetoboa ngozi, au kiungo ni baridi, cheupe au hakihisi chini ya jeraha. Kwa mivunjiko mingine, mpeleke hospitali.",
     "after": "Wazee mara nyingi huvunjika nyonga au kifundo cha mkono wanapoanguka. Hata kama bado anatembea, maumivu yanayoendelea yanahitaji X-ray."
    }
   },
@@ -1387,7 +1389,7 @@
      "If you suspect a neck injury, do not move them."
     ],
     "intro": "Most bumps to the head are minor, but older people and anyone on blood thinners can bleed inside the skull, sometimes hours later.",
-    "urgent": "Call 999 or 112 if they were knocked out even briefly, are confused or very drowsy, vomit more than once, have a severe or worsening headache, have a seizure, have blood or clear fluid from the ears or nose, have weakness, slurred speech, unequal pupils, double vision, loss of balance or memory, or difficulty walking. Anyone over 65, on blood thinners, who has had brain surgery or has been drinking alcohol should be checked at a hospital or clinic today.",
+    "urgent": "Call 922 or 999 if they were knocked out even briefly, are confused or very drowsy, vomit more than once, have a severe or worsening headache, have a seizure, have blood or clear fluid from the ears or nose, have weakness, slurred speech, unequal pupils, double vision, loss of balance or memory, or difficulty walking. Anyone over 65, on blood thinners, who has had brain surgery or has been drinking alcohol should be checked at a hospital or clinic today.",
     "after": "Tell the family and the doctor about the head injury, even if it seemed small."
    },
    "sw": {
@@ -1404,7 +1406,7 @@
      "Ukishuku shingo imeumia, usimsogeze."
     ],
     "intro": "Michubuko mingi ya kichwa ni midogo, lakini wazee na yeyote anayetumia dawa za kupunguza kuganda kwa damu wanaweza kuvuja damu ndani ya fuvu, wakati mwingine saa kadhaa baadaye.",
-    "urgent": "Piga 999 au 112 kama alipoteza fahamu hata kwa muda mfupi, amechanganyikiwa au anasinzia sana, anatapika zaidi ya mara moja, ana maumivu makali ya kichwa au yanayozidi, anapata kifafa, anatokwa damu au maji meupe masikioni au puani, ana udhaifu, maneno hayatoki vizuri, mboni za macho hazilingani, anaona vitu viwili, anapoteza usawa au kumbukumbu, au anatembea kwa shida. Yeyote mwenye zaidi ya miaka 65, anayetumia dawa za kupunguza kuganda kwa damu, aliyefanyiwa upasuaji wa ubongo au aliyekunywa pombe akigonga kichwa achunguzwe hospitali au kliniki leo.",
+    "urgent": "Piga 922 au 999 kama alipoteza fahamu hata kwa muda mfupi, amechanganyikiwa au anasinzia sana, anatapika zaidi ya mara moja, ana maumivu makali ya kichwa au yanayozidi, anapata kifafa, anatokwa damu au maji meupe masikioni au puani, ana udhaifu, maneno hayatoki vizuri, mboni za macho hazilingani, anaona vitu viwili, anapoteza usawa au kumbukumbu, au anatembea kwa shida. Yeyote mwenye zaidi ya miaka 65, anayetumia dawa za kupunguza kuganda kwa damu, aliyefanyiwa upasuaji wa ubongo au aliyekunywa pombe akigonga kichwa achunguzwe hospitali au kliniki leo.",
     "after": "Iambie familia na daktari kuhusu jeraha la kichwa, hata kama lilionekana dogo."
    }
   },
@@ -1462,7 +1464,7 @@
      "Do not let them sit up or turn their head."
     ],
     "intro": "Suspect a neck or back injury after a fall from a height, a hard blow to the head, a road accident, or if they have neck or back pain, tingling, numbness or weakness in the arms or legs.",
-    "urgent": "Call 999 or 112 now.",
+    "urgent": "Call 922 or 999 now.",
     "after": "Tell the paramedics how the injury happened and whether they could move their arms and legs."
    },
    "sw": {
@@ -1478,7 +1480,7 @@
      "Usimwache akae wala ageuze kichwa."
     ],
     "intro": "Shuku jeraha la shingo au mgongo baada ya kuanguka kutoka juu, pigo kubwa kichwani, ajali ya barabarani, au kama ana maumivu ya shingo au mgongo, kuwashwa, kufa ganzi au udhaifu mikononi au miguuni.",
-    "urgent": "Piga 999 au 112 sasa hivi.",
+    "urgent": "Piga 922 au 999 sasa hivi.",
     "after": "Waambie wahudumu wa afya jinsi jeraha lilivyotokea na kama aliweza kusogeza mikono na miguu."
    }
   },
@@ -1754,7 +1756,7 @@
      "Do not remove clothing stuck to the burn."
     ],
     "intro": "Cooling a burn quickly with water reduces the damage. Older people's skin burns more deeply.",
-    "urgent": "Call 999 or 112 or go to hospital if the burn is bigger than the person's hand, is on the face, hands, feet, genitals or a joint, looks white, leathery or charred, was caused by electricity or chemicals, or they breathed in smoke.",
+    "urgent": "Call 922 or 999 or go to hospital if the burn is bigger than the person's hand, is on the face, hands, feet, genitals or a joint, looks white, leathery or charred, was caused by electricity or chemicals, or they breathed in smoke.",
     "after": "See a nurse or doctor if the burn blisters, is larger than a coin, or shows infection later."
    },
    "sw": {
@@ -1773,7 +1775,7 @@
      "Usiondoe nguo zilizoshikamana na jeraha."
     ],
     "intro": "Kupoza jeraha la moto haraka kwa maji kunapunguza madhara. Ngozi ya wazee huungua kwa kina zaidi.",
-    "urgent": "Piga 999 au 112 au nenda hospitali kama jeraha ni kubwa kuliko kiganja cha mtu, liko usoni, mikononi, miguuni, sehemu za siri au kwenye kiungo, linaonekana jeupe, gumu kama ngozi kavu au limeungua kuwa jeusi, lilisababishwa na umeme au kemikali, au alivuta moshi.",
+    "urgent": "Piga 922 au 999 au nenda hospitali kama jeraha ni kubwa kuliko kiganja cha mtu, liko usoni, mikononi, miguuni, sehemu za siri au kwenye kiungo, linaonekana jeupe, gumu kama ngozi kavu au limeungua kuwa jeusi, lilisababishwa na umeme au kemikali, au alivuta moshi.",
     "after": "Mwone muuguzi au daktari kama jeraha lina malengelenge, ni kubwa kuliko sarafu, au linaonyesha maambukizi baadaye."
    }
   },
@@ -1849,7 +1851,7 @@
      "Do not try to remove anything stuck in the eye."
     ],
     "intro": "Eyes are delicate. Rinse anything chemical out straight away and do not rub.",
-    "urgent": "Call 999 or 112 or go to hospital for chemicals in the eye, anything stuck in the eye, a cut to the eye, or sudden loss of vision.",
+    "urgent": "Call 922 or 999 or go to hospital for chemicals in the eye, anything stuck in the eye, a cut to the eye, or sudden loss of vision.",
     "after": "See a doctor if pain, redness, blurred vision or light sensitivity continues."
    },
    "sw": {
@@ -1864,7 +1866,7 @@
      "Usijaribu kutoa kitu kilichokwama jichoni."
     ],
     "intro": "Macho ni dhaifu. Suuza kemikali yoyote mara moja na usisugue.",
-    "urgent": "Piga 999 au 112 au nenda hospitali kwa kemikali jichoni, kitu kilichokwama jichoni, jeraha la jicho, au kupoteza uwezo wa kuona ghafla.",
+    "urgent": "Piga 922 au 999 au nenda hospitali kwa kemikali jichoni, kitu kilichokwama jichoni, jeraha la jicho, au kupoteza uwezo wa kuona ghafla.",
     "after": "Mwone daktari kama maumivu, wekundu, kuona ukungu au kuumizwa na mwanga kunaendelea."
    }
   },
@@ -1921,7 +1923,7 @@
      "Do not wait to see if the animal gets sick before getting the vaccine."
     ],
     "intro": "Animal bites can carry infection and, in Kenya, rabies, which is deadly once symptoms start but can be prevented with vaccine.",
-    "urgent": "If the bleeding is heavy, press on it and call 999 or 112.",
+    "urgent": "If the bleeding is heavy, press on it and call 922 or 999.",
     "after": "Watch for redness, swelling, pus or fever over the next days and return to the clinic if you see them."
    },
    "sw": {
@@ -1937,7 +1939,7 @@
      "Usisubiri kuona kama mnyama ataugua kabla ya kupata chanjo."
     ],
     "intro": "Kuumwa na wanyama kunaweza kuleta maambukizi na, nchini Kenya, kichaa cha mbwa, ambacho huua dalili zikianza lakini kinaweza kuzuiwa kwa chanjo.",
-    "urgent": "Kama damu ni nyingi, bonyeza jeraha na upige 999 au 112.",
+    "urgent": "Kama damu ni nyingi, bonyeza jeraha na upige 922 au 999.",
     "after": "Angalia wekundu, uvimbe, usaha au homa kwa siku zinazofuata na urudi kliniki ukiziona."
    }
   },
@@ -2000,7 +2002,7 @@
      "Do not try to catch or kill the snake."
     ],
     "intro": "Snake bites in Kenya can be dangerous. Stay calm, keep still, and get to hospital fast, antivenom is given there.",
-    "urgent": "Call 999 or 112 or take them to the nearest hospital now.",
+    "urgent": "Call 922 or 999 or take them to the nearest hospital now.",
     "after": "Even if the person feels fine, they must be seen at hospital, because some venoms act hours later."
    },
    "sw": {
@@ -2019,7 +2021,7 @@
      "Usijaribu kumkamata wala kumuua nyoka."
     ],
     "intro": "Kuumwa na nyoka nchini Kenya kunaweza kuwa hatari. Tulia, mwache atulie, na mfike hospitali haraka, dawa ya sumu (antivenom) hutolewa huko.",
-    "urgent": "Piga 999 au 112 au mpeleke hospitali iliyo karibu sasa hivi.",
+    "urgent": "Piga 922 au 999 au mpeleke hospitali iliyo karibu sasa hivi.",
     "after": "Hata kama anajisikia mzima, lazima aonekane hospitali, kwa sababu sumu nyingine hufanya kazi saa kadhaa baadaye."
    }
   },
@@ -2075,7 +2077,7 @@
      "Do not scratch the area."
     ],
     "intro": "Most stings cause pain, redness and swelling that settle in a day or two.",
-    "urgent": "Call 999 or 112 if they have swelling of the face, lips or throat, difficulty breathing, feel faint, were stung in the mouth or throat, or were stung many times.",
+    "urgent": "Call 922 or 999 if they have swelling of the face, lips or throat, difficulty breathing, feel faint, were stung in the mouth or throat, or were stung many times.",
     "after": "See a doctor if swelling keeps spreading after 2 days or there are signs of infection."
    },
    "sw": {
@@ -2092,7 +2094,7 @@
      "Usikune sehemu hiyo."
     ],
     "intro": "Miuma mingi husababisha maumivu, wekundu na uvimbe ambao hupungua kwa siku moja au mbili.",
-    "urgent": "Piga 999 au 112 kama ana uvimbe usoni, midomoni au kooni, anapumua kwa shida, anahisi kuzimia, aliumwa mdomoni au kooni, au aliumwa mara nyingi.",
+    "urgent": "Piga 922 au 999 kama ana uvimbe usoni, midomoni au kooni, anapumua kwa shida, anahisi kuzimia, aliumwa mdomoni au kooni, au aliumwa mara nyingi.",
     "after": "Mwone daktari kama uvimbe unaendelea kuenea baada ya siku 2 au kuna dalili za maambukizi."
    }
   },
@@ -2145,9 +2147,9 @@
      "If they are awake and can swallow, sit them down.",
      "Give fast sugar straight away: half a glass (150 ml) of fruit juice or a non-diet soda, or 3 to 4 teaspoons of sugar stirred into water, or glucose tablets.",
      "Wait 10 to 15 minutes and check their sugar with their meter if they have one.",
-     "If they are not better 10 to 15 minutes after the first sugar, give fast sugar again and call 999 or 112.",
+     "If they are not better 10 to 15 minutes after the first sugar, give fast sugar again and call 922 or 999.",
      "Once they feel better, give a starchy snack or their next meal, such as bread, biscuits or ugali.",
-     "If they get worse at any point, call 999 or 112 straight away."
+     "If they get worse at any point, call 922 or 999 straight away."
     ],
     "avoid": [
      "Do not give anything by mouth if they are drowsy or cannot swallow safely.",
@@ -2155,7 +2157,7 @@
      "Do not leave them alone until they have recovered."
     ],
     "intro": "People with diabetes who take insulin or diabetes tablets can have low blood sugar. Signs are shaking, sweating, paleness, hunger, a fast heartbeat, confusion, irritability, unusual behaviour or drowsiness.",
-    "urgent": "If they are very drowsy, unconscious or cannot swallow safely, call 999 or 112, put them in the recovery position and give nothing by mouth.",
+    "urgent": "If they are very drowsy, unconscious or cannot swallow safely, call 922 or 999, put them in the recovery position and give nothing by mouth.",
     "after": "Tell the family and their doctor, as their diabetes medicine or meals may need changing."
    },
    "sw": {
@@ -2163,9 +2165,9 @@
      "Kama yuko macho na anaweza kumeza, mkalishe chini.",
      "Mpe sukari ya haraka mara moja: nusu glasi (ml 150) ya juisi ya matunda au soda isiyo ya diet, au vijiko 3 hadi 4 vya sukari vilivyokorogwa kwenye maji, au vidonge vya glukosi.",
      "Subiri dakika 10 hadi 15 na upime sukari kwa mashine yake kama anayo.",
-     "Kama hajapata nafuu dakika 10 hadi 15 baada ya sukari ya kwanza, mpe sukari ya haraka tena na upige 999 au 112.",
+     "Kama hajapata nafuu dakika 10 hadi 15 baada ya sukari ya kwanza, mpe sukari ya haraka tena na upige 922 au 999.",
      "Akijisikia vizuri, mpe chakula cha wanga au mlo wake unaofuata, kama mkate, biskuti au ugali.",
-     "Akizidi kuwa mbaya wakati wowote, piga 999 au 112 mara moja."
+     "Akizidi kuwa mbaya wakati wowote, piga 922 au 999 mara moja."
     ],
     "avoid": [
      "Usimpe chochote kwa mdomo kama anasinzia au hawezi kumeza salama.",
@@ -2173,7 +2175,7 @@
      "Usimwache peke yake mpaka apone."
     ],
     "intro": "Watu wenye kisukari wanaotumia insulini au vidonge vya kisukari wanaweza kushukiwa na sukari. Dalili ni kutetemeka, kutokwa jasho, kupauka, njaa, moyo kwenda mbio, kuchanganyikiwa, hasira, tabia isiyo ya kawaida au kusinzia.",
-    "urgent": "Kama anasinzia sana, hajitambui au hawezi kumeza salama, piga 999 au 112, mlaze katika mkao wa kupona na usimpe chochote kwa mdomo.",
+    "urgent": "Kama anasinzia sana, hajitambui au hawezi kumeza salama, piga 922 au 999, mlaze katika mkao wa kupona na usimpe chochote kwa mdomo.",
     "after": "Iambie familia na daktari wake, kwani dawa zake za kisukari au milo inaweza kuhitaji kubadilishwa."
    }
   },
@@ -2250,7 +2252,7 @@
      "Do not skip or change their insulin or tablets unless the doctor says so."
     ],
     "intro": "High blood sugar causes thirst, passing a lot of urine, tiredness, blurred vision and headaches. Very high sugar can become dangerous.",
-    "urgent": "Call 999 or 112 or go to hospital if the meter reads \"HI\" or above about 16.7 mmol/L (300 mg/dL) and they are vomiting, very drowsy, confused, breathing fast and deep, or their breath smells fruity.",
+    "urgent": "Call 922 or 999 or go to hospital if the meter reads \"HI\" or above about 16.7 mmol/L (300 mg/dL) and they are vomiting, very drowsy, confused, breathing fast and deep, or their breath smells fruity.",
     "after": "Share the readings with the family and the doctor so treatment can be adjusted."
    },
    "sw": {
@@ -2266,7 +2268,7 @@
      "Usiruke wala kubadilisha insulini au vidonge vyake isipokuwa daktari akisema."
     ],
     "intro": "Sukari ikipanda husababisha kiu, kukojoa sana, uchovu, kuona ukungu na maumivu ya kichwa. Sukari iliyo juu sana inaweza kuwa hatari.",
-    "urgent": "Piga 999 au 112 au nenda hospitali kama mashine inasoma \"HI\" au juu ya takriban 16.7 mmol/L (300 mg/dL) na anatapika, anasinzia sana, amechanganyikiwa, anapumua haraka na kwa kina, au pumzi yake inanuka kama matunda.",
+    "urgent": "Piga 922 au 999 au nenda hospitali kama mashine inasoma \"HI\" au juu ya takriban 16.7 mmol/L (300 mg/dL) na anatapika, anasinzia sana, amechanganyikiwa, anapumua haraka na kwa kina, au pumzi yake inanuka kama matunda.",
     "after": "Shiriki vipimo na familia na daktari ili matibabu yarekebishwe."
    }
   },
@@ -2310,7 +2312,7 @@
     "steps": [
      "Help them sit upright, leaning slightly forward. Keep calm and reassure them.",
      "Help them use their reliever inhaler, usually blue (salbutamol): 1 puff every 30 to 60 seconds, up to 10 puffs. Use a spacer if they have one.",
-     "If they are not better after 10 puffs, or are getting worse, call 999 or 112.",
+     "If they are not better after 10 puffs, or are getting worse, call 922 or 999.",
      "If help has not arrived after 10 minutes, repeat up to 10 puffs."
     ],
     "avoid": [
@@ -2318,14 +2320,14 @@
      "Do not leave them alone."
     ],
     "intro": "In an asthma attack the airways tighten, causing wheezing, coughing, a tight chest and breathlessness.",
-    "urgent": "Call 999 or 112 if they are too breathless to speak, their lips are turning blue, they are exhausted or drowsy, or the inhaler is not helping.",
+    "urgent": "Call 922 or 999 if they are too breathless to speak, their lips are turning blue, they are exhausted or drowsy, or the inhaler is not helping.",
     "after": "Even if the attack settles, they should see their doctor within 2 days to review their asthma treatment."
    },
    "sw": {
     "steps": [
      "Msaidie akae wima, ameinama mbele kidogo. Tulia na umtulize.",
      "Msaidie atumie inhaler yake ya kupunguza pumu, kwa kawaida ya bluu (salbutamol): pafu 1 kila sekunde 30 hadi 60, hadi pafu 10. Tumia spacer kama anayo.",
-     "Kama hajapata nafuu baada ya pafu 10, au anazidi kuwa mbaya, piga 999 au 112.",
+     "Kama hajapata nafuu baada ya pafu 10, au anazidi kuwa mbaya, piga 922 au 999.",
      "Kama msaada haujafika baada ya dakika 10, rudia hadi pafu 10."
     ],
     "avoid": [
@@ -2333,7 +2335,7 @@
      "Usimwache peke yake."
     ],
     "intro": "Wakati wa shambulio la pumu njia za hewa hubana, na kusababisha mluzi, kikohozi, kifua kubana na kukosa pumzi.",
-    "urgent": "Piga 999 au 112 kama anakosa pumzi kiasi cha kushindwa kuongea, midomo inakuwa bluu, amechoka sana au anasinzia, au inhaler haisaidii.",
+    "urgent": "Piga 922 au 999 kama anakosa pumzi kiasi cha kushindwa kuongea, midomo inakuwa bluu, amechoka sana au anasinzia, au inhaler haisaidii.",
     "after": "Hata shambulio likitulia, amwone daktari wake ndani ya siku 2 kukagua matibabu ya pumu."
    }
   },
@@ -2391,7 +2393,7 @@
      "Do not allow smoking or open flames near home oxygen."
     ],
     "intro": "Breathlessness in an older person can come from the lungs, the heart, an infection or anxiety. Sudden or severe breathlessness is an emergency.",
-    "urgent": "Call 999 or 112 if it came on suddenly, is severe, they have chest pain, blue or grey lips, cannot finish a sentence, are confused or drowsy, or cannot lie flat when they normally can.",
+    "urgent": "Call 922 or 999 if it came on suddenly, is severe, they have chest pain, blue or grey lips, cannot finish a sentence, are confused or drowsy, or cannot lie flat when they normally can.",
     "after": "Tell their doctor today about any new or worsening breathlessness, even if it settles."
    },
    "sw": {
@@ -2407,7 +2409,7 @@
      "Usiruhusu uvutaji sigara wala moto karibu na oksijeni ya nyumbani."
     ],
     "intro": "Kukosa pumzi kwa mzee kunaweza kutokana na mapafu, moyo, maambukizi au wasiwasi. Kukosa pumzi ghafla au kwa kiasi kikubwa ni dharura.",
-    "urgent": "Piga 999 au 112 kama kulianza ghafla, ni kukubwa, ana maumivu ya kifua, midomo ya bluu au kijivu, hawezi kumaliza sentensi, amechanganyikiwa au anasinzia, au hawezi kulala chali wakati kwa kawaida anaweza.",
+    "urgent": "Piga 922 au 999 kama kulianza ghafla, ni kukubwa, ana maumivu ya kifua, midomo ya bluu au kijivu, hawezi kumaliza sentensi, amechanganyikiwa au anasinzia, au hawezi kulala chali wakati kwa kawaida anaweza.",
     "after": "Mwambie daktari wake leo kuhusu kukosa pumzi kupya au kunakozidi, hata kama kutatulia."
    }
   },
@@ -2463,7 +2465,7 @@
      "Do not splash water on their face or give drinks while drowsy."
     ],
     "intro": "Fainting is a short loss of consciousness when blood flow to the brain drops. People usually wake within a minute.",
-    "urgent": "Call 999 or 112 if they do not wake within a minute, are injured, have chest pain, a racing or irregular heartbeat or breathlessness, fainted during activity, or it is the first time in an older person.",
+    "urgent": "Call 922 or 999 if they do not wake within a minute, are injured, have chest pain, a racing or irregular heartbeat or breathlessness, fainted during activity, or it is the first time in an older person.",
     "after": "In older people fainting can be a sign of a heart problem, low blood pressure or a medicine side effect, so tell their doctor."
    },
    "sw": {
@@ -2480,7 +2482,7 @@
      "Usimmwagie maji usoni wala kumpa vinywaji akiwa bado anasinzia."
     ],
     "intro": "Kuzirai ni kupoteza fahamu kwa muda mfupi mtiririko wa damu kwenye ubongo ukipungua. Kwa kawaida watu huzinduka ndani ya dakika moja.",
-    "urgent": "Piga 999 au 112 kama hazinduki ndani ya dakika moja, ameumia, ana maumivu ya kifua, moyo unakwenda mbio au bila mpangilio au anakosa pumzi, alizirai akifanya kazi, au ni mara ya kwanza kwa mzee.",
+    "urgent": "Piga 922 au 999 kama hazinduki ndani ya dakika moja, ameumia, ana maumivu ya kifua, moyo unakwenda mbio au bila mpangilio au anakosa pumzi, alizirai akifanya kazi, au ni mara ya kwanza kwa mzee.",
     "after": "Kwa wazee kuzirai kunaweza kuwa ishara ya tatizo la moyo, shinikizo la chini la damu au madhara ya dawa, kwa hiyo mwambie daktari wake."
    }
   },
@@ -2549,7 +2551,7 @@
      "Never use a charcoal jiko indoors with doors and windows closed."
     ],
     "intro": "Poisoning can come from swallowing chemicals, pesticides, too much medicine, poisonous plants, or breathing in fumes, such as from a charcoal jiko in a closed room.",
-    "urgent": "Call 999 or 112 now.",
+    "urgent": "Call 922 or 999 now.",
     "after": "Take the container or a photo of the label to hospital."
    },
    "sw": {
@@ -2566,7 +2568,7 @@
      "Kamwe usitumie jiko la makaa ndani ya nyumba milango na madirisha yakiwa yamefungwa."
     ],
     "intro": "Sumu inaweza kutokana na kumeza kemikali, dawa za wadudu, dawa nyingi kupita kiasi, mimea yenye sumu, au kuvuta moshi, kama wa jiko la makaa ndani ya chumba kilichofungwa.",
-    "urgent": "Piga 999 au 112 sasa hivi.",
+    "urgent": "Piga 922 au 999 sasa hivi.",
     "after": "Peleka chombo au picha ya lebo hospitalini."
    }
   },
@@ -2617,7 +2619,7 @@
    "en": {
     "steps": [
      "Stay calm and find out exactly which medicine, how much and when. Keep the packets and the medicine list.",
-     "Call their doctor, the clinic or a pharmacist now for advice, or 999 or 112 if you cannot reach them.",
+     "Call their doctor, the clinic or a pharmacist now for advice, or 922 or 999 if you cannot reach them.",
      "Watch them closely for the next hours for drowsiness, confusion, vomiting or changes in breathing.",
      "If they become unresponsive but are breathing, put them in the recovery position.",
      "For a missed dose: check the leaflet or ask the pharmacist. Usually you take it when remembered unless it is nearly time for the next dose."
@@ -2627,13 +2629,13 @@
      "Never give a double dose to make up for a missed one, unless a doctor tells you to."
     ],
     "intro": "Taking a double dose, the wrong medicine or someone else's medicine is common with older people. Many mistakes are harmless, but some medicines are dangerous in extra doses.",
-    "urgent": "Call 999 or 112 straight away if they are drowsy, confused, breathing slowly, have chest pain, a very slow or fast heartbeat, a seizure, or are unresponsive, or if they took a large amount on purpose.",
+    "urgent": "Call 922 or 999 straight away if they are drowsy, confused, breathing slowly, have chest pain, a very slow or fast heartbeat, a seizure, or are unresponsive, or if they took a large amount on purpose.",
     "after": "A weekly pill organiser and a written medicine chart help prevent repeat mistakes. Tell the family about the mistake."
    },
    "sw": {
     "steps": [
      "Tulia na ujue hasa ni dawa gani, kiasi gani na lini. Hifadhi pakiti na orodha ya dawa.",
-     "Mpigie daktari wake, kliniki au mfamasia sasa kwa ushauri, au 999 au 112 kama huwapati.",
+     "Mpigie daktari wake, kliniki au mfamasia sasa kwa ushauri, au 922 au 999 kama huwapati.",
      "Mwangalie kwa karibu kwa saa zinazofuata kwa kusinzia, kuchanganyikiwa, kutapika au mabadiliko ya kupumua.",
      "Akiacha kujitambua lakini anapumua, mlaze katika mkao wa kupona.",
      "Kwa dozi iliyosahaulika: angalia karatasi ya maelekezo au muulize mfamasia. Kwa kawaida inatumika ukikumbuka isipokuwa kama ni karibu na wakati wa dozi inayofuata."
@@ -2643,7 +2645,7 @@
      "Kamwe usimpe dozi mara mbili kufidia iliyosahaulika, isipokuwa daktari akisema."
     ],
     "intro": "Kumeza dozi mara mbili, dawa isiyo sahihi au dawa ya mtu mwingine ni kawaida kwa wazee. Makosa mengi hayana madhara, lakini dawa nyingine ni hatari kwa dozi za ziada.",
-    "urgent": "Piga 999 au 112 mara moja kama anasinzia, amechanganyikiwa, anapumua polepole, ana maumivu ya kifua, mapigo ya moyo ni polepole sana au haraka sana, anapata kifafa, au hajitambui, au kama alimeza kiasi kikubwa kwa makusudi.",
+    "urgent": "Piga 922 au 999 mara moja kama anasinzia, amechanganyikiwa, anapumua polepole, ana maumivu ya kifua, mapigo ya moyo ni polepole sana au haraka sana, anapata kifafa, au hajitambui, au kama alimeza kiasi kikubwa kwa makusudi.",
     "after": "Kisanduku cha vidonge cha wiki na chati ya dawa iliyoandikwa husaidia kuzuia makosa kujirudia. Iambie familia kuhusu kosa hilo."
    }
   },
@@ -2695,7 +2697,7 @@
      "Do not give anything to drink if they are confused or drowsy."
     ],
     "intro": "Older people overheat easily. Heat exhaustion causes headache, dizziness, heavy sweating, cramps, nausea and a fast pulse. Heatstroke is an emergency: hot skin, confusion, fits or unconsciousness.",
-    "urgent": "Call 999 or 112 if they are confused, have a seizure, are unresponsive, have a very high temperature (40 °C or more), or do not improve within 30 minutes.",
+    "urgent": "Call 922 or 999 if they are confused, have a seizure, are unresponsive, have a very high temperature (40 °C or more), or do not improve within 30 minutes.",
     "after": "Keep them cool and drinking regularly on hot days, and check on them often."
    },
    "sw": {
@@ -2711,7 +2713,7 @@
      "Usimpe kinywaji chochote kama amechanganyikiwa au anasinzia."
     ],
     "intro": "Wazee hupata joto kupita kiasi kwa urahisi. Uchovu wa joto husababisha maumivu ya kichwa, kizunguzungu, jasho jingi, kukakamaa kwa misuli, kichefuchefu na mapigo ya haraka. Kiharusi cha joto ni dharura: ngozi ya moto, kuchanganyikiwa, kifafa au kupoteza fahamu.",
-    "urgent": "Piga 999 au 112 kama amechanganyikiwa, anapata kifafa, hajitambui, ana joto la juu sana (nyuzi 40 au zaidi), au hapati nafuu ndani ya dakika 30.",
+    "urgent": "Piga 922 au 999 kama amechanganyikiwa, anapata kifafa, hajitambui, ana joto la juu sana (nyuzi 40 au zaidi), au hapati nafuu ndani ya dakika 30.",
     "after": "Mweke mahali pa baridi na anywe maji mara kwa mara siku za joto, na umwangalie mara nyingi."
    }
   },
@@ -2763,7 +2765,7 @@
      "Do not give alcohol."
     ],
     "intro": "Older people can get dangerously cold, even indoors on cold nights in the highlands. Signs are shivering, cold pale skin, slurred speech, confusion, clumsiness and drowsiness.",
-    "urgent": "Call 999 or 112 if they are drowsy, confused, have stopped shivering while still cold, or are breathing slowly.",
+    "urgent": "Call 922 or 999 if they are drowsy, confused, have stopped shivering while still cold, or are breathing slowly.",
     "after": "Make sure their room stays warm at night and they have enough bedding."
    },
    "sw": {
@@ -2780,7 +2782,7 @@
      "Usimpe pombe."
     ],
     "intro": "Wazee wanaweza kupata baridi hatari, hata ndani ya nyumba usiku wa baridi maeneo ya juu. Dalili ni kutetemeka, ngozi baridi nyeupe, maneno kutotoka vizuri, kuchanganyikiwa, kutokuwa makini na kusinzia.",
-    "urgent": "Piga 999 au 112 kama anasinzia, amechanganyikiwa, ameacha kutetemeka ingawa bado ni baridi, au anapumua polepole.",
+    "urgent": "Piga 922 au 999 kama anasinzia, amechanganyikiwa, ameacha kutetemeka ingawa bado ni baridi, au anapumua polepole.",
     "after": "Hakikisha chumba chake kinabaki na joto usiku na ana matandiko ya kutosha."
    }
   },
@@ -2845,7 +2847,7 @@
      "Do not give anti-diarrhoea medicine if there is blood in the stool or a fever, unless a doctor says so."
     ],
     "intro": "Vomiting, diarrhoea, heat or not drinking enough can quickly dry out an older person. Signs are thirst, a dry mouth, dark or little urine, dizziness, tiredness and new confusion.",
-    "urgent": "Get medical help today, or call 999 or 112, if they cannot keep fluids down, there is blood in the vomit or stool, no urine for 8 hours, they are very drowsy or confused, have severe belly pain, or the diarrhoea lasts more than 2 days.",
+    "urgent": "Get medical help today, or call 922 or 999, if they cannot keep fluids down, there is blood in the vomit or stool, no urine for 8 hours, they are very drowsy or confused, have severe belly pain, or the diarrhoea lasts more than 2 days.",
     "after": "Keep a note of how much they drink and pass urine, and tell the doctor if they take water tablets (diuretics) or diabetes medicine, which may need pausing."
    },
    "sw": {
@@ -2861,7 +2863,7 @@
      "Usimpe dawa ya kuzuia kuhara kama kuna damu kwenye kinyesi au homa, isipokuwa daktari akisema."
     ],
     "intro": "Kutapika, kuhara, joto au kutokunywa maji ya kutosha kunaweza kumkausha mzee haraka. Dalili ni kiu, mdomo mkavu, mkojo mweusi au kidogo, kizunguzungu, uchovu na kuchanganyikiwa kupya.",
-    "urgent": "Tafuta msaada wa matibabu leo, au piga 999 au 112, kama hawezi kubaki na vinywaji tumboni, kuna damu kwenye matapishi au kinyesi, hajakojoa kwa saa 8, anasinzia sana au amechanganyikiwa, ana maumivu makali ya tumbo, au kuhara kunaendelea zaidi ya siku 2.",
+    "urgent": "Tafuta msaada wa matibabu leo, au piga 922 au 999, kama hawezi kubaki na vinywaji tumboni, kuna damu kwenye matapishi au kinyesi, hajakojoa kwa saa 8, anasinzia sana au amechanganyikiwa, ana maumivu makali ya tumbo, au kuhara kunaendelea zaidi ya siku 2.",
     "after": "Andika kiasi anachokunywa na kukojoa, na umwambie daktari kama anatumia dawa za kukojoa au za kisukari, ambazo zinaweza kuhitaji kusimamishwa."
    }
   },
@@ -2921,7 +2923,7 @@
      "Do not give more than one medicine that contains paracetamol at the same time."
     ],
     "intro": "A temperature of 38 °C or more is a fever, usually caused by an infection. In older people an infection may show as confusion, weakness or falls instead of a high temperature.",
-    "urgent": "Call 999 or 112 or go to hospital now if the fever comes with confusion or drowsiness, a stiff neck, a rash that does not fade when pressed with a glass, difficulty breathing, a seizure, very fast breathing or heartbeat, or a temperature of 40 °C or more.",
+    "urgent": "Call 922 or 999 or go to hospital now if the fever comes with confusion or drowsiness, a stiff neck, a rash that does not fade when pressed with a glass, difficulty breathing, a seizure, very fast breathing or heartbeat, or a temperature of 40 °C or more.",
     "after": "Tell the family and get them seen at a clinic if the fever lasts more than 2 days or they seem more unwell."
    },
    "sw": {
@@ -2938,7 +2940,7 @@
      "Usimpe dawa zaidi ya moja zenye paracetamol kwa wakati mmoja."
     ],
     "intro": "Joto la nyuzi 38 au zaidi ni homa, kwa kawaida husababishwa na maambukizi. Kwa wazee maambukizi yanaweza kuonekana kama kuchanganyikiwa, udhaifu au kuanguka badala ya joto la juu.",
-    "urgent": "Piga 999 au 112 au nenda hospitali sasa kama homa inakuja na kuchanganyikiwa au kusinzia, shingo kukakamaa, vipele visivyofifia vikibonyezwa na glasi, kupumua kwa shida, kifafa, kupumua au mapigo ya moyo ya haraka sana, au joto la nyuzi 40 au zaidi.",
+    "urgent": "Piga 922 au 999 au nenda hospitali sasa kama homa inakuja na kuchanganyikiwa au kusinzia, shingo kukakamaa, vipele visivyofifia vikibonyezwa na glasi, kupumua kwa shida, kifafa, kupumua au mapigo ya moyo ya haraka sana, au joto la nyuzi 40 au zaidi.",
     "after": "Iambie familia na umpeleke kliniki kama homa inaendelea zaidi ya siku 2 au anaonekana kuzidiwa."
    }
   },
@@ -2995,7 +2997,7 @@
      "Do not give sleeping tablets or sedatives."
     ],
     "intro": "Sudden confusion in an older person (delirium) is a warning sign of illness, such as an infection, low blood sugar, dehydration, a stroke, a medicine problem or a head injury. It needs checking the same day.",
-    "urgent": "Call 999 or 112 if there are stroke signs (face drooping, arm weakness, slurred speech), they are very drowsy or hard to wake, have a high fever, breathing problems, or hit their head.",
+    "urgent": "Call 922 or 999 if there are stroke signs (face drooping, arm weakness, slurred speech), they are very drowsy or hard to wake, have a high fever, breathing problems, or hit their head.",
     "after": "Tell the family when the confusion started and how it changed. This is very useful for the doctor."
    },
    "sw": {
@@ -3011,7 +3013,7 @@
      "Usimpe vidonge vya usingizi wala vya kutuliza."
     ],
     "intro": "Kuchanganyikiwa ghafla kwa mzee (delirium) ni ishara ya onyo ya ugonjwa, kama maambukizi, sukari kushuka, upungufu wa maji, kiharusi, tatizo la dawa au jeraha la kichwa. Inahitaji kuangaliwa siku hiyo hiyo.",
-    "urgent": "Piga 999 au 112 kama kuna dalili za kiharusi (uso kupinda, mkono kulegea, maneno kutotoka vizuri), anasinzia sana au ni vigumu kumwamsha, ana homa kali, matatizo ya kupumua, au aligonga kichwa.",
+    "urgent": "Piga 922 au 999 kama kuna dalili za kiharusi (uso kupinda, mkono kulegea, maneno kutotoka vizuri), anasinzia sana au ni vigumu kumwamsha, ana homa kali, matatizo ya kupumua, au aligonga kichwa.",
     "after": "Iambie familia kuchanganyikiwa kulianza lini na kulivyobadilika. Hii inamsaidia sana daktari."
    }
   },
@@ -3063,7 +3065,7 @@
      "Do not let them do heavy activity until it is checked."
     ],
     "intro": "One high reading is not always an emergency. What matters is how high it is and whether they have symptoms.",
-    "urgent": "Call 999 or 112 if the reading is 180/120 or higher and they have chest pain, a severe headache, breathlessness, confusion, blurred vision, weakness or numbness, or trouble speaking.",
+    "urgent": "Call 922 or 999 if the reading is 180/120 or higher and they have chest pain, a severe headache, breathlessness, confusion, blurred vision, weakness or numbness, or trouble speaking.",
     "after": "Keep a record of readings to show their doctor."
    },
    "sw": {
@@ -3079,7 +3081,7 @@
      "Usimwache afanye kazi nzito mpaka ikaguliwe."
     ],
     "intro": "Kipimo kimoja cha juu si dharura kila mara. Muhimu ni kiko juu kiasi gani na kama ana dalili.",
-    "urgent": "Piga 999 au 112 kama kipimo ni 180/120 au zaidi na ana maumivu ya kifua, maumivu makali ya kichwa, kukosa pumzi, kuchanganyikiwa, kuona ukungu, udhaifu au ganzi, au shida ya kuongea.",
+    "urgent": "Piga 922 au 999 kama kipimo ni 180/120 au zaidi na ana maumivu ya kifua, maumivu makali ya kichwa, kukosa pumzi, kuchanganyikiwa, kuona ukungu, udhaifu au ganzi, au shida ya kuongea.",
     "after": "Weka kumbukumbu ya vipimo umwonyeshe daktari wake."
    }
   },
@@ -3112,13 +3114,13 @@
   "examples": [
    "she has severe stomach pain",
    "his belly is swollen and hard",
-   "he vomited blood",
-   "black stool and weakness",
+   "he has cramps and keeps vomiting",
+   "pain in the lower right side of her belly",
    "what to do for a bad tummy ache",
    "tumbo linamuuma sana",
    "tumbo limevimba na ni gumu",
-   "anatapika damu",
-   "kinyesi chake ni cheusi",
+   "anaumwa na tumbo tangu jana",
+   "tumbo linakata na anatapika",
    "maumivu makali ya tumbo ghafla"
   ],
   "answer": {
@@ -3134,7 +3136,7 @@
      "Do not give painkillers such as ibuprofen or aspirin, or laxatives, unless a doctor advises."
     ],
     "intro": "Stomach pain has many causes. In older people serious problems can show few signs, so take strong or unusual pain seriously.",
-    "urgent": "Call 999 or 112 if the pain is sudden and severe, they vomit blood or something like coffee grounds, pass black or bloody stools, the belly is hard and swollen, they faint, or the pain spreads to the chest.",
+    "urgent": "Call 922 or 999 if the pain is sudden and severe, they vomit blood or something like coffee grounds, pass black or bloody stools, the belly is hard and swollen, they faint, or the pain spreads to the chest.",
     "after": "Share your notes with the doctor and the family."
    },
    "sw": {
@@ -3149,7 +3151,7 @@
      "Usimpe dawa za maumivu kama ibuprofen au aspirini, wala dawa za kuharisha, isipokuwa daktari akishauri."
     ],
     "intro": "Maumivu ya tumbo yana sababu nyingi. Kwa wazee matatizo makubwa yanaweza kuonyesha dalili chache, kwa hiyo chukulia maumivu makali au yasiyo ya kawaida kwa uzito.",
-    "urgent": "Piga 999 au 112 kama maumivu ni ya ghafla na makali, anatapika damu au kitu kama mashapo ya kahawa, kinyesi ni cheusi au chenye damu, tumbo ni gumu na limevimba, anazirai, au maumivu yanaenea kifuani.",
+    "urgent": "Piga 922 au 999 kama maumivu ni ya ghafla na makali, anatapika damu au kitu kama mashapo ya kahawa, kinyesi ni cheusi au chenye damu, tumbo ni gumu na limevimba, anazirai, au maumivu yanaenea kifuani.",
     "after": "Shiriki maelezo yako na daktari na familia."
    }
   },
@@ -3199,7 +3201,7 @@
      "Do not give the next dose of a medicine that may have caused it until a doctor advises."
     ],
     "intro": "A mild allergy causes an itchy rash or hives, sneezing, a runny nose or itchy eyes, without breathing problems or swelling of the face or throat.",
-    "urgent": "If they get swelling of the lips, tongue or throat, wheezing, difficulty breathing or feel faint, it is a severe reaction: call 999 or 112 and use their adrenaline injector if they have one.",
+    "urgent": "If they get swelling of the lips, tongue or throat, wheezing, difficulty breathing or feel faint, it is a severe reaction: call 922 or 999 and use their adrenaline injector if they have one.",
     "after": "Tell the family and the doctor, and write the new allergy on their medicine list."
    },
    "sw": {
@@ -3213,7 +3215,7 @@
      "Usimpe dozi inayofuata ya dawa inayoweza kuwa imesababisha mpaka daktari ashauri."
     ],
     "intro": "Mzio mdogo husababisha vipele vinavyowasha, kupiga chafya, mafua au macho kuwasha, bila matatizo ya kupumua wala uvimbe usoni au kooni.",
-    "urgent": "Akipata uvimbe wa midomo, ulimi au koo, mluzi, kupumua kwa shida au kuhisi kuzimia, ni mzio mkali: piga 999 au 112 na utumie sindano yake ya adrenaline kama anayo.",
+    "urgent": "Akipata uvimbe wa midomo, ulimi au koo, mluzi, kupumua kwa shida au kuhisi kuzimia, ni mzio mkali: piga 922 au 999 na utumie sindano yake ya adrenaline kama anayo.",
     "after": "Iambie familia na daktari, na uandike mzio huo mpya kwenye orodha ya dawa zake."
    }
   },
@@ -3263,7 +3265,7 @@
      "Do not tell them to just calm down or that it is nothing."
     ],
     "intro": "A panic attack causes a racing heart, fast breathing, shaking, sweating and intense fear. It feels frightening but passes, usually within 20 minutes.",
-    "urgent": "In an older person, chest pain, breathlessness or feeling faint can be a heart problem. Unless they have had panic attacks before and this feels the same, treat it as a medical emergency and call 999 or 112.",
+    "urgent": "In an older person, chest pain, breathlessness or feeling faint can be a heart problem. Unless they have had panic attacks before and this feels the same, treat it as a medical emergency and call 922 or 999.",
     "after": "If attacks keep happening, suggest they talk to their doctor."
    },
    "sw": {
@@ -3279,7 +3281,7 @@
      "Usimwambie atulie tu au kwamba si kitu."
     ],
     "intro": "Hofu kali (panic attack) husababisha moyo kwenda mbio, kupumua haraka, kutetemeka, jasho na hofu kubwa. Inatisha lakini huisha, kwa kawaida ndani ya dakika 20.",
-    "urgent": "Kwa mzee, maumivu ya kifua, kukosa pumzi au kuhisi kuzimia kunaweza kuwa tatizo la moyo. Isipokuwa amewahi kupata hofu kali hapo awali na hii inafanana, ichukulie kama dharura na upige 999 au 112.",
+    "urgent": "Kwa mzee, maumivu ya kifua, kukosa pumzi au kuhisi kuzimia kunaweza kuwa tatizo la moyo. Isipokuwa amewahi kupata hofu kali hapo awali na hii inafanana, ichukulie kama dharura na upige 922 au 999.",
     "after": "Kama hofu kali zinaendelea kutokea, mshauri azungumze na daktari wake."
    }
   },
@@ -3388,7 +3390,7 @@
      "Saline or clean water for rinsing, and an antiseptic such as povidone-iodine.",
      "A thermometer, and the person's blood sugar meter and blood pressure machine if they use them.",
      "ORS sachets, paracetamol, and any emergency medicines they are prescribed, such as an inhaler or adrenaline injector.",
-     "A torch, a foil blanket, and a card with emergency numbers (999, 112, Red Cross 1199), the family's numbers, the person's medicines, allergies and conditions."
+     "A torch, a foil blanket, and a card with emergency numbers (922 ambulance, 999 or 112, Red Cross 1199), the family's numbers, the person's medicines, allergies and conditions."
     ],
     "avoid": [
      "Do not keep expired medicines. Check the kit every 3 months."
@@ -3404,7 +3406,7 @@
      "Maji ya chumvi (saline) au maji safi ya kusuuza, na dawa ya kuua vijidudu kama povidone-iodine.",
      "Kipimajoto, na mashine ya sukari na ya shinikizo la damu kama mgonjwa anazitumia.",
      "Pakiti za ORS, paracetamol, na dawa zozote za dharura alizoandikiwa, kama inhaler au sindano ya adrenaline.",
-     "Tochi, blanketi ya foil, na kadi yenye nambari za dharura (999, 112, Red Cross 1199), nambari za familia, dawa za mgonjwa, mizio na magonjwa yake."
+     "Tochi, blanketi ya foil, na kadi yenye nambari za dharura (922 ambulance, 999 or 112, Red Cross 1199), nambari za familia, dawa za mgonjwa, mizio na magonjwa yake."
     ],
     "avoid": [
      "Usiweke dawa zilizopitwa na muda. Kagua sanduku kila miezi 3."
@@ -3417,6 +3419,327 @@
   "title": {
    "en": "Home first aid kit",
    "sw": "Sanduku la huduma ya kwanza nyumbani"
+  }
+ },
+ "internal_bleeding": {
+  "id": "internal_bleeding",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "vomiting blood",
+   "coughing up blood",
+   "black stool",
+   "blood in stool",
+   "internal bleeding",
+   "kutapika damu",
+   "kukohoa damu",
+   "kinyesi cheusi"
+  ],
+  "examples": [
+   "he is vomiting blood",
+   "she coughed up blood this morning",
+   "his stool is black and sticky",
+   "vomit looks like coffee grounds",
+   "there is blood in her poo",
+   "anatapika damu",
+   "mzee anakohoa damu",
+   "kinyesi chake ni cheusi kama lami",
+   "bibi ametapika damu nyingi"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "If they are vomiting or coughing, help them sit leaning forward so they do not choke.",
+     "If they are drowsy but breathing, put them in the recovery position.",
+     "Keep them still and warm, and stay with them.",
+     "Watch for shock: pale, cold, clammy skin, fast breathing, confusion. If you see it, lay them flat and raise their legs if they have no injury.",
+     "Keep their medicine list ready for the paramedics, especially blood thinners and pain killers."
+    ],
+    "avoid": [
+     "Do not give food, drink or medicine.",
+     "Do not let them walk about or travel to hospital on their own."
+    ],
+    "urgent": "Call 922 or 999 now. Vomiting or coughing up blood, or black, sticky stools, can mean serious bleeding inside the body.",
+    "intro": "Blood from inside the body can be bright red, dark like coffee grounds, or turn stools black and tarry. It always needs a hospital.",
+    "after": "Even if it seems to stop, they must be checked in hospital today."
+   },
+   "sw": {
+    "steps": [
+     "Kama anatapika au kukohoa, msaidie akae ameinama mbele ili asikabwe.",
+     "Kama anasinzia lakini anapumua, mlaze katika mkao wa kujiokoa (recovery position).",
+     "Mweke atulie na apate joto, na ukae naye.",
+     "Angalia dalili za mshtuko: ngozi iliyopauka, baridi na yenye jasho, kupumua haraka, kuchanganyikiwa. Ukiziona, mlaze chali na uinue miguu yake kama hana jeraha.",
+     "Weka tayari orodha ya dawa zake kwa wahudumu wa afya, hasa dawa za kupunguza kuganda kwa damu na za maumivu."
+    ],
+    "avoid": [
+     "Usimpe chakula, kinywaji wala dawa.",
+     "Usimwache atembee wala aende hospitali peke yake."
+    ],
+    "urgent": "Piga 922 au 999 sasa hivi. Kutapika au kukohoa damu, au kinyesi cheusi kinachonata, kunaweza kumaanisha kutokwa damu nyingi ndani ya mwili.",
+    "intro": "Damu inayotoka ndani ya mwili inaweza kuwa nyekundu, nyeusi kama mashapo ya kahawa, au kufanya kinyesi kuwa cheusi na kinachonata. Daima inahitaji hospitali.",
+    "after": "Hata kama inaonekana imekoma, lazima akaguliwe hospitalini leo."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Vomiting or coughing up blood, black stools",
+   "sw": "Kutapika au kukohoa damu, kinyesi cheusi"
+  }
+ },
+ "mental_health_crisis": {
+  "id": "mental_health_crisis",
+  "critical": true,
+  "classify": true,
+  "keywords": [
+   "suicide",
+   "suicidal",
+   "kill myself",
+   "self harm",
+   "wants to die",
+   "kujiua",
+   "kujidhuru",
+   "anataka kufa"
+  ],
+  "examples": [
+   "he says he wants to kill himself",
+   "she is talking about ending her life",
+   "my dad took all his tablets on purpose",
+   "she cut her wrists",
+   "he says life is not worth living anymore",
+   "anataka kujiua",
+   "mzee amesema hataki kuishi tena",
+   "amejikata kwa makusudi",
+   "cucu anasema anataka kufa"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Stay with them. If you must step away, make sure someone else is with them.",
+     "If it is safe, remove things they could use to harm themselves: medicines, poisons, knives, rope.",
+     "Speak calmly. Ask directly, \"Are you thinking of ending your life?\", and listen without judging.",
+     "Tell them they are not alone and that help is available.",
+     "Give first aid for any injury, for example press firmly on bleeding.",
+     "Get support now: Kenya Red Cross free line 1199, or Befrienders Kenya +254 722 178 177. Tell the family and their doctor."
+    ],
+    "avoid": [
+     "Do not promise to keep it a secret.",
+     "Do not argue, lecture or tell them to cheer up.",
+     "Do not leave them alone."
+    ],
+    "urgent": "If they have hurt themselves, taken an overdose, or may act now, call 922 or 999 and do not leave them alone.",
+    "intro": "Thoughts of suicide are an emergency. Asking about them does not make them more likely. Staying with the person and listening helps.",
+    "after": "Help them see a doctor or counsellor soon, and keep medicines locked away."
+   },
+   "sw": {
+    "steps": [
+     "Kaa naye. Ukilazimika kuondoka kidogo, hakikisha mtu mwingine yuko naye.",
+     "Kama ni salama, ondoa vitu anavyoweza kutumia kujidhuru: dawa, sumu, visu, kamba.",
+     "Ongea kwa utulivu. Uliza moja kwa moja, \"Je, unafikiria kujiua?\", na usikilize bila kumhukumu.",
+     "Mwambie hayuko peke yake na kwamba msaada upo.",
+     "Toa huduma ya kwanza kwa jeraha lolote, kwa mfano bonyeza kwa nguvu mahali damu inatoka.",
+     "Pata msaada sasa: nambari ya bure ya Kenya Red Cross 1199, au Befrienders Kenya +254 722 178 177. Ijulishe familia na daktari wake."
+    ],
+    "avoid": [
+     "Usiahidi kuweka siri.",
+     "Usibishane, usimhubirie wala kumwambia achangamke tu.",
+     "Usimwache peke yake."
+    ],
+    "urgent": "Kama amejidhuru, amemeza dawa nyingi, au anaweza kuchukua hatua sasa, piga 922 au 999 na usimwache peke yake.",
+    "intro": "Mawazo ya kujiua ni dharura. Kuuliza kuhusu mawazo hayo hakuyaongezi. Kukaa na mtu na kumsikiliza kunasaidia.",
+    "after": "Msaidie amwone daktari au mshauri hivi karibuni, na ufungie dawa mahali salama."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Thoughts of suicide or self-harm",
+   "sw": "Mawazo ya kujiua au kujidhuru"
+  }
+ },
+ "embedded_object": {
+  "id": "embedded_object",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "impaled",
+   "embedded",
+   "stuck in the wound",
+   "splinter",
+   "kitu kimekwama",
+   "kibanzi"
+  ],
+  "examples": [
+   "a nail went into his foot and is still in",
+   "there is a piece of glass stuck in her hand",
+   "a stick is stuck in his leg",
+   "a knife is still in the wound",
+   "should i pull out the thorn stuck deep in her arm",
+   "msumari umemchoma mguu na bado umekwama",
+   "kipande cha glasi kimekwama mkononi",
+   "kijiti kimekwama kwenye jeraha"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Do not pull out anything large or deep. Press firmly around the object, not on it, with a clean cloth.",
+     "Pad around it with rolled cloth on each side and bandage over the padding without pressing on the object.",
+     "Keep them still, lying down if they feel faint, and watch for shock.",
+     "For a small splinter near the surface: wash the area, grip the splinter with clean tweezers, pull it out the way it went in, then wash again and cover.",
+     "If something dirty or rusty broke the skin, ask a clinic about a tetanus injection."
+    ],
+    "avoid": [
+     "Do not remove a large or deep object, even if it looks easy.",
+     "Do not dig for a splinter you cannot see."
+    ],
+    "urgent": "Call 922 or 999 if the object is large or deep, is in the chest, belly, neck, head or eye, or there is heavy bleeding.",
+    "intro": "Leave a large or deep object where it is: it may be holding back bleeding. Small splinters near the surface can be taken out.",
+    "after": "Any deep wound needs a clinic or hospital today."
+   },
+   "sw": {
+    "steps": [
+     "Usitoe kitu chochote kikubwa au kilichoingia ndani. Bonyeza kwa nguvu kuzunguka kitu, si juu yake, kwa kitambaa safi.",
+     "Weka vitambaa vilivyokunjwa pande zote mbili na ufunge bendeji juu ya vitambaa hivyo bila kukibonyeza kitu.",
+     "Mweke atulie, alale kama anahisi kuzimia, na uangalie dalili za mshtuko.",
+     "Kwa kibanzi kidogo kilicho juu ya ngozi: osha mahali hapo, kishike kwa koleo safi, kivute kwa njia kilivyoingia, kisha osha tena na ufunike.",
+     "Kama kitu kichafu au chenye kutu kilitoboa ngozi, uliza kliniki kuhusu sindano ya pepopunda."
+    ],
+    "avoid": [
+     "Usitoe kitu kikubwa au kilichoingia ndani, hata kama kinaonekana rahisi.",
+     "Usichimbe kutafuta kibanzi usichokiona."
+    ],
+    "urgent": "Piga 922 au 999 kama kitu ni kikubwa au kimeingia ndani sana, kiko kifuani, tumboni, shingoni, kichwani au jichoni, au kuna damu nyingi.",
+    "intro": "Acha kitu kikubwa au kilichoingia ndani pale kilipo: huenda kinazuia damu. Vibanzi vidogo vilivyo juu ya ngozi vinaweza kutolewa.",
+    "after": "Jeraha lolote refu linahitaji kliniki au hospitali leo."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Something stuck in a wound",
+   "sw": "Kitu kilichokwama kwenye jeraha"
+  }
+ },
+ "foreign_object": {
+  "id": "foreign_object",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "in his ear",
+   "stuck in nose",
+   "swallowed something",
+   "button battery",
+   "kitu sikioni",
+   "kitu puani",
+   "amemeza"
+  ],
+  "examples": [
+   "he pushed a bean into his ear",
+   "there is something stuck in her nose",
+   "she swallowed a coin",
+   "grandpa swallowed his denture clip",
+   "an insect went into his ear",
+   "amemeza sarafu",
+   "kuna kitu kimeingia sikioni",
+   "bibi amemeza meno yake ya bandia",
+   "mdudu ameingia sikioni mwa babu"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "If they are choking (cannot breathe, speak or cough), follow the choking steps and call for help.",
+     "Nose: ask them to close the clear side and blow gently out through the blocked side.",
+     "Insect in the ear: lay them with that ear up and pour in a little lukewarm water to float it out, only if the ear is not injured.",
+     "If the object does not come out easily, take them to a clinic.",
+     "Swallowed object: if they breathe and swallow normally, note what it was and when, and watch them. Go to hospital if they get pain, vomiting, drooling or blood."
+    ],
+    "avoid": [
+     "Do not push tweezers, cotton buds or anything else into the ear or nose.",
+     "Do not make them vomit."
+    ],
+    "urgent": "Call 922 or 999 now if they cannot breathe, speak or cough. Go to hospital straight away if a battery, magnet or something sharp was swallowed, or they have pain, drooling or vomiting after swallowing.",
+    "intro": "Most small things pass or come out on their own, but batteries, magnets and sharp objects can do serious harm. Never dig an object out.",
+    "after": "Bring the packet or a similar object to show the nurse or doctor."
+   },
+   "sw": {
+    "steps": [
+     "Kama amekabwa (hawezi kupumua, kuongea wala kukohoa), fuata hatua za kukabwa na uite msaada.",
+     "Puani: mwambie afunge upande usio na kitu na apumue nje kwa upole kupitia upande ulioziba.",
+     "Mdudu sikioni: mlaze sikio hilo likiwa juu na umimine maji kidogo ya uvuguvugu ili mdudu aelee nje, ikiwa tu sikio halina jeraha.",
+     "Kama kitu hakitoki kwa urahisi, mpeleke kliniki.",
+     "Kitu kilichomezwa: kama anapumua na kumeza kawaida, andika kilikuwa nini na saa ngapi, na umwangalie. Nenda hospitali akipata maumivu, kutapika, kutokwa mate au damu."
+    ],
+    "avoid": [
+     "Usisukume koleo, vijiti vya pamba wala kitu kingine sikioni au puani.",
+     "Usimfanye atapike."
+    ],
+    "urgent": "Piga 922 au 999 sasa hivi kama hawezi kupumua, kuongea wala kukohoa. Nenda hospitali mara moja kama amemeza betri, sumaku au kitu chenye ncha kali, au ana maumivu, anatokwa mate au anatapika baada ya kumeza.",
+    "intro": "Vitu vingi vidogo hupita au hutoka vyenyewe, lakini betri, sumaku na vitu vyenye ncha kali vinaweza kuleta madhara makubwa. Kamwe usichimbe kutoa kitu.",
+    "after": "Beba pakiti au kitu kinachofanana ili kumwonyesha muuguzi au daktari."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Something in the ear or nose, or swallowed",
+   "sw": "Kitu sikioni au puani, au kilichomezwa"
+  }
+ },
+ "headache": {
+  "id": "headache",
+  "critical": false,
+  "classify": true,
+  "keywords": [
+   "headache",
+   "migraine",
+   "head pain",
+   "kichwa kinauma",
+   "maumivu ya kichwa"
+  ],
+  "examples": [
+   "she has a very bad headache",
+   "his head has been pounding since morning",
+   "sudden worst headache of her life",
+   "headache with fever and a stiff neck",
+   "what can i give for a headache",
+   "kichwa kinamuuma sana",
+   "mzee analalamika maumivu ya kichwa",
+   "kichwa kinauma ghafla kwa nguvu sana"
+  ],
+  "answer": {
+   "en": {
+    "steps": [
+     "Help them sit or lie down somewhere quiet and dim.",
+     "Give water to drink if they are not vomiting.",
+     "They can take their usual pain relief, such as paracetamol, at the dose on the packet, if their doctor allows it.",
+     "If you have a blood pressure machine, check it: a very high reading with a headache needs a doctor today.",
+     "Check on them again within an hour."
+    ],
+    "avoid": [
+     "Do not give more pain relief than the packet says.",
+     "Do not give aspirin or ibuprofen to someone on blood thinners unless their doctor said so."
+    ],
+    "urgent": "Call 922 or 999 now if it is sudden and very severe (the worst ever), or comes with a weak face or arm, slurred speech, confusion, a stiff neck with fever, a fit, or follows a head injury.",
+    "intro": "Most headaches are not dangerous and ease with rest, water and simple pain relief.",
+    "after": "See a doctor if the headaches are new, getting worse, wake them at night or keep coming back."
+   },
+   "sw": {
+    "steps": [
+     "Msaidie akae au alale mahali tulivu na penye mwanga hafifu.",
+     "Mpe maji ya kunywa kama hatapiki.",
+     "Anaweza kumeza dawa yake ya kawaida ya maumivu, kama paracetamol, kwa kipimo kilichoandikwa kwenye pakiti, ikiwa daktari wake anaruhusu.",
+     "Kama una mashine ya kupima shinikizo la damu, mpime: kipimo cha juu sana pamoja na maumivu ya kichwa kinahitaji daktari leo.",
+     "Mwangalie tena ndani ya saa moja."
+    ],
+    "avoid": [
+     "Usimpe dawa ya maumivu zaidi ya kilichoandikwa kwenye pakiti.",
+     "Usimpe aspirin wala ibuprofen mtu anayetumia dawa za kupunguza kuganda kwa damu bila daktari kusema hivyo."
+    ],
+    "urgent": "Piga 922 au 999 sasa hivi kama yalianza ghafla na ni makali sana (makali kuliko yote), au yanakuja pamoja na uso au mkono kudhoofika, kuongea kwa shida, kuchanganyikiwa, shingo kukakamaa pamoja na homa, kifafa, au baada ya kuumia kichwa.",
+    "intro": "Maumivu mengi ya kichwa si hatari na hupungua kwa kupumzika, kunywa maji na dawa rahisi za maumivu.",
+    "after": "Mwone daktari kama maumivu ya kichwa ni mapya, yanazidi, yanamwamsha usiku au yanarudi mara kwa mara."
+   }
+  },
+  "followup": null,
+  "title": {
+   "en": "Bad headache",
+   "sw": "Maumivu makali ya kichwa"
   }
  }
 }

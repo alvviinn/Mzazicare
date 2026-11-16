@@ -7,14 +7,14 @@ keywords: low blood sugar, low sugar, hypo, hypoglycaemia, hypoglycemia, sugar d
 
 ### en
 intro: People with diabetes who take insulin or diabetes tablets can have low blood sugar. Signs are shaking, sweating, paleness, hunger, a fast heartbeat, confusion, irritability, unusual behaviour or drowsiness.
-urgent: If they are very drowsy, unconscious or cannot swallow safely, call 999 or 112, put them in the recovery position and give nothing by mouth.
+urgent: If they are very drowsy, unconscious or cannot swallow safely, call 922 or 999, put them in the recovery position and give nothing by mouth.
 steps:
 - If they are awake and can swallow, sit them down.
 - Give fast sugar straight away: half a glass (150 ml) of fruit juice or a non-diet soda, or 3 to 4 teaspoons of sugar stirred into water, or glucose tablets.
 - Wait 10 to 15 minutes and check their sugar with their meter if they have one.
-- If they are not better 10 to 15 minutes after the first sugar, give fast sugar again and call 999 or 112.
+- If they are not better 10 to 15 minutes after the first sugar, give fast sugar again and call 922 or 999.
 - Once they feel better, give a starchy snack or their next meal, such as bread, biscuits or ugali.
-- If they get worse at any point, call 999 or 112 straight away.
+- If they get worse at any point, call 922 or 999 straight away.
 avoid:
 - Do not give anything by mouth if they are drowsy or cannot swallow safely.
 - Do not give chocolate or fatty food as the first treatment, it works too slowly.
@@ -23,14 +23,14 @@ after: Tell the family and their doctor, as their diabetes medicine or meals may
 
 ### sw
 intro: Watu wenye kisukari wanaotumia insulini au vidonge vya kisukari wanaweza kushukiwa na sukari. Dalili ni kutetemeka, kutokwa jasho, kupauka, njaa, moyo kwenda mbio, kuchanganyikiwa, hasira, tabia isiyo ya kawaida au kusinzia.
-urgent: Kama anasinzia sana, hajitambui au hawezi kumeza salama, piga 999 au 112, mlaze katika mkao wa kupona na usimpe chochote kwa mdomo.
+urgent: Kama anasinzia sana, hajitambui au hawezi kumeza salama, piga 922 au 999, mlaze katika mkao wa kupona na usimpe chochote kwa mdomo.
 steps:
 - Kama yuko macho na anaweza kumeza, mkalishe chini.
 - Mpe sukari ya haraka mara moja: nusu glasi (ml 150) ya juisi ya matunda au soda isiyo ya diet, au vijiko 3 hadi 4 vya sukari vilivyokorogwa kwenye maji, au vidonge vya glukosi.
 - Subiri dakika 10 hadi 15 na upime sukari kwa mashine yake kama anayo.
-- Kama hajapata nafuu dakika 10 hadi 15 baada ya sukari ya kwanza, mpe sukari ya haraka tena na upige 999 au 112.
+- Kama hajapata nafuu dakika 10 hadi 15 baada ya sukari ya kwanza, mpe sukari ya haraka tena na upige 922 au 999.
 - Akijisikia vizuri, mpe chakula cha wanga au mlo wake unaofuata, kama mkate, biskuti au ugali.
-- Akizidi kuwa mbaya wakati wowote, piga 999 au 112 mara moja.
+- Akizidi kuwa mbaya wakati wowote, piga 922 au 999 mara moja.
 avoid:
 - Usimpe chochote kwa mdomo kama anasinzia au hawezi kumeza salama.
 - Usimpe chokoleti au vyakula vya mafuta kama tiba ya kwanza, vinafanya kazi polepole sana.
@@ -65,7 +65,7 @@ keywords: high blood sugar, high sugar, hyperglycaemia, hyperglycemia, sugar is 
 
 ### en
 intro: High blood sugar causes thirst, passing a lot of urine, tiredness, blurred vision and headaches. Very high sugar can become dangerous.
-urgent: Call 999 or 112 or go to hospital if the meter reads "HI" or above about 16.7 mmol/L (300 mg/dL) and they are vomiting, very drowsy, confused, breathing fast and deep, or their breath smells fruity.
+urgent: Call 922 or 999 or go to hospital if the meter reads "HI" or above about 16.7 mmol/L (300 mg/dL) and they are vomiting, very drowsy, confused, breathing fast and deep, or their breath smells fruity.
 steps:
 - Check their sugar with their meter if they have one, and write down the reading and time.
 - Give plenty of water or other sugar-free drinks.
@@ -79,7 +79,7 @@ after: Share the readings with the family and the doctor so treatment can be adj
 
 ### sw
 intro: Sukari ikipanda husababisha kiu, kukojoa sana, uchovu, kuona ukungu na maumivu ya kichwa. Sukari iliyo juu sana inaweza kuwa hatari.
-urgent: Piga 999 au 112 au nenda hospitali kama mashine inasoma "HI" au juu ya takriban 16.7 mmol/L (300 mg/dL) na anatapika, anasinzia sana, amechanganyikiwa, anapumua haraka na kwa kina, au pumzi yake inanuka kama matunda.
+urgent: Piga 922 au 999 au nenda hospitali kama mashine inasoma "HI" au juu ya takriban 16.7 mmol/L (300 mg/dL) na anatapika, anasinzia sana, amechanganyikiwa, anapumua haraka na kwa kina, au pumzi yake inanuka kama matunda.
 steps:
 - Pima sukari yake kwa mashine kama anayo, na uandike kipimo na saa.
 - Mpe maji mengi au vinywaji vingine visivyo na sukari.
@@ -110,11 +110,11 @@ keywords: asthma, asthma attack, wheezing, inhaler, blue inhaler, salbutamol, ti
 
 ### en
 intro: In an asthma attack the airways tighten, causing wheezing, coughing, a tight chest and breathlessness.
-urgent: Call 999 or 112 if they are too breathless to speak, their lips are turning blue, they are exhausted or drowsy, or the inhaler is not helping.
+urgent: Call 922 or 999 if they are too breathless to speak, their lips are turning blue, they are exhausted or drowsy, or the inhaler is not helping.
 steps:
 - Help them sit upright, leaning slightly forward. Keep calm and reassure them.
 - Help them use their reliever inhaler, usually blue (salbutamol): 1 puff every 30 to 60 seconds, up to 10 puffs. Use a spacer if they have one.
-- If they are not better after 10 puffs, or are getting worse, call 999 or 112.
+- If they are not better after 10 puffs, or are getting worse, call 922 or 999.
 - If help has not arrived after 10 minutes, repeat up to 10 puffs.
 avoid:
 - Do not lie them down.
@@ -123,11 +123,11 @@ after: Even if the attack settles, they should see their doctor within 2 days to
 
 ### sw
 intro: Wakati wa shambulio la pumu njia za hewa hubana, na kusababisha mluzi, kikohozi, kifua kubana na kukosa pumzi.
-urgent: Piga 999 au 112 kama anakosa pumzi kiasi cha kushindwa kuongea, midomo inakuwa bluu, amechoka sana au anasinzia, au inhaler haisaidii.
+urgent: Piga 922 au 999 kama anakosa pumzi kiasi cha kushindwa kuongea, midomo inakuwa bluu, amechoka sana au anasinzia, au inhaler haisaidii.
 steps:
 - Msaidie akae wima, ameinama mbele kidogo. Tulia na umtulize.
 - Msaidie atumie inhaler yake ya kupunguza pumu, kwa kawaida ya bluu (salbutamol): pafu 1 kila sekunde 30 hadi 60, hadi pafu 10. Tumia spacer kama anayo.
-- Kama hajapata nafuu baada ya pafu 10, au anazidi kuwa mbaya, piga 999 au 112.
+- Kama hajapata nafuu baada ya pafu 10, au anazidi kuwa mbaya, piga 922 au 999.
 - Kama msaada haujafika baada ya dakika 10, rudia hadi pafu 10.
 avoid:
 - Usimlaze chini.
@@ -152,7 +152,7 @@ keywords: shortness of breath, short of breath, breathless, difficulty breathing
 
 ### en
 intro: Breathlessness in an older person can come from the lungs, the heart, an infection or anxiety. Sudden or severe breathlessness is an emergency.
-urgent: Call 999 or 112 if it came on suddenly, is severe, they have chest pain, blue or grey lips, cannot finish a sentence, are confused or drowsy, or cannot lie flat when they normally can.
+urgent: Call 922 or 999 if it came on suddenly, is severe, they have chest pain, blue or grey lips, cannot finish a sentence, are confused or drowsy, or cannot lie flat when they normally can.
 steps:
 - Help them sit upright, leaning forward with arms resting on a table or their knees.
 - Loosen tight clothing and open a window for fresh air.
@@ -166,7 +166,7 @@ after: Tell their doctor today about any new or worsening breathlessness, even i
 
 ### sw
 intro: Kukosa pumzi kwa mzee kunaweza kutokana na mapafu, moyo, maambukizi au wasiwasi. Kukosa pumzi ghafla au kwa kiasi kikubwa ni dharura.
-urgent: Piga 999 au 112 kama kulianza ghafla, ni kukubwa, ana maumivu ya kifua, midomo ya bluu au kijivu, hawezi kumaliza sentensi, amechanganyikiwa au anasinzia, au hawezi kulala chali wakati kwa kawaida anaweza.
+urgent: Piga 922 au 999 kama kulianza ghafla, ni kukubwa, ana maumivu ya kifua, midomo ya bluu au kijivu, hawezi kumaliza sentensi, amechanganyikiwa au anasinzia, au hawezi kulala chali wakati kwa kawaida anaweza.
 steps:
 - Msaidie akae wima, ameinama mbele na mikono imeegemea meza au magoti.
 - Legeza nguo zinazobana na ufungue dirisha apate hewa safi.
@@ -198,7 +198,7 @@ keywords: fainted, faint, fainting, feeling faint, dizzy and passed out, blacked
 
 ### en
 intro: Fainting is a short loss of consciousness when blood flow to the brain drops. People usually wake within a minute.
-urgent: Call 999 or 112 if they do not wake within a minute, are injured, have chest pain, a racing or irregular heartbeat or breathlessness, fainted during activity, or it is the first time in an older person.
+urgent: Call 922 or 999 if they do not wake within a minute, are injured, have chest pain, a racing or irregular heartbeat or breathlessness, fainted during activity, or it is the first time in an older person.
 steps:
 - If they feel faint, help them lie down, or sit with the head between the knees.
 - If they have fainted, lay them on their back and raise their legs about 30 cm on a chair or pillows.
@@ -213,7 +213,7 @@ after: In older people fainting can be a sign of a heart problem, low blood pres
 
 ### sw
 intro: Kuzirai ni kupoteza fahamu kwa muda mfupi mtiririko wa damu kwenye ubongo ukipungua. Kwa kawaida watu huzinduka ndani ya dakika moja.
-urgent: Piga 999 au 112 kama hazinduki ndani ya dakika moja, ameumia, ana maumivu ya kifua, moyo unakwenda mbio au bila mpangilio au anakosa pumzi, alizirai akifanya kazi, au ni mara ya kwanza kwa mzee.
+urgent: Piga 922 au 999 kama hazinduki ndani ya dakika moja, ameumia, ana maumivu ya kifua, moyo unakwenda mbio au bila mpangilio au anakosa pumzi, alizirai akifanya kazi, au ni mara ya kwanza kwa mzee.
 steps:
 - Akihisi kuzirai, msaidie alale chini, au akae na kichwa kati ya magoti.
 - Kama amezirai, mlaze chali na uinue miguu yake kama sentimita 30 juu ya kiti au mito.
@@ -244,7 +244,7 @@ keywords: poisoning, poisoned, swallowed poison, drank paraffin, drank bleach, s
 
 ### en
 intro: Poisoning can come from swallowing chemicals, pesticides, too much medicine, poisonous plants, or breathing in fumes, such as from a charcoal jiko in a closed room.
-urgent: Call 999 or 112 now.
+urgent: Call 922 or 999 now.
 steps:
 - For fumes or smoke: get them into fresh air straight away, open doors and windows, and turn off or remove the jiko or heater, without putting yourself at risk.
 - Find out what they took or touched, how much and when. Keep the container, packet or plant to show the medics.
@@ -259,7 +259,7 @@ after: Take the container or a photo of the label to hospital.
 
 ### sw
 intro: Sumu inaweza kutokana na kumeza kemikali, dawa za wadudu, dawa nyingi kupita kiasi, mimea yenye sumu, au kuvuta moshi, kama wa jiko la makaa ndani ya chumba kilichofungwa.
-urgent: Piga 999 au 112 sasa hivi.
+urgent: Piga 922 au 999 sasa hivi.
 steps:
 - Kwa moshi au gesi: mtoe nje kwenye hewa safi mara moja, fungua milango na madirisha, na uzime au uondoe jiko au hita, bila kujiweka hatarini.
 - Tafuta alichokunywa au kugusa, kiasi gani na lini. Hifadhi chombo, pakiti au mmea uwaonyeshe wahudumu wa afya.
@@ -295,10 +295,10 @@ keywords: overdose, took too many tablets, double dose, wrong medicine, someone 
 
 ### en
 intro: Taking a double dose, the wrong medicine or someone else's medicine is common with older people. Many mistakes are harmless, but some medicines are dangerous in extra doses.
-urgent: Call 999 or 112 straight away if they are drowsy, confused, breathing slowly, have chest pain, a very slow or fast heartbeat, a seizure, or are unresponsive, or if they took a large amount on purpose.
+urgent: Call 922 or 999 straight away if they are drowsy, confused, breathing slowly, have chest pain, a very slow or fast heartbeat, a seizure, or are unresponsive, or if they took a large amount on purpose.
 steps:
 - Stay calm and find out exactly which medicine, how much and when. Keep the packets and the medicine list.
-- Call their doctor, the clinic or a pharmacist now for advice, or 999 or 112 if you cannot reach them.
+- Call their doctor, the clinic or a pharmacist now for advice, or 922 or 999 if you cannot reach them.
 - Watch them closely for the next hours for drowsiness, confusion, vomiting or changes in breathing.
 - If they become unresponsive but are breathing, put them in the recovery position.
 - For a missed dose: check the leaflet or ask the pharmacist. Usually you take it when remembered unless it is nearly time for the next dose.
@@ -309,10 +309,10 @@ after: A weekly pill organiser and a written medicine chart help prevent repeat 
 
 ### sw
 intro: Kumeza dozi mara mbili, dawa isiyo sahihi au dawa ya mtu mwingine ni kawaida kwa wazee. Makosa mengi hayana madhara, lakini dawa nyingine ni hatari kwa dozi za ziada.
-urgent: Piga 999 au 112 mara moja kama anasinzia, amechanganyikiwa, anapumua polepole, ana maumivu ya kifua, mapigo ya moyo ni polepole sana au haraka sana, anapata kifafa, au hajitambui, au kama alimeza kiasi kikubwa kwa makusudi.
+urgent: Piga 922 au 999 mara moja kama anasinzia, amechanganyikiwa, anapumua polepole, ana maumivu ya kifua, mapigo ya moyo ni polepole sana au haraka sana, anapata kifafa, au hajitambui, au kama alimeza kiasi kikubwa kwa makusudi.
 steps:
 - Tulia na ujue hasa ni dawa gani, kiasi gani na lini. Hifadhi pakiti na orodha ya dawa.
-- Mpigie daktari wake, kliniki au mfamasia sasa kwa ushauri, au 999 au 112 kama huwapati.
+- Mpigie daktari wake, kliniki au mfamasia sasa kwa ushauri, au 922 au 999 kama huwapati.
 - Mwangalie kwa karibu kwa saa zinazofuata kwa kusinzia, kuchanganyikiwa, kutapika au mabadiliko ya kupumua.
 - Akiacha kujitambua lakini anapumua, mlaze katika mkao wa kupona.
 - Kwa dozi iliyosahaulika: angalia karatasi ya maelekezo au muulize mfamasia. Kwa kawaida inatumika ukikumbuka isipokuwa kama ni karibu na wakati wa dozi inayofuata.
@@ -342,7 +342,7 @@ keywords: heat exhaustion, heatstroke, heat stroke, overheated, too hot, very ho
 
 ### en
 intro: Older people overheat easily. Heat exhaustion causes headache, dizziness, heavy sweating, cramps, nausea and a fast pulse. Heatstroke is an emergency: hot skin, confusion, fits or unconsciousness.
-urgent: Call 999 or 112 if they are confused, have a seizure, are unresponsive, have a very high temperature (40 °C or more), or do not improve within 30 minutes.
+urgent: Call 922 or 999 if they are confused, have a seizure, are unresponsive, have a very high temperature (40 °C or more), or do not improve within 30 minutes.
 steps:
 - Move them to a cool, shady place and help them lie down with legs slightly raised.
 - Remove extra clothing.
@@ -356,7 +356,7 @@ after: Keep them cool and drinking regularly on hot days, and check on them ofte
 
 ### sw
 intro: Wazee hupata joto kupita kiasi kwa urahisi. Uchovu wa joto husababisha maumivu ya kichwa, kizunguzungu, jasho jingi, kukakamaa kwa misuli, kichefuchefu na mapigo ya haraka. Kiharusi cha joto ni dharura: ngozi ya moto, kuchanganyikiwa, kifafa au kupoteza fahamu.
-urgent: Piga 999 au 112 kama amechanganyikiwa, anapata kifafa, hajitambui, ana joto la juu sana (nyuzi 40 au zaidi), au hapati nafuu ndani ya dakika 30.
+urgent: Piga 922 au 999 kama amechanganyikiwa, anapata kifafa, hajitambui, ana joto la juu sana (nyuzi 40 au zaidi), au hapati nafuu ndani ya dakika 30.
 steps:
 - Mpeleke mahali penye baridi na kivuli na umsaidie alale na miguu imeinuliwa kidogo.
 - Mvue nguo za ziada.
@@ -384,7 +384,7 @@ keywords: hypothermia, very cold, freezing, shivering a lot, cold and confused, 
 
 ### en
 intro: Older people can get dangerously cold, even indoors on cold nights in the highlands. Signs are shivering, cold pale skin, slurred speech, confusion, clumsiness and drowsiness.
-urgent: Call 999 or 112 if they are drowsy, confused, have stopped shivering while still cold, or are breathing slowly.
+urgent: Call 922 or 999 if they are drowsy, confused, have stopped shivering while still cold, or are breathing slowly.
 steps:
 - Move them to a warm room, out of the wind.
 - Replace wet clothing with dry clothing.
@@ -399,7 +399,7 @@ after: Make sure their room stays warm at night and they have enough bedding.
 
 ### sw
 intro: Wazee wanaweza kupata baridi hatari, hata ndani ya nyumba usiku wa baridi maeneo ya juu. Dalili ni kutetemeka, ngozi baridi nyeupe, maneno kutotoka vizuri, kuchanganyikiwa, kutokuwa makini na kusinzia.
-urgent: Piga 999 au 112 kama anasinzia, amechanganyikiwa, ameacha kutetemeka ingawa bado ni baridi, au anapumua polepole.
+urgent: Piga 922 au 999 kama anasinzia, amechanganyikiwa, ameacha kutetemeka ingawa bado ni baridi, au anapumua polepole.
 steps:
 - Mpeleke kwenye chumba chenye joto, mbali na upepo.
 - Mbadilishe nguo zilizolowa kwa nguo kavu.
@@ -428,7 +428,7 @@ keywords: dehydration, dehydrated, diarrhoea, diarrhea, vomiting, throwing up, l
 
 ### en
 intro: Vomiting, diarrhoea, heat or not drinking enough can quickly dry out an older person. Signs are thirst, a dry mouth, dark or little urine, dizziness, tiredness and new confusion.
-urgent: Get medical help today, or call 999 or 112, if they cannot keep fluids down, there is blood in the vomit or stool, no urine for 8 hours, they are very drowsy or confused, have severe belly pain, or the diarrhoea lasts more than 2 days.
+urgent: Get medical help today, or call 922 or 999, if they cannot keep fluids down, there is blood in the vomit or stool, no urine for 8 hours, they are very drowsy or confused, have severe belly pain, or the diarrhoea lasts more than 2 days.
 steps:
 - Give oral rehydration solution (ORS): mix a sachet with clean water exactly as the packet says.
 - Give small sips often, for example a few sips every few minutes, even if they are vomiting.
@@ -442,7 +442,7 @@ after: Keep a note of how much they drink and pass urine, and tell the doctor if
 
 ### sw
 intro: Kutapika, kuhara, joto au kutokunywa maji ya kutosha kunaweza kumkausha mzee haraka. Dalili ni kiu, mdomo mkavu, mkojo mweusi au kidogo, kizunguzungu, uchovu na kuchanganyikiwa kupya.
-urgent: Tafuta msaada wa matibabu leo, au piga 999 au 112, kama hawezi kubaki na vinywaji tumboni, kuna damu kwenye matapishi au kinyesi, hajakojoa kwa saa 8, anasinzia sana au amechanganyikiwa, ana maumivu makali ya tumbo, au kuhara kunaendelea zaidi ya siku 2.
+urgent: Tafuta msaada wa matibabu leo, au piga 922 au 999, kama hawezi kubaki na vinywaji tumboni, kuna damu kwenye matapishi au kinyesi, hajakojoa kwa saa 8, anasinzia sana au amechanganyikiwa, ana maumivu makali ya tumbo, au kuhara kunaendelea zaidi ya siku 2.
 steps:
 - Mpe mchanganyiko wa ORS: changanya pakiti moja na maji safi kama pakiti inavyosema.
 - Mpe kidogo kidogo mara kwa mara, kwa mfano mafunda machache kila baada ya dakika chache, hata kama anatapika.
@@ -476,7 +476,7 @@ keywords: fever, high temperature, temperature is high, hot body, chills, feveri
 
 ### en
 intro: A temperature of 38 °C or more is a fever, usually caused by an infection. In older people an infection may show as confusion, weakness or falls instead of a high temperature.
-urgent: Call 999 or 112 or go to hospital now if the fever comes with confusion or drowsiness, a stiff neck, a rash that does not fade when pressed with a glass, difficulty breathing, a seizure, very fast breathing or heartbeat, or a temperature of 40 °C or more.
+urgent: Call 922 or 999 or go to hospital now if the fever comes with confusion or drowsiness, a stiff neck, a rash that does not fade when pressed with a glass, difficulty breathing, a seizure, very fast breathing or heartbeat, or a temperature of 40 °C or more.
 steps:
 - Measure the temperature with a thermometer and write it down with the time.
 - Keep them comfortable in light clothing in a cool, airy room.
@@ -491,7 +491,7 @@ after: Tell the family and get them seen at a clinic if the fever lasts more tha
 
 ### sw
 intro: Joto la nyuzi 38 au zaidi ni homa, kwa kawaida husababishwa na maambukizi. Kwa wazee maambukizi yanaweza kuonekana kama kuchanganyikiwa, udhaifu au kuanguka badala ya joto la juu.
-urgent: Piga 999 au 112 au nenda hospitali sasa kama homa inakuja na kuchanganyikiwa au kusinzia, shingo kukakamaa, vipele visivyofifia vikibonyezwa na glasi, kupumua kwa shida, kifafa, kupumua au mapigo ya moyo ya haraka sana, au joto la nyuzi 40 au zaidi.
+urgent: Piga 922 au 999 au nenda hospitali sasa kama homa inakuja na kuchanganyikiwa au kusinzia, shingo kukakamaa, vipele visivyofifia vikibonyezwa na glasi, kupumua kwa shida, kifafa, kupumua au mapigo ya moyo ya haraka sana, au joto la nyuzi 40 au zaidi.
 steps:
 - Pima joto kwa kipimajoto na uliandike pamoja na saa.
 - Mweke vizuri akiwa na nguo nyepesi katika chumba chenye hewa na baridi.
@@ -524,7 +524,7 @@ keywords: confused, sudden confusion, not making sense, disoriented, delirium, a
 
 ### en
 intro: Sudden confusion in an older person (delirium) is a warning sign of illness, such as an infection, low blood sugar, dehydration, a stroke, a medicine problem or a head injury. It needs checking the same day.
-urgent: Call 999 or 112 if there are stroke signs (face drooping, arm weakness, slurred speech), they are very drowsy or hard to wake, have a high fever, breathing problems, or hit their head.
+urgent: Call 922 or 999 if there are stroke signs (face drooping, arm weakness, slurred speech), they are very drowsy or hard to wake, have a high fever, breathing problems, or hit their head.
 steps:
 - Do the FAST stroke check first: face, arms, speech.
 - If they have diabetes, check their blood sugar if you can, and treat low sugar if it is low.
@@ -538,7 +538,7 @@ after: Tell the family when the confusion started and how it changed. This is ve
 
 ### sw
 intro: Kuchanganyikiwa ghafla kwa mzee (delirium) ni ishara ya onyo ya ugonjwa, kama maambukizi, sukari kushuka, upungufu wa maji, kiharusi, tatizo la dawa au jeraha la kichwa. Inahitaji kuangaliwa siku hiyo hiyo.
-urgent: Piga 999 au 112 kama kuna dalili za kiharusi (uso kupinda, mkono kulegea, maneno kutotoka vizuri), anasinzia sana au ni vigumu kumwamsha, ana homa kali, matatizo ya kupumua, au aligonga kichwa.
+urgent: Piga 922 au 999 kama kuna dalili za kiharusi (uso kupinda, mkono kulegea, maneno kutotoka vizuri), anasinzia sana au ni vigumu kumwamsha, ana homa kali, matatizo ya kupumua, au aligonga kichwa.
 steps:
 - Fanya kwanza kipimo cha kiharusi cha FAST: uso, mikono, kuongea.
 - Kama ana kisukari, pima sukari yake ukiweza, na utibu sukari iliyoshuka kama iko chini.
@@ -569,7 +569,7 @@ keywords: high blood pressure, blood pressure is high, bp is high, pressure read
 
 ### en
 intro: One high reading is not always an emergency. What matters is how high it is and whether they have symptoms.
-urgent: Call 999 or 112 if the reading is 180/120 or higher and they have chest pain, a severe headache, breathlessness, confusion, blurred vision, weakness or numbness, or trouble speaking.
+urgent: Call 922 or 999 if the reading is 180/120 or higher and they have chest pain, a severe headache, breathlessness, confusion, blurred vision, weakness or numbness, or trouble speaking.
 steps:
 - Have them sit quietly for 5 minutes with the back supported and feet flat.
 - Measure again with the arm resting at heart level, without talking. Write down both readings.
@@ -583,7 +583,7 @@ after: Keep a record of readings to show their doctor.
 
 ### sw
 intro: Kipimo kimoja cha juu si dharura kila mara. Muhimu ni kiko juu kiasi gani na kama ana dalili.
-urgent: Piga 999 au 112 kama kipimo ni 180/120 au zaidi na ana maumivu ya kifua, maumivu makali ya kichwa, kukosa pumzi, kuchanganyikiwa, kuona ukungu, udhaifu au ganzi, au shida ya kuongea.
+urgent: Piga 922 au 999 kama kipimo ni 180/120 au zaidi na ana maumivu ya kifua, maumivu makali ya kichwa, kukosa pumzi, kuchanganyikiwa, kuona ukungu, udhaifu au ganzi, au shida ya kuongea.
 steps:
 - Mwache akae kimya kwa dakika 5 mgongo ukiwa umeegemea na nyayo sakafuni.
 - Pima tena mkono ukiwa umeegemea usawa wa moyo, bila kuongea. Andika vipimo vyote viwili.
@@ -613,7 +613,7 @@ keywords: stomach pain, abdominal pain, belly pain, tummy ache, severe stomach a
 
 ### en
 intro: Stomach pain has many causes. In older people serious problems can show few signs, so take strong or unusual pain seriously.
-urgent: Call 999 or 112 if the pain is sudden and severe, they vomit blood or something like coffee grounds, pass black or bloody stools, the belly is hard and swollen, they faint, or the pain spreads to the chest.
+urgent: Call 922 or 999 if the pain is sudden and severe, they vomit blood or something like coffee grounds, pass black or bloody stools, the belly is hard and swollen, they faint, or the pain spreads to the chest.
 steps:
 - Help them into a comfortable position, often lying with knees bent.
 - Give small sips of water only.
@@ -626,7 +626,7 @@ after: Share your notes with the doctor and the family.
 
 ### sw
 intro: Maumivu ya tumbo yana sababu nyingi. Kwa wazee matatizo makubwa yanaweza kuonyesha dalili chache, kwa hiyo chukulia maumivu makali au yasiyo ya kawaida kwa uzito.
-urgent: Piga 999 au 112 kama maumivu ni ya ghafla na makali, anatapika damu au kitu kama mashapo ya kahawa, kinyesi ni cheusi au chenye damu, tumbo ni gumu na limevimba, anazirai, au maumivu yanaenea kifuani.
+urgent: Piga 922 au 999 kama maumivu ni ya ghafla na makali, anatapika damu au kitu kama mashapo ya kahawa, kinyesi ni cheusi au chenye damu, tumbo ni gumu na limevimba, anazirai, au maumivu yanaenea kifuani.
 steps:
 - Msaidie akae katika mkao mzuri, mara nyingi akiwa amelala na magoti yamekunjwa.
 - Mpe mafunda madogo ya maji tu.
@@ -640,13 +640,13 @@ after: Shiriki maelezo yako na daktari na familia.
 ### examples
 - she has severe stomach pain
 - his belly is swollen and hard
-- he vomited blood
-- black stool and weakness
+- he has cramps and keeps vomiting
+- pain in the lower right side of her belly
 - what to do for a bad tummy ache
 - tumbo linamuuma sana
 - tumbo limevimba na ni gumu
-- anatapika damu
-- kinyesi chake ni cheusi
+- anaumwa na tumbo tangu jana
+- tumbo linakata na anatapika
 - maumivu makali ya tumbo ghafla
 
 ## allergic_reaction
@@ -656,7 +656,7 @@ keywords: allergic reaction, allergy, rash, hives, itchy rash, itching all over,
 
 ### en
 intro: A mild allergy causes an itchy rash or hives, sneezing, a runny nose or itchy eyes, without breathing problems or swelling of the face or throat.
-urgent: If they get swelling of the lips, tongue or throat, wheezing, difficulty breathing or feel faint, it is a severe reaction: call 999 or 112 and use their adrenaline injector if they have one.
+urgent: If they get swelling of the lips, tongue or throat, wheezing, difficulty breathing or feel faint, it is a severe reaction: call 922 or 999 and use their adrenaline injector if they have one.
 steps:
 - Remove or stop the trigger if you know it, for example wash off a cream or move away from a plant.
 - An antihistamine tablet can help if they have taken it safely before.
@@ -668,7 +668,7 @@ after: Tell the family and the doctor, and write the new allergy on their medici
 
 ### sw
 intro: Mzio mdogo husababisha vipele vinavyowasha, kupiga chafya, mafua au macho kuwasha, bila matatizo ya kupumua wala uvimbe usoni au kooni.
-urgent: Akipata uvimbe wa midomo, ulimi au koo, mluzi, kupumua kwa shida au kuhisi kuzimia, ni mzio mkali: piga 999 au 112 na utumie sindano yake ya adrenaline kama anayo.
+urgent: Akipata uvimbe wa midomo, ulimi au koo, mluzi, kupumua kwa shida au kuhisi kuzimia, ni mzio mkali: piga 922 au 999 na utumie sindano yake ya adrenaline kama anayo.
 steps:
 - Ondoa au simamisha chanzo kama unakijua, kwa mfano osha krimu au ondoka karibu na mmea.
 - Kidonge cha mzio (antihistamine) kinaweza kusaidia kama amekitumia salama hapo awali.
@@ -694,7 +694,7 @@ keywords: panic attack, anxiety attack, very anxious, hyperventilating, breathin
 
 ### en
 intro: A panic attack causes a racing heart, fast breathing, shaking, sweating and intense fear. It feels frightening but passes, usually within 20 minutes.
-urgent: In an older person, chest pain, breathlessness or feeling faint can be a heart problem. Unless they have had panic attacks before and this feels the same, treat it as a medical emergency and call 999 or 112.
+urgent: In an older person, chest pain, breathlessness or feeling faint can be a heart problem. Unless they have had panic attacks before and this feels the same, treat it as a medical emergency and call 922 or 999.
 steps:
 - Move to a quiet place and stay with them.
 - Speak calmly and reassure them that it will pass.
@@ -708,7 +708,7 @@ after: If attacks keep happening, suggest they talk to their doctor.
 
 ### sw
 intro: Hofu kali (panic attack) husababisha moyo kwenda mbio, kupumua haraka, kutetemeka, jasho na hofu kubwa. Inatisha lakini huisha, kwa kawaida ndani ya dakika 20.
-urgent: Kwa mzee, maumivu ya kifua, kukosa pumzi au kuhisi kuzimia kunaweza kuwa tatizo la moyo. Isipokuwa amewahi kupata hofu kali hapo awali na hii inafanana, ichukulie kama dharura na upige 999 au 112.
+urgent: Kwa mzee, maumivu ya kifua, kukosa pumzi au kuhisi kuzimia kunaweza kuwa tatizo la moyo. Isipokuwa amewahi kupata hofu kali hapo awali na hii inafanana, ichukulie kama dharura na upige 922 au 999.
 steps:
 - Nendeni mahali penye utulivu na ukae naye.
 - Ongea kwa utulivu na umhakikishie kwamba itapita.
@@ -787,7 +787,7 @@ steps:
 - Saline or clean water for rinsing, and an antiseptic such as povidone-iodine.
 - A thermometer, and the person's blood sugar meter and blood pressure machine if they use them.
 - ORS sachets, paracetamol, and any emergency medicines they are prescribed, such as an inhaler or adrenaline injector.
-- A torch, a foil blanket, and a card with emergency numbers (999, 112, Red Cross 1199), the family's numbers, the person's medicines, allergies and conditions.
+- A torch, a foil blanket, and a card with emergency numbers (922 ambulance, 999 or 112, Red Cross 1199), the family's numbers, the person's medicines, allergies and conditions.
 avoid:
 - Do not keep expired medicines. Check the kit every 3 months.
 after: Show everyone in the home where the kit is.
@@ -801,7 +801,7 @@ steps:
 - Maji ya chumvi (saline) au maji safi ya kusuuza, na dawa ya kuua vijidudu kama povidone-iodine.
 - Kipimajoto, na mashine ya sukari na ya shinikizo la damu kama mgonjwa anazitumia.
 - Pakiti za ORS, paracetamol, na dawa zozote za dharura alizoandikiwa, kama inhaler au sindano ya adrenaline.
-- Tochi, blanketi ya foil, na kadi yenye nambari za dharura (999, 112, Red Cross 1199), nambari za familia, dawa za mgonjwa, mizio na magonjwa yake.
+- Tochi, blanketi ya foil, na kadi yenye nambari za dharura (922 ambulance, 999 or 112, Red Cross 1199), nambari za familia, dawa za mgonjwa, mizio na magonjwa yake.
 avoid:
 - Usiweke dawa zilizopitwa na muda. Kagua sanduku kila miezi 3.
 after: Waonyeshe wote nyumbani mahali sanduku lilipo.

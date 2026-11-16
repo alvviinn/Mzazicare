@@ -167,6 +167,7 @@ if ($Only -in 'all', 'api') {
     Set-Content -Path (Join-Path $firstaid '__init__.py') -Value '' -Encoding ascii
     Copy-Item (Join-Path $Root 'ml\firstaid\assistant.py') $firstaid
     Copy-Item (Join-Path $Root 'ml\firstaid\safety.py') $firstaid  # round-3 policy (numpy only)
+    Copy-Item (Join-Path $Root 'ml\firstaid\lexicon.py') $firstaid  # medical word list: no health message turned away
     foreach ($f in 'guide.json', 'intent.onnx', 'intent.json', 'tokenizer.json', 'policy.json',
                    'baseline.npz', 'baseline_vocab.json', 'danger.npz', 'danger_vocab.json',
                    'oos_gate.npz', 'oos_gate_vocab.json') {
@@ -178,6 +179,11 @@ if ($Only -in 'all', 'api') {
     # Zipped with Python: Windows PowerShell's Compress-Archive writes backslashes, which Linux unpacks wrongly.
     # ('zip' is spelled with chr() because Windows PowerShell drops quotes inside arguments to native programs.)
     Run $Py @('-c', 'import shutil, sys; shutil.make_archive(sys.argv[1][:-4], chr(122) + chr(105) + chr(112), sys.argv[2])', $zip, $pkg)
+    # Saving settings restarts Azure's build container. A build started during that restart is killed half-way
+    # ("Deployment has been stopped due to SCM container restart", 2026-11-16) and the site is left without its code,
+    # so give the restart time to finish before uploading.
+    Step 'Letting Azure apply the settings (2 minutes)'
+    Start-Sleep -Seconds 120
     Step 'Uploading the API (Azure installs the Python packages; takes a few minutes)'
     # --async: the CLI's own wait for Azure's build can hang for hours, so we upload and then poll the site ourselves.
     Az webapp deploy -n $state.api -g $state.group --src-path $zip --type zip --async true -o none | Out-Null

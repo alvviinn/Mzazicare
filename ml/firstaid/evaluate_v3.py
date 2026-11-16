@@ -6,6 +6,9 @@
     python -m firstaid.evaluate_v3 freeze        # hash the frozen test set (once, before any scoring)
     python -m firstaid.evaluate_v3 test          # score the frozen test ONCE per candidate -> frozen/test_report_v4.md
 (round 3 used frozen/test_v3.tsv, scored once on 2026-11-12 and now retired; round 3c uses frozen/test_v4.tsv)
+Round 4 (MZAZI_ROUND, default 4; see train_v3): models, policy.json and guide.json are read from the staging folder
+models/v4_stage, the sealed test is frozen/test_v6.tsv, and "test" also scores the chosen candidate through the app's
+own FirstAidAssistant.reply() (the medical word list and every reply rule included), one message at a time.
 
 Gates (a candidate that misses any fails, whatever its accuracy):
   G1 "call 999" shown on >= 99 % of life-threatening messages
@@ -35,7 +38,7 @@ from .config import ARTIFACTS, DATA
 from .knowledge import load_guide
 from .safety import NON_TOPICS, DangerHead, LinearText, decide, decide_check, wilson
 from .train import fit_temperature, label_list
-from .train_v3 import FROZEN, V3, load_sets, read_tsv
+from .train_v3 import FROZEN, ROUND, STAGE, V3, load_sets, read_tsv
 from .assistant import danger_topics
 
 GATES = {'G1': 0.99, 'G2': 0.01, 'G3': 0.02}
@@ -44,13 +47,14 @@ CANDIDATES = {'baseline': ['baseline'], 'fine-tuned': ['finetuned'], 'ensemble':
               'baseline+check': ['baseline'], 'fine-tuned+check': ['finetuned'], 'ensemble+check': ['baseline', 'finetuned'],
               'fine-tuned+inline': ['finetuned'], 'ensemble+inline': ['baseline', 'finetuned']}
 ADVICE = ('answer', 'answer_check')  # replies that show advice (answer_check: advice under the danger banner)
-TEST_FILE = FROZEN / 'test_v5.tsv'  # v3 and v4 are retired (each scored once)
-MANIFEST = FROZEN / 'MANIFEST_v5.json'
-SCORING_LOG = FROZEN / 'scoring_log_v5.jsonl'
+TEST_V = 5 if ROUND == 3 else 6  # v3, v4 and v5 are retired (each scored once)
+TEST_FILE = FROZEN / f'test_v{TEST_V}.tsv'
+MANIFEST = FROZEN / f'MANIFEST_v{TEST_V}.json'
+SCORING_LOG = FROZEN / f'scoring_log_v{TEST_V}.jsonl'
 
 
 # ---------------------------------------------------------------- model outputs (cached per set)
-FT_DIR = DATA / 'models' / 'v3_onnx'
+FT_DIR = DATA / 'models' / 'v3_onnx' if ROUND == 3 else STAGE
 # The live assistant scores one message at a time. The 8-bit model's activation scales are computed per batch, so a
 # message scored inside a batch of 128 can get slightly different numbers. Since 2026-11-12 every set is scored one
 # message at a time, exactly like the app (MZAZI_BATCH overrides, for speed while experimenting).
@@ -60,7 +64,7 @@ BATCH = int(os.environ.get('MZAZI_BATCH', '1'))  # the round-3 fine-tuned model 
 
 def _model_stamp():
     """Fingerprint of every model file, so cached outputs are never reused after a model changes."""
-    files = [FT_DIR / 'intent.onnx'] + [ARTIFACTS / f'{m}.npz' for m in ('baseline', 'danger', 'oos_gate')]
+    files = [FT_DIR / 'intent.onnx'] + [STAGE / f'{m}.npz' for m in ('baseline', 'danger', 'oos_gate')]
     files += [f for f in (FT_DIR / 'danger_head.npz',) if f.exists()]
     return hashlib.sha256('|'.join(f'{f}:{f.stat().st_size}:{f.stat().st_mtime_ns}' for f in files).encode()).hexdigest()[:8]
 
@@ -99,7 +103,7 @@ def outputs(name, rows):
         return dict(np.load(cache))
     out = {}
     for m in ('baseline', 'danger', 'oos_gate'):
-        out[m] = LinearText(ARTIFACTS, m).logits(texts)
+        out[m] = LinearText(STAGE, m).logits(texts)
     out['finetuned'], emb = onnx_outputs(texts)
     if (FT_DIR / 'danger_head.npz').exists():
         out['danger_head'] = DangerHead(FT_DIR / 'danger_head.npz').logits(emb)[:, None]
@@ -219,7 +223,7 @@ def tune():
     # (same temperatures: they are fitted on the same validation outputs)
     only = os.environ.get('MZAZI_TUNE_ONLY')
     if only:
-        old = json.loads((ARTIFACTS / 'policy.json').read_text())
+        old = json.loads((STAGE / 'policy.json').read_text())
         policy['candidates'] = {c: v for c, v in old['candidates'].items() if not c.endswith(only)}
     import itertools
     grids = {
@@ -263,7 +267,7 @@ def tune():
               f"{mt['G1_call999_recall']['rate']:.3f} G2 {mt['G2_wrong_advice']['rate']:.3f} G3 "
               f"{mt['G3_non_first_aid_treated_as_first_aid']['rate']:.3f} direct {mt['direct_correct_answers']['rate']:.3f}"
               f" check {mt['check_all']['rate']:.3f} {'PASS' if ok else 'FAIL'} (margins)", flush=True)
-    (ARTIFACTS / 'policy.json').write_text(json.dumps(policy, indent=1), encoding='utf-8')
+    (STAGE / 'policy.json').write_text(json.dumps(policy, indent=1), encoding='utf-8')
 
 
 def cfg_for(policy, cand):
@@ -320,7 +324,7 @@ def misses(rows, res, mt):
 
 def report(which):
     guide, labels = load_guide(), label_list()
-    policy = json.loads((ARTIFACTS / 'policy.json').read_text())
+    policy = json.loads((STAGE / 'policy.json').read_text())
     val, dev = load_sets()
     rows = {'val': val, 'dev': dev}[which]
     out = outputs(which, rows)
@@ -356,9 +360,9 @@ def test():
     man = json.loads(MANIFEST.read_text())
     if sha(TEST_FILE) != man['sha256']:
         sys.exit('The frozen test file has changed since it was frozen. Refusing to score.')
-    policy = json.loads((ARTIFACTS / 'policy.json').read_text())
+    policy = json.loads((STAGE / 'policy.json').read_text())
     from . import assistant
-    files = [FT_DIR / 'intent.onnx', Path(assistant.__file__)] + [ARTIFACTS / f'{m}.npz' for m in ('baseline', 'danger', 'oos_gate')]
+    files = [FT_DIR / 'intent.onnx', Path(assistant.__file__)] + [STAGE / f'{m}.npz' for m in ('baseline', 'danger', 'oos_gate')]
     files += [f for f in (FT_DIR / 'danger_head.npz',) if f.exists()]
     fingerprint = hashlib.sha256((json.dumps(policy, sort_keys=True) + ''.join(sha(f) for f in files)).encode()).hexdigest()[:16]
     chosen = policy.get('chosen_before_test')
@@ -379,7 +383,16 @@ def test():
     note = (f"FROZEN TEST: {man['rows']} messages by an independent writer, second-pass labelled, sha256 "
             f"{man['sha256'][:12]}…, scored once (fingerprint {fingerprint}). 95 % Wilson intervals in brackets. "
             f"Candidate chosen on validation BEFORE scoring: {chosen}.")
-    text = '\n'.join(table(results, 'First aid round 3d: frozen test', note) + detail) + '\n'
+    text = '\n'.join(table(results, f'First aid round {ROUND}: frozen test', note) + detail) + '\n'
+    verdict = {}
+    if ROUND >= 4:  # the number that matters: the chosen candidate exactly as the app answers
+        res = as_app(rows)
+        mt = metrics(rows, res)
+        verdict = {'as_app': passes(mt)}
+        text = '\n'.join(table({chosen + ' (as the app answers)': mt}, f'First aid round {ROUND}: frozen test, as the app answers',
+                               f'The chosen candidate through FirstAidAssistant.reply(), one message at a time, the '
+                               f'medical word list included. Same single scoring as below.')
+                         + ['', '## as the app answers'] + misses(rows, res, mt)) + '\n\n' + text
     overlap = FROZEN / (TEST_FILE.stem + '_overlap.json')
     if overlap.exists():  # the same score without test messages that have a near-copy in the training data
         near = set(json.loads(overlap.read_text())['rows_with_near_copy_in_training'])
@@ -388,13 +401,41 @@ def test():
         sub = [rows[i] for i in keep]
         res = run(sub, {k: v[keep] for k, v in out.items()}, models, cfg, guide, labels)
         text += '\n'.join(table({chosen: metrics(sub, res)}, 'Same, without near-copies of training messages',
-                                f'{len(near)} of {len(rows)} test messages have a training message with char n-gram '
-                                f'cosine >= 0.80; they are left out here.')) + '\n'
+                                f'{len(near)} of {len(rows)} test messages have a near-copy (char n-gram cosine >= 0.80) '
+                                f'in the {json.loads(overlap.read_text()).get("compared_with", "training data")}; '
+                                f'they are left out here.')) + '\n'
     (FROZEN / f'test_report_{TEST_FILE.stem[5:]}.md').write_text(text, encoding='utf-8')
     with open(SCORING_LOG, 'a') as f:
         f.write(json.dumps({'fingerprint': fingerprint, 'at': datetime.now().isoformat(timespec='seconds'),
-                            'chosen': chosen, 'verdicts': {c: passes(results[c]) for c in results}}) + '\n')
+                            'chosen': chosen, 'verdicts': {c: passes(results[c]) for c in results}, **verdict}) + '\n')
     print(text)
+
+
+def as_app(rows, artifacts=None):
+    """Each message through the assistant the app runs (artifacts: the staging folder), mapped to the fields metrics()
+    reads. argmax is the fine-tuned model's top label (only for the topic-accuracy line)."""
+    from .assistant import FirstAidAssistant
+    a = FirstAidAssistant(artifacts or STAGE)
+    res = []
+    for r in rows:
+        o = a.reply(message=r['text'])
+        kind = 'answer_check' if o['kind'] == 'answer' and o.get('danger_banner') else o['kind']
+        options = [x['topic'] for x in (o.get('followup') or {}).get('options', [])] if kind == 'clarify' else []
+        res.append({'kind': kind, 'topic': o.get('topic'), 'emergency': bool(o.get('emergency')), 'options': options,
+                    'argmax': a.labels[int(np.argmax(a._logits(r['text'])[0]))]})
+    return res
+
+
+def report_app(which):
+    """Validation or development through the app's reply() (for iterating; never a test result)."""
+    val, dev = load_sets()
+    rows = {'val': val, 'dev': dev}[which]
+    res = as_app(rows)
+    mt = metrics(rows, res)
+    text = '\n'.join(table({'as the app answers': mt}, f'First aid round {ROUND}: {which}, as the app answers',
+                           'Not a test result.') + misses(rows, res, mt)) + '\n'
+    (V3 / f'report_app_{which}.md').write_text(text, encoding='utf-8')
+    print('\n'.join(table({'as the app answers': mt}, f'{which}, as the app answers', 'Not a test result.')))
 
 
 def test_as_deployed():
@@ -410,7 +451,7 @@ def test_as_deployed():
         sys.exit('Score the test with "test" first.')
     if any(e.get('kind') == 'as_deployed' for e in log):
         sys.exit('The as-deployed re-measurement was already done. Not allowed again.')
-    policy = json.loads((ARTIFACTS / 'policy.json').read_text())
+    policy = json.loads((STAGE / 'policy.json').read_text())
     chosen = policy['chosen_before_test']
     if chosen != log[0]['chosen']:
         sys.exit('The chosen candidate changed since the test was scored. Refusing.')
@@ -433,5 +474,5 @@ def test_as_deployed():
 
 if __name__ == '__main__':
     cmd = sys.argv[1]
-    {'tune': tune, 'freeze': freeze, 'test': test, 'test_as_deployed': test_as_deployed}.get(
-        cmd, lambda: report(sys.argv[2]))()
+    {'tune': tune, 'freeze': freeze, 'test': test, 'test_as_deployed': test_as_deployed,
+     'report_app': lambda: report_app(sys.argv[2])}.get(cmd, lambda: report(sys.argv[2]))()

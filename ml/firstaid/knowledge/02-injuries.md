@@ -7,7 +7,7 @@ keywords: fell, fall, fallen, found on the floor, slipped, tripped, fell down, f
 
 ### en
 intro: After a fall, an older person can be badly hurt without it being obvious. Do not rush to lift them.
-urgent: Call 999 or 112 if they hit their head, were knocked out even briefly, take blood thinners, cannot move a leg, have severe pain in the hip, back or neck, are confused, or cannot get up.
+urgent: Call 922 or 999 if they hit their head, were knocked out even briefly, take blood thinners, cannot move a leg, have severe pain in the hip, back or neck, are confused, or cannot get up.
 steps:
 - Stay calm, check the area is safe, and talk to them. Ask what happened and where it hurts.
 - Check they are awake and breathing normally. If not, follow the unresponsive or CPR steps.
@@ -22,7 +22,7 @@ after: Tell the family and their doctor about every fall, even if they seem fine
 
 ### sw
 intro: Baada ya kuanguka, mzee anaweza kuwa ameumia vibaya bila kuonekana wazi. Usikimbilie kumwinua.
-urgent: Piga 999 au 112 kama aligonga kichwa, alipoteza fahamu hata kwa muda mfupi, anatumia dawa za kupunguza kuganda kwa damu, hawezi kusogeza mguu, ana maumivu makali kiunoni, mgongoni au shingoni, amechanganyikiwa, au hawezi kuinuka.
+urgent: Piga 922 au 999 kama aligonga kichwa, alipoteza fahamu hata kwa muda mfupi, anatumia dawa za kupunguza kuganda kwa damu, hawezi kusogeza mguu, ana maumivu makali kiunoni, mgongoni au shingoni, amechanganyikiwa, au hawezi kuinuka.
 steps:
 - Tulia, hakikisha mahali ni salama, na uongee naye. Muulize kilichotokea na wapi panauma.
 - Hakikisha yuko macho na anapumua kawaida. Kama sivyo, fuata hatua za asiyejitambua au CPR.
@@ -68,7 +68,7 @@ keywords: broken bone, fracture, broken arm, broken leg, broken wrist, broken hi
 
 ### en
 intro: Signs of a broken bone are pain, swelling, bruising, a limb at a strange angle, or not being able to move or put weight on it.
-urgent: Call 999 or 112 for a suspected broken hip, thigh, pelvis, neck or back, a bone poking through the skin, or a limb that is cold, pale or numb below the injury. For other breaks, take them to hospital.
+urgent: Call 922 or 999 for a suspected broken hip, thigh, pelvis, neck or back, a bone poking through the skin, or a limb that is cold, pale or numb below the injury. For other breaks, take them to hospital.
 steps:
 - Keep them still and support the injured part in the position you found it, using pillows, rolled blankets or clothing.
 - For an arm, if they can bend it, support it in a sling made from a scarf or cloth.
@@ -83,7 +83,7 @@ after: Older people often break a hip or wrist in a fall. Even if they can still
 
 ### sw
 intro: Dalili za kuvunjika mfupa ni maumivu, uvimbe, michubuko, kiungo kilichopinda isivyo kawaida, au kushindwa kukisogeza au kukiwekea uzito.
-urgent: Piga 999 au 112 ukishuku nyonga, paja, fupanyonga, shingo au mgongo umevunjika, mfupa umetoboa ngozi, au kiungo ni baridi, cheupe au hakihisi chini ya jeraha. Kwa mivunjiko mingine, mpeleke hospitali.
+urgent: Piga 922 au 999 ukishuku nyonga, paja, fupanyonga, shingo au mgongo umevunjika, mfupa umetoboa ngozi, au kiungo ni baridi, cheupe au hakihisi chini ya jeraha. Kwa mivunjiko mingine, mpeleke hospitali.
 steps:
 - Mwache atulie na usaidie sehemu iliyoumia ilivyo, kwa mito, blanketi zilizoviringishwa au nguo.
 - Kwa mkono, kama anaweza kuukunja, ushikilie kwa kombeo lililotengenezwa kwa skafu au kitambaa.
@@ -164,7 +164,7 @@ keywords: head injury, hit his head, hit her head, bumped head, knock on the hea
 
 ### en
 intro: Most bumps to the head are minor, but older people and anyone on blood thinners can bleed inside the skull, sometimes hours later.
-urgent: Call 999 or 112 if they were knocked out even briefly, are confused or very drowsy, vomit more than once, have a severe or worsening headache, have a seizure, have blood or clear fluid from the ears or nose, have weakness, slurred speech, unequal pupils, double vision, loss of balance or memory, or difficulty walking. Anyone over 65, on blood thinners, who has had brain surgery or has been drinking alcohol should be checked at a hospital or clinic today.
+urgent: Call 922 or 999 if they were knocked out even briefly, are confused or very drowsy, vomit more than once, have a severe or worsening headache, have a seizure, have blood or clear fluid from the ears or nose, have weakness, slurred speech, unequal pupils, double vision, loss of balance or memory, or difficulty walking. Anyone over 65, on blood thinners, who has had brain surgery or has been drinking alcohol should be checked at a hospital or clinic today.
 steps:
 - Help them sit down and rest.
 - Hold a cold pack wrapped in a cloth on the bump for 10 to 20 minutes.
@@ -179,7 +179,7 @@ after: Tell the family and the doctor about the head injury, even if it seemed s
 
 ### sw
 intro: Michubuko mingi ya kichwa ni midogo, lakini wazee na yeyote anayetumia dawa za kupunguza kuganda kwa damu wanaweza kuvuja damu ndani ya fuvu, wakati mwingine saa kadhaa baadaye.
-urgent: Piga 999 au 112 kama alipoteza fahamu hata kwa muda mfupi, amechanganyikiwa au anasinzia sana, anatapika zaidi ya mara moja, ana maumivu makali ya kichwa au yanayozidi, anapata kifafa, anatokwa damu au maji meupe masikioni au puani, ana udhaifu, maneno hayatoki vizuri, mboni za macho hazilingani, anaona vitu viwili, anapoteza usawa au kumbukumbu, au anatembea kwa shida. Yeyote mwenye zaidi ya miaka 65, anayetumia dawa za kupunguza kuganda kwa damu, aliyefanyiwa upasuaji wa ubongo au aliyekunywa pombe akigonga kichwa achunguzwe hospitali au kliniki leo.
+urgent: Piga 922 au 999 kama alipoteza fahamu hata kwa muda mfupi, amechanganyikiwa au anasinzia sana, anatapika zaidi ya mara moja, ana maumivu makali ya kichwa au yanayozidi, anapata kifafa, anatokwa damu au maji meupe masikioni au puani, ana udhaifu, maneno hayatoki vizuri, mboni za macho hazilingani, anaona vitu viwili, anapoteza usawa au kumbukumbu, au anatembea kwa shida. Yeyote mwenye zaidi ya miaka 65, anayetumia dawa za kupunguza kuganda kwa damu, aliyefanyiwa upasuaji wa ubongo au aliyekunywa pombe akigonga kichwa achunguzwe hospitali au kliniki leo.
 steps:
 - Msaidie akae na apumzike.
 - Shikilia barafu iliyofungwa kwenye kitambaa juu ya uvimbe kwa dakika 10 hadi 20.
@@ -215,7 +215,7 @@ keywords: neck injury, back injury, spine injury, spinal injury, can't feel legs
 
 ### en
 intro: Suspect a neck or back injury after a fall from a height, a hard blow to the head, a road accident, or if they have neck or back pain, tingling, numbness or weakness in the arms or legs.
-urgent: Call 999 or 112 now.
+urgent: Call 922 or 999 now.
 steps:
 - Tell them not to move.
 - Kneel behind their head and hold it still with your hands on both sides, keeping the head, neck and body in a straight line.
@@ -229,7 +229,7 @@ after: Tell the paramedics how the injury happened and whether they could move t
 
 ### sw
 intro: Shuku jeraha la shingo au mgongo baada ya kuanguka kutoka juu, pigo kubwa kichwani, ajali ya barabarani, au kama ana maumivu ya shingo au mgongo, kuwashwa, kufa ganzi au udhaifu mikononi au miguuni.
-urgent: Piga 999 au 112 sasa hivi.
+urgent: Piga 922 au 999 sasa hivi.
 steps:
 - Mwambie asisogee.
 - Piga magoti nyuma ya kichwa chake na ukishike kimya kwa mikono pande zote mbili, ukiweka kichwa, shingo na mwili katika mstari mmoja.
@@ -388,7 +388,7 @@ keywords: burn, burnt, burned, scald, scalded, hot water burn, boiling water, fi
 
 ### en
 intro: Cooling a burn quickly with water reduces the damage. Older people's skin burns more deeply.
-urgent: Call 999 or 112 or go to hospital if the burn is bigger than the person's hand, is on the face, hands, feet, genitals or a joint, looks white, leathery or charred, was caused by electricity or chemicals, or they breathed in smoke.
+urgent: Call 922 or 999 or go to hospital if the burn is bigger than the person's hand, is on the face, hands, feet, genitals or a joint, looks white, leathery or charred, was caused by electricity or chemicals, or they breathed in smoke.
 steps:
 - Move them away from the heat source.
 - Cool the burn under cool running water for 20 minutes. This still helps up to 3 hours after the burn.
@@ -405,7 +405,7 @@ after: See a nurse or doctor if the burn blisters, is larger than a coin, or sho
 
 ### sw
 intro: Kupoza jeraha la moto haraka kwa maji kunapunguza madhara. Ngozi ya wazee huungua kwa kina zaidi.
-urgent: Piga 999 au 112 au nenda hospitali kama jeraha ni kubwa kuliko kiganja cha mtu, liko usoni, mikononi, miguuni, sehemu za siri au kwenye kiungo, linaonekana jeupe, gumu kama ngozi kavu au limeungua kuwa jeusi, lilisababishwa na umeme au kemikali, au alivuta moshi.
+urgent: Piga 922 au 999 au nenda hospitali kama jeraha ni kubwa kuliko kiganja cha mtu, liko usoni, mikononi, miguuni, sehemu za siri au kwenye kiungo, linaonekana jeupe, gumu kama ngozi kavu au limeungua kuwa jeusi, lilisababishwa na umeme au kemikali, au alivuta moshi.
 steps:
 - Mwondoe karibu na chanzo cha joto.
 - Poza jeraha chini ya maji baridi yanayotiririka kwa dakika 20. Hii bado inasaidia hadi saa 3 baada ya kuungua.
@@ -450,7 +450,7 @@ keywords: eye injury, something in the eye, chemical in eye, splash in eye, dust
 
 ### en
 intro: Eyes are delicate. Rinse anything chemical out straight away and do not rub.
-urgent: Call 999 or 112 or go to hospital for chemicals in the eye, anything stuck in the eye, a cut to the eye, or sudden loss of vision.
+urgent: Call 922 or 999 or go to hospital for chemicals in the eye, anything stuck in the eye, a cut to the eye, or sudden loss of vision.
 steps:
 - For a chemical splash: hold the eye open under gently running lukewarm water for at least 20 minutes, with the injured eye lower so water runs away from the other eye. Remove contact lenses if they come out easily.
 - For dust or grit: ask them to blink, then rinse the eye with clean water.
@@ -463,7 +463,7 @@ after: See a doctor if pain, redness, blurred vision or light sensitivity contin
 
 ### sw
 intro: Macho ni dhaifu. Suuza kemikali yoyote mara moja na usisugue.
-urgent: Piga 999 au 112 au nenda hospitali kwa kemikali jichoni, kitu kilichokwama jichoni, jeraha la jicho, au kupoteza uwezo wa kuona ghafla.
+urgent: Piga 922 au 999 au nenda hospitali kwa kemikali jichoni, kitu kilichokwama jichoni, jeraha la jicho, au kupoteza uwezo wa kuona ghafla.
 steps:
 - Kwa kemikali iliyorukia jichoni: shikilia jicho wazi chini ya maji ya uvuguvugu yanayotiririka polepole kwa angalau dakika 20, jicho lililoumia likiwa chini ili maji yasiingie jicho jingine. Toa lenzi za macho kama zinatoka kwa urahisi.
 - Kwa vumbi au mchanga: mwambie apepese, kisha suuza jicho kwa maji safi.
@@ -492,7 +492,7 @@ keywords: dog bite, bitten by a dog, cat bite, cat scratch, animal bite, monkey 
 
 ### en
 intro: Animal bites can carry infection and, in Kenya, rabies, which is deadly once symptoms start but can be prevented with vaccine.
-urgent: If the bleeding is heavy, press on it and call 999 or 112.
+urgent: If the bleeding is heavy, press on it and call 922 or 999.
 steps:
 - Wash the wound straight away with soap and plenty of running water for 15 minutes. This greatly lowers the rabies risk.
 - If you have an antiseptic such as povidone-iodine, apply it after washing.
@@ -506,7 +506,7 @@ after: Watch for redness, swelling, pus or fever over the next days and return t
 
 ### sw
 intro: Kuumwa na wanyama kunaweza kuleta maambukizi na, nchini Kenya, kichaa cha mbwa, ambacho huua dalili zikianza lakini kinaweza kuzuiwa kwa chanjo.
-urgent: Kama damu ni nyingi, bonyeza jeraha na upige 999 au 112.
+urgent: Kama damu ni nyingi, bonyeza jeraha na upige 922 au 999.
 steps:
 - Osha jeraha mara moja kwa sabuni na maji mengi yanayotiririka kwa dakika 15. Hii inapunguza sana hatari ya kichaa cha mbwa.
 - Kama una dawa ya kuua vijidudu kama povidone-iodine, ipake baada ya kuosha.
@@ -537,7 +537,7 @@ keywords: snake bite, bitten by a snake, snakebite, snake bit, cobra, puff adder
 
 ### en
 intro: Snake bites in Kenya can be dangerous. Stay calm, keep still, and get to hospital fast, antivenom is given there.
-urgent: Call 999 or 112 or take them to the nearest hospital now.
+urgent: Call 922 or 999 or take them to the nearest hospital now.
 steps:
 - Move away from the snake.
 - Keep the person calm, lying down and as still as possible, movement spreads venom.
@@ -554,7 +554,7 @@ after: Even if the person feels fine, they must be seen at hospital, because som
 
 ### sw
 intro: Kuumwa na nyoka nchini Kenya kunaweza kuwa hatari. Tulia, mwache atulie, na mfike hospitali haraka, dawa ya sumu (antivenom) hutolewa huko.
-urgent: Piga 999 au 112 au mpeleke hospitali iliyo karibu sasa hivi.
+urgent: Piga 922 au 999 au mpeleke hospitali iliyo karibu sasa hivi.
 steps:
 - Ondokeni mbali na nyoka.
 - Mtulize mtu, alale chini na atulie kadri inavyowezekana, kusogea husambaza sumu.
@@ -588,7 +588,7 @@ keywords: bee sting, stung by a bee, wasp sting, insect bite, insect sting, scor
 
 ### en
 intro: Most stings cause pain, redness and swelling that settle in a day or two.
-urgent: Call 999 or 112 if they have swelling of the face, lips or throat, difficulty breathing, feel faint, were stung in the mouth or throat, or were stung many times.
+urgent: Call 922 or 999 if they have swelling of the face, lips or throat, difficulty breathing, feel faint, were stung in the mouth or throat, or were stung many times.
 steps:
 - If a bee sting is left in the skin, scrape it out sideways with a fingernail or a card as soon as possible.
 - Wash the area with soap and water.
@@ -603,7 +603,7 @@ after: See a doctor if swelling keeps spreading after 2 days or there are signs 
 
 ### sw
 intro: Miuma mingi husababisha maumivu, wekundu na uvimbe ambao hupungua kwa siku moja au mbili.
-urgent: Piga 999 au 112 kama ana uvimbe usoni, midomoni au kooni, anapumua kwa shida, anahisi kuzimia, aliumwa mdomoni au kooni, au aliumwa mara nyingi.
+urgent: Piga 922 au 999 kama ana uvimbe usoni, midomoni au kooni, anapumua kwa shida, anahisi kuzimia, aliumwa mdomoni au kooni, au aliumwa mara nyingi.
 steps:
 - Kama mwiba wa nyuki umebaki kwenye ngozi, ukwangue kwa pembeni kwa kucha au kadi haraka iwezekanavyo.
 - Osha sehemu hiyo kwa sabuni na maji.

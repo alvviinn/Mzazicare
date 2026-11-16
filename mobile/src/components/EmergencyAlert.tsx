@@ -94,7 +94,7 @@ export function EmergencyAlert({ token }: { token: string }) {
           {ringing && (
             <Button title="I'm handling it" variant="light" icon="check" loading={busy} onPress={() => respond(current)} />
           )}
-          <Button title="Call 999" variant={ringing ? 'secondary' : 'danger'} icon="phone" onPress={() => Linking.openURL('tel:999')} />
+          <Button title="Call 922 (ambulance)" variant={ringing ? 'secondary' : 'danger'} icon="phone" onPress={() => Linking.openURL('tel:922')} />
           {pos && (
             <Button
               title={`Where ${first} is`}

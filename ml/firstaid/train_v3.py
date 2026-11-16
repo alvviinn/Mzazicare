@@ -1,4 +1,10 @@
 """Round 3: caretaker-style data, a danger detector and an out-of-scope gate (see safety.py and evaluate_v3.py).
+Round 4 (the default; MZAZI_ROUND=3 reproduces round 3): five new topics (internal_bleeding, mental_health_crisis,
+embedded_object, foreign_object, headache), more caretaker-style data for the topics the model was unsure about,
+harder non-first-aid messages, validation handoff/val_r4.tsv, sealed test frozen/test_v6.tsv. Every round-4 model is
+written to a staging folder (models/v4_stage), never to artifacts/: installing it is a separate decision.
+
+    python -m firstaid.train_v3 data | linear | finetune_r4 | export | danger_head | stage_guide
 
     python -m firstaid.train_v3 data      # build train/val v3 (near-duplicates of val/test removed from training)
     python -m firstaid.train_v3 linear    # train + export the baseline topic model, danger detector, out-of-scope gate
@@ -30,7 +36,11 @@ from .train import NON_TOPICS, fit_temperature, label_list, macro_f1
 
 FROZEN = DATA / 'frozen'
 HANDOFF = DATA / 'handoff'
-V3 = DATA / 'v3'
+ROUND = int(os.environ.get('MZAZI_ROUND', '4'))
+V3 = DATA / ('v3' if ROUND == 3 else f'v{ROUND}')  # the round's working folder (data, caches, reports)
+STAGE = ARTIFACTS if ROUND == 3 else DATA / 'models' / f'v{ROUND}_stage'  # where the round's models are written
+TESTS = ('test_v3.tsv', 'test_v4.tsv') if ROUND == 3 else ('test_v3.tsv', 'test_v4.tsv', 'test_v5.tsv', 'test_v6.tsv')
+NEW_TOPICS = ('internal_bleeding', 'mental_health_crisis', 'embedded_object', 'foreign_object', 'headache')
 DUP_COSINE = 0.80  # training messages this similar (char n-gram TF-IDF cosine) to a val/test message are dropped
 OVERSAMPLE = 3  # caretaker-style training messages count this many times (plus typo variations)
 
@@ -63,9 +73,25 @@ def fill_lt(rows, guide):
 
 def load_sets():
     guide = load_guide()
-    val = fill_lt(read_tsv(HANDOFF / 'val_caretaker.tsv') + read_tsv(HERE / 'eval/test_questions_2.tsv'), guide)
+    val = read_tsv(HANDOFF / 'val_caretaker.tsv') + read_tsv(HERE / 'eval/test_questions_2.tsv')
+    if ROUND >= 4 and (HANDOFF / 'val_r4.tsv').exists():
+        val += read_tsv(HANDOFF / 'val_r4.tsv')
+    val = fill_lt(relabel(val, guide), guide)
     dev = fill_lt(read_tsv(HERE / 'eval/test_questions.tsv'), guide)
     return val, dev
+
+
+def relabel(rows, guide):
+    """Round 4: vomiting/coughing blood and black stools were written as abdominal_pain before internal_bleeding
+    existed; they now belong to internal_bleeding (the boundary in the topics.md round-4 notes)."""
+    if ROUND < 4:
+        return rows
+    from . import lexicon
+    for r in rows:
+        if r['label'] == 'abdominal_pain' and 'internal_bleeding' in lexicon.topics(r['text'], guide):
+            r['label'] = r['advice'] = 'internal_bleeding'
+            r['lt'] = True
+    return rows
 
 
 def near_duplicates(candidates, references, threshold=DUP_COSINE):
@@ -84,17 +110,27 @@ def build_data():
     rng = random.Random(3)
     guide = load_guide()
     labels = set(label_list())
-    test = [r for f in ('test_v3.tsv', 'test_v4.tsv') if (FROZEN / f).exists() for r in read_tsv(FROZEN / f)]
+    test = [r for f in TESTS if (FROZEN / f).exists() for r in read_tsv(FROZEN / f)]  # used only to drop near-copies
     val, dev = load_sets()
     old = [json.loads(l) for f in ('train.jsonl', 'val.jsonl') for l in open(DATA / f, encoding='utf-8')]
     rows = [{'text': r['text'], 'label': r['label'], 'lt': bool(r['label'] in guide and guide[r['label']]['critical']),
-             'source': r['source']} for r in old]
+             'source': r['source'], 'advice': r['label']} for r in old]
+    if ROUND >= 4:  # the new topics' hand-written guide examples, with typo variations
+        for t in NEW_TOPICS:
+            for e in guide[t]['examples']:
+                lang = 'sw' if lang_of(e) == 'sw' else 'en'
+                for i, v in enumerate([e] + sorted({vary(e, lang, rng) for _ in range(3)} - {e})):
+                    rows.append({'text': v, 'label': t, 'lt': guide[t]['critical'], 'advice': t,
+                                 'source': 'guide' if i == 0 else 'guide_variation'})
+    rows = relabel(rows, guide)
     care = []
     parts = ('train_caretaker_part*.tsv', 'train_negatives_part*.tsv', 'train_extra_part*.tsv')
+    if ROUND >= 4:
+        parts += ('train_r4_*.tsv',)
     for p in [f for pattern in parts for f in sorted(HANDOFF.glob(pattern))]:
         care += read_tsv(p)
     bad = [r for r in care if r['label'] not in labels]
-    care = [r for r in care if r['label'] in labels]
+    care = relabel([r for r in care if r['label'] in labels], guide)
     for r in care:
         lang = 'sw' if r['lang'] == 'sw' else 'en'
         variants = {r['text']}
@@ -120,7 +156,7 @@ def build_data():
         'caretaker_training_messages': len(care), 'caretaker_rows_with_bad_labels': len(bad),
         'training_rows_before_dedup': len(rows), 'dropped_as_near_duplicates_of_val_dev_or_test': len(drop),
         'training_rows': len(kept), 'validation_rows': len(val), 'development_rows': len(dev), 'test_rows': len(test),
-        'training_by_source': by(kept, 'source'),
+        'training_by_source': by(kept, 'source'), 'training_by_label': by(kept, 'label'),
         'training_life_threatening_share': float(np.mean([r['lt'] for r in kept])),
     }
     (V3 / 'data_report.json').write_text(json.dumps(report, indent=1), encoding='utf-8')
@@ -137,7 +173,7 @@ def export_linear(name, words, chars, clf, labels, temperature):
     scale = np.abs(coef).max(axis=1, keepdims=True) / 127.0
     scale[scale == 0] = 1.0
     np.savez_compressed(
-        ARTIFACTS / f'{name}.npz', coef=np.round(coef / scale).astype(np.int8), scale=scale.astype(np.float32),
+        STAGE / f'{name}.npz', coef=np.round(coef / scale).astype(np.int8), scale=scale.astype(np.float32),
         intercept=clf.intercept_.astype(np.float32),
         idf_words=words.idf_.astype(np.float32), idf_chars=chars.idf_.astype(np.float32))
     vw, vc = [None] * len(words.vocabulary_), [None] * len(chars.vocabulary_)
@@ -145,7 +181,7 @@ def export_linear(name, words, chars, clf, labels, temperature):
         vw[i] = t
     for t, i in chars.vocabulary_.items():
         vc[i] = t
-    (ARTIFACTS / f'{name}_vocab.json').write_text(json.dumps(
+    (STAGE / f'{name}_vocab.json').write_text(json.dumps(
         {'labels': labels, 'temperature': temperature, 'words': vw, 'chars': vc,
          'word_ngrams': list(words.ngram_range), 'char_ngrams': list(chars.ngram_range)}, ensure_ascii=False), encoding='utf-8')
 
@@ -187,8 +223,9 @@ def train_linear():
         z = clf.decision_function(B)
         z2 = z if z.ndim == 2 else np.stack([np.zeros_like(z), z], axis=1)  # binary: two-class logits for calibration
         temperature = fit_temperature(z2, yva)
+        STAGE.mkdir(parents=True, exist_ok=True)
         export_linear(name, words, chars, clf, names, temperature)
-        lite = LinearText(ARTIFACTS, name)
+        lite = LinearText(STAGE, name)
         same = float(np.mean(lite.probabilities(Xva).argmax(1) == clf.predict(B)))
         summary[name] = {'C': C, 'val_macro_f1': f1, 'temperature': temperature, 'numpy_matches_sklearn': same}
         print(f'{name}: C={C} T={temperature:.2f}, numpy runtime agrees with scikit-learn on {same * 100:.2f} % of val',
@@ -236,9 +273,18 @@ def finetune(epochs=3, batch=32, lr=5e-5, tag='v3', init=None):
     Xtr, ytr = [r['text'] for r in tr], np.array([idx[r['label']] for r in tr])
     Xva, yva = [r['text'] for r in va], np.array([idx[r['label']] for r in va])
     model = build_classifier(len(labels))
-    if init:  # warm start: continue from an earlier fine-tuned model (same labels)
-        model.load_state_dict(torch.load(MODELS / init))
-        print(f'warm start from {init}', flush=True)
+    if init:  # warm start: continue from an earlier fine-tuned model
+        state = torch.load(MODELS / init)
+        old = json.loads((MODELS / init).with_suffix('.json').read_text())['labels']
+        if old != labels:  # new topics: copy the head rows of the labels both models know, new rows start fresh
+            head = {k: model.state_dict()[k].clone() for k in ('head.weight', 'head.bias')}
+            for i, l in enumerate(labels):
+                if l in old:
+                    for k in head:
+                        head[k][i] = state[k][old.index(l)]
+            state.update(head)
+        model.load_state_dict(state)
+        print(f'warm start from {init} ({len(old)} -> {len(labels)} labels)', flush=True)
     counts = np.bincount(ytr, minlength=len(labels)).astype(float)
     weights = torch.tensor((counts.sum() / (len(labels) * np.maximum(counts, 1))) ** 0.5, dtype=torch.float32)
     loss_fn = nn.CrossEntropyLoss(weight=weights, label_smoothing=0.1)
@@ -293,7 +339,7 @@ def finetune(epochs=3, batch=32, lr=5e-5, tag='v3', init=None):
     print('done', flush=True)
 
 
-def export_onnx(source='finetune_v3.pt'):
+def export_onnx(source=None):
     """Export models/finetune_v3.pt to 8-bit ONNX in a staging folder (models/v3_onnx). The live
     artifacts/intent.onnx is not touched: replacing it is a separate decision after the evaluation."""
     import torch
@@ -301,8 +347,9 @@ def export_onnx(source='finetune_v3.pt'):
 
     from .train import MODELS, batch_logits, build_classifier, prep
     labels = label_list()
-    stage = MODELS / 'v3_onnx'
-    stage.mkdir(exist_ok=True)
+    source = source or ('finetune_v3.pt' if ROUND == 3 else f'finetune_v{ROUND}.pt')
+    stage = MODELS / 'v3_onnx' if ROUND == 3 else STAGE
+    stage.mkdir(parents=True, exist_ok=True)
     model = build_classifier(len(labels))
     model.load_state_dict(torch.load(MODELS / source))
     model.eval()
@@ -320,7 +367,7 @@ def export_onnx(source='finetune_v3.pt'):
 
     from .train import mean_pool
     x = model.tok(prep(['bibi ameanguka bafuni', 'he is choking']), padding=True, return_tensors='pt')
-    full = MODELS / 'intent_v3_fp32.onnx'
+    full = MODELS / f'intent_v{ROUND}_fp32.onnx'
     torch.onnx.export(Wrapper(model), (x['input_ids'], x['attention_mask']), str(full),
                       input_names=['input_ids', 'attention_mask'], output_names=['logits', 'embedding'],
                       dynamic_axes={'input_ids': {0: 'batch', 1: 'tokens'}, 'attention_mask': {0: 'batch', 1: 'tokens'},
@@ -378,7 +425,7 @@ def danger_head():
         return float(np.mean(score[yva == 0] >= cut))
 
     from .safety import LinearText
-    tfidf = LinearText(ARTIFACTS, 'danger').logits([r['text'] for r in va])[:, 0]
+    tfidf = LinearText(STAGE, 'danger').logits([r['text'] for r in va])[:, 0]
     print(f'word-based detector: flags {flagged_at_recall(tfidf):.1%} of not-life-threatening validation messages '
           f'at 99 % recall', flush=True)
     best = None
@@ -398,11 +445,26 @@ def danger_head():
     print(f'saved {path}: C={C} T={temperature:.2f}; numpy matches scikit-learn: {same}', flush=True)
 
 
+def stage_guide():
+    """The guide with the round's topics, next to the round's models (what artifacts/guide.json becomes on install)."""
+    from .knowledge import check
+    guide = load_guide()
+    problems = check(guide)
+    if problems:
+        sys.exit('\n'.join(problems))
+    STAGE.mkdir(parents=True, exist_ok=True)
+    out = {tid: {k: v for k, v in t.items() if k != 'source'} for tid, t in guide.items()}
+    (STAGE / 'guide.json').write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding='utf-8')
+    print(f'{len(guide)} topics -> {STAGE / "guide.json"}')
+
+
 if __name__ == '__main__':
-    if sys.argv[1] == 'finetune_warm':  # round 3b: 2 more epochs from finetune_v3.pt on the extended data
+    if sys.argv[1] == 'finetune_r4':  # round 4: warm start from round 3b, head grown to the new labels
+        finetune(epochs=2, lr=4e-5, tag='v4', init='finetune_v3b.pt')
+    elif sys.argv[1] == 'finetune_warm':  # round 3b: 2 more epochs from finetune_v3.pt on the extended data
         finetune(epochs=2, lr=3e-5, tag='v3b', init='finetune_v3.pt')
     elif sys.argv[1] == 'export' and len(sys.argv) > 2:
         export_onnx(sys.argv[2])
     else:
         {'data': build_data, 'linear': train_linear, 'finetune': finetune, 'export': export_onnx,
-         'danger_head': danger_head}[sys.argv[1]]()
+         'danger_head': danger_head, 'stage_guide': stage_guide}[sys.argv[1]]()

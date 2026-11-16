@@ -8,7 +8,7 @@ How a reply is chosen:
 1. A tapped follow-up button names its topic directly.
 2. A typed "yes"/"no" answers the last follow-up question.
 3. A safety check looks for danger words (not breathing, chest pain, heavy bleeding...). If it fires, the reply
-   always starts with "call 999 or 112", whatever the model says.
+   always starts with "call 922 or 999", whatever the model says.
 4. The model picks a topic. If it is not confident enough, the assistant asks which of its top guesses is meant
    rather than guessing. Advice text only ever comes from the guide.
 """
@@ -166,36 +166,36 @@ TEXT = {
                  'Thank you for asking. Here is what to do.', 'Let\'s deal with this step by step.'],
         'open_urgent': ['This could be an emergency.', 'This sounds serious.', 'Act quickly, this may be an emergency.'],
         'steps': 'What to do:', 'avoid': 'Do not:', 'more': 'Tap an answer, or describe what is happening.',
-        'note': 'This is first-aid guidance, not a diagnosis. If you are unsure or things get worse, call 999 or 112.',
+        'note': 'This is first-aid guidance, not a diagnosis. If you are unsure or things get worse, call 922 or 999.',
         'clarify': 'I want to make sure I give you the right steps. Is it one of these?',
         'clarify_other': 'Something else',
         'other_hint': 'Tell me in a few words what happened, for example "she fell and hit her head" or "he is choking".',
         'greeting': 'Hello! I can guide you through first aid, for example falls, bleeding, burns, choking, chest pain, '
                     'fits or low blood sugar. Describe what is happening, in English or Kiswahili.',
-        'out_of_scope': 'I can only help with first aid and emergencies. Describe what has happened to the person, '
-                        'for example "she fell" or "he has chest pain".',
+        'out_of_scope': 'I am here for first aid and health emergencies. Tell me what is happening to the person, for '
+                        'example "she fell" or "he has chest pain". In an emergency call 922 (free ambulance line) or 999.',
         'general_medical': 'That sounds like a general health question rather than first aid. Their doctor, nurse or '
                            'pharmacist is the best person to ask. If they are unwell right now, tell me the signs you see.',
-        'emergency': 'Call 999 or 112 now.',
-        'clarify_urgent': 'If the person is unresponsive, not breathing normally, bleeding heavily or getting worse, call 999 or 112 now.',
+        'emergency': 'Call 922 or 999 now.',
+        'clarify_urgent': 'If the person is unresponsive, not breathing normally, bleeding heavily or getting worse, call 922 or 999 now.',
     },
     'sw': {
         'open': ['Sawa, tupitie hili pamoja.', 'Niko hapa kukusaidia. Tulia, unafanya jambo sahihi.',
                  'Asante kwa kuuliza. Haya ndiyo ya kufanya.', 'Tushughulikie hili hatua kwa hatua.'],
         'open_urgent': ['Hii inaweza kuwa dharura.', 'Hili linaonekana kuwa zito.', 'Chukua hatua haraka, hii inaweza kuwa dharura.'],
         'steps': 'Cha kufanya:', 'avoid': 'Usifanye:', 'more': 'Gusa jibu, au eleza kinachoendelea.',
-        'note': 'Huu ni ushauri wa huduma ya kwanza, si uchunguzi wa daktari. Ukiwa na shaka au hali ikizidi, piga 999 au 112.',
+        'note': 'Huu ni ushauri wa huduma ya kwanza, si uchunguzi wa daktari. Ukiwa na shaka au hali ikizidi, piga 922 au 999.',
         'clarify': 'Nataka kuhakikisha nakupa hatua sahihi. Je, ni mojawapo ya haya?',
         'clarify_other': 'Kitu kingine',
         'other_hint': 'Niambie kwa maneno machache kilichotokea, kwa mfano "ameanguka akagonga kichwa" au "amekabwa".',
         'greeting': 'Habari! Naweza kukuongoza katika huduma ya kwanza, kwa mfano kuanguka, kutokwa damu, kuungua, '
                     'kukabwa, maumivu ya kifua, kifafa au sukari kushuka. Eleza kinachoendelea, kwa Kiswahili au Kiingereza.',
-        'out_of_scope': 'Naweza kusaidia tu na huduma ya kwanza na dharura. Eleza kilichompata mtu, kwa mfano '
-                        '"ameanguka" au "ana maumivu ya kifua".',
+        'out_of_scope': 'Niko hapa kwa huduma ya kwanza na dharura za afya. Niambie kinachompata mtu, kwa mfano '
+                        '"ameanguka" au "ana maumivu ya kifua". Katika dharura piga 922 (ambulensi, bure) au 999.',
         'general_medical': 'Hilo linaonekana kuwa swali la afya kwa ujumla badala ya huduma ya kwanza. Daktari, muuguzi '
                            'au mfamasia wake ndiye bora kuulizwa. Kama anaumwa sasa hivi, niambie dalili unazoziona.',
-        'emergency': 'Piga 999 au 112 sasa hivi.',
-        'clarify_urgent': 'Kama mtu hajitambui, hapumui kawaida, anatokwa damu nyingi au hali inazidi, piga 999 au 112 sasa hivi.',
+        'emergency': 'Piga 922 au 999 sasa hivi.',
+        'clarify_urgent': 'Kama mtu hajitambui, hapumui kawaida, anatokwa damu nyingi au hali inazidi, piga 922 au 999 sasa hivi.',
     },
 }
 
@@ -238,11 +238,11 @@ CHECK_TEXT = {
     'en': {'question': 'Is someone in danger right now? For example not breathing, not waking, bleeding heavily, or '
                        'getting worse fast.', 'yes': 'Yes, in danger', 'no': 'No',
            'banner': 'Is anyone in danger right now: not breathing, not waking, bleeding heavily or getting worse '
-                     'fast? Call 999 or 112 now.'},
+                     'fast? Call 922 or 999 now.'},
     'sw': {'question': 'Je, kuna mtu yuko hatarini sasa hivi? Kwa mfano hapumui, haamki, anatokwa damu nyingi, au hali '
                        'inazidi haraka.', 'yes': 'Ndiyo, yuko hatarini', 'no': 'Hapana',
            'banner': 'Je, kuna mtu yuko hatarini sasa hivi: hapumui, haamki, anatokwa damu nyingi au hali inazidi '
-                     'haraka? Piga 999 au 112 sasa hivi.'},
+                     'haraka? Piga 922 au 999 sasa hivi.'},
 }
 CHECK_YES, CHECK_NO = '__check_yes', '__check_no'
 
@@ -261,9 +261,13 @@ class FirstAidAssistant:
         self.temperature = meta['temperature']
         self.threshold = meta['threshold']
         self.policy = None
+        # the medical word list (lexicon.py) on top of the models: off since round 4, whose models passed the sealed
+        # test v6 alone, while the word list pushed wrong advice and false alarms over the gates (2026-11-16)
+        self.word_list = False
         pol = artifacts / 'policy.json'
         if pol.exists():
             p = json.loads(pol.read_text(encoding='utf-8'))
+            self.word_list = bool(p.get('word_list', False))
             chosen = p.get('chosen_before_test')
             if chosen and all((artifacts / f'{m}.npz').exists() for m in ('baseline', 'danger', 'oos_gate')):
                 from .safety import LinearText
@@ -326,14 +330,20 @@ class FirstAidAssistant:
 
     def _reply_v3(self, message, lang, check=None):
         if check == 'yes':
+            from . import lexicon
             d = self.decide(message)
             options = d['options'] or [t for t in danger_topics(message, self.guide)][:3] or ['call_for_help']
+            if self.word_list:
+                options = list(dict.fromkeys(lexicon.topics(message, self.guide) + list(options)))[:3]  # named first
             r = self.clarify(options[:3], lang, None, emergency=True)
             r['urgent'] = TEXT[lang]['emergency']
             r['text'] = '\n'.join([r['urgent'], TEXT[lang]['clarify']])
             r['how'] = 'check_yes'
             return r
         d = self.decide(message, no_danger=(check == 'no'))
+        widened = self._widen(message, lang, d) if self.word_list else None
+        if widened:
+            return widened
         if d['kind'] == 'check':
             words = CHECK_TEXT[lang]
             return {'kind': 'check', 'topic': None, 'lang': lang, 'emergency': False, 'confidence': None,
@@ -343,7 +353,7 @@ class FirstAidAssistant:
                                              {'label': words['no'], 'topic': CHECK_NO}]}}
         if d['kind'] == 'answer':
             return self.answer(d['topic'], lang, emergency=d['emergency'], how='model')
-        if d['kind'] == 'answer_check':  # advice at once, under the red "anyone in danger? call 999" banner
+        if d['kind'] == 'answer_check':  # advice at once, under the red "anyone in danger? call 922" banner
             r = self.answer(d['topic'], lang, emergency=False, how='banner')
             r['danger_banner'] = CHECK_TEXT[lang]['banner']
             r['text'] = r['danger_banner'] + '\n' + r['text']
@@ -351,6 +361,55 @@ class FirstAidAssistant:
         if d['kind'] == 'clarify':
             return self.clarify(d['options'], lang, None, emergency=d['emergency'], escalate=False)
         return self.simple(d['kind'], lang)
+
+    def _widen(self, message, lang, d):
+        """Where the models gave up, use the medical word list (firstaid/lexicon.py) so a health message is never
+        turned away: "not first aid" / "general health", a "did you mean" without the named situation, or the safety
+        question when the message names the situation (its advice comes with the red "call 922" banner instead).
+        An answer the models gave is kept, except for a life-threatening situation they were never trained on."""
+        from . import lexicon
+        named = lexicon.topics(message, self.guide)
+        if d['kind'] == 'greeting' or (d['kind'] in ('out_of_scope', 'general_medical', 'check')
+                                       and lexicon.about_a_thing(message)):
+            return None
+        if d['kind'] in ('out_of_scope', 'general_medical', 'check'):
+            # The models judged it not first aid, or were unsure about danger. Since round 4 they know every topic in
+            # the guide, so only a named life-threatening situation overrules them (round-4 validation: overruling
+            # them for any named or health-related word gave wrong advice or first-aid buttons on 19 % of
+            # non-first-aid messages, and advice for the wrong situation instead of the safety question).
+            named = [t for t in named if self.guide[t]['critical']]
+            if not named:
+                return None
+        # The models cannot know the life-threatening topics they were never trained on (vomiting blood, thoughts of
+        # suicide): whatever they said is then a guess at a neighbour, so the named emergency wins. Only ever more
+        # urgent, never less.
+        unknown = [t for t in named if self.guide[t]['critical'] and t not in self.labels]
+        if unknown and d.get('topic') not in unknown:
+            r = self.answer(unknown[0], lang, emergency=True, how='lexicon')
+        elif d['kind'] in ('answer', 'answer_check'):
+            return None
+        elif d['kind'] == 'check' and not named:
+            return None  # unclear danger and no situation named: keep the safety question
+        elif d['kind'] == 'clarify':  # "did you mean": the situations the message names go first
+            options = list(dict.fromkeys(named + list(d['options'])))[:3]
+            if not named or options == list(d['options'])[:3]:
+                return None
+            r = self.clarify(options, lang, None, emergency=d['emergency'], escalate=True)
+        elif d['kind'] not in ('out_of_scope', 'general_medical', 'check'):
+            return None
+        elif len(named) == 1:  # the message names one situation: its advice
+            topic = named[0]
+            critical = self.guide[topic]['critical']
+            r = self.answer(topic, lang, emergency=critical, how='lexicon')
+            if not critical:  # advice at once, under the red "anyone in danger? call 922" banner
+                r['danger_banner'] = CHECK_TEXT[lang]['banner']
+                r['text'] = r['danger_banner'] + '\n' + r['text']
+        else:  # several: "did you mean", with how to get help now if any is life-threatening (or the models were
+            # unsure about danger: it replaces the safety question, so the "call 922" line stays)
+            urgent = d['kind'] == 'check' or any(self.guide[t]['critical'] for t in named)
+            r = self.clarify(named, lang, None, emergency=urgent, escalate=True)
+        r['how'] = 'lexicon'
+        return r
 
     def understand(self, text):
         """(label, confidence, top-3 topic ids, danger topics)."""

@@ -3,7 +3,7 @@
 <!--
 Format (read by firstaid/knowledge.py):
   ## <topic id>
-  critical: yes|no          yes = the reply starts with "call 999 or 112 now"
+  critical: yes|no          yes = the reply starts with "call 922 or 999 now"
   title: English | Kiswahili
   keywords: words that point to this topic (English and Kiswahili, comma-separated); used for data labelling and the
             safety check
@@ -18,10 +18,10 @@ Kiswahili text must be reviewed by a native-speaking first-aid trainer before re
 ## call_for_help
 critical: no
 title: Calling for emergency help | Kuita msaada wa dharura
-keywords: ambulance, emergency number, call 999, call 112, who do i call, which number, gari la wagonjwa, ambulensi, nambari ya dharura, nipige simu wapi, piga 999
+keywords: ambulance, emergency number, call 922, call 999, call 112, 922, who do i call, which number, gari la wagonjwa, ambulensi, nambari ya dharura, nipige simu wapi, piga 999
 
 ### en
-intro: In Kenya you can call 999 or 112 for an ambulance, free from any phone, even without airtime. The Kenya Red Cross emergency line is 1199.
+intro: In Kenya call 922 for an ambulance: the national medical emergency line, free from any network, even without airtime. 999 and 112 (police and general emergencies) also work, and the Kenya Red Cross line is 1199.
 steps:
 - Stay calm and speak clearly.
 - Say exactly where you are: the area, road, building and a landmark the driver can find.
@@ -32,7 +32,7 @@ steps:
 after: Keep the person's medicine list and ID ready for the paramedics, and tell the family.
 
 ### sw
-intro: Nchini Kenya unaweza kupiga 999 au 112 kuita gari la wagonjwa, bure kutoka simu yoyote, hata bila salio. Nambari ya dharura ya Kenya Red Cross ni 1199.
+intro: Nchini Kenya piga 922 kuita gari la wagonjwa: nambari ya kitaifa ya dharura za matibabu, bure kutoka mtandao wowote, hata bila salio. 999 na 112 (polisi na dharura nyingine) pia zinafanya kazi, na nambari ya Kenya Red Cross ni 1199.
 steps:
 - Tulia na uongee waziwazi.
 - Eleza mahali hasa ulipo: eneo, barabara, jengo na alama ambayo dereva anaweza kuipata.
@@ -67,7 +67,7 @@ keywords: unconscious, unresponsive, passed out, not waking, won't wake up, coll
 
 ### en
 intro: Someone who does not respond but is breathing needs their airway kept open.
-urgent: Call 999 or 112 now, or ask someone else to call while you help.
+urgent: Call 922 or 999 now, or ask someone else to call while you help.
 steps:
 - Check for danger first, then shout their name and tap their shoulders.
 - If they do not respond, tilt their head back gently and lift the chin to open the airway.
@@ -83,7 +83,7 @@ after: Keep them warm with a blanket and tell the paramedics how long they were 
 
 ### sw
 intro: Mtu asiyejibu lakini anapumua anahitaji njia yake ya hewa iwe wazi.
-urgent: Piga 999 au 112 sasa hivi, au mwombe mtu mwingine apige wakati wewe unasaidia.
+urgent: Piga 922 au 999 sasa hivi, au mwombe mtu mwingine apige wakati wewe unasaidia.
 steps:
 - Kwanza hakikisha hakuna hatari, kisha mwite kwa jina kwa sauti na umguse mabegani.
 - Asipojibu, rudisha kichwa chake nyuma polepole na uinue kidevu ili kufungua njia ya hewa.
@@ -128,7 +128,7 @@ keywords: not breathing, stopped breathing, no pulse, heart stopped, cardiac arr
 
 ### en
 intro: If someone is unresponsive and not breathing normally, their heart has probably stopped. CPR keeps blood flowing to the brain until help arrives.
-urgent: Call 999 or 112 now and put the phone on speaker. If there is a defibrillator (AED) nearby and someone else can fetch it, send them. If you are alone, do not leave the person to look for one: AEDs are rare in Kenya, just keep doing CPR.
+urgent: Call 922 or 999 now and put the phone on speaker. If there is a defibrillator (AED) nearby and someone else can fetch it, send them. If you are alone, do not leave the person to look for one: AEDs are rare in Kenya, just keep doing CPR.
 steps:
 - Kneel beside them on a firm surface, on the floor rather than a bed.
 - Put the heel of one hand in the centre of the chest, on the lower half of the breastbone, and your other hand on top.
@@ -145,7 +145,7 @@ after: If they start breathing normally, put them in the recovery position and k
 
 ### sw
 intro: Mtu asiyejibu na asiyepumua kawaida, huenda moyo wake umesimama. CPR husaidia damu kuendelea kufika kwenye ubongo mpaka msaada ufike.
-urgent: Piga 999 au 112 sasa hivi na uweke simu kwenye spika. Kama kuna mashine ya kushtua moyo (AED) karibu na kuna mtu mwingine wa kuileta, mtume. Kama uko peke yako, usimwache mgonjwa kwenda kuitafuta: AED ni chache Kenya, endelea tu na CPR.
+urgent: Piga 922 au 999 sasa hivi na uweke simu kwenye spika. Kama kuna mashine ya kushtua moyo (AED) karibu na kuna mtu mwingine wa kuileta, mtume. Kama uko peke yako, usimwache mgonjwa kwenda kuitafuta: AED ni chache Kenya, endelea tu na CPR.
 steps:
 - Piga magoti kando yake akiwa juu ya sehemu ngumu, sakafuni badala ya kitandani.
 - Weka kisigino cha kiganja kimoja katikati ya kifua, nusu ya chini ya mfupa wa kifua, na kiganja kingine juu yake.
@@ -188,34 +188,34 @@ keywords: choking, choke, food stuck in throat, can't breathe after eating, some
 
 ### en
 intro: Choking happens when something blocks the airway. If the person cannot cough, speak or breathe, act straight away.
-urgent: Ask someone to call 999 or 112 while you start. If you are alone and it has not cleared after 5 back blows and 5 abdominal thrusts, call 999 or 112 yourself straight away on speaker, then keep going.
+urgent: Ask someone to call 922 or 999 while you start. If you are alone and it has not cleared after 5 back blows and 5 abdominal thrusts, call 922 or 999 yourself straight away on speaker, then keep going.
 steps:
 - Ask "Are you choking?" If they can cough, encourage them to keep coughing.
 - If they cannot cough, speak or breathe, stand to the side and slightly behind them and lean them forward.
 - Give up to 5 firm back blows between the shoulder blades with the heel of your hand. Check after each one whether the object has come out.
 - If it has not cleared, give up to 5 abdominal thrusts: stand behind them, put your fist just above the belly button, hold it with your other hand, and pull sharply inwards and upwards.
 - Keep repeating 5 back blows and 5 abdominal thrusts until the object comes out or help arrives.
-- If they become unresponsive, lower them carefully to the floor, call 999 or 112 if nobody has, and start CPR.
+- If they become unresponsive, lower them carefully to the floor, call 922 or 999 if nobody has, and start CPR.
 avoid:
 - Do not put your fingers in their mouth to feel for the object, you can push it deeper. Only remove something you can clearly see.
 - Do not give water while they are choking.
-- Do not give abdominal thrusts to a baby under 1. For a baby, give up to 5 back blows with the baby face down along your forearm, then up to 5 chest thrusts with two fingers on the breastbone, and call 999 or 112.
+- Do not give abdominal thrusts to a baby under 1. For a baby, give up to 5 back blows with the baby face down along your forearm, then up to 5 chest thrusts with two fingers on the breastbone, and call 922 or 999.
 after: Anyone who has had abdominal thrusts must see a doctor the same day, as they can cause internal injury.
 
 ### sw
 intro: Kukabwa hutokea kitu kinapoziba njia ya hewa. Kama mtu hawezi kukohoa, kuongea wala kupumua, chukua hatua mara moja.
-urgent: Mwombe mtu apige 999 au 112 wakati wewe unaanza. Kama uko peke yako na kitu hakijatoka baada ya makofi 5 na mibano ya tumbo 5, piga 999 au 112 wewe mwenyewe mara moja kwa spika, kisha uendelee.
+urgent: Mwombe mtu apige 922 au 999 wakati wewe unaanza. Kama uko peke yako na kitu hakijatoka baada ya makofi 5 na mibano ya tumbo 5, piga 922 au 999 wewe mwenyewe mara moja kwa spika, kisha uendelee.
 steps:
 - Muulize "Umekabwa?" Kama anaweza kukohoa, mhimize aendelee kukohoa.
 - Kama hawezi kukohoa, kuongea wala kupumua, simama kando yake na nyuma kidogo, kisha umwinamishe mbele.
 - Mpige makofi hadi 5 kwa nguvu katikati ya mabega kwa kisigino cha kiganja. Angalia baada ya kila kofi kama kitu kimetoka.
 - Kisipotoka, fanya mibano ya tumbo hadi 5: simama nyuma yake, weka ngumi juu kidogo ya kitovu, ishike kwa mkono mwingine, na uvute kwa nguvu ndani na juu.
 - Endelea kurudia makofi 5 na mibano ya tumbo 5 mpaka kitu kitoke au msaada ufike.
-- Akiacha kujitambua, mlaze sakafuni kwa uangalifu, piga 999 au 112 kama hakuna aliyepiga, na uanze CPR.
+- Akiacha kujitambua, mlaze sakafuni kwa uangalifu, piga 922 au 999 kama hakuna aliyepiga, na uanze CPR.
 avoid:
 - Usiingize vidole mdomoni kutafuta kitu, unaweza kukisukuma ndani zaidi. Toa tu kitu unachokiona waziwazi.
 - Usimpe maji wakati amekabwa.
-- Usimpe mtoto mchanga (chini ya mwaka 1) mibano ya tumbo. Kwa mtoto mchanga, mpe makofi hadi 5 mgongoni akiwa amelala kifudifudi juu ya mkono wako, kisha mibano hadi 5 ya kifua kwa vidole viwili juu ya mfupa wa kifua, na upige 999 au 112.
+- Usimpe mtoto mchanga (chini ya mwaka 1) mibano ya tumbo. Kwa mtoto mchanga, mpe makofi hadi 5 mgongoni akiwa amelala kifudifudi juu ya mkono wako, kisha mibano hadi 5 ya kifua kwa vidole viwili juu ya mfupa wa kifua, na upige 922 au 999.
 after: Mtu yeyote aliyefanyiwa mibano ya tumbo lazima amwone daktari siku hiyo hiyo, kwani inaweza kusababisha jeraha la ndani.
 
 ### followup
@@ -278,7 +278,7 @@ keywords: chest pain, heart attack, chest pressure, chest tightness, pain spread
 
 ### en
 intro: Chest pain, pressure or tightness that may spread to the arm, jaw, neck or back, often with breathlessness, sweating or feeling sick, can be a heart attack. Older people, women and people with diabetes may only feel tired, breathless or unwell.
-urgent: Call 999 or 112 now. Treat it as a heart attack until a doctor says otherwise.
+urgent: Call 922 or 999 now. Treat it as a heart attack until a doctor says otherwise.
 steps:
 - Help them sit down in a comfortable half-sitting position, for example on the floor leaning against a wall with knees bent.
 - Loosen tight clothing and keep them calm and still.
@@ -294,7 +294,7 @@ after: Write down when the pain started and what medicine they took, and give th
 
 ### sw
 intro: Maumivu, mgandamizo au kubana kifuani kunakoweza kuenea mkononi, tayani, shingoni au mgongoni, mara nyingi pamoja na kukosa pumzi, kutokwa jasho au kichefuchefu, kunaweza kuwa mshtuko wa moyo. Wazee, wanawake na watu wenye kisukari wanaweza kuhisi uchovu tu, kukosa pumzi au kujisikia vibaya.
-urgent: Piga 999 au 112 sasa hivi. Lichukulie kama mshtuko wa moyo mpaka daktari aseme vinginevyo.
+urgent: Piga 922 au 999 sasa hivi. Lichukulie kama mshtuko wa moyo mpaka daktari aseme vinginevyo.
 steps:
 - Msaidie akae katika mkao wa nusu kukaa, kwa mfano sakafuni ameegemea ukuta na magoti yamekunjwa.
 - Legeza nguo zinazobana na umtulize asisogee.
@@ -335,12 +335,12 @@ keywords: stroke, face drooping, face droop, slurred speech, can't speak properl
 
 ### en
 intro: A stroke is when blood stops reaching part of the brain. Every minute counts. Use the FAST check.
-urgent: Call 999 or 112 now if you see any of these signs, even if they go away.
+urgent: Call 922 or 999 now if you see any of these signs, even if they go away.
 steps:
 - Face: ask them to smile. Does one side of the face droop?
 - Arms: ask them to lift both arms. Does one drift down or feel weak?
 - Speech: is their speech slurred, strange or are they unable to speak or understand?
-- Time: call 999 or 112 straight away and note the exact time the signs started, doctors need this.
+- Time: call 922 or 999 straight away and note the exact time the signs started, doctors need this.
 - Also watch for sudden loss of balance, sudden loss of vision, a sudden very bad headache or sudden confusion.
 - Keep them comfortable, sitting or lying with head and shoulders slightly raised, and reassure them.
 - If they become unresponsive but are breathing, put them in the recovery position.
@@ -351,12 +351,12 @@ after: If the signs disappeared within minutes, it may have been a mini-stroke (
 
 ### sw
 intro: Kiharusi ni pale damu inapoacha kufika sehemu ya ubongo. Kila dakika ni muhimu. Tumia kipimo cha FAST.
-urgent: Piga 999 au 112 sasa hivi ukiona dalili yoyote kati ya hizi, hata kama zitaisha.
+urgent: Piga 922 au 999 sasa hivi ukiona dalili yoyote kati ya hizi, hata kama zitaisha.
 steps:
 - Uso: mwambie atabasamu. Je, upande mmoja wa uso umeshuka?
 - Mikono: mwambie ainue mikono yote miwili. Je, mmoja unashuka au ni dhaifu?
 - Kuongea: je, maneno yake hayatoki vizuri, ni ya ajabu, au hawezi kuongea wala kuelewa?
-- Muda: piga 999 au 112 mara moja na uandike saa hasa dalili zilipoanza, madaktari wanahitaji hili.
+- Muda: piga 922 au 999 mara moja na uandike saa hasa dalili zilipoanza, madaktari wanahitaji hili.
 - Pia angalia kupoteza usawa ghafla, kupoteza uwezo wa kuona ghafla, maumivu makali sana ya kichwa ghafla au kuchanganyikiwa ghafla.
 - Mtulize akiwa amekaa au amelala na kichwa na mabega yameinuliwa kidogo.
 - Akiacha kujitambua lakini anapumua, mlaze katika mkao wa kupona.
@@ -393,7 +393,7 @@ keywords: bleeding heavily, heavy bleeding, lots of blood, blood won't stop, ble
 
 ### en
 intro: Heavy bleeding must be stopped quickly. Firm, direct pressure is the most important thing you can do.
-urgent: Call 999 or 112 now, or ask someone else to call.
+urgent: Call 922 or 999 now, or ask someone else to call.
 steps:
 - Put on gloves or use a plastic bag over your hand if you can, but do not delay.
 - Press firmly and directly on the wound with a clean cloth, pad or your hand.
@@ -408,7 +408,7 @@ after: Tell the paramedics if the person takes blood thinners, such as warfarin 
 
 ### sw
 intro: Damu nyingi lazima isimamishwe haraka. Kubonyeza kwa nguvu moja kwa moja kwenye jeraha ndiyo jambo muhimu zaidi unaloweza kufanya.
-urgent: Piga 999 au 112 sasa hivi, au mwombe mtu mwingine apige.
+urgent: Piga 922 au 999 sasa hivi, au mwombe mtu mwingine apige.
 steps:
 - Vaa glavu au funika mkono na mfuko wa plastiki kama unaweza, lakini usichelewe.
 - Bonyeza kwa nguvu moja kwa moja juu ya jeraha kwa kitambaa safi, pedi au mkono wako.
@@ -451,7 +451,7 @@ keywords: anaphylaxis, severe allergic reaction, throat swelling, tongue swellin
 
 ### en
 intro: A severe allergic reaction (anaphylaxis) can follow a sting, food or medicine. Signs include swelling of the lips, tongue or throat, wheezing or difficulty breathing, a hoarse voice, feeling faint, and often a rash.
-urgent: Call 999 or 112 now.
+urgent: Call 922 or 999 now.
 steps:
 - If they have an adrenaline auto-injector (such as an EpiPen), help them use it straight away into the outer thigh. It can go through clothing.
 - Hold it in place for as long as the device instructions say, then note the time.
@@ -465,7 +465,7 @@ after: They must go to hospital even if the adrenaline works, because the reacti
 
 ### sw
 intro: Mzio mkali (anaphylaxis) unaweza kufuata kuumwa na mdudu, chakula au dawa. Dalili ni kuvimba midomo, ulimi au koo, kupumua kwa shida au kwa mluzi, sauti kukwaruza, kuhisi kuzimia, na mara nyingi vipele.
-urgent: Piga 999 au 112 sasa hivi.
+urgent: Piga 922 au 999 sasa hivi.
 steps:
 - Kama ana sindano ya adrenaline (kama EpiPen), msaidie aitumie mara moja kwenye upande wa nje wa paja. Inaweza kupita kwenye nguo.
 - Ishikilie kwa muda ambao maelekezo ya kifaa yanasema, kisha andika saa.
@@ -500,7 +500,7 @@ keywords: seizure, fit, fitting, convulsions, convulsing, shaking uncontrollably
 
 ### en
 intro: During a seizure a person may fall, go stiff and jerk. Most seizures stop on their own within a few minutes. Your job is to keep them safe.
-urgent: Call 999 or 112 if it lasts more than 5 minutes, it is their first seizure or the cause is unknown, another one follows, they are injured, they have trouble breathing afterwards, it happened in water, or they are not awake 10 minutes after it stops.
+urgent: Call 922 or 999 if it lasts more than 5 minutes, it is their first seizure or the cause is unknown, another one follows, they are injured, they have trouble breathing afterwards, it happened in water, or they are not awake 10 minutes after it stops.
 steps:
 - Stay calm and note the time the seizure started.
 - Move hard or sharp objects away and put something soft under their head.
@@ -515,7 +515,7 @@ after: Write down how long it lasted and what happened, and tell their doctor an
 
 ### sw
 intro: Wakati wa kifafa mtu anaweza kuanguka, kukakamaa na kurusha viungo. Vifafa vingi huisha vyenyewe ndani ya dakika chache. Kazi yako ni kumweka salama.
-urgent: Piga 999 au 112 kama kinachukua zaidi ya dakika 5, ni mara yake ya kwanza au chanzo hakijulikani, kingine kinafuata, ameumia, anapumua kwa shida baadaye, kilitokea majini, au hajazinduka dakika 10 baada ya kuisha.
+urgent: Piga 922 au 999 kama kinachukua zaidi ya dakika 5, ni mara yake ya kwanza au chanzo hakijulikani, kingine kinafuata, ameumia, anapumua kwa shida baadaye, kilitokea majini, au hajazinduka dakika 10 baada ya kuisha.
 steps:
 - Tulia na uandike saa kifafa kilipoanza.
 - Ondoa vitu vigumu au vyenye ncha karibu naye na uweke kitu laini chini ya kichwa chake.
@@ -551,7 +551,7 @@ keywords: shock, pale cold clammy, cold and clammy, weak fast pulse, going into 
 
 ### en
 intro: Shock means not enough blood is reaching the organs, for example after heavy bleeding, burns, severe vomiting or diarrhoea, a serious infection or an allergic reaction. Signs are pale, cold, clammy skin, a fast weak pulse, fast breathing, dizziness and confusion.
-urgent: Call 999 or 112 now.
+urgent: Call 922 or 999 now.
 steps:
 - Treat the cause if you can, for example press on a bleeding wound.
 - Help them lie down. Raise their legs if this does not hurt them and there is no injury to the legs, hips, back or head.
@@ -565,7 +565,7 @@ after: Tell the paramedics what caused it and any changes you noticed.
 
 ### sw
 intro: Mshtuko (shock) maana yake damu haitoshi kufika kwenye viungo, kwa mfano baada ya kutokwa damu nyingi, kuungua, kutapika au kuhara sana, maambukizi makali au mzio. Dalili ni ngozi nyeupe, baridi na yenye jasho, mapigo ya haraka na dhaifu, kupumua haraka, kizunguzungu na kuchanganyikiwa.
-urgent: Piga 999 au 112 sasa hivi.
+urgent: Piga 922 au 999 sasa hivi.
 steps:
 - Tibu chanzo kama unaweza, kwa mfano bonyeza jeraha linalovuja damu.
 - Msaidie alale chini. Inua miguu yake kama haimuumizi na hakuna jeraha miguuni, kiunoni, mgongoni au kichwani.
@@ -594,7 +594,7 @@ keywords: drowning, drowned, pulled from water, nearly drowned, fell in the wate
 
 ### en
 intro: A person pulled from water may have stopped breathing. Your safety comes first.
-urgent: Call 999 or 112 now.
+urgent: Call 922 or 999 now.
 steps:
 - Do not go into the water yourself unless trained. Reach with a stick or throw something that floats.
 - Once they are out, check if they are breathing normally.
@@ -607,7 +607,7 @@ after: Anyone who was under water must go to hospital, even if they seem fine, a
 
 ### sw
 intro: Mtu aliyetolewa majini huenda ameacha kupumua. Usalama wako ni wa kwanza.
-urgent: Piga 999 au 112 sasa hivi.
+urgent: Piga 922 au 999 sasa hivi.
 steps:
 - Usiingie majini mwenyewe kama hujafunzwa. Mfikie kwa fimbo au mrushie kitu kinachoelea.
 - Akishatoka, angalia kama anapumua kawaida.
@@ -636,7 +636,7 @@ keywords: electric shock, electrocuted, electrocution, touched a live wire, shoc
 
 ### en
 intro: Electricity can stop the heart and cause deep burns. Make it safe before you touch them.
-urgent: Call 999 or 112 now.
+urgent: Call 922 or 999 now.
 steps:
 - Switch off the power at the main switch or pull out the plug. Do not touch the person until the power is off.
 - If you cannot switch it off, stand on something dry like a wooden board or folded newspaper and push them away from the source with a dry wooden broom or chair.
@@ -650,7 +650,7 @@ after: Everyone who has had an electric shock should see a doctor, because it ca
 
 ### sw
 intro: Umeme unaweza kusimamisha moyo na kusababisha kuungua kwa ndani. Hakikisha ni salama kabla ya kumgusa.
-urgent: Piga 999 au 112 sasa hivi.
+urgent: Piga 922 au 999 sasa hivi.
 steps:
 - Zima umeme kwenye swichi kuu au chomoa plagi. Usimguse mtu mpaka umeme uzimwe.
 - Kama huwezi kuzima, simama juu ya kitu kikavu kama ubao au gazeti lililokunjwa na umsukume mbali na chanzo kwa ufagio au kiti kikavu cha mbao.

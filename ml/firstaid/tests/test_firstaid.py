@@ -14,11 +14,11 @@ class GuideTests(unittest.TestCase):
     def test_guide_has_no_problems(self):
         self.assertEqual(check(self.guide), [])
 
-    def test_every_life_threatening_topic_says_call_999(self):
+    def test_every_life_threatening_topic_says_call_922(self):
         for tid, t in self.guide.items():
             if t['critical']:
                 for lang in ('en', 'sw'):
-                    self.assertIn('999', t['answer'][lang]['urgent'], f'{tid} {lang}')
+                    self.assertIn('922', t['answer'][lang]['urgent'], f'{tid} {lang}')
 
     def test_core_topics_exist(self):
         for tid in ('cpr', 'choking_severe', 'heart_attack', 'stroke', 'severe_bleeding', 'fall', 'burns',

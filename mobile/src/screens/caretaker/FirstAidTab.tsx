@@ -60,35 +60,35 @@ const QUICK: Record<'en' | 'sw', { label: string; topic: string; icon: IconName 
 const WORDS = {
   en: {
     title: 'First aid',
-    call: 'Call 999',
+    call: 'Call 922 (ambulance)',
     intro: 'Describe it, or tap one.',
     urgentNow: 'Life-threatening',
     more: 'Other situations',
     placeholder: 'e.g. "she fell and hit her head"',
     steps: 'What to do',
     avoid: 'Do not',
-    callNow: 'Call 999 now',
+    callNow: 'Call 922 now',
     source: 'Red Cross / IFRC guidelines · not a diagnosis',
     thinking: 'Finding the right steps…',
   },
   sw: {
     title: 'Huduma ya kwanza',
-    call: 'Piga 999',
+    call: 'Piga 922 (ambulensi)',
     intro: 'Eleza, au gusa mojawapo.',
     urgentNow: 'Hatari ya maisha',
     more: 'Hali nyingine',
     placeholder: 'mf. "ameanguka akagonga kichwa"',
     steps: 'Cha kufanya',
     avoid: 'Usifanye',
-    callNow: 'Piga 999 sasa',
+    callNow: 'Piga 922 sasa',
     source: 'Miongozo ya Red Cross / IFRC · si uchunguzi wa daktari',
     thinking: 'Natafuta hatua sahihi…',
   },
 };
 
-const call999 = () => {
+const callEmergency = () => {
   haptic.warn();
-  Linking.openURL('tel:999');
+  Linking.openURL('tel:922'); // Kenya's national medical emergency line (free, any network)
 };
 const CHECK_YES = '__check_yes'; // the "Yes, in danger" option of the safety question (see ml/firstaid/assistant.py)
 
@@ -117,7 +117,7 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
       entries = [...entries, { id: nextId.current++, from: 'guide', reply }];
       onChange({ entries, lang: keepLang ? chat.lang : reply.lang }); // follow the language they typed in
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not get an answer. Call 999 or 112 if it is an emergency.');
+      setError(e instanceof Error ? e.message : 'Could not get an answer. Call 922 or 999 if it is an emergency.');
     } finally {
       setBusy(false);
     }
@@ -152,9 +152,9 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
           <Text style={[text.captionStrong, styles.langItem, chat.lang === 'en' ? styles.langOn : styles.langOff]}>EN</Text>
           <Text style={[text.captionStrong, styles.langItem, chat.lang === 'sw' ? styles.langOn : styles.langOff]}>SW</Text>
         </Pressable>
-        <PressScale onPress={call999} style={styles.callBtn} accessibilityRole="button" accessibilityLabel={w.call}>
+        <PressScale onPress={callEmergency} style={styles.callBtn} accessibilityRole="button" accessibilityLabel={w.call}>
           <Icon name="phone" color={on.error} />
-          <Text style={[text.bodyStrong, { color: on.error }]}>999</Text>
+          <Text style={[text.bodyStrong, { color: on.error }]}>922</Text>
         </PressScale>
       </View>
       <OfflineBanner />
@@ -265,10 +265,10 @@ export default function FirstAidTab({ token, chat, onChange, footer, autoFocus }
   );
 }
 
-// A red band that calls 999 when tapped: for emergencies and for the danger banner above advice.
+// A red band that calls 922 when tapped: for emergencies and for the danger banner above advice.
 function Urgent({ message, callLabel }: { message: string; callLabel: string }) {
   return (
-    <Pressable onPress={call999} style={styles.urgent} accessibilityRole="button" accessibilityLabel={`${message} ${callLabel}`}>
+    <Pressable onPress={callEmergency} style={styles.urgent} accessibilityRole="button" accessibilityLabel={`${message} ${callLabel}`}>
       <Icon name="warning" color={on.error} />
       <Text style={[text.bodyStrong, styles.urgentText]}>{message}</Text>
       <View style={styles.urgentCall}>
@@ -348,7 +348,7 @@ function GuideBubble({
         </>
       )}
       {reply.kind === 'check' && (
-        <Pressable onPress={call999} style={styles.checkCall} accessibilityRole="button" accessibilityLabel={words.callNow}>
+        <Pressable onPress={callEmergency} style={styles.checkCall} accessibilityRole="button" accessibilityLabel={words.callNow}>
           <Icon name="phone" color={colors.error} />
           <Text style={[text.bodyStrong, { color: colors.error }]}>{words.callNow}</Text>
         </Pressable>
