@@ -25,7 +25,7 @@ const atkinson = localFont({
 
 export const metadata: Metadata = {
   title: 'MzaziCare',
-  description: 'Family dashboard for elderly care: visits, voice tone, alerts and chat.',
+  description: 'Family dashboard for elderly care: verified caretaker visits, tasks with photo proof, medicines, voice tone, emergencies and chat.',
 };
 
 // the browser bar matches --background (a meta tag value, so it cannot read the CSS variable)

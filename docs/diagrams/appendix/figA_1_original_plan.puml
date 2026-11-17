@@ -1,0 +1,32 @@
+@startgantt figA_1_original_plan
+<style>
+ganttDiagram {
+  task { FontName Arial; FontSize 12; BackGroundColor #BBBBBB; LineColor #000000 }
+  milestone { BackGroundColor #000000; LineColor #000000 }
+  separator { FontStyle bold; FontSize 12 }
+  timeline { FontName Arial; FontSize 11 }
+}
+</style>
+skinparam dpi 200
+printscale weekly
+Project starts 2026-07-06
+-- Semester 1 (proposal) --
+[Project conceptualisation] starts 2026-07-07 and ends 2026-07-18
+[Proposal writing: Chapter 1] starts 2026-07-13 and ends 2026-07-19
+[Supervisor allocation and meeting] starts 2026-07-21 and ends 2026-08-02
+[Proposal writing: Chapter 2] starts 2026-07-23 and ends 2026-07-28
+[Proposal writing: Chapter 3] starts 2026-07-29 and ends 2026-08-09
+[Proposal examination and wireframe design] starts 2026-08-16 and ends 2026-09-20
+[Proposal defence] happens 2026-09-25
+-- Semester 2 (implementation, as planned) --
+[Environment setup and data acquisition] starts 2026-10-05 and ends 2026-10-11
+[Data preprocessing and pipeline] starts 2026-10-12 and ends 2026-10-25
+[Sprint 1: NLP chatbot (mBERT)] starts 2026-10-26 and ends 2026-11-08
+[Sprint 2: DQN geofence agent] starts 2026-11-09 and ends 2026-11-22
+[Sprint 3: voice CNN (MFCC)] starts 2026-11-23 and ends 2026-12-06
+[Sprint 4: dashboard and integration] starts 2026-12-07 and ends 2026-12-13
+[Testing and bug fixing] starts 2026-12-14 and ends 2026-12-20
+[Documentation writing] starts 2026-12-14 and ends 2026-12-24
+[Final defence preparation] starts 2026-12-21 and ends 2026-12-24
+[Final defence and system demonstration] happens 2026-12-24
+@endgantt

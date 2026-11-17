@@ -1,0 +1,75 @@
+# Proposed CI ML job checked on a clean copy of the tracked files (git ls-files), 2026-11-17 12:57:58 EAST
+===== $ python run_like_ci_ml_job.py voice/tests torch scikit-learn pandas
+suite: voice/tests; pip install numpy scipy soundfile onnxruntime torch scikit-learn pandas
+would be installed (27): cffi, cloudpickle, filelock, flatbuffers, fsspec, jinja2, joblib, markupsafe, mpmath, narwhals, networkx, numpy, onnxruntime, packaging, pandas, protobuf, pycparser, python-dateutil, scikit-learn, scipy, setuptools, soundfile, sympy, threadpoolctl, torch, typing-extensions, tzdata
+test_chunked_and_whole_feature_extraction_agree (voice.tests.test_compare.ComparisonHelpersTests.test_chunked_and_whole_feature_extraction_agree) ... ok
+test_deltas_of_a_straight_line_are_its_slope (voice.tests.test_compare.ComparisonHelpersTests.test_deltas_of_a_straight_line_are_its_slope) ... ok
+test_functionals_have_1680_numbers_and_start_with_the_mfcc_means (voice.tests.test_compare.ComparisonHelpersTests.test_functionals_have_1680_numbers_and_start_with_the_mfcc_means) ... ok
+test_functionals_see_change_over_time (voice.tests.test_compare.ComparisonHelpersTests.test_functionals_see_change_over_time) ... ok
+test_noise_windows_never_count_as_angry (voice.tests.test_compare.ComparisonHelpersTests.test_noise_windows_never_count_as_angry) ... ok
+test_perfectly_calibrated_predictions_have_no_calibration_error (voice.tests.test_compare.ComparisonHelpersTests.test_perfectly_calibrated_predictions_have_no_calibration_error) ... ok
+test_temperature_softens_overconfident_probabilities (voice.tests.test_compare.ComparisonHelpersTests.test_temperature_softens_overconfident_probabilities) ... ok
+test_the_bilstm_takes_the_same_input_as_the_deployed_cnn (voice.tests.test_compare.ComparisonHelpersTests.test_the_bilstm_takes_the_same_input_as_the_deployed_cnn) ... ok
+test_alert_rule_is_the_cautious_one_from_the_model_file (voice.tests.test_data_and_infer.AnalyzerTests.test_alert_rule_is_the_cautious_one_from_the_model_file) ... ok
+test_model_file_describes_itself (voice.tests.test_data_and_infer.AnalyzerTests.test_model_file_describes_itself) ... ok
+test_result_has_all_tones_that_add_up (voice.tests.test_data_and_infer.AnalyzerTests.test_result_has_all_tones_that_add_up) ... ok
+test_same_audio_gives_the_same_answer (voice.tests.test_data_and_infer.AnalyzerTests.test_same_audio_gives_the_same_answer) ... ok
+test_silence_returns_no_speech (voice.tests.test_data_and_infer.AnalyzerTests.test_silence_returns_no_speech) ... ok
+test_cremad_maps_emotions_and_keeps_speakers_apart (voice.tests.test_data_and_infer.LabelMappingTests.test_cremad_maps_emotions_and_keeps_speakers_apart) ... ok
+test_esc50_round1_keeps_only_non_human_sounds_split_by_fold (voice.tests.test_data_and_infer.LabelMappingTests.test_esc50_round1_keeps_only_non_human_sounds_split_by_fold) ... ok
+test_esc50_round2_laughter_is_happy_and_coughs_are_noise (voice.tests.test_data_and_infer.LabelMappingTests.test_esc50_round2_laughter_is_happy_and_coughs_are_noise) ... ok
+test_ravdess_ignores_song_and_video_files (voice.tests.test_data_and_infer.LabelMappingTests.test_ravdess_ignores_song_and_video_files) ... ok
+test_ravdess_maps_emotions_and_drops_ambiguous_ones (voice.tests.test_data_and_infer.LabelMappingTests.test_ravdess_maps_emotions_and_drops_ambiguous_ones) ... ok
+test_ravdess_splits_by_actor (voice.tests.test_data_and_infer.LabelMappingTests.test_ravdess_splits_by_actor) ... ok
+test_vocalsound_laughter_is_happy_other_sounds_noise_one_per_speaker_split_by_speaker (voice.tests.test_data_and_infer.LabelMappingTests.test_vocalsound_laughter_is_happy_other_sounds_noise_one_per_speaker_split_by_speaker) ... ok
+test_forward_shape_and_size (voice.tests.test_data_and_infer.ModelTests.test_forward_shape_and_size) ... ok
+test_garbage_is_an_error_not_silence (voice.tests.test_features.LoadAudioTests.test_garbage_is_an_error_not_silence) ... ok
+test_reads_bytes_in_memory_and_resamples_to_16k (voice.tests.test_features.LoadAudioTests.test_reads_bytes_in_memory_and_resamples_to_16k) ... ok
+test_stereo_becomes_mono (voice.tests.test_features.LoadAudioTests.test_stereo_becomes_mono) ... ok
+test_different_sounds_give_different_features (voice.tests.test_features.MfccTests.test_different_sounds_give_different_features) ... ok
+test_is_deterministic_and_finite (voice.tests.test_features.MfccTests.test_is_deterministic_and_finite) ... ok
+test_loudness_of_the_recording_does_not_change_the_features (voice.tests.test_features.MfccTests.test_loudness_of_the_recording_does_not_change_the_features) ... ok
+test_shape_matches_the_model_input (voice.tests.test_features.MfccTests.test_shape_matches_the_model_input) ... ok
+test_long_clip_is_cropped (voice.tests.test_features.WindowingTests.test_long_clip_is_cropped) ... ok
+test_loudest_window_picks_the_busy_part (voice.tests.test_features.WindowingTests.test_loudest_window_picks_the_busy_part) ... ok
+test_rms_normalize_hits_the_target_level (voice.tests.test_features.WindowingTests.test_rms_normalize_hits_the_target_level) ... ok
+test_short_clip_is_tiled_not_zero_padded (voice.tests.test_features.WindowingTests.test_short_clip_is_tiled_not_zero_padded) ... ok
+test_silence_gate (voice.tests.test_features.WindowingTests.test_silence_gate) ... ok
+test_split_windows_counts (voice.tests.test_features.WindowingTests.test_split_windows_counts) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 4.311s
+
+OK
+blocked imports seen: ['tqdm', 'charset-normalizer', 'pyarrow', 'rich']
+exit=0
+===== $ python run_like_ci_ml_job.py firstaid/tests torch scikit-learn pandas
+suite: firstaid/tests; pip install numpy scipy soundfile onnxruntime torch scikit-learn pandas
+would be installed (27): cffi, cloudpickle, filelock, flatbuffers, fsspec, jinja2, joblib, markupsafe, mpmath, narwhals, networkx, numpy, onnxruntime, packaging, pandas, protobuf, pycparser, python-dateutil, scikit-learn, scipy, setuptools, soundfile, sympy, threadpoolctl, torch, typing-extensions, tzdata
+test_keyword_labelling_keeps_only_clear_questions (firstaid.tests.test_firstaid.DataTests.test_keyword_labelling_keeps_only_clear_questions) ... ok
+test_variations_stay_close_to_the_original (firstaid.tests.test_firstaid.DataTests.test_variations_stay_close_to_the_original) ... ok
+test_checker_catches_mistakes (firstaid.tests.test_firstaid.GuideTests.test_checker_catches_mistakes) ... ok
+test_core_topics_exist (firstaid.tests.test_firstaid.GuideTests.test_core_topics_exist) ... ok
+test_every_life_threatening_topic_says_call_922 (firstaid.tests.test_firstaid.GuideTests.test_every_life_threatening_topic_says_call_922) ... ok
+test_guide_has_no_problems (firstaid.tests.test_firstaid.GuideTests.test_guide_has_no_problems) ... ok
+test_detects_kiswahili_and_english (firstaid.tests.test_firstaid.LanguageTests.test_detects_kiswahili_and_english) ... ok
+test_calm_messages_raise_no_alarm (firstaid.tests.test_firstaid.SafetyCheckTests.test_calm_messages_raise_no_alarm) ... ok
+test_danger_words_in_both_languages (firstaid.tests.test_firstaid.SafetyCheckTests.test_danger_words_in_both_languages) ... ok
+test_clinical_and_kiswahili_words_name_the_situation (firstaid.tests.test_lexicon.LexiconTests.test_clinical_and_kiswahili_words_name_the_situation) ... ok
+test_every_topic_it_names_exists_in_the_guide (firstaid.tests.test_lexicon.LexiconTests.test_every_topic_it_names_exists_in_the_guide) ... ok
+test_health_messages_are_recognised (firstaid.tests.test_lexicon.LexiconTests.test_health_messages_are_recognised) ... ok
+test_idioms_objects_and_animals_are_not_first_aid (firstaid.tests.test_lexicon.LexiconTests.test_idioms_objects_and_animals_are_not_first_aid) ... ok
+test_life_threatening_first (firstaid.tests.test_lexicon.LexiconTests.test_life_threatening_first) ... ok
+test_banner_needs_confidence (firstaid.tests.test_safety_policy.DecideCheckTests.test_banner_needs_confidence) ... ok
+test_banner_never_when_it_may_not_be_first_aid (firstaid.tests.test_safety_policy.DecideCheckTests.test_banner_never_when_it_may_not_be_first_aid) ... ok
+test_no_danger_answers_normally (firstaid.tests.test_safety_policy.DecideCheckTests.test_no_danger_answers_normally) ... ok
+test_strong_danger_still_says_call_999 (firstaid.tests.test_safety_policy.DecideCheckTests.test_strong_danger_still_says_call_999) ... ok
+test_weak_danger_with_confident_topic_gives_advice_with_banner (firstaid.tests.test_safety_policy.DecideCheckTests.test_weak_danger_with_confident_topic_gives_advice_with_banner) ... ok
+test_weak_danger_without_inline_asks_the_question (firstaid.tests.test_safety_policy.DecideCheckTests.test_weak_danger_without_inline_asks_the_question) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.415s
+
+OK
+blocked imports seen: ['pyarrow']
+exit=0

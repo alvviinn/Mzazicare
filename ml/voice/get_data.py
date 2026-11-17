@@ -11,6 +11,8 @@ Sources (all freely available for research):
   cremad       CREMA-D, 91 actors, acted emotions (HF mirror)        https://huggingface.co/datasets/myleslinder/crema-d
   esc50        ESC-50 environmental sounds (background / non-speech) https://github.com/karoldvl/ESC-50
   librispeech  LibriSpeech dev-clean, natural read speech (neutral)  https://www.openslr.org/12
+  vocalsound   VocalSound (round 2): laughter, coughs, sighs... (HF)  https://huggingface.co/datasets/MahiA/VocalSound
+               original: Gong et al. (2022), https://github.com/YuanGongND/vocalsound (CC BY-SA 4.0)
 
 If a download is very slow, fetch the file with `curl -L -o <dest> <url>` into DATA/zips and re-run.
 """
@@ -102,7 +104,20 @@ def cremad():
     print('cremad: done', n, 'files', flush=True)
 
 
-STEPS = {'ravdess': ravdess, 'esc50': esc50, 'librispeech': librispeech, 'cremad': cremad}
+def vocalsound():
+    """VocalSound, 16 kHz version (21,024 clips, 3,365 people). The original Dropbox link was disabled when this was
+    added, so it comes from a Hugging Face mirror of the same files (the mirror's card says MIT; the original
+    licence, CC BY-SA 4.0, is the one to credit)."""
+    out = DATA / 'vocalsound' / 'VocalSound'
+    if len(list((out / 'audios').glob('*.wav'))) >= 21000:
+        return print('vocalsound: already there')
+    print('vocalsound: downloading (~1 GB)...', flush=True)
+    from huggingface_hub import snapshot_download
+    snapshot_download('MahiA/VocalSound', repo_type='dataset', local_dir=out)
+    print('vocalsound: done', sum(1 for _ in out.rglob('*.wav')), 'files', flush=True)
+
+
+STEPS = {'ravdess': ravdess, 'esc50': esc50, 'librispeech': librispeech, 'cremad': cremad, 'vocalsound': vocalsound}
 
 if __name__ == '__main__':
     for name in sys.argv[1:] or list(STEPS):

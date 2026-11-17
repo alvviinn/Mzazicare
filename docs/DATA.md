@@ -33,7 +33,8 @@ All are public research datasets. They are **not** in the repository: they are d
 | RAVDESS (speech) | happy, calm, neutral, stressed, angry | 1,440 clips, 24 actors | Livingstone and Russo (2018), <https://zenodo.org/records/1188976> | CC BY-NC-SA 4.0 |
 | CREMA-D | happy, neutral, stressed, angry | 7,442 clips, 91 actors | Cao et al. (2014), <https://github.com/CheyneyComputerScience/CREMA-D> (downloaded from a Hugging Face mirror) | Open Database License (ODbL) |
 | LibriSpeech dev-clean | neutral (natural read speech, more speakers) | 2,703 utterances, 40 speakers | Panayotov et al. (2015), <https://www.openslr.org/12> | CC BY 4.0 |
-| ESC-50 | "noise": anything that is not a person speaking | 2,000 clips (1,600 non-human used) | Piczak (2015), <https://github.com/karoldvl/ESC-50> | CC BY-NC 3.0 |
+| ESC-50 | "noise": anything that is not a person speaking; from round 2 also "laughing" (as happy) and other human sounds (as noise) | 2,000 clips (1,960 used in round 2; crying baby left out) | Piczak (2015), <https://github.com/karoldvl/ESC-50> | CC BY-NC 3.0 |
+| VocalSound (round 2) | laughter as happy; cough, sneeze, sniff, throat clearing, sigh as noise | 21,024 clips, 3,365 people recorded on their own devices; all laughter (1,500 in training) and one other sound per person used | Gong et al. (2022), <https://github.com/YuanGongND/vocalsound> (downloaded from the Hugging Face mirror `MahiA/VocalSound`) | CC BY-SA 4.0 |
 
 The notebook `esc-50-environmental-sound-classification.ipynb` that was on the development PC is a Kaggle analysis of ESC-50 and contains no audio;
 it was used only as a reference.
@@ -47,7 +48,8 @@ deployment the trained model would need legal review or retraining on data that 
 2. `voice/data.py`: index every clip and map its label onto our classes
    * happy -> happy; calm -> calm; neutral -> neutral; **fearful and sad -> stressed**; angry -> angry
    * disgust and surprise are **left out** on purpose (ambiguous; a wrong "angry" would worry a family for nothing)
-   * ESC-50: only non-human classes become "noise" (people, coughs, laughter and similar are excluded)
+   * ESC-50: in round 1 only non-human classes became "noise"; from round 2 "laughing" is happy, other human sounds are noise, and "crying baby" is left out
+   * VocalSound (round 2): laughter is happy; one cough, sneeze, sniff, throat clearing or sigh per person is noise (a sigh is too ambiguous to call stressed); split by person (15 % test, 10 % validation); clips shorter than 0.3 s are skipped
    * RAVDESS: speech only (no song, no video-only files)
 3. **Speaker-independent splits**: train / validation / test are separated by actor or speaker (and by ESC-50 fold). Nobody heard in
    training appears in the test set.
@@ -90,6 +92,6 @@ windowing).
 * **Human in the loop.** The AI never punishes anyone. It raises a flag; the family confirms or dismisses it. Those decisions become the labels for the next training round.
 * **Fairness and bias.** The training speech is acted English from adults. Older voices, Kenyan accents, Kiswahili and code-switching are under-represented, so errors may be higher for
   exactly the people this system serves. The accuracy figures must not be read as field performance (see the model card).
-* **Dataset terms.** Use of RAVDESS, CREMA-D, LibriSpeech and ESC-50 must respect their licences and citation requirements (section 2).
+* **Dataset terms.** Use of RAVDESS, CREMA-D, LibriSpeech, ESC-50 and VocalSound must respect their licences and citation requirements (section 2).
 * **Secrets.** No credentials are stored in Git (see the root README). The only generated secrets are in the git-ignored `backend/.env`.
 * **Pilot ethics.** A study with real families needs institutional ethics approval and written consent from every participant.

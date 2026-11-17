@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -85,6 +86,9 @@ def alert_json(a):
         'position': {'latitude': a.latitude, 'longitude': a.longitude, 'accuracy': a.accuracy}
         if a.latitude is not None else None,
         'confidence': a.confidence,
+        # who closed it and when (any account in the circle), shown in the alert history
+        'handled_by': (a.handled_by.name or a.handled_by.email) if a.handled_by_id else None,
+        'handled_at': a.handled_at.isoformat() if a.handled_at else None,
     }
 
 
@@ -180,7 +184,7 @@ class DashboardView(APIView):
                     alert_json(a)
                     # open flags first (most severe, then newest), then the most recent resolved ones
                     for a in sorted(
-                        Alert.objects.filter(sponsor=me).select_related('patient', 'shift__elderly')[:20],
+                        Alert.objects.filter(sponsor=me).select_related('patient', 'shift__elderly', 'handled_by')[:20],
                         key=lambda a: (a.status != Alert.Status.OPEN, -a.severity if a.status == Alert.Status.OPEN else 0),
                     )[:10]
                 ],
@@ -196,12 +200,20 @@ class AlertView(APIView):
         status = request.data.get('status')
         if status not in (Alert.Status.CONFIRMED, Alert.Status.DISMISSED):
             raise ValidationError({'detail': 'Status must be confirmed or dismissed.'})
-        alert = Alert.objects.filter(pk=pk, sponsor=request.user).first()
-        if not alert:
-            raise ValidationError({'detail': 'Alert not found.'})
-        alert.status = status
-        alert.save(update_fields=['status'])
-        return Response({'detail': 'ok'})
+        with transaction.atomic():
+            alert = Alert.objects.select_for_update().filter(pk=pk, sponsor=request.user).first()
+            if not alert:
+                raise ValidationError({'detail': 'Alert not found.'})
+            if alert.kind == Alert.Kind.SOS:
+                # the same as "I'm handling it" on a phone: closed for everyone, the others are told
+                from .circle_views import resolve_emergency
+                resolve_emergency(alert, request.user, status)
+            elif alert.status == Alert.Status.OPEN:
+                alert.status = status
+                alert.handled_by = request.user
+                alert.handled_at = timezone.now()
+                alert.save(update_fields=['status', 'handled_by', 'handled_at'])
+        return Response(alert_json(alert))
 
 
 class ChatView(APIView):

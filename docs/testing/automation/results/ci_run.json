@@ -1,0 +1,55 @@
+{
+  "retrieved_at": "2026-11-17T12:51:08+03:00",
+  "source": "GitHub REST API, public, unauthenticated (gh CLI not signed in)",
+  "latest_run_on_main": {
+    "id": 44052919547,
+    "url": "https://github.com/alvviinn/Mzazicare/actions/runs/44052919547",
+    "created_at": "2026-11-17T09:09:11Z",
+    "head_sha": "eb0e01cf801c4f44c0ccddba2969eca61bdcd89d",
+    "commit_message": "add testing agents",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "name": "Mobile (TypeScript)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T09:09:15Z",
+        "completed_at": "2026-11-17T09:09:35Z",
+        "failed_steps": []
+      },
+      {
+        "name": "Backend (Django)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T09:09:15Z",
+        "completed_at": "2026-11-17T09:09:53Z",
+        "failed_steps": []
+      },
+      {
+        "name": "Secret scan",
+        "conclusion": "success",
+        "started_at": "2026-11-17T09:09:15Z",
+        "completed_at": "2026-11-17T09:09:54Z",
+        "failed_steps": []
+      },
+      {
+        "name": "ML (features, data rules, inference)",
+        "conclusion": "failure",
+        "started_at": "2026-11-17T09:09:15Z",
+        "completed_at": "2026-11-17T09:09:41Z",
+        "failed_steps": [
+          "Run python -m unittest discover -s voice/tests -t . -v"
+        ]
+      }
+    ]
+  },
+  "last_successful_run_on_main": {
+    "id": 40591038452,
+    "url": "https://github.com/alvviinn/Mzazicare/actions/runs/40591038452",
+    "created_at": "2026-10-27T21:57:46Z",
+    "head_sha": "53e6c9314721eadbf4dec8ca451fcb432adf347c"
+  },
+  "failing_since": {
+    "first_failing_commit": "b653e08",
+    "date": "2026-10-29",
+    "cause": "ml/voice/tests/test_compare.py imports torch and voice.compare imports sklearn; the ML job installs neither (reproduced locally, results/*_ci_ml_job_repro.txt)"
+  }
+}

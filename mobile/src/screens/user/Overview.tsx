@@ -229,7 +229,7 @@ export default function Overview({ token, profile, dash, error, onChanged, onGoP
             first={i === 0}
             leading={<Icon name={a.status === 'confirmed' ? 'verified' : 'circleX'} color={colors.inkMuted} />}
             title={a.label}
-            subtitle={`${a.status === 'confirmed' ? 'Confirmed' : 'Dismissed'} · ${timeAgo(a.created_at)}`}
+            subtitle={alertOutcome(a)}
           />
         ))}
       </Sheet>
@@ -363,6 +363,15 @@ function TodayCard({
       )}
     </Card>
   );
+}
+
+// History line: when it happened, then who closed it and when, e.g. "10:42 · Handled by Cara at 10:45".
+function alertOutcome(a: AlertItem): string {
+  const sos = a.kind === 'sos';
+  const what = a.status === 'confirmed' ? (sos ? 'Handled' : 'Confirmed') : sos ? 'False alarm' : 'Dismissed';
+  const when = `${fmtTime(a.created_at)} (${timeAgo(a.created_at)})`;
+  if (!a.handled_by) return `${when} · ${what}`;
+  return `${when} · ${what} by ${a.handled_by.split(' ')[0]}${a.handled_at ? ` at ${fmtTime(a.handled_at)}` : ''}`;
 }
 
 const SEVERITY: Record<number, { text: string; tone: PillTone }> = {

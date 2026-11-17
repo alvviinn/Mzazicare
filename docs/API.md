@@ -22,8 +22,8 @@ Roles: **family** (`user`), **caretaker**, **elderly**.
 
 | Method and path | Purpose |
 |---|---|
-| `GET /dashboard/` | Everything on the Overview: whether a caretaker and an elderly person are linked (`matched`), today's shift status (`none` / `on_shift` / `paused` (on a break) / `away` / `waiting` / `completed`), the caretaker's to-do list for today, average active time per day, days worked and chore completion over 7 days, tone shares (with dominant tone and quality rating), recent day-shifts (each opens with `GET /shifts/<id>/`), how each elderly person feels today, medicine adherence, alerts (open first, most severe first; each with `severity` 3/2/1, `patient`, `shift_id`, and the evidence: `position` {latitude, longitude, accuracy in m} when a recent fix exists, `confidence` 0-1 for voice alerts), and unread chat counts. |
-| `POST /alerts/<id>/` | `{status: "confirmed" \| "dismissed"}`. The human decision on an alert. |
+| `GET /dashboard/` | Everything on the Overview: whether a caretaker and an elderly person are linked (`matched`), today's shift status (`none` / `on_shift` / `paused` (on a break) / `away` / `waiting` / `completed`), the caretaker's to-do list for today, average active time per day, days worked and chore completion over 7 days, tone shares (with dominant tone and quality rating), recent day-shifts (each opens with `GET /shifts/<id>/`), how each elderly person feels today, medicine adherence, alerts (open first, most severe first; each with `severity` 3/2/1, `patient`, `shift_id`, and the evidence: `position` {latitude, longitude, accuracy in m} when a recent fix exists, `confidence` 0-1 for voice alerts; `handled_by` and `handled_at`: who closed it and when), and unread chat counts. |
+| `POST /alerts/<id>/` | `{status: "confirmed" \| "dismissed"}`. The human decision on an alert; records who and when and returns the alert. For an emergency it is the same as "I'm handling it" (confirmed = handled, dismissed = false alarm): closed for everyone in the circle, and the others are pushed. If someone already closed it, their answer stands. |
 | `GET /chat/?with=<email>` | The conversation with one person in the circle (marks their messages read). |
 | `POST /chat/` | `{to, body}` (max 2,000 characters). Allowed only between a family account and the people it linked (family <-> caretaker, family <-> elderly; **not** caretaker <-> elderly). Also used by caretakers and elderly people to message the family. |
 | `POST /medicines/` | `{elderly_email, name, dose?, time: "HH:MM"}`: a daily reminder for one of your elderly people. |
@@ -65,8 +65,16 @@ time counts as hours.
 |---|---|
 | `GET /elder/home/` | The home screen data: caretaker presence in plain terms (`here`, `away`, `left`, `not_arrived`, `none`), today's mood answer, today's medicines with `taken` / `due` / `missed` / `later`. |
 | `POST /elder/checkin/` | `{mood: "good" \| "okay" \| "unwell"}`. "unwell" alerts the family (at most once in 3 hours). |
-| `POST /elder/sos/` | The emergency button. Alerts the family, sends them a chat message, and shows an emergency banner to the caretaker. Double taps within 2 minutes are merged. |
+| `POST /elder/sos/` | The emergency button. Pushes the family and caretakers (full screen), sends the family a chat message, and shows an emergency banner to the caretaker until someone handles it (see Emergencies). Double taps within 2 minutes are merged. |
 | `POST /medicines/<id>/take/` | "I took it" for today. Safe to repeat. |
+
+## Emergencies (everyone in the circle)
+
+| Method and path | Who | Purpose |
+|---|---|---|
+| `GET /emergency/` | family, caretaker, elderly (their own) | "I need help" alerts to show full screen: every open one, plus ones closed in the last 10 minutes so the other phones see who handled it and their alarm stops. Each has `id`, `patient`, `message`, `at`, `position`, `status` (`open`, `confirmed` = handled, `dismissed` = false alarm), `handled_by`, `handled_by_me`, `handled_at`. An elder is not shown one marked a false alarm. |
+| `POST /emergency/<id>/handle/` | family, caretaker | "I'm handling it". Closes the emergency for everyone (dashboard, every phone, the caretaker's banner), records the first responder, pushes the others "X is handling it" and the elder "Help is coming". A later tap returns the first responder's answer (no error). |
+| `POST /push/` | any | Register (or unregister) this phone for push notifications (Firebase Cloud Messaging). |
 
 ## Access summary
 
@@ -77,5 +85,6 @@ time counts as hours.
 | Shift, hours, audio; ticking tasks off (with a photo) | no | yes | no |
 | Task lists and history, proof photos | yes (their caretakers'; assign and remove their own tasks) | yes (their own) | no |
 | Mood check-in, SOS, medicine ticks, elder home | no | no | yes |
+| Respond to an emergency ("I'm handling it") | yes | yes | no |
 | Location | no | yes | yes |
 | Chat | with their circle | with the family only | with the family only |

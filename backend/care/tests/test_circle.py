@@ -69,7 +69,57 @@ class EmergencyTests(FamilyTestCase):
         again = self.sponsor_api.post(f'/api/emergency/{pk}/handle/').data
         self.assertEqual((again['handled_by'], again['handled_by_me']), ('Cara Care', False))
         self.assertEqual(self.elder_api.get('/api/emergency/').data[0]['handled_by'], 'Cara Care')
-        self.assertEqual(self.caretaker_api.get('/api/shift/state/').data['emergency']['handled_by'], 'Cara Care')
+        self.assertIsNone(self.caretaker_api.get('/api/shift/state/').data['emergency'])  # closed for everyone
+
+    def test_handling_on_a_phone_closes_it_on_the_dashboard_with_who_and_when(self):
+        self.elder_api.post('/api/elder/sos/')
+        pk = Alert.objects.get().pk
+        self.caretaker_api.post(f'/api/emergency/{pk}/handle/')
+        a = next(x for x in self.sponsor_api.get('/api/dashboard/').data['alerts'] if x['id'] == pk)
+        self.assertEqual((a['status'], a['handled_by']), ('confirmed', 'Cara Care'))
+        self.assertIsNotNone(a['handled_at'])
+        # the other phones get it back closed, so nobody's alarm keeps ringing
+        for api in (self.sponsor_api, self.caretaker_api):
+            item = api.get('/api/emergency/').data[0]
+            self.assertEqual((item['status'], item['handled_by']), ('confirmed', 'Cara Care'))
+
+    def test_handled_on_the_dashboard_closes_it_on_every_phone(self):
+        self.elder_api.post('/api/elder/sos/')
+        pk = Alert.objects.get().pk
+        self.sent.clear()
+        r = self.sponsor_api.post(f'/api/alerts/{pk}/', {'status': 'confirmed'}, format='json')
+        self.assertEqual((r.status_code, r.data['handled_by']), (200, 'Pat Parent'))
+        told = {u.email for users, *_ in self.sent for u in users}
+        self.assertEqual(told, {'care@example.com', 'elder@example.com'})
+        for api in (self.caretaker_api, self.elder_api):
+            item = api.get('/api/emergency/').data[0]
+            self.assertEqual((item['status'], item['handled_by']), ('confirmed', 'Pat Parent'))
+        # a caretaker answering afterwards does not take it over
+        again = self.caretaker_api.post(f'/api/emergency/{pk}/handle/').data
+        self.assertEqual((again['handled_by'], again['handled_by_me']), ('Pat Parent', False))
+
+    def test_false_alarm_closes_it_everywhere_and_the_elder_no_longer_sees_it(self):
+        self.elder_api.post('/api/elder/sos/')
+        pk = Alert.objects.get().pk
+        self.sent.clear()
+        self.sponsor_api.post(f'/api/alerts/{pk}/', {'status': 'dismissed'}, format='json')
+        a = Alert.objects.get()
+        self.assertEqual((a.status, a.handled_by.email), ('dismissed', 'family@example.com'))
+        self.assertEqual(self.elder_api.get('/api/emergency/').data, [])
+        self.assertEqual(self.caretaker_api.get('/api/emergency/').data[0]['status'], 'dismissed')
+        self.assertIsNone(self.caretaker_api.get('/api/shift/state/').data['emergency'])
+        told = {u.email for users, *_ in self.sent for u in users}
+        self.assertEqual(told, {'care@example.com'})  # the elder is not pushed "false alarm"
+
+    def test_closed_emergencies_stop_coming_back_after_a_few_minutes(self):
+        from datetime import timedelta
+        from django.utils import timezone
+        self.elder_api.post('/api/elder/sos/')
+        pk = Alert.objects.get().pk
+        self.caretaker_api.post(f'/api/emergency/{pk}/handle/')
+        Alert.objects.filter(pk=pk).update(handled_at=timezone.now() - timedelta(minutes=11))
+        for api in (self.sponsor_api, self.caretaker_api, self.elder_api):
+            self.assertEqual(api.get('/api/emergency/').data, [])
 
     def test_who_may_respond(self):
         self.elder_api.post('/api/elder/sos/')

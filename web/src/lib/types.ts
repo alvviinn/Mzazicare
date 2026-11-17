@@ -89,6 +89,8 @@ export type AlertItem = {
   shift_id: number | null;
   position: GeoPoint | null; // where the phone was when it was raised
   confidence: number | null; // model confidence 0-1 (voice alerts)
+  handled_by: string | null; // who closed it (any account in the circle)
+  handled_at: string | null;
 };
 
 export type Mood = 'good' | 'okay' | 'unwell';

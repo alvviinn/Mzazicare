@@ -33,8 +33,9 @@ export type ChatPerson = { email: string; name: string; unread: number };
 // Anyone in the same care circle (family, caretakers, elderly) can message anyone else in it.
 export type Contact = ChatPerson & { role: Role };
 
-// An open "I need help" from an elderly person: shown full screen to the family and caretakers until someone
-// says they are handling it.
+// An "I need help" from an elderly person: shown full screen to the family and caretakers until someone handles it
+// (or calls it a false alarm). Then it is closed for everyone; for a few minutes it still comes back, closed, so the
+// others see who handled it.
 export type Emergency = {
   id: number;
   patient: { name: string; email: string } | null;
@@ -44,6 +45,7 @@ export type Emergency = {
   handled_by: string | null; // name of the first person who responded
   handled_by_me: boolean;
   handled_at: string | null;
+  status: 'open' | 'confirmed' | 'dismissed'; // confirmed = handled, dismissed = false alarm
 };
 
 // A shift is one DAY of work. Stepping out of range is a break; the same shift continues when the caretaker returns.
@@ -97,6 +99,8 @@ export type AlertItem = {
   shift_id: number | null;
   position: { latitude: number; longitude: number; accuracy: number | null } | null; // where the phone was
   confidence: number | null; // model confidence 0-1 (voice alerts)
+  handled_by: string | null; // who closed it (any account in the circle)
+  handled_at: string | null;
 };
 
 export type Mood = 'good' | 'okay' | 'unwell';

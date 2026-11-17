@@ -12,8 +12,9 @@ const POLL_MS = 8000;
 const ALARM = [0, 900, 600]; // repeated while nobody has responded
 
 // The full-screen alarm the family and caretakers get when an elderly person presses "I need help".
-// It covers whatever screen is open and keeps vibrating until someone taps "I'm handling it"; then everyone else
-// sees who is handling it. Shown again on the next emergency.
+// It covers whatever screen is open and keeps vibrating until anyone in the circle handles it (here, on another
+// phone or on the dashboard). That closes it for everyone: the others see who handled it, once. Shown again on the
+// next emergency.
 export function EmergencyAlert({ token }: { token: string }) {
   const [items, setItems] = useState<Emergency[]>([]);
   const [dismissed, setDismissed] = useState<number[]>([]);
@@ -40,10 +41,11 @@ export function EmergencyAlert({ token }: { token: string }) {
   }, [load]);
   useEmergencyPush(load); // a push arriving while the app is open shows the alarm at once
 
-  // The one to show: an unanswered emergency first, then one someone else answered that I have not seen yet.
+  // The one to show: an open emergency first, then one someone else closed that I have not seen yet.
   const current =
-    items.find((e) => !e.handled_by) ?? items.find((e) => !e.handled_by_me && !dismissed.includes(e.id)) ?? null;
-  const ringing = !!current && !current.handled_by;
+    items.find((e) => e.status === 'open') ?? items.find((e) => !e.handled_by_me && !dismissed.includes(e.id)) ?? null;
+  const ringing = !!current && current.status === 'open';
+  const falseAlarm = current?.status === 'dismissed';
 
   useEffect(() => {
     if (!ringing) return;
@@ -79,15 +81,15 @@ export function EmergencyAlert({ token }: { token: string }) {
           <Icon name={ringing ? 'siren' : 'checkCircle'} size={icon.l} color={ringing ? colors.error : colors.ink} />
         </View>
         <Text style={[text.captionStrong, styles.onRed, !ringing && styles.onCalm]} accessibilityRole="header">
-          {ringing ? 'EMERGENCY' : 'EMERGENCY · RESPONDING'}
+          {ringing ? 'EMERGENCY' : falseAlarm ? 'EMERGENCY · FALSE ALARM' : 'EMERGENCY · HANDLED'}
         </Text>
         <Text style={[text.display, styles.onRed, !ringing && styles.onCalm]} accessibilityLiveRegion="assertive">
-          {ringing ? `${name} needs help` : `${current.handled_by} is handling it`}
+          {ringing ? `${name} needs help` : falseAlarm ? `${current.handled_by} marked it a false alarm` : `${current.handled_by} is handling it`}
         </Text>
         <Text style={[text.body, styles.onRed, !ringing && styles.onCalm]}>
           {ringing
             ? `${first} pressed "I need help" at ${fmtTime(current.at)} (${timeAgo(current.at)}). Call them or go to them now.`
-            : `${first} pressed "I need help" at ${fmtTime(current.at)}. ${current.handled_by} responded at ${fmtTime(current.handled_at ?? current.at)}.`}
+            : `${first} pressed "I need help" at ${fmtTime(current.at)}. ${current.handled_by} ${falseAlarm ? 'closed it' : 'responded'} at ${fmtTime(current.handled_at ?? current.at)}.`}
         </Text>
 
         <View style={styles.actions}>

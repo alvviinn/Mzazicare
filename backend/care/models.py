@@ -189,7 +189,8 @@ class Alert(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     accuracy = models.FloatField(null=True, blank=True)  # GPS accuracy in metres
     confidence = models.FloatField(null=True, blank=True)  # model confidence 0-1 (voice alerts)
-    # Emergencies: the first person (family or caretaker) who said "I'm handling it", shown to everyone else.
+    # Who closed it and when: for an emergency, the first person (family or caretaker) to handle it or call it a
+    # false alarm; it is then closed for everyone in the circle and shown in the history.
     handled_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )

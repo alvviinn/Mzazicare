@@ -1,0 +1,44 @@
+@startgantt figA_2_plan_vs_actual
+<style>
+ganttDiagram {
+  task { FontName Arial; FontSize 12; LineColor #000000 }
+  milestone { BackGroundColor #000000; LineColor #000000 }
+  separator { FontStyle bold; FontSize 12 }
+  timeline { FontName Arial; FontSize 11 }
+}
+</style>
+skinparam dpi 200
+printscale weekly
+Project starts 2026-10-05
+today is 2026-11-17 and is colored in #DDDDDD
+
+-- Environment, accounts and data layer --
+[Planned: environment and data] starts 2026-10-05 and ends 2026-10-25 and is colored in #FFFFFF/#000000
+[Actual: setup, PostgreSQL, accounts, roles] starts 2026-10-12 and ends 2026-10-13 and is colored in #333333/#000000
+[Actual: tests, CI, scripts, documentation] starts 2026-10-22 and ends 2026-10-24 and is colored in #333333/#000000
+-- Care features for the three roles --
+[Actual: family, caregiver and elderly screens, chat] starts 2026-10-12 and ends 2026-10-18 and is colored in #333333/#000000
+[Actual: tasks with photo proof, task assignment] starts 2026-11-01 and ends 2026-11-01 and is colored in #333333/#000000
+[Actual: Google sign-in and two-step code] starts 2026-11-04 and ends 2026-11-10 and is colored in #333333/#000000
+-- Geofence and shifts --
+[Planned: Sprint 2, DQN geofence agent] starts 2026-11-09 and ends 2026-11-22 and is colored in #FFFFFF/#000000
+[Actual: rule-based geofence, day shifts and breaks] starts 2026-10-13 and ends 2026-10-26 and is colored in #333333/#000000
+-- Voice tone model --
+[Planned: Sprint 3, voice CNN] starts 2026-11-23 and ends 2026-12-06 and is colored in #FFFFFF/#000000
+[Actual: tone CNN, capture, live chart] starts 2026-10-19 and ends 2026-10-26 and is colored in #333333/#000000
+[Actual: comparison with SVM, random forest, BiLSTM] starts 2026-10-28 and ends 2026-10-29 and is colored in #333333/#000000
+[Actual: retraining rounds] starts 2026-11-12 and ends 2026-11-17 and is colored in #333333/#000000
+-- Dashboard and integration --
+[Planned: Sprint 4, dashboard and integration] starts 2026-12-07 and ends 2026-12-13 and is colored in #FFFFFF/#000000
+[Actual: family web dashboard] starts 2026-10-28 and ends 2026-11-05 and is colored in #333333/#000000
+[Actual: Azure deployment, APK, push notifications] starts 2026-11-05 and ends 2026-11-16 and is colored in #333333/#000000
+-- First-aid assistant --
+[Planned: Sprint 1, NLP chatbot (mBERT)] starts 2026-10-26 and ends 2026-11-08 and is colored in #FFFFFF/#000000
+[Actual: first-aid assistant, four training rounds] starts 2026-11-09 and ends 2026-11-16 and is colored in #333333/#000000
+-- Testing and documentation --
+[Planned: testing and bug fixing] starts 2026-12-14 and ends 2026-12-20 and is colored in #FFFFFF/#000000
+[Planned: documentation writing] starts 2026-12-14 and ends 2026-12-24 and is colored in #FFFFFF/#000000
+[Actual: automated tests run with each change] starts 2026-10-22 and ends 2026-11-17 and is colored in #333333/#000000
+[Actual: Chapter 5 and report revision] starts 2026-11-12 and ends 2026-11-17 and is colored in #333333/#000000
+[Final defence and system demonstration (planned)] happens 2026-12-24
+@endgantt

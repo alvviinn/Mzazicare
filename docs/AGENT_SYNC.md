@@ -44,6 +44,7 @@ Names taken from the code (backend/accounts/models.py, backend/care/models.py, b
 | 4.16 | Web Dashboard Wireframe | 4 | docs/diagrams/fig4_16_wireframe_web.png | Chapter 4 agent |
 | 4.17 | System Architecture Diagram | 4 | docs/diagrams/fig4_17_architecture.png | Chapter 4 agent |
 | 4.18 | Deployment Diagram | 4 | docs/diagrams/fig4_18_deployment.png | Chapter 4 agent |
+| 5.29 (fills existing placeholder) | Output of the automated test run on 17 November 2026 | 5 | docs/testing/automation/figures/fig5_29_test_run.png | Automation agent |
 
 Placement, captions and every text change: `docs/diagrams/CHAPTER4_FIGURES.md` (paragraph numbers refer to the current v2 build).
 
@@ -66,6 +67,18 @@ Placement, captions and every text change: `docs/diagrams/CHAPTER4_FIGURES.md` (
 - (Testing agent, 2026-11-17) Registered as **Testing agent**. Owns `docs/testing/`; owns no figures. Runs the emulated field test (TC-019) and the simulated usability test (TC-021) and delivers report text only through `docs/testing/REPORT_INSERTS.md` plus one request here. All results will be described as emulated (Android emulators) or simulated (AI-played personas), never as physical phones or real participants. Plan: `docs/testing/TEST_PLAN.md`.
 - (Testing agent) Backend choice: **resolved by user** (2026-11-17): local backend with a fresh test schema and a development build of C:\mzb\mobile. The mzb copy is built as it is; its three older Tone-tab files are recorded as a deviation (no test task uses that tab).
 - (Testing agent) Location sharing: **resolved by user** (2026-11-17): it also works in the background (Android foreground service), as Section 5.5.3 says. No report change needed.
+
+- (Automation agent, 2026-11-17) Registered as **Automation agent**. Owns `docs/testing/automation/` and any new 5.x figures it registers (provisional numbers). Runs and verifies the automated suites, CI evidence (TC-022), pilot response times (TC-018) and the pilot security checklist (TC-020). Report text only through `docs/testing/automation/REPORT_INSERTS.md` plus one Request. No emulator tests running yet; will note here before any.
+- (Automation agent) Local run on 2026-11-17: backend **208** tests OK (report says 204), tone model 34 OK, first-aid 20 OK. Outputs in `docs/testing/automation/results/`. Count corrections will be in REPORT_INSERTS.md.
+- (Automation agent) **CI has failed on every push to main since 29 Oct 2026** (first failing run: commit b653e08; last success: run 40591038452 on 27 Oct, commit 53e6c93; latest run 44048080880 on 34f53e8: Backend, Mobile, Secret scan pass, ML fails). Cause reproduced locally (`docs/testing/automation/ci_repro/run_like_ci_ml_job.py`): `ml/voice/tests/test_compare.py` imports `torch` and `voice.compare` imports `sklearn`, neither installed by the ML job. The first-aid tests also need `pandas`. Consequence: TC-022 cannot be Pass, p685 ("every push ... four jobs") must not imply green CI, and Figure 5.34 (successful run) has no recent successful run. Needs user. Proposed exact change to `.github/workflows/ci.yml`, job `ml`, replacing
+  `      # PyTorch is not needed for these tests (the model-shape test skips itself without it).` / `      - run: pip install numpy scipy soundfile onnxruntime` / `      - run: python -m unittest discover -s voice/tests -t . -v`
+  with
+  `      # test_compare.py needs torch and scikit-learn; the first-aid tests need pandas.` / `      - run: pip install numpy scipy soundfile onnxruntime scikit-learn pandas` / `      - run: pip install torch --index-url https://download.pytorch.org/whl/cpu` / `      - run: python -m unittest discover -s voice/tests -t . -v` / `      - run: python -m unittest discover -s firstaid/tests -t . -v`
+  (verified locally: voice 34 OK with torch + scikit-learn added; first-aid 20 OK with pandas added), and adding a job after `mobile`:
+  `  web:` / `    name: Web (TypeScript)` / `    runs-on: ubuntu-latest` / `    defaults:` / `      run:` / `        working-directory: web` / `    steps:` / `      - uses: actions/checkout@v4` / `      - uses: actions/setup-node@v4` / `        with:` / `          node-version: 22` / `          cache: npm` / `          cache-dependency-path: web/package-lock.json` / `      - run: npm ci --no-audit --no-fund` / `      - run: npm run typecheck`
+  so CI runs what `scripts/test.ps1` runs (first-aid tests and web type-check are currently local only).
+- (Automation agent) `scripts/check-secrets.ps1` takes over 25 CPU-minutes locally under Windows PowerShell 5.1 because it regex-scans `ml/firstaid/artifacts/tokenizer.json` (about 1,000,000 lines) and three 2.4 MB one-line vocab JSON files line by line. Needs user. Suggested exact change: after `$files = git ls-files | Where-Object { $_ -notmatch $skipExt -and $_ -notmatch 'package-lock\.json$' }` add `$files = $files | Where-Object { $_ -notmatch '^ml/firstaid/artifacts/.*\.json$' }  # generated model files, no secrets`.
+- (Automation agent) `docs/SETUP.md` section 5 still says "123 backend tests" and "24 ML tests". Needs user (docs are not mine to edit). Suggested: "208 backend tests" and "54 ML tests (34 tone model, 20 first-aid)".
 
 ## Requests (Ch5 → Ch4)
 

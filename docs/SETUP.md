@@ -12,7 +12,7 @@ the manual commands are given so you can see (and repeat) what they do.
 | Python | 3.14 (3.12+ works) | backend and ML |
 | Node.js / npm | 25 / 11 (Node 20+ works) | mobile app |
 | PostgreSQL | 17 (15+ works) | database. PostGIS is installed but not used yet |
-| Expo Go | latest from the store | running the app on a phone |
+| Android Studio (its SDK and bundled Java) and an Android phone | latest | the app runs as a built APK (`scripts\build-apk.ps1`); Expo Go cannot load its native parts |
 
 Machine used for development: Intel Core i7-8650U (4 cores), 15 GB RAM, **no dedicated GPU**, 47 GB free disk. The acoustic model is small
 enough to train on this CPU in about an hour, so Kaggle GPUs were not needed.
@@ -61,7 +61,14 @@ scripts\run-mobile.ps1       # window 2: Expo; writes mobile\.env.local with thi
 scripts\run-web.ps1          # optional window 3: the family web dashboard on http://localhost:3000
 ```
 
-Scan the QR code with Expo Go (Android) or the Camera app (iPhone). The phone must be on the same Wi-Fi as the PC.
+The full app (background location, background recording, push notifications) needs the built APK:
+
+```powershell
+scripts\build-apk.ps1 -Api <API address> -Install   # about 25 minutes; the phone on USB with USB debugging on
+```
+
+The Expo dev server above is still useful for quick screen changes: scan its QR code with Expo Go (Android) or the
+Camera app (iPhone), on the same Wi-Fi as the PC. Background features and push do not work there.
 
 ### The family web dashboard (optional)
 
@@ -105,8 +112,8 @@ scripts\test.ps1
 
 * Secret scan of every tracked file
 * `manage.py check` and a check that no migration is missing
-* 123 backend tests (in-memory SQLite, dummy settings: `--settings=config.settings_test`)
-* 24 ML tests (needs `setup.ps1 -WithML`)
+* 208 backend tests (in-memory SQLite, dummy settings: `--settings=config.settings_test`)
+* 34 tone-model tests and 20 first-aid tests (needs `setup.ps1 -WithML`)
 * `tsc --noEmit` for the mobile app
 
 ## 6. Machine-learning environment (optional)

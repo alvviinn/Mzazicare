@@ -43,6 +43,15 @@ const SEVERITY: Record<number, { text: string; tone: PillTone }> = {
   1: { text: 'Check', tone: 'muted' },
 };
 
+// History line: when it happened, then who closed it and when, e.g. "10:42 · Handled by Cara at 10:45".
+function alertOutcome(a: AlertItem): string {
+  const sos = a.kind === 'sos';
+  const what = a.status === 'confirmed' ? (sos ? 'Handled' : 'Confirmed') : sos ? 'False alarm' : 'Dismissed';
+  const when = `${fmtTime(a.created_at)} (${timeAgo(a.created_at)})`;
+  if (!a.handled_by) return `${when} · ${what}`;
+  return `${when} · ${what} by ${firstName(a.handled_by)}${a.handled_at ? ` at ${fmtTime(a.handled_at)}` : ''}`;
+}
+
 const MOOD_ICON: Record<Mood, LucideIcon> = { good: Smile, okay: Meh, unwell: Frown };
 
 const MED_STATE: Record<Dashboard['medicines']['items'][number]['state'], { Icon: LucideIcon; color: string; label: string; tone: PillTone }> = {
@@ -435,7 +444,7 @@ export default function OverviewPage() {
                 key={a.id}
                 leading={a.status === 'confirmed' ? <BadgeCheck className="icon" style={{ color: 'var(--ink-muted)' }} aria-hidden /> : <CircleX className="icon" style={{ color: 'var(--ink-muted)' }} aria-hidden />}
                 title={a.label}
-                subtitle={`${a.status === 'confirmed' ? 'Confirmed' : 'Dismissed'} · ${timeAgo(a.created_at)} · ${a.message}`}
+                subtitle={`${alertOutcome(a)} · ${a.message}`}
               />
             ))}
           </div>
