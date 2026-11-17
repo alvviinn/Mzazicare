@@ -13,12 +13,13 @@ import numpy as np
 import onnxruntime as ort
 
 from .config import CLASSES, TONES
-from .data import DATA
-from .infer import ART, MAX_NOISE_PROB
+from .data import FEATURES
+from .infer import MAX_NOISE_PROB
+from .train import ART
 
 rng = np.random.default_rng(0)
 meta = json.loads((ART / 'labels.json').read_text(encoding='utf-8'))
-d = np.load(DATA / 'features.npz')
+d = np.load(FEATURES)
 te = d['split'] == 'test'
 X = d['X'][te].astype(np.float32)
 y = d['y'][te]

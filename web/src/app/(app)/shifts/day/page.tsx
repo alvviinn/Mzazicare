@@ -3,18 +3,19 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
-import { ArrowLeft, CheckCircle2, Circle, ClipboardList, Coffee, LogIn, LogOut, MapPin, MapPinCheck, PlayCircle } from 'lucide-react';
+import { ArrowLeft, Circle, CircleCheck, ClipboardCheck, Coffee, LogIn, LogOut, MapPin, MapPinCheck, Play } from 'lucide-react';
 import { ReactNode, Suspense } from 'react';
 import { ShiftMap } from '@/components/ShiftMap';
-import { Empty, Loading, PageHead, Pill, Tile, ToneBars } from '@/components/ui';
 import { ToneChart } from '@/components/ToneChart';
+import { Avatar, Empty, ErrorNote, Loading, Pill, Row, Section, ToneCard } from '@/components/ui';
 import { getShift } from '@/lib/api';
 import { usePolling } from '@/lib/auth';
 import { fmtDuration, fmtShiftDayLong, fmtTime, STATUS_LABEL } from '@/lib/format';
 import { TimelineEvent } from '@/lib/types';
 
+// Timeline marks: cobalt for the visit itself, amber for a break (a status), green for a task done, muted for leaving.
 const EVENT: Record<TimelineEvent['kind'], { text: string; mark: '' | 'out' | 'end'; Icon: LucideIcon }> = {
-  started: { text: 'Shift opened', mark: '', Icon: PlayCircle },
+  started: { text: 'Shift opened', mark: '', Icon: Play },
   arrived: { text: 'Checked in (arrived)', mark: '', Icon: LogIn },
   stepped_out: { text: 'Stepped out (break starts)', mark: 'out', Icon: Coffee },
   returned: { text: 'Came back', mark: '', Icon: MapPinCheck },
@@ -34,15 +35,28 @@ export default function ShiftDetailPage() {
 
 function ShiftFromQuery() {
   const id = Number(useSearchParams().get('id'));
-  if (!id) return <p className="muted">This shift could not be found.</p>;
+  if (!id) return <Empty icon={MapPin} title="This shift could not be found" />;
   return <ShiftDetail key={id} id={id} />;
+}
+
+function HeroStat({ Icon, value, label }: { Icon: LucideIcon; value: string; label: string }) {
+  return (
+    <div className="hero-stat">
+      <Icon className="icon" aria-hidden />
+      <div>
+        <div className="on-ink-strong">{value}</div>
+        <div className="on-ink-caption">{label}</div>
+      </div>
+    </div>
+  );
 }
 
 function ShiftDetail({ id }: { id: number }) {
   const { data: shift, error } = usePolling((t) => getShift(t, id), 15000);
 
-  if (!shift) return error ? <p className="error" role="alert">Couldn&apos;t load this shift. {error}</p> : <Loading label="Loading the shift…" />;
+  if (!shift) return error ? <ErrorNote message={`Couldn't load this shift. ${error}`} /> : <Loading label="Loading the shift…" />;
   const st = STATUS_LABEL[shift.status];
+  const stillOut = !!shift.left && !shift.end;
 
   // One timeline: check-in, breaks, each task done, check-out.
   const entries: Entry[] = [
@@ -57,39 +71,55 @@ function ShiftDetail({ id }: { id: number }) {
           <>
             {ev.text}
             {e.kind === 'returned' && e.break_minutes !== undefined && ` after ${fmtDuration(e.break_minutes)}`}
-            {e.note && <span className="muted small"> · {e.note}</span>}
+            {e.note && <span className="caption"> · {e.note}</span>}
           </>
         ),
       };
     }),
     ...shift.chores
       .filter((c) => c.is_done && c.done_at)
-      .map((c, i) => ({ at: c.done_at!, key: `c${i}`, mark: 'task', Icon: CheckCircle2, text: <>Task done: {c.description}</> })),
+      .map((c, i) => ({ at: c.done_at!, key: `c${i}`, mark: 'task', Icon: CircleCheck, text: <>Task done: {c.description}</> })),
   ].sort((x, y) => x.at.localeCompare(y.at));
 
   return (
     <>
-      <p style={{ margin: 0 }}>
-        <Link href="/shifts">
-          <ArrowLeft className="icon" aria-hidden /> All shifts
-        </Link>
-      </p>
-      <PageHead
-        title={fmtShiftDayLong(shift.date)}
-        sub={`${shift.caretaker} with ${shift.elderly}`}
-        right={<Pill tone={st.tone}>{st.text}</Pill>}
-      />
+      <Link href="/shifts" className="back-link">
+        <ArrowLeft className="icon" aria-hidden /> All shifts
+      </Link>
+      <header className="page-head">
+        <div>
+          <p className="caption">Shift</p>
+          <h1>{fmtShiftDayLong(shift.date)}</h1>
+        </div>
+      </header>
 
-      <div className="grid tiles" style={{ marginTop: 'var(--space-4)' }}>
-        <Tile value={fmtDuration(shift.minutes)} label="Active time" />
-        <Tile value={shift.breaks ? `${shift.breaks} (${fmtDuration(shift.break_minutes)})` : 'None'} label="Breaks" />
-        <Tile value={shift.chores_total ? `${shift.chores_done}/${shift.chores_total}` : '–'} label="Chores done" />
-        <Tile value={shift.arrived ? fmtTime(shift.arrived) : '–'} label="Arrived" />
-      </div>
+      {/* the one ink hero: who, how long, and the day's numbers */}
+      <section className="card ink hero" aria-label={`${shift.caretaker} with ${shift.elderly}`}>
+        <div className="today-top">
+          <span className="pair">
+            <Avatar name={shift.caretaker} size={48} solid />
+            <Avatar name={shift.elderly} size={48} />
+          </span>
+          <div className="grow">
+            <div className="on-ink-strong">{shift.caretaker}</div>
+            <div className="on-ink-caption">with {shift.elderly}</div>
+          </div>
+          <Pill tone={st.tone}>{st.text}</Pill>
+        </div>
+        <div className="today-figure">
+          <div className="on-ink-display">{fmtDuration(shift.minutes)}</div>
+          <div className="on-ink-caption">
+            {['active', shift.arrived ? `${fmtTime(shift.arrived)} – ${shift.end ? fmtTime(shift.end) : stillOut ? 'out' : 'now'}` : 'not arrived'].join(' · ')}
+          </div>
+        </div>
+        <div className="hero-stats">
+          <HeroStat Icon={Coffee} value={fmtDuration(shift.break_minutes)} label={`${shift.breaks} break${shift.breaks === 1 ? '' : 's'}`} />
+          <HeroStat Icon={shift.source === 'auto' ? MapPinCheck : Play} value={shift.source === 'auto' ? 'By itself' : 'By hand'} label="How it started" />
+          {shift.chores_total > 0 && <HeroStat Icon={ClipboardCheck} value={`${shift.chores_done}/${shift.chores_total}`} label="Tasks done" />}
+        </div>
+      </section>
 
-      <h2>
-        <MapPin className="icon" aria-hidden /> Where the visit happened
-      </h2>
+      <Section title="Where the visit happened" />
       <div className="card">
         {shift.map && (shift.map.centre || shift.map.trail.length) ? (
           <>
@@ -99,14 +129,14 @@ function ShiftDetail({ id }: { id: number }) {
               trail={shift.map.trail}
               label={`Map of the visit: ${shift.map.radius_m} metre area around ${shift.elderly}'s phone and ${shift.map.trail.length} caretaker positions`}
             />
-            <div className="map-legend">
+            <div className="legend">
               <span>
-                <i style={{ background: 'var(--color-primary)' }} />
-                {shift.map.radius_m} m area around {shift.elderly}&apos;s phone
+                <i style={{ background: 'var(--primary)' }} />
+                {shift.map.radius_m} m around {shift.elderly}&apos;s phone
               </span>
               <span>
-                <i style={{ background: 'var(--color-warning)' }} />
-                {shift.caretaker}&apos;s path ({shift.map.trail.length} positions, every 30 s or more)
+                <i style={{ background: 'var(--ink)' }} />
+                {shift.caretaker}&apos;s path ({shift.map.trail.length} positions)
               </span>
             </div>
           </>
@@ -119,90 +149,100 @@ function ShiftDetail({ id }: { id: number }) {
 
       <div className="grid two">
         <div>
-          <h2>Timeline</h2>
+          <Section title="Timeline" />
           <div className="card">
             {entries.length === 0 ? (
-              <Empty icon={ClipboardList} title="Nothing recorded yet">
+              <Empty icon={ClipboardCheck} title="Nothing recorded yet">
                 Check-in, each task and check-out appear here in order as the day goes on.
               </Empty>
             ) : (
-              <ul className="timeline">
+              <ol className="timeline">
                 {entries.map((e) => (
                   <li key={e.key}>
-                    <e.Icon className={`mark ${e.mark}`} aria-hidden />
+                    <span className={`mark ${e.mark}`}>
+                      <e.Icon className="icon" aria-hidden />
+                    </span>
                     <span className="when">{fmtTime(e.at)}</span>
-                    <span>{e.text}</span>
+                    <span className="what">{e.text}</span>
                   </li>
                 ))}
-              </ul>
+              </ol>
             )}
           </div>
         </div>
 
         <div>
-          <h2>Active periods and breaks</h2>
-          <div className="card divided">
-            {shift.segments.length === 0 && (
-              <span className="muted">No verified time yet. Time counts only while the caretaker is within range of the elderly person&apos;s phone.</span>
+          <Section title="Time with them, and breaks" />
+          <div className="card list">
+            {shift.segments.length === 0 && shift.breaks_list.length === 0 && (
+              <Empty icon={MapPinCheck} title="No verified time yet">
+                Time counts only while the caretaker is within range of your loved one&apos;s phone.
+              </Empty>
             )}
             {shift.segments.map((s, i) => (
-              <div className="row" key={i}>
-                <div className="grow">
-                  <b>
-                    {fmtTime(s.start)} – {s.end ? fmtTime(s.end) : 'now'}
-                  </b>
-                  <div className="muted small">With the elderly person</div>
-                </div>
-                <span>{fmtDuration(s.minutes)}</span>
-              </div>
+              <Row
+                key={i}
+                leading={<MapPinCheck className="icon" style={{ color: 'var(--primary)' }} aria-hidden />}
+                title={`${fmtTime(s.start)} – ${s.end ? fmtTime(s.end) : 'now'}`}
+                subtitle="With your loved one"
+                trailing={<span className="strong">{fmtDuration(s.minutes)}</span>}
+              />
             ))}
             {shift.breaks_list.map((b, i) => (
-              <div className="row" key={`b${i}`}>
-                <div className="grow">
-                  <b>
-                    {fmtTime(b.start)} – {b.end ? fmtTime(b.end) : 'now'}
-                  </b>
-                  <div className="muted small">Break (not counted)</div>
-                </div>
-                <span>{fmtDuration(b.minutes)}</span>
-              </div>
+              <Row
+                key={`b${i}`}
+                leading={<Coffee className="icon" style={{ color: 'var(--warning)' }} aria-hidden />}
+                title={`${fmtTime(b.start)} – ${b.end ? fmtTime(b.end) : 'now'}`}
+                subtitle="Break (not counted)"
+                trailing={<span>{fmtDuration(b.minutes)}</span>}
+              />
             ))}
           </div>
         </div>
       </div>
 
-      <h2>Chores</h2>
-      <div className="card divided">
+      <Section title="Tasks" />
+      <div className="card list">
         {shift.chores.length === 0 && (
-          <Empty icon={ClipboardList} title="No tasks on the list for this day">
+          <Empty icon={ClipboardCheck} title="No tasks on the list for this day">
             Tasks you or the caretaker add appear here, with the time each was done.
           </Empty>
         )}
         {shift.chores.map((c, i) => (
-          <div className="row" key={i}>
-            {c.is_done ? (
-              <CheckCircle2 className="icon" style={{ color: 'var(--color-success)' }} aria-label="Done" />
-            ) : (
-              <Circle className="icon" style={{ color: 'var(--color-border-strong)' }} aria-label="Not done" />
-            )}
-            <span className="grow" style={{ color: c.is_done ? undefined : 'var(--color-text-muted)' }}>
-              {c.description}
-            </span>
-            {c.done_at && <span className="muted small">{fmtTime(c.done_at)}</span>}
-          </div>
+          <Row
+            key={i}
+            leading={
+              c.is_done ? (
+                <CircleCheck className="icon-m" style={{ color: 'var(--success)' }} aria-label="Done" />
+              ) : (
+                <Circle className="icon-m" style={{ color: 'var(--ink-muted)' }} aria-label="Not done" />
+              )
+            }
+            title={c.description}
+            subtitle={c.done_at ? `Done ${fmtTime(c.done_at)}` : 'Not done'}
+          />
         ))}
       </div>
 
       {shift.tones && (
-        <>
-          <h2>Voice tone during this visit</h2>
-          <div className="card">
-            {!!shift.tone_timeline?.length && <ToneChart points={shift.tone_timeline} bucketMinutes={15} />}
+        <div className="grid two">
+          <div>
+            <Section title="Voice tone through the visit" />
+            <div className="card">
+              {shift.tone_timeline?.length ? (
+                <ToneChart points={shift.tone_timeline} bucketMinutes={15} />
+              ) : (
+                <Empty icon={ClipboardCheck} title="No speech heard on this shift" />
+              )}
+            </div>
           </div>
-          <div className="card">
-            <ToneBars tones={shift.tones} />
+          <div>
+            <Section title="The visit's mix" />
+            <div className="card">
+              <ToneCard tones={shift.tones} period="this visit" />
+            </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );

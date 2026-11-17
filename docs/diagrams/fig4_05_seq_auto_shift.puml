@@ -1,0 +1,31 @@
+@startuml fig4_05_seq_auto_shift
+!include style.iuml
+autonumber
+hide footbox
+
+participant "Elderly phone" as E
+participant "Caregiver phone" as C
+participant "LocationView" as API
+participant "presence.evaluate()" as P
+database "PostgreSQL" as DB
+
+loop every 15 seconds (also in the background)
+  E -> API : POST /api/location/ {latitude, longitude, accuracy, mocked}
+  API -> DB : save the latest Location of the elderly phone
+  C -> API : POST /api/location/ {latitude, longitude, accuracy, mocked}
+  API -> DB : save the latest Location of the caregiver phone
+  opt fix reported as mocked
+    API -> DB : Alert(kind = geofence), at most once an hour
+  end
+  API -> P : evaluate(caregiver)
+  P -> DB : read both fixes (fresh < 120 s, accuracy < 40 m, not mocked)
+  alt within 15 m and no shift today
+    P -> DB : create Shift(source = auto)\nand open a ShiftSegment
+  else within 15 m while on a break
+    P -> DB : open a new ShiftSegment (same shift continues)
+  else beyond 20 m, or no usable fix for 3 minutes
+    P -> DB : close the ShiftSegment at last_in_range_at (break starts)
+  end
+  API --> C : 200 ok
+end
+@enduml

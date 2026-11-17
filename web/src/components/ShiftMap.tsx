@@ -4,7 +4,8 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import type { GeoPoint } from '@/lib/types';
 
-// Colours come from the tokens (read at runtime so the map matches the rest of the page).
+// Colours come from the tokens (read at runtime so the map matches the rest of the page): the geofence and the
+// elder's phone in cobalt, the caretaker's path in ink, an alert's position in red (it is a status).
 function token(name: string) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
@@ -34,9 +35,9 @@ export function ShiftMap({ centre, radius, trail = [], point, label, className =
         attribution: '&copy; OpenStreetMap contributors',
       }).addTo(map);
 
-      const primary = token('--color-primary');
-      const warning = token('--color-warning');
-      const danger = token('--color-danger');
+      const primary = token('--primary');
+      const path = token('--ink');
+      const danger = token('--error');
       const bounds: [number, number][] = [];
 
       if (centre) {
@@ -55,9 +56,9 @@ export function ShiftMap({ centre, radius, trail = [], point, label, className =
       if (trail.length) {
         const line = trail.map((p) => [p.latitude, p.longitude] as [number, number]);
         bounds.push(...line);
-        L.polyline(line, { color: warning, weight: 3, opacity: 0.9 }).addTo(map);
+        L.polyline(line, { color: path, weight: 3, opacity: 0.9 }).addTo(map);
         const last = trail[trail.length - 1];
-        L.circleMarker([last.latitude, last.longitude], { radius: 6, color: warning, weight: 2, fillColor: warning, fillOpacity: 1 })
+        L.circleMarker([last.latitude, last.longitude], { radius: 6, color: path, weight: 2, fillColor: path, fillOpacity: 1 })
           .bindTooltip(`Caretaker's last position${last.accuracy ? ` (±${Math.round(last.accuracy)} m)` : ''}`)
           .addTo(map);
       }

@@ -7,6 +7,9 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { getProfile, SESSION_EXPIRED } from './src/api/client';
 import { clearSession, loadSession, Session } from './src/auth/session';
+import { stopBackgroundSharing } from './src/location/backgroundTask';
+import { stopVoice } from './src/audio/voiceService';
+import { cancelMedicineReminders } from './src/elder/medReminders';
 import { registerForPush, unregisterForPush } from './src/push';
 import { EmergencyAlert } from './src/components/EmergencyAlert';
 import { Button, Empty } from './src/components/ui';
@@ -42,6 +45,9 @@ export default function App() {
 
   const signOut = useCallback(async () => {
     if (sessionRef.current) await unregisterForPush(sessionRef.current.token); // no notifications for a signed-out account
+    await stopBackgroundSharing(); // stop sending this phone's location and remove its notification
+    await stopVoice(); // and the voice monitoring with its microphone service
+    await cancelMedicineReminders();
     await clearSession();
     setSession(null);
     setProfile(null);

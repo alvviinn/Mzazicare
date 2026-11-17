@@ -1,42 +1,64 @@
 'use client';
 
+// The component kit, the web twin of the app's (mobile/src/components/ui.tsx). Every value comes from tokens.css.
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
-import { CalendarClock, AudioLines } from 'lucide-react';
-import { ReactNode } from 'react';
-import { fmtDuration, fmtShiftDay, fmtTime, QUALITY_LABEL, STATUS_LABEL, TONE_COLOR, TONE_LABEL } from '@/lib/format';
-import { Dashboard, ShiftSummary } from '@/lib/types';
+import { Angry, Annoyed, AudioWaveform, CalendarDays, Check, ChevronRight, CircleAlert, Laugh, Meh, Smile, X } from 'lucide-react';
+import { ReactNode, useEffect, useRef } from 'react';
+import { BANDS, bandShare, fmtDuration, fmtShiftDay, fmtTime, PillTone, QUALITY_LABEL, STATUS_LABEL } from '@/lib/format';
+import { Dashboard, ShiftSummary, Tone } from '@/lib/types';
 
-export function Pill({ tone, children }: { tone: 'good' | 'warn' | 'bad' | 'quiet'; children: ReactNode }) {
-  return <span className={`pill ${tone}`}>{children}</span>;
-}
+export const TONE_ICON: Record<Tone, LucideIcon> = { happy: Laugh, calm: Smile, neutral: Meh, stressed: Annoyed, angry: Angry };
 
-export function Tile({ value, label }: { value: ReactNode; label: string }) {
+/** A status in words with a dot, never colour alone. The dot carries the status colour; the words are ink. */
+export function Pill({ tone, children }: { tone: PillTone; children: ReactNode }) {
   return (
-    <div className="tile">
-      <div className="value">{value}</div>
-      <div className="label">{label}</div>
-    </div>
+    <span className={`pill ${tone}`}>
+      <i aria-hidden />
+      {children}
+    </span>
   );
 }
 
-export function PageHead({ title, sub, right }: { title: string; sub?: string; right?: ReactNode }) {
+/** Initial in a circle: ink on the cornflower tint; `solid` (on the hero) is ink on cornflower. */
+export function Avatar({ name, size = 40, solid }: { name: string; size?: number; solid?: boolean }) {
   return (
-    <div className="page-head">
+    <span className={`avatar${solid ? ' solid' : ''}`} style={{ width: size, height: size, fontSize: size >= 56 ? 'var(--size-heading)' : undefined }} aria-hidden>
+      {(name.trim().charAt(0) || '?').toUpperCase()}
+    </span>
+  );
+}
+
+/** Page title: a small line above (the date, or what the page covers), the display title, an action on the right. */
+export function PageHead({ title, kicker, right }: { title: string; kicker?: string; right?: ReactNode }) {
+  return (
+    <header className="page-head">
       <div>
+        {kicker && <p className="caption">{kicker}</p>}
         <h1>{title}</h1>
-        {sub && <p className="sub">{sub}</p>}
       </div>
       {right}
+    </header>
+  );
+}
+
+/** Section heading with an optional link or button on the right ("See all"). */
+export function Section({ title, action }: { title: ReactNode; action?: ReactNode }) {
+  return (
+    <div className="section">
+      <h2>{title}</h2>
+      {action}
     </div>
   );
 }
 
+/** Ink words with a red icon (red small text fails on the tints). */
 export function ErrorNote({ message }: { message: string }) {
   return message ? (
-    <p className="error" role="alert">
-      {message}
+    <p className="error-note" role="alert">
+      <CircleAlert className="icon" aria-hidden />
+      <span>{message}</span>
     </p>
   ) : null;
 }
@@ -52,46 +74,191 @@ export function Loading({ label }: { label: string }) {
 }
 
 /** An empty list: what will appear here and why there is nothing yet. */
-export function Empty({ icon: Icon, title, children }: { icon: LucideIcon; title: string; children: ReactNode }) {
+export function Empty({ icon: Icon, title, children }: { icon: LucideIcon; title: string; children?: ReactNode }) {
   return (
     <div className="empty">
-      <Icon className="icon" aria-hidden />
+      <span className="empty-icon">
+        <Icon className="icon" aria-hidden />
+      </span>
       <b>{title}</b>
-      <p>{children}</p>
+      {children && <p>{children}</p>}
     </div>
   );
 }
 
-/** Horizontal bars for the tone mix. */
-export function ToneBars({ tones }: { tones: Dashboard['tones'] }) {
-  const q = tones.quality ? QUALITY_LABEL[tones.quality] : null;
+/** A list row: something on the left, a title and a caption, something on the right. */
+export function Row({ leading, title, subtitle, trailing }: { leading?: ReactNode; title: ReactNode; subtitle?: ReactNode; trailing?: ReactNode }) {
+  return (
+    <div className="list-row">
+      {leading}
+      <div className="grow">
+        <div className="strong">{title}</div>
+        {subtitle && <div className="caption">{subtitle}</div>}
+      </div>
+      {trailing}
+    </div>
+  );
+}
+
+/** A progress ring with the figure or an icon in the middle. Cobalt arc on light cards; `onInk`: cornflower on cobalt. */
+export function Ring({ value, total, size = 64, onInk, children }: { value: number; total: number; size?: number; onInk?: boolean; children?: ReactNode }) {
+  const stroke = 6;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const share = total > 0 ? Math.min(1, value / total) : 0;
+  return (
+    <span className={`ring${onInk ? ' on-ink' : ''}`} style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
+        <circle className="ring-track" cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} fill="none" />
+        {share > 0 && (
+          <circle
+            className="ring-arc"
+            cx={size / 2}
+            cy={size / 2}
+            r={r}
+            strokeWidth={stroke}
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray={`${c * share} ${c}`}
+            transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          />
+        )}
+      </svg>
+      <span className="ring-mid">{children}</span>
+    </span>
+  );
+}
+
+/** Live progress through a day, like an order tracker: done steps ticked, the current one ringed. */
+export function Stepper({ steps, current, onInk }: { steps: string[]; current: number; onInk?: boolean }) {
+  return (
+    <ol className={`stepper${onInk ? ' on-ink' : ''}`} aria-label={`Step ${current + 1} of ${steps.length}: ${steps[current]}`}>
+      {steps.map((s, i) => (
+        <li key={s} className={i < current ? 'done' : i === current ? 'now' : ''} aria-current={i === current ? 'step' : undefined}>
+          <span className="step-dot">{i < current && <Check className="icon-xs" aria-hidden strokeWidth={3} />}</span>
+          <span className="step-label">{s}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/** Two or three choices in one pill: the chosen one is white on the line colour. */
+export function Segmented<K extends string | number>({
+  options,
+  value,
+  onChange,
+  label,
+}: {
+  options: { key: K; label: string }[];
+  value: K;
+  onChange: (k: K) => void;
+  label: string;
+}) {
+  return (
+    <div className="segmented" role="group" aria-label={label}>
+      {options.map((o) => (
+        <button key={String(o.key)} type="button" className={o.key === value ? 'on' : ''} aria-pressed={o.key === value} onClick={() => onChange(o.key)}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** The web's bottom sheet: a native modal dialog. A sheet from the bottom on phones, a centred panel on wider screens.
+ *  Esc, the close button or a click on the backdrop closes it. */
+export function Dialog({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ReactNode }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    if (open && !d.open) d.showModal();
+    if (!open && d.open) d.close();
+  }, [open]);
+  return (
+    <dialog
+      ref={ref}
+      className="dialog"
+      aria-labelledby="dialog-title"
+      onClose={onClose}
+      onClick={(e) => {
+        if (e.target === ref.current) onClose(); // the backdrop
+      }}
+    >
+      {open && (
+        <div className="dialog-body">
+          <div className="dialog-head">
+            <h2 id="dialog-title">{title}</h2>
+            <button type="button" className="icon-btn" onClick={onClose} aria-label="Close">
+              <X className="icon" aria-hidden />
+            </button>
+          </div>
+          {children}
+        </div>
+      )}
+    </dialog>
+  );
+}
+
+/** The five tone colours, happy first. With `shares`, each one also carries its percentage (and empty ones are left out). */
+export function ToneLegend({ shares }: { shares?: Partial<Record<Tone, number>> }) {
+  return (
+    <div className="legend">
+      {[...BANDS]
+        .reverse()
+        .filter((b) => !shares || bandShare(shares, b) > 0)
+        .map((b) => (
+          <span key={b.key}>
+            <i style={{ background: b.color }} />
+            {b.label}
+            {shares && <b>{bandShare(shares, b)}%</b>}
+          </span>
+        ))}
+    </div>
+  );
+}
+
+/** The tone mix as one stacked bar with the dominant face, and every tone's share in the legend under it. */
+export function ToneCard({ tones, period = 'this week' }: { tones: Dashboard['tones']; period?: string }) {
   if (!tones.items.length || !tones.dominant) {
     return (
-      <Empty icon={AudioLines} title="No voice tone yet">
-        Tone results appear once your caretaker and your loved one have been heard talking during a shift, and both have agreed to it.
-      </Empty>
+      <div className="tone-head">
+        <span className="tone-face">
+          <AudioWaveform className="icon" aria-hidden />
+        </span>
+        <div className="grow">
+          <div className="strong">No voices heard yet</div>
+          <div className="caption">Tone results appear once the caretaker and your loved one have talked during a shift, and both have agreed to it.</div>
+        </div>
+      </div>
     );
   }
+  const top = tones.items[0];
+  const Face = TONE_ICON[top.tone];
+  const q = tones.quality ? QUALITY_LABEL[tones.quality] : null;
+  const shares = Object.fromEntries(tones.items.map((t) => [t.tone, t.percent])) as Partial<Record<Tone, number>>;
   return (
     <>
-      <div className="row" style={{ marginBottom: 'var(--space-2)' }}>
+      <div className="tone-head">
+        <span className="tone-face">
+          <Face className="icon-l" aria-hidden />
+        </span>
         <div className="grow">
-          <h3>Mostly {TONE_LABEL[tones.dominant].toLowerCase()}</h3>
-          <span className="muted small">
-            {tones.positive_percent}% happy or calm · {tones.negative_percent}% stressed or angry
-          </span>
+          <h3>Mostly {top.label.toLowerCase()}</h3>
+          <div className="caption">
+            {top.percent}% · {period}
+          </div>
         </div>
         {q && <Pill tone={q.tone}>{q.text}</Pill>}
       </div>
-      {tones.items.map((t) => (
-        <div className="bar" key={t.tone}>
-          <span className="name">{t.label}</span>
-          <div className="track">
-            <div className="fill" style={{ width: `${t.percent}%`, background: TONE_COLOR[t.tone] }} />
-          </div>
-          <span className="pct">{t.percent}%</span>
-        </div>
-      ))}
+      <div className="stack" role="img" aria-label={tones.items.map((t) => `${t.label} ${t.percent}%`).join(', ')}>
+        {[...BANDS].reverse().map((b) => {
+          const v = bandShare(shares, b);
+          return v > 0 ? <span key={b.key} style={{ flex: v, background: b.color }} /> : null;
+        })}
+      </div>
+      <ToneLegend shares={shares} />
     </>
   );
 }
@@ -101,7 +268,7 @@ export function ShiftTable({ shifts, showCaretaker = true }: { shifts: ShiftSumm
   const router = useRouter();
   if (!shifts.length)
     return (
-      <Empty icon={CalendarClock} title="No shifts in this period">
+      <Empty icon={CalendarDays} title="No shifts in this period">
         A shift appears here each day your caretaker arrives at the home, with their arrival, breaks and time worked.
       </Empty>
     );
@@ -111,12 +278,13 @@ export function ShiftTable({ shifts, showCaretaker = true }: { shifts: ShiftSumm
         <thead>
           <tr>
             <th>Day</th>
-            {showCaretaker && <th>Caretaker</th>}
-            <th>Times</th>
+            {showCaretaker && <th className="hide-s">Caretaker</th>}
+            <th className="hide-xs">Times</th>
             <th>Active</th>
-            <th>Breaks</th>
-            <th>Chores</th>
+            <th className="hide-s">Breaks</th>
+            <th className="hide-s">Tasks</th>
             <th>Status</th>
+            <th aria-hidden />
           </tr>
         </thead>
         <tbody>
@@ -128,15 +296,20 @@ export function ShiftTable({ shifts, showCaretaker = true }: { shifts: ShiftSumm
             return (
               <tr key={s.id} className="click" onClick={() => router.push(`/shifts/day?id=${s.id}`)}>
                 <td>
-                  <Link href={`/shifts/day?id=${s.id}`}>{fmtShiftDay(s.date)}</Link>
+                  <Link href={`/shifts/day?id=${s.id}`} onClick={(e) => e.stopPropagation()}>
+                    {fmtShiftDay(s.date)}
+                  </Link>
                 </td>
-                {showCaretaker && <td>{s.caretaker}</td>}
-                <td>{times}</td>
-                <td>{fmtDuration(s.minutes)}</td>
-                <td>{s.breaks ? `${s.breaks} (${fmtDuration(s.break_minutes)})` : '–'}</td>
-                <td>{s.chores_total ? `${s.chores_done}/${s.chores_total}` : '–'}</td>
+                {showCaretaker && <td className="hide-s">{s.caretaker}</td>}
+                <td className="hide-xs">{times}</td>
+                <td className="strong">{fmtDuration(s.minutes)}</td>
+                <td className="hide-s">{s.breaks ? `${s.breaks} (${fmtDuration(s.break_minutes)})` : '–'}</td>
+                <td className="hide-s">{s.chores_total ? `${s.chores_done}/${s.chores_total}` : '–'}</td>
                 <td>
                   <Pill tone={st.tone}>{st.text}</Pill>
+                </td>
+                <td className="chev">
+                  <ChevronRight className="icon" aria-hidden />
                 </td>
               </tr>
             );

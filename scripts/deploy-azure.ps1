@@ -211,7 +211,12 @@ if ($Only -in 'all', 'web') {
     [IO.File]::WriteAllText((Join-Path $work '.env.production.local'), ($envLines -join "`n") + "`n", (New-Object Text.UTF8Encoding($false)))
     Push-Location $work
     try {
-        if (-not (Test-Path 'node_modules')) { Run 'npm.cmd' @('ci', '--no-audit', '--no-fund') }
+        # Reinstall when there is no install yet, or package-lock.json changed since the last one (npm writes
+        # node_modules\.package-lock.json at the end of a successful install, so a half-finished one also counts as stale).
+        $stamp = 'node_modules\.package-lock.json'
+        if (-not (Test-Path $stamp) -or (Get-Item 'package-lock.json').LastWriteTime -gt (Get-Item $stamp).LastWriteTime) {
+            Run 'npm.cmd' @('ci', '--no-audit', '--no-fund')
+        }
         if (Test-Path '.next') { Remove-Item '.next' -Recurse -Force }
         $env:NEXT_PUBLIC_API_URL = "https://$apiHost"
         Run 'npx.cmd' @('next', 'build')
@@ -219,7 +224,11 @@ if ($Only -in 'all', 'web') {
 
     Step 'Uploading the dashboard'
     Az storage blob delete-batch -s '$web' --account-name $state.storage --account-key $storageKey -o none | Out-Null
-    Az storage blob upload-batch -s (Join-Path $work 'out') -d '$web' --account-name $state.storage --account-key $storageKey --overwrite -o none | Out-Null
+    # Pages and their route data (.html/.txt) must be checked on every visit: with no Cache-Control a browser keeps
+    # its old copy for hours after a deploy and shows the previous version (seen when clicking Home). The files under
+    # _next/static have the build's hash in their names, so they can be kept for a year.
+    Az storage blob upload-batch -s (Join-Path $work 'out') -d '$web' --account-name $state.storage --account-key $storageKey --overwrite --content-cache-control 'no-cache' -o none | Out-Null
+    Az storage blob upload-batch -s (Join-Path $work 'out') -d '$web' --pattern '_next/static/*' --account-name $state.storage --account-key $storageKey --overwrite --content-cache-control 'public, max-age=31536000, immutable' -o none | Out-Null
     Ok "Dashboard deployed: https://$webHost"
 }
 

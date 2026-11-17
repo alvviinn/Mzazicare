@@ -57,7 +57,10 @@ foreach ($line in Get-Content $keyProps) { if ($line -match '^(\w+)=(.*)$') { $p
 $app = Join-Path $Work 'mobile'
 Step "Copying mobile\ to $app"
 New-Item -ItemType Directory -Force $app | Out-Null
-& robocopy (Join-Path $Root 'mobile') $app /MIR /XD node_modules android ios .expo /XF .env.local /NFL /NDL /NJH /NJS /NP | Out-Null
+# Only the app's OWN generated android/ and ios/ folders are skipped (full paths): a bare "android" would also
+# skip modules\*\android, the native code of the app's local modules (e.g. modules\mic-keeper).
+$src = Join-Path $Root 'mobile'
+& robocopy $src $app /MIR /XD node_modules (Join-Path $src 'android') (Join-Path $src 'ios') .expo /XF .env.local /NFL /NDL /NJH /NJS /NP | Out-Null
 if ($LASTEXITCODE -ge 8) { Fail "Could not copy the app (robocopy $LASTEXITCODE)." }
 
 # The backend address and optional Google IDs are built into the app.

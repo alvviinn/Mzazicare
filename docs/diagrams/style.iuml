@@ -1,0 +1,95 @@
+' Shared style for every Chapter 4 figure: black, white and light grey; one sans-serif font; no shadows.
+skinparam dpi 200
+skinparam shadowing false
+skinparam monochrome false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam defaultFontColor #000000
+skinparam backgroundColor #FFFFFF
+skinparam ArrowColor #000000
+skinparam ArrowThickness 1
+skinparam roundCorner 6
+skinparam padding 2
+skinparam nodesep 40
+skinparam ranksep 50
+skinparam BorderColor #000000
+
+skinparam rectangle {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+}
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontStyle bold
+}
+skinparam node {
+  BackgroundColor #F2F2F2
+  BorderColor #000000
+}
+skinparam database {
+  BackgroundColor #F2F2F2
+  BorderColor #000000
+}
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+}
+skinparam actor {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+}
+skinparam usecase {
+  BackgroundColor #F2F2F2
+  BorderColor #000000
+}
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  HeaderBackgroundColor #F2F2F2
+  AttributeIconSize 0
+}
+skinparam entity {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+}
+skinparam state {
+  BackgroundColor #F2F2F2
+  BorderColor #000000
+  StartColor #000000
+  EndColor #000000
+}
+skinparam activity {
+  BackgroundColor #F2F2F2
+  BorderColor #000000
+  DiamondBackgroundColor #FFFFFF
+  DiamondBorderColor #000000
+  StartColor #000000
+  EndColor #000000
+}
+skinparam partition {
+  BorderColor #000000
+}
+skinparam sequence {
+  ParticipantBackgroundColor #F2F2F2
+  ParticipantBorderColor #000000
+  ActorBackgroundColor #FFFFFF
+  ActorBorderColor #000000
+  DatabaseBackgroundColor #F2F2F2
+  LifeLineBorderColor #000000
+  LifeLineBackgroundColor #FFFFFF
+  GroupBackgroundColor #F2F2F2
+  GroupBorderColor #000000
+  BoxBackgroundColor #FFFFFF
+  BoxBorderColor #000000
+}
+skinparam note {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+}
+skinparam legend {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+}
+hide circle
+hide stereotype

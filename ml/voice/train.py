@@ -16,16 +16,18 @@ import torch
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from torch import nn
 
-from .config import CLASSES, HOP, N_FFT, N_FRAMES, N_MELS, N_MFCC, SR, WINDOW_S
-from .data import DATA
+from .config import CLASSES, HOP, N_FFT, N_FRAMES, N_MELS, N_MFCC, ROUND, SR, WINDOW_S
+from .data import FEATURES, STAGE
 from .model import ToneCNN
 
-ART = Path(__file__).parent / 'artifacts'
+# Round 1 wrote straight to the live artifacts/; round 2+ trains into a staging folder that is copied over only
+# after it passes the checks in voice.laugh_eval.
+ART = Path(__file__).parent / 'artifacts' if ROUND < 2 else STAGE
 torch.set_num_threads(4)
 
 
 def load():
-    d = np.load(DATA / 'features.npz')
+    d = np.load(FEATURES)
     return {k: d[k] for k in d.files}
 
 
@@ -63,11 +65,13 @@ def fit_temperature(logits, y):
     return float(t.clamp(min=0.05))
 
 
-def fit(model, Xtr, ytr, Xva, yva, weights, epochs, batch, gen, patience=7, clip=None):
-    """Train with augmentation and keep the weights with the best validation macro-F1. Returns that state."""
-    opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-2)
+def fit(model, Xtr, ytr, Xva, yva, weights, epochs, batch, gen, patience=7, clip=None, select=None, max_lr=3e-3):
+    """Train with augmentation and keep the weights with the best validation macro-F1. Returns that state.
+
+    select: optional mask of the validation windows the checkpoint is chosen on (default: all of them)."""
+    opt = torch.optim.AdamW(model.parameters(), lr=max_lr * 2 / 3, weight_decay=1e-2)
     steps = epochs * int(np.ceil(len(ytr) / batch))
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps)
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=max_lr, total_steps=steps)
     loss_fn = nn.CrossEntropyLoss(weight=weights, label_smoothing=0.05)
 
     best_f1, best_state, bad = -1.0, None, 0
@@ -88,8 +92,9 @@ def fit(model, Xtr, ytr, Xva, yva, weights, epochs, batch, gen, patience=7, clip
             sched.step()
             total += float(loss) * len(idx)
         pred = logits_for(model, Xva).argmax(1).numpy()
-        f1 = f1_score(yva.numpy(), pred, average='macro')
-        acc = float((pred == yva.numpy()).mean())
+        sel = np.ones(len(pred), bool) if select is None else select
+        f1 = f1_score(yva.numpy()[sel], pred[sel], average='macro')
+        acc = float((pred[sel] == yva.numpy()[sel]).mean())
         print(f'epoch {epoch:2d} loss {total / len(ytr):.3f} | val acc {acc:.3f} macro-F1 {f1:.3f} | {time.time() - t0:.0f}s', flush=True)
         if f1 > best_f1:
             best_f1, bad = f1, 0
@@ -106,8 +111,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--epochs', type=int, default=30)
     ap.add_argument('--batch', type=int, default=64)
+    ap.add_argument('--init', help='fine-tune from this model folder (its weights and its normalisation) instead of from scratch')
+    ap.add_argument('--max-lr', type=float, default=3e-3)
     args = ap.parse_args()
-    ART.mkdir(exist_ok=True)
+    ART.mkdir(parents=True, exist_ok=True)
     torch.manual_seed(0)
     np.random.seed(0)
     gen = torch.Generator().manual_seed(0)
@@ -120,6 +127,9 @@ def main():
     # per-coefficient normalisation from training data only
     mean = X_all[tr].mean(axis=(0, 2))
     std = X_all[tr].std(axis=(0, 2)) + 1e-5
+    if args.init:  # keep the starting model's normalisation, so its weights see the inputs they were trained on
+        init_meta = json.loads((Path(args.init) / 'labels.json').read_text(encoding='utf-8'))
+        mean, std = np.array(init_meta['mean'], np.float32), np.array(init_meta['std'], np.float32)
     norm = lambda X: torch.from_numpy(((X - mean[None, :, None]) / std[None, :, None])[:, None]).float()
     Xtr, Xva, Xte = norm(X_all[tr]), norm(X_all[va]), norm(X_all[te])
     ytr, yva, yte = (torch.from_numpy(y_all[m]).long() for m in (tr, va, te))
@@ -130,8 +140,19 @@ def main():
     print('class counts', dict(zip(CLASSES, counts.astype(int).tolist())), flush=True)
 
     model = ToneCNN()
+    if args.init:
+        model.load_state_dict(torch.load(Path(args.init) / 'tone_cnn.pt', map_location='cpu'))
+        print('fine-tuning from', args.init, flush=True)
     print('parameters', sum(p.numel() for p in model.parameters()), flush=True)
-    best_state = fit(model, Xtr, ytr, Xva, yva, weights, args.epochs, args.batch, gen)
+    if ROUND < 2:
+        best_state = fit(model, Xtr, ytr, Xva, yva, weights, args.epochs, args.batch, gen)
+    else:
+        # Round 2 trains on laughter and coughs too, but picks the checkpoint on the round-1 speech + noise
+        # windows, so ~900 laughter/cough clips cannot pull the choice away from recognising the tones in speech.
+        # Patience 12 lets the one-cycle schedule reach its low learning rate instead of stopping at its peak.
+        select = ~np.isin(d['dataset'][va], ('vs_laugh', 'vs_other', 'esc50_laugh'))
+        best_state = fit(model, Xtr, ytr, Xva, yva, weights, args.epochs, args.batch, gen, patience=12, select=select,
+                         max_lr=args.max_lr)
 
     model.load_state_dict(best_state)
     temperature = fit_temperature(logits_for(model, Xva), yva)

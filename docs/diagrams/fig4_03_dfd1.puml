@@ -1,0 +1,46 @@
+@startuml fig4_03_dfd1
+!pragma layout smetana
+!include style.iuml
+
+skinparam ranksep 70
+skinparam nodesep 18
+
+rectangle "Family" as F
+rectangle "Caregiver" as C
+rectangle "Elderly person" as E
+
+usecase "1.0\nSign in and\nlink people" as P1
+usecase "2.0\nVerify presence\nand record shifts" as P2
+usecase "3.0\nRecord tasks\nwith proof" as P3
+usecase "4.0\nAnalyse\nvoice tone" as P4
+usecase "5.0\nElderly check-in,\nmedicines and SOS" as P5
+usecase "6.0\nRaise and\nreview alerts" as P6
+
+rectangle "D1  User / Invite" as D1
+rectangle "D2  Location / TrackPoint" as D2
+rectangle "D3  Shift / ShiftSegment" as D3
+rectangle "D4  Task / TaskCompletion" as D4
+rectangle "D5  ToneReading / ToneSample" as D5
+rectangle "D6  Alert" as D6
+rectangle "D7  Medication / CheckIn" as D7
+
+F --> P1 : credentials, emails to link
+C --> P2 : location every 15 s
+E --> P2 : location every 15 s
+C --> P3 : task tick + photo
+C --> P4 : 10 s audio clip
+E --> P5 : mood, medicine tick, SOS
+F --> P6 : confirm / dismiss
+
+P1 --> D1 : accounts, roles
+P2 --> D2 : latest fix, trail
+P2 --> D3 : in-range segments
+P3 --> D4 : completion + photo
+P4 --> D5 : tone shares (no audio)
+P5 --> D7 : check-ins, medicine logs
+P2 --> D6 : fake-GPS alert
+P4 --> D6 : vocal-distress alert
+P5 --> D6 : SOS / unwell alert
+D6 --> P6 : open alerts
+D3 --> P6 : shift evidence
+@enduml

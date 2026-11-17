@@ -1,0 +1,24 @@
+@startuml fig4_02_context_dfd0
+!pragma layout smetana
+!include style.iuml
+skinparam ranksep 90
+skinparam nodesep 60
+
+rectangle "Family" as F
+rectangle "Caregiver" as C
+rectangle "Elderly person" as E
+usecase "0\nMzaziCare\nsystem" as S
+rectangle "Google Sign-In" as G
+rectangle "Azure Communication\nServices Email" as M
+rectangle "Firebase Cloud\nMessaging" as P
+
+F --> S : people to add, medicines,\ntasks, alert decisions, messages
+S --> F : dashboard, shift timelines,\ntone report, alerts
+C --> S : location, audio clips,\ntask photos, first-aid questions
+S --> C : shift state, hours, tasks,\nfirst-aid steps
+E --> S : location, mood,\nmedicine ticks, SOS
+S --> E : caregiver presence,\nmedicines due
+G --> S : verified ID token
+S --> M : 6-digit sign-in code
+S --> P : alert and message\nnotifications
+@enduml

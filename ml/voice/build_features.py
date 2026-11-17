@@ -14,10 +14,10 @@ import numpy as np
 
 from .augment import augment
 from .config import CLASSES, SR, WINDOW
-from .data import DATA, build_index
+from .data import DATA, FEATURES, build_index
 from .features import fit_window, load_audio, loudest_window, mfcc
 
-OUT = DATA / 'features.npz'
+OUT = FEATURES
 _NOISE = None
 
 
@@ -29,8 +29,11 @@ def process(args):
     except Exception as e:
         print('skip', row['path'], e, flush=True)
         return []
+    if len(y) < int(0.3 * SR):  # some crowdsourced recordings (VocalSound) are empty or a blip: nothing to learn
+        print('skip (too short)', row['path'], flush=True)
+        return []
     out = []
-    if row['dataset'] == 'esc50':
+    if row['dataset'] in ('esc50', 'esc50_laugh'):
         # two windows per 5 s clip: the start and the end
         for seg in (y[:WINDOW], y[-WINDOW:]):
             out.append((mfcc(fit_window(seg)), row, False))

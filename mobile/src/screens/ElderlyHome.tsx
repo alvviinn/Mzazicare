@@ -7,6 +7,7 @@ import { SharingBanner } from '../components/SharingBanner';
 import { Avatar, Button, Card, haptic, OfflineBanner, PressScale, Sheet, StatusBarStrip } from '../components/ui';
 import { VoiceCard } from '../components/VoiceCard';
 import { Lang, t } from '../elder/i18n';
+import { syncMedicineReminders } from '../elder/medReminders';
 import { SCALES, useElderPrefs } from '../elder/prefs';
 import { fmtTime } from '../format';
 import { useLocationSharing } from '../location/useLocationSharing';
@@ -69,13 +70,15 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
   const [settings, setSettings] = useState(false);
 
   // This phone is the centre of the 15 m geofence that confirms the caretaker is with you.
-  const sharing = useLocationSharing(token);
-  const voice = useVoiceMonitoring(token);
+  const sharing = useLocationSharing(token, lang);
+  const voice = useVoiceMonitoring(token, lang);
 
   const load = useCallback(async () => {
     try {
-      setHome(await getElderHome(token));
+      const next = await getElderHome(token);
+      setHome(next);
       setError(false);
+      syncMedicineReminders(next.medicines, lang); // so the phone rings at dose times even with the app closed
     } catch {
       setError(true);
     }
@@ -83,7 +86,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
     const [contacts, open] = await Promise.allSettled([getContacts(token), getEmergencies(token)]);
     if (contacts.status === 'fulfilled') setUnread(Object.fromEntries(contacts.value.map((c) => [c.email, c.unread])));
     if (open.status === 'fulfilled') setSos(open.value[0] ?? null);
-  }, [token]);
+  }, [token, lang]);
 
   useEffect(() => {
     load();

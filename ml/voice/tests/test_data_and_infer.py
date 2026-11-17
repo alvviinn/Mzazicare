@@ -59,7 +59,7 @@ class LabelMappingTests(unittest.TestCase):
         self.assertTrue(all(len(s) == 1 for s in by_speaker.values()), 'a speaker appears in more than one split')
         self.assertEqual({r['split'] for r in rows}, {'train', 'val', 'test'})
 
-    def test_esc50_keeps_only_non_human_sounds_split_by_fold(self):
+    def write_esc50(self):
         meta = self.root / 'esc50' / 'ESC-50-master' / 'meta'
         meta.mkdir(parents=True)
         with open(meta / 'esc50.csv', 'w', newline='') as f:
@@ -67,11 +67,46 @@ class LabelMappingTests(unittest.TestCase):
             w.writerow(['filename', 'fold', 'target', 'category'])
             w.writerow(['a.wav', 1, 0, 'dog'])
             w.writerow(['b.wav', 5, 1, 'vacuum_cleaner'])
-            w.writerow(['c.wav', 2, 2, 'laughing'])  # a person: excluded from "noise"
-            w.writerow(['d.wav', 4, 3, 'crying_baby'])  # a person: excluded
-        rows = data.esc50()
+            w.writerow(['c.wav', 2, 2, 'laughing'])
+            w.writerow(['d.wav', 4, 3, 'crying_baby'])  # a person, but not the elder: always left out
+            w.writerow(['e.wav', 3, 4, 'coughing'])
+
+    def test_esc50_round1_keeps_only_non_human_sounds_split_by_fold(self):
+        self.write_esc50()
+        old, data.ROUND = data.ROUND, 1
+        try:
+            rows = data.esc50()
+        finally:
+            data.ROUND = old
         self.assertEqual({(r['label'], r['split']) for r in rows}, {('noise', 'train'), ('noise', 'test')})
         self.assertEqual(len(rows), 2)
+
+    def test_esc50_round2_laughter_is_happy_and_coughs_are_noise(self):
+        self.write_esc50()
+        old, data.ROUND = data.ROUND, 2
+        try:
+            rows = {r['path'].rsplit('\\', 1)[-1].rsplit('/', 1)[-1]: r for r in data.esc50()}
+        finally:
+            data.ROUND = old
+        self.assertEqual(sorted(rows), ['a.wav', 'b.wav', 'c.wav', 'e.wav'])  # no crying baby
+        self.assertEqual((rows['c.wav']['label'], rows['c.wav']['dataset']), ('happy', 'esc50_laugh'))
+        self.assertEqual(rows['e.wav']['label'], 'noise')
+
+    def test_vocalsound_laughter_is_happy_other_sounds_noise_one_per_speaker_split_by_speaker(self):
+        for spk in range(40):
+            for kind in ('laughter', 'cough', 'sneeze', 'sigh'):
+                self.touch('vocalsound', 'audios', f'f{spk:04d}_0_{kind}.wav')
+        rows = data.vocalsound()
+        laugh = [r for r in rows if r['dataset'] == 'vs_laugh']
+        other = [r for r in rows if r['dataset'] == 'vs_other']
+        self.assertEqual((len(laugh), len(other)), (40, 40))  # every laugh; one other sound per speaker
+        self.assertEqual({r['label'] for r in laugh}, {'happy'})
+        self.assertEqual({r['label'] for r in other}, {'noise'})
+        splits = {}
+        for r in rows:
+            splits.setdefault(r['speaker'], set()).add(r['split'])
+        self.assertTrue(all(len(s) == 1 for s in splits.values()))  # a speaker is never in two splits
+        self.assertEqual({r['split'] for r in rows}, {'train', 'val', 'test'})
 
 
 @unittest.skipUnless((ART / 'tone_cnn.onnx').exists(), 'trained model not present')

@@ -1,0 +1,36 @@
+@startuml fig4_04_seq_sign_in
+!include style.iuml
+autonumber
+hide footbox
+
+actor "User" as U
+participant "LoginScreen\n(mobile app)" as App
+participant "LoginView /\nVerifyCodeView" as API
+participant "two_factor" as TF
+database "PostgreSQL" as DB
+participant "ACS Email" as Mail
+
+U -> App : email and password
+App -> API : POST /api/auth/login/
+API -> DB : check email and hashed password
+alt wrong email or password
+  API --> App : 400 "Incorrect email or password."
+else password correct, account needs the code
+  API -> TF : start(user)
+  TF -> DB : save LoginChallenge\n(hashes only, 10-minute life)
+  TF -> Mail : send 6-digit code
+  API --> App : {two_factor, challenge, sent_to}
+  Mail --> U : email with the code
+  U -> App : types the code
+  App -> API : POST /api/auth/verify/ {challenge, code}
+  API -> TF : verify(challenge, code)
+  alt wrong code
+    TF -> DB : attempts + 1 (after 5 the challenge is deleted)
+    API --> App : 400 "That code is not right. N tries left."
+  else right code
+    TF -> DB : delete LoginChallenge (single use)
+    API --> App : {token (JWT, 90 days), name, role}
+    App --> U : home screen of the role
+  end
+end
+@enduml

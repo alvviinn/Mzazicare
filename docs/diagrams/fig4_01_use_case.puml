@@ -1,0 +1,55 @@
+@startuml fig4_01_use_case
+!pragma layout smetana
+!include style.iuml
+left to right direction
+skinparam nodesep 12
+skinparam ranksep 80
+
+actor "Family" as F
+actor "Caregiver" as C
+actor "Elderly person" as E
+
+rectangle "MzaziCare" {
+  usecase "Add a caregiver or elderly\nperson by email" as UC3
+  usecase "Set medicine reminders" as UC4
+  usecase "Assign tasks to the caregiver" as UC5
+  usecase "Review shifts, task photos\nand voice tone" as UC6
+  usecase "Confirm or dismiss alerts" as UC7
+  usecase "Respond to an emergency\n('I'm handling it')" as UC8
+  usecase "Register and sign in\n(email code or Google)" as UC1
+  usecase "Chat with the care circle" as UC2
+  usecase "Work a day shift\n(starts by itself within 15 m)" as UC9
+  usecase "Tick a task with a proof photo" as UC10
+  usecase "View working hours" as UC11
+  usecase "Ask the first-aid assistant" as UC12
+  usecase "Share location and agree\nto voice monitoring" as UC13
+  usecase "Say how I feel today" as UC14
+  usecase "Tick a medicine as taken" as UC15
+  usecase "Press the emergency button" as UC16
+}
+
+F -- UC3
+F -- UC4
+F -- UC5
+F -- UC6
+F -- UC7
+F -- UC8
+F -- UC1
+F -- UC2
+
+UC8 -- C
+UC1 -- C
+UC2 -- C
+UC9 -- C
+UC10 -- C
+UC11 -- C
+UC12 -- C
+UC13 -- C
+
+UC1 -- E
+UC2 -- E
+UC13 -- E
+UC14 -- E
+UC15 -- E
+UC16 -- E
+@enduml

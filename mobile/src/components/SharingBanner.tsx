@@ -7,7 +7,16 @@ import { Icon } from './Icon';
 const MESSAGES: Record<'en' | 'sw', Record<SharingStatus, { text: string; long: string; ok: boolean }>> = {
   en: {
     starting: { text: 'Starting location…', long: 'Starting location sharing.', ok: true },
-    sharing: { text: 'Location on', long: 'Location sharing is on. Keep MzaziCare open during visits.', ok: true },
+    sharing: {
+      text: 'Location on',
+      long: 'Location sharing is on, also when MzaziCare is closed or the screen is off. It stops when you sign out.',
+      ok: true,
+    },
+    foreground: {
+      text: 'Location on only while MzaziCare is open',
+      long: 'Location works only while MzaziCare is open on screen. Keep it open during visits.',
+      ok: false,
+    },
     denied: {
       text: 'Location off · turn on in Settings',
       long: 'Location permission is off. Turn it on in your phone settings so visits can be verified.',
@@ -17,7 +26,16 @@ const MESSAGES: Record<'en' | 'sw', Record<SharingStatus, { text: string; long: 
   },
   sw: {
     starting: { text: 'Inaanza mahali…', long: 'Inaanza kushiriki mahali.', ok: true },
-    sharing: { text: 'Mahali kumewashwa', long: 'Kushiriki mahali kumewashwa. Weka MzaziCare wazi wakati wa ziara.', ok: true },
+    sharing: {
+      text: 'Mahali kumewashwa',
+      long: 'Kushiriki mahali kumewashwa, hata MzaziCare ikiwa imefungwa au skrini imezimwa. Kunazimwa ukitoka kwenye akaunti.',
+      ok: true,
+    },
+    foreground: {
+      text: 'Mahali kunafanya kazi MzaziCare ikiwa wazi tu',
+      long: 'Mahali kunafanya kazi tu MzaziCare ikiwa wazi kwenye skrini. Iweke wazi wakati wa ziara.',
+      ok: false,
+    },
     denied: {
       text: 'Mahali kumezimwa · washa kwenye Mipangilio',
       long: 'Ruhusa ya mahali imezimwa. Iwashe kwenye mipangilio ya simu yako.',

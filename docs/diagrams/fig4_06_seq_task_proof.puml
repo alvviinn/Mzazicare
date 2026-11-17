@@ -1,0 +1,30 @@
+@startuml fig4_06_seq_task_proof
+!include style.iuml
+autonumber
+hide footbox
+
+actor "Caregiver" as U
+participant "TasksTab\n(mobile app)" as App
+participant "TaskDoneView" as API
+participant "presence" as P
+database "PostgreSQL" as DB
+
+U -> App : tick a task
+App -> U : open the camera (no gallery)
+U -> App : take the photo
+App -> API : POST /api/tasks/<id>/done/\n(photo bytes, image/jpeg)
+API -> API : check role, size <= 6 MB,\ntype from first bytes (JPEG, PNG, WebP)
+API -> P : require_in_range() -> current_reading(caregiver)
+P --> API : state (in / out / unknown), distance
+alt not verified within 15 m of the elderly person
+  API --> App : 403, nothing is stored
+  App --> U : "You are about N m from the elderly person.\nMove within 15 m to mark this done."
+else in range
+  API -> DB : Task.is_done = true, done_at = now
+  API -> DB : create TaskCompletion\n(title, shift, photo, photo_type)
+  API -> DB : mark the shift's Chore done
+  API --> App : 201 task with completion_id
+  App --> U : task shown as done
+end
+note over App : offline: the tick and photo wait in the\ntask queue and are sent when back online
+@enduml

@@ -1,14 +1,7 @@
 import { ShiftStatus, Tone } from './types';
 
-// Same values as --tone-* in styles/tokens.css (repeated here because SVG fill attributes can't read CSS variables).
-// Each is at least 3:1 on white so the chart marks stay visible.
-export const TONE_COLOR: Record<Tone, string> = {
-  happy: '#3E9B6B',
-  calm: '#4E9B8B',
-  neutral: '#84918D',
-  stressed: '#BA8424',
-  angry: '#C4503F',
-};
+// The status pill's tones, as in the app: the dot carries the status colour, the words are ink.
+export type PillTone = 'success' | 'ink' | 'muted' | 'error' | 'secondary' | 'warning';
 
 export const TONE_LABEL: Record<Tone, string> = {
   happy: 'Happy',
@@ -17,23 +10,35 @@ export const TONE_LABEL: Record<Tone, string> = {
   stressed: 'Stressed',
   angry: 'Angry',
 };
+export const TONE_ORDER: Tone[] = ['happy', 'calm', 'neutral', 'stressed', 'angry'];
 
-// stacking order in the chart: tense at the bottom, happy on top
-export const TONE_STACK: Tone[] = ['angry', 'stressed', 'neutral', 'calm', 'happy'];
+// Tone charts draw each of the five tones in its own colour (green happy, light green calm, grey neutral, amber stressed,
+// red angry; same as the app), stacked with angry at the bottom and happy on top.
+// The exact share of each tone is always written next to the chart too (legend and the picked column).
+export type Band = { key: Tone; label: string; color: string; tones: Tone[] };
+export const BANDS: Band[] = (['angry', 'stressed', 'neutral', 'calm', 'happy'] as Tone[]).map((t) => ({
+  key: t,
+  label: TONE_LABEL[t],
+  color: `var(--tone-${t})`,
+  tones: [t],
+}));
+export const bandShare = (shares: Partial<Record<Tone, number>>, b: Band) => b.tones.reduce((n, t) => n + (shares[t] ?? 0), 0);
+// Tension bars: green up to 15%, amber up to the 30% line, red above it.
+export const tensionColor = (t: number) => (t > 30 ? 'var(--tone-angry)' : t > 15 ? 'var(--tone-stressed)' : 'var(--tone-happy)');
 
-export const STATUS_LABEL: Record<ShiftStatus, { text: string; tone: 'good' | 'warn' | 'quiet' }> = {
-  on_shift: { text: 'On shift', tone: 'good' },
-  paused: { text: 'On a break', tone: 'warn' },
-  away: { text: 'Away', tone: 'warn' },
-  waiting: { text: 'Not arrived', tone: 'quiet' },
-  ended: { text: 'Finished', tone: 'quiet' },
+export const STATUS_LABEL: Record<ShiftStatus, { text: string; tone: PillTone }> = {
+  on_shift: { text: 'On shift', tone: 'success' },
+  paused: { text: 'On a break', tone: 'ink' },
+  away: { text: 'Away', tone: 'ink' },
+  waiting: { text: 'Not arrived', tone: 'muted' },
+  ended: { text: 'Finished', tone: 'muted' },
 };
 
-export const QUALITY_LABEL = {
-  good: { text: 'Good', tone: 'good' },
-  fair: { text: 'Fair', tone: 'warn' },
-  needs_attention: { text: 'Needs attention', tone: 'bad' },
-} as const;
+export const QUALITY_LABEL: Record<'good' | 'fair' | 'needs_attention', { text: string; tone: PillTone }> = {
+  good: { text: 'Good', tone: 'success' },
+  fair: { text: 'Fair', tone: 'ink' },
+  needs_attention: { text: 'Needs attention', tone: 'error' },
+};
 
 export function fmtTime(iso: string): string {
   return new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -87,3 +92,7 @@ export const timeOfDay = () => {
   const h = new Date().getHours();
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
 };
+
+/** 'Monday 16 November' */
+export const today = () => new Date().toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
+export const firstName = (name: string) => name.split(' ')[0];

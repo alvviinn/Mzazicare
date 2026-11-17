@@ -1,0 +1,83 @@
+@startuml fig4_08_erd_shifts
+!pragma layout smetana
+!include style.iuml
+left to right direction
+skinparam ranksep 90
+skinparam nodesep 16
+
+entity "User" as U {
+  * id : bigint <<PK>>
+  --
+  role : caretaker | elderly | user
+}
+entity "Location" as LO {
+  * user_id : bigint <<PK, FK User>>
+  --
+  latitude, longitude : float
+  accuracy : float
+  mocked : bool
+  updated_at : datetime
+}
+entity "Shift" as S {
+  * id : bigint <<PK>>
+  --
+  caretaker_id : bigint <<FK User>>
+  elderly_id : bigint <<FK User>>
+  start_time : datetime
+  end_time : datetime (null while open)
+  source : auto | manual
+  ended_by : manual | auto
+  last_in_range_at : datetime
+}
+entity "ShiftSegment" as SS {
+  * id : bigint <<PK>>
+  --
+  shift_id : bigint <<FK Shift>>
+  start : datetime
+  end : datetime (null while in range)
+}
+entity "TrackPoint" as TP {
+  * id : bigint <<PK>>
+  --
+  shift_id : bigint <<FK Shift>>
+  who : caretaker | elderly
+  latitude, longitude : float
+  at : datetime
+}
+entity "ToneReading" as TR {
+  * id : bigint <<PK>>
+  --
+  shift_id : bigint <<FK Shift>>
+  tone : happy | calm | neutral\n| stressed | angry
+  seconds : float
+  percent : smallint
+}
+entity "ToneSample" as TS {
+  * id : bigint <<PK>>
+  --
+  shift_id : bigint <<FK Shift>>
+  at : datetime
+  speech_s : float
+  happy ... angry : float (shares)
+  distress : bool
+}
+entity "Alert" as A {
+  * id : bigint <<PK>>
+  --
+  sponsor_id : bigint <<FK User>>
+  shift_id : bigint <<FK Shift>>
+  patient_id : bigint <<FK User>>
+  kind : sos | unwell | vocal_distress\n| geofence | ...
+  status : open | confirmed | dismissed
+  handled_by_id : bigint <<FK User>>
+}
+
+U ||--o| LO : latest fix
+U ||--o{ S : "works (caretaker)\n/ receives (elderly)"
+S ||--|{ SS : in-range time
+S ||--o{ TP : trail
+S ||--o{ TR : tone totals
+S ||--o{ TS : tone per clip
+U ||--o{ A : family receives
+S |o--o{ A : may cause
+@enduml

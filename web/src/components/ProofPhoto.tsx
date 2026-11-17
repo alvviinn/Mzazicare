@@ -29,6 +29,13 @@ export function ProofPhoto({ completionId, caption, size = 48 }: { completionId:
     };
   }, [token, completionId]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
   if (failed)
     return (
       <span className="proof missing" style={{ width: size, height: size }} title="Photo unavailable" role="img" aria-label="Photo unavailable">
@@ -47,7 +54,7 @@ export function ProofPhoto({ completionId, caption, size = 48 }: { completionId:
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={url} alt={caption ? `Proof photo: ${caption}` : 'Proof photo'} />
           {caption && <p>{caption}</p>}
-          <span className="small">Click anywhere to close</span>
+          <span className="caption">Click anywhere or press Esc to close</span>
         </div>
       )}
     </>

@@ -1,8 +1,9 @@
 'use client';
 
+import { ClipboardCheck, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { ProofPhoto } from '@/components/ProofPhoto';
-import { ErrorNote, Loading, PageHead } from '@/components/ui';
+import { Empty, ErrorNote, Loading, PageHead, Row, Section, Segmented } from '@/components/ui';
 import { getTaskHistory } from '@/lib/api';
 import { useToken } from '@/lib/auth';
 import { fmtDay, fmtTime } from '@/lib/format';
@@ -39,49 +40,42 @@ export default function TaskHistoryPage() {
   return (
     <>
       <PageHead
+        kicker={items ? `${items.length} task${items.length === 1 ? '' : 's'} done in the last ${days} days` : `Last ${days} days`}
         title="Task history"
-        sub={items ? `Last ${days} days · ${items.length} task${items.length === 1 ? '' : 's'} done` : `Last ${days} days`}
-        right={
-          <div className="ranges">
-            {RANGES.map((d) => (
-              <button key={d} className={days === d ? '' : 'secondary'} onClick={() => setDays(d)} aria-pressed={days === d}>
-                {d} days
-              </button>
-            ))}
-          </div>
-        }
+        right={<Segmented label="Period" options={RANGES.map((d) => ({ key: d, label: `${d} days` }))} value={days} onChange={setDays} />}
       />
       <ErrorNote message={error} />
       {items === null && !error && <Loading label="Loading task history…" />}
       {items !== null && groups.length === 0 && (
-        <div className="card muted" style={{ marginTop: 18 }}>
-          No tasks were done in the last {days} days.
+        <div className="card">
+          <Empty icon={ClipboardCheck} title={`No tasks done in the last ${days} days`}>
+            Each task the caretaker ticks off shows here with its photo.
+          </Empty>
         </div>
       )}
       {groups.map((g) => (
         <section key={g.day}>
-          <h2>
-            {g.day} <span className="muted small">· {g.items.length} done</span>
-          </h2>
-          <div className="card divided">
+          <Section
+            title={
+              <>
+                {g.day} <span className="caption">· {g.items.length} done</span>
+              </>
+            }
+          />
+          <div className="card list">
             {g.items.map((r) => (
-              <div className="row" key={r.id}>
-                <ProofPhoto completionId={r.id} caption={`${r.title} · ${r.caretaker} · ${fmtDay(r.done_at)} ${fmtTime(r.done_at)}`} size={64} />
-                <div className="grow">
-                  <b>{r.title}</b>
-                  <div className="muted small">
-                    Done {fmtTime(r.done_at)} by {r.caretaker}
-                    {r.assigned_by ? ` · set by ${r.assigned_by}` : ' · their own task'}
-                    {r.recurring ? ' · every working day' : ''}
-                  </div>
-                </div>
-              </div>
+              <Row
+                key={r.id}
+                leading={<ProofPhoto completionId={r.id} caption={`${r.title} · ${r.caretaker} · ${fmtDay(r.done_at)} ${fmtTime(r.done_at)}`} size={64} />}
+                title={r.title}
+                subtitle={`Done ${fmtTime(r.done_at)} by ${r.caretaker}${r.assigned_by ? ` · set by ${r.assigned_by}` : ' · their own task'}${r.recurring ? ' · every working day' : ''}`}
+              />
             ))}
           </div>
         </section>
       ))}
-      <p className="muted small">
-        A caretaker can only tick a task off while they are with the elderly person, and must take a photo to do it.
+      <p className="caption note with-icon">
+        <ShieldCheck className="icon-xs" aria-hidden />A caretaker can only tick a task off while they are with your loved one, and must take a photo to do it.
       </p>
     </>
   );

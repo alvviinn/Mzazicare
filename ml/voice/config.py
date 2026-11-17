@@ -17,4 +17,11 @@ CLASSES = TONES + ['noise']
 
 # Windows quieter than this (before normalisation) are treated as silence and skipped.
 SILENCE_DB = -55.0
+
+# Training round. 1 = the original model (acted emotions only). 2 adds laughter (as happy) and other human
+# non-speech sounds such as coughs and sneezes (as noise), after laughter was found to read as "tense" in a live test.
+# Round 2+ writes its features and models to separate files/folders, so round 1 stays reproducible.
+import os as _os
+
+ROUND = int(_os.environ.get('MZAZI_VOICE_ROUND', '2'))
 TARGET_RMS_DB = -23.0  # every window is level-normalised, so a quiet phone and a loud one look alike

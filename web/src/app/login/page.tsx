@@ -1,7 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { ArrowLeft, LogIn, MailCheck } from 'lucide-react';
+import { Brand } from '@/components/Brand';
+import { ErrorNote } from '@/components/ui';
+import { FormEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { resendCode } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 import { CodeChallenge } from '@/lib/types';
@@ -50,7 +53,7 @@ export default function LoginPage() {
 
   if (pending) {
     return (
-      <main className="login">
+      <AuthFrame>
         <CodeForm
           start={pending}
           onConfirm={async (challenge, code) => {
@@ -59,15 +62,15 @@ export default function LoginPage() {
           }}
           onCancel={() => setPending(null)}
         />
-      </main>
+      </AuthFrame>
     );
   }
 
   return (
-    <main className="login">
-      <form className="card" onSubmit={submit}>
-        <div className="brand">MzaziCare</div>
-        <p className="sub">Sign in to follow your loved one&apos;s care.</p>
+    <AuthFrame>
+      <form className="auth-form" onSubmit={submit} noValidate>
+        <h1>Sign in</h1>
+        <p className="muted">Follow your loved one&apos;s care from anywhere.</p>
         <label htmlFor="email">Email</label>
         <input id="email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} />
         <label htmlFor="password">Password</label>
@@ -78,18 +81,17 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {error && <p className="error">{error}</p>}
-        <p style={{ marginTop: 18 }}>
-          <button type="submit" disabled={busy} style={{ width: '100%' }}>
-            {busy ? 'Signing in…' : 'Sign in'}
-          </button>
-        </p>
+        <ErrorNote message={error} />
+        <button type="submit" className="btn primary block" disabled={busy} aria-busy={busy}>
+          <LogIn className="icon" aria-hidden />
+          {busy ? 'Signing in…' : 'Sign in'}
+        </button>
         {GOOGLE_CLIENT_ID && <GoogleButton onToken={google} />}
-        <p className="muted small">
-          No account yet? Create one in the MzaziCare phone app (or continue with Google), then sign in here.
+        <p className="caption auth-foot">
+          No account yet? Create one in the MzaziCare phone app{GOOGLE_CLIENT_ID ? ' (or continue with Google)' : ''}, then sign in here. Caretakers and elders use the phone app.
         </p>
       </form>
-    </main>
+    </AuthFrame>
   );
 }
 
@@ -144,11 +146,13 @@ function CodeForm({
   }
 
   return (
-    <form className="card" onSubmit={submit}>
-      <div className="brand">MzaziCare</div>
-      <h3 style={{ marginBottom: 4 }}>Check your email</h3>
-      <p className="muted small" style={{ marginTop: 0 }}>
-        We sent a 6-digit code to {challenge.sent_to}. It works for {Math.round(challenge.expires_in / 60)} minutes.
+    <form className="auth-form" onSubmit={submit} noValidate>
+      <span className="auth-icon">
+        <MailCheck className="icon-m" aria-hidden />
+      </span>
+      <h1>Check your email</h1>
+      <p className="muted">
+        We sent a 6-digit code to <b>{challenge.sent_to}</b>. It works for {Math.round(challenge.expires_in / 60)} minutes.
       </p>
       <label htmlFor="code">Code</label>
       <input
@@ -160,23 +164,43 @@ function CodeForm({
         value={code}
         onChange={(e) => setCode(e.target.value)}
         placeholder="123456"
+        className="code-input"
       />
-      {error && <p className="error">{error}</p>}
-      {note && <p className="ok">{note}</p>}
-      <p style={{ marginTop: 18 }}>
-        <button type="submit" disabled={busy} style={{ width: '100%' }}>
-          {busy ? 'Checking…' : 'Continue'}
-        </button>
-      </p>
-      <p className="small" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0 }}>
-        <button type="button" className="linklike" onClick={resend} disabled={wait > 0}>
-          {wait > 0 ? `Send a new code in ${wait}s` : 'Send a new code'}
-        </button>
+      <ErrorNote message={error} />
+      {note && (
+        <p className="ok-note" role="status">
+          <MailCheck className="icon" aria-hidden />
+          {note}
+        </p>
+      )}
+      <button type="submit" className="btn primary block" disabled={busy} aria-busy={busy}>
+        {busy ? 'Checking…' : 'Continue'}
+      </button>
+      <div className="auth-links">
         <button type="button" className="linklike" onClick={onCancel}>
+          <ArrowLeft className="icon" aria-hidden />
           Back
         </button>
-      </p>
+        <button type="button" className="linklike" onClick={resend} disabled={wait > 0}>
+          {wait > 0 ? `Send a new code in ${wait} s` : 'Send a new code'}
+        </button>
+      </div>
     </form>
+  );
+}
+
+// The frame for sign in and the emailed code, as in the app: the brand on the ink hero panel, the form beside it
+// (above it on a narrow screen).
+function AuthFrame({ children }: { children: ReactNode }) {
+  return (
+    <main className="auth">
+      <section className="auth-band" aria-label="MzaziCare">
+        <Brand />
+        <p className="auth-tagline">Care for Mzazi, from anywhere.</p>
+        <p className="on-ink-caption auth-sub">Who is with them, for how long, how they sound and whether they took their medicine.</p>
+      </section>
+      <section className="auth-panel">{children}</section>
+    </main>
   );
 }
 

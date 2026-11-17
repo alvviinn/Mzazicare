@@ -1,0 +1,19 @@
+@startuml fig4_13_state_alert
+!pragma layout smetana
+!include style.iuml
+skinparam ranksep 60
+skinparam nodesep 60
+
+state "open" as Open : push notification sent\n(SOS also to caregivers)
+state "confirmed" as Confirmed : family agrees it was real
+state "dismissed" as Dismissed : family judges it a false alarm
+
+[*] --> Open : raised: sos, unwell,\nvocal_distress or geofence
+Open --> Open : SOS: "I'm handling it"\n(handled_by recorded)
+Open --> Confirmed : family confirms
+Open --> Dismissed : family dismisses
+Confirmed --> Dismissed : family changes\nthe decision
+Dismissed --> Confirmed : family changes\nthe decision
+Confirmed --> [*] : kept as a label\nfor retraining
+Dismissed --> [*] : kept as a label\nfor retraining
+@enduml

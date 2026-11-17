@@ -1,0 +1,28 @@
+@startuml fig4_12_state_shift
+!pragma layout smetana
+!include style.iuml
+skinparam ranksep 50
+skinparam nodesep 50
+
+state "No shift yet" as None : status none
+state "Active" as Active : segment open,\ntime counts
+state "Break" as Break : segment closed,\ntime paused
+state "Away" as Away : break over 90 min\n(display only)
+state "Ended" as Ended : End tapped\n(ended_by = manual)
+state "Day closed" as Closed : end_time set\n(ended_by = auto)
+
+[*] --> None : day starts
+None --> Active : within 15 m\n(Shift created, source = auto)
+Active --> Break : beyond 20 m, or no\nusable fix for 3 min
+Break --> Active : back within 15 m\n(same shift)
+Break --> Away : 90 min pass
+Away --> Active : back within 15 m\n(same shift)
+Active --> Ended : End tapped
+Break --> Ended : End tapped
+Ended --> Active : left range, then back\nwithin 15 m the same day
+Active --> Closed : midnight
+Break --> Closed : midnight
+Away --> Closed : midnight
+Ended --> Closed : midnight
+Closed --> [*] : next day is a new shift
+@enduml

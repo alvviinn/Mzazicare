@@ -62,8 +62,8 @@ const STRINGS: Record<string, { en: Str; sw: Str }> = {
 
   phone_title: { en: 'Your phone', sw: 'Simu yako' },
   phone_body: {
-    en: 'Your phone tells MzaziCare where it is only to confirm that your caretaker is with you. Your caretaker cannot see where you are. Please keep this app open when your caretaker visits.',
-    sw: 'Simu yako hutuma mahali ilipo kwa MzaziCare ili kuthibitisha kuwa mlezi wako yuko nawe. Mlezi wako haoni uliko. Tafadhali weka programu hii wazi mlezi wako anapokuja.',
+    en: 'Your phone tells MzaziCare where it is only to confirm that your caretaker is with you. Your caretaker cannot see where you are. This keeps working when the app is closed, and stops when you sign out.',
+    sw: 'Simu yako hutuma mahali ilipo kwa MzaziCare ili kuthibitisha kuwa mlezi wako yuko nawe. Mlezi wako haoni uliko. Hii inaendelea hata programu ikiwa imefungwa, na inazimwa ukitoka kwenye akaunti.',
   },
   circle_title: { en: 'Your family and carers', sw: 'Familia na walezi wako' },
   family: { en: 'Family', sw: 'Familia' },

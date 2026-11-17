@@ -1,76 +1,119 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { GestureResponderEvent, StyleSheet, Text, View } from 'react-native';
 import { fmtTime } from '../format';
-import { colors, icon, radius, space, text } from '../theme';
+import { colors, icon, radius, space, text, toneColors } from '../theme';
 import { Dashboard, Tone, TonePoint } from '../types';
 import { Icon, TONE_ICON } from './Icon';
 import { Card, haptic, PillTone, StatusPill } from './ui';
 
-// Charts use only cobalt, cornflower and their tints, so the five tones are drawn as three bands.
-// The exact share of each tone is always written next to the chart (legend and the tapped column).
-type Band = 'positive' | 'neutral' | 'tense';
-const BANDS: { key: Band; label: string; color: string; tones: Tone[] }[] = [
-  { key: 'tense', label: 'Tense', color: colors.secondary, tones: ['angry', 'stressed'] },
-  { key: 'neutral', label: 'Neutral', color: colors.secondaryTint, tones: ['neutral'] },
-  { key: 'positive', label: 'Happy or calm', color: colors.primary, tones: ['calm', 'happy'] },
-];
+// Each tone in its own colour (green happy, light green calm, grey neutral, amber stressed, red angry),
+// stacked with angry at the bottom and happy on top. The exact shares are also written next to the chart.
 const LABELS: Record<Tone, string> = { happy: 'Happy', calm: 'Calm', neutral: 'Neutral', stressed: 'Stressed', angry: 'Angry' };
-const HEIGHT = 120;
+const BANDS: { key: Tone; label: string; color: string; tones: Tone[] }[] = (['angry', 'stressed', 'neutral', 'calm', 'happy'] as Tone[]).map(
+  (t) => ({ key: t, label: LABELS[t], color: toneColors[t], tones: [t] }),
+);
+const HEIGHT = 168; // bars plus the room for the ink mark under them
+const MARK_ROOM = 12;
+const LINE = 30; // stressed + angry above 30% needs a look
 const band = (shares: Record<Tone, number>, b: (typeof BANDS)[number]) => b.tones.reduce((n, t) => n + (shares[t] ?? 0), 0);
 
-function Legend() {
+// The five tone colours, happy first. With `shares`, each also carries its percentage (empty ones left out).
+function Legend({ shares }: { shares?: Record<Tone, number> }) {
   return (
     <View style={styles.legend}>
-      {[...BANDS].reverse().map((b) => (
-        <View key={b.key} style={styles.legendItem}>
-          <View style={[styles.swatch, { backgroundColor: b.color }]} />
-          <Text style={text.caption}>{b.label}</Text>
-        </View>
-      ))}
+      {[...BANDS]
+        .reverse()
+        .filter((b) => !shares || band(shares, b) > 0)
+        .map((b) => (
+          <View key={b.key} style={styles.legendItem}>
+            <View style={[styles.swatch, { backgroundColor: b.color }]} />
+            <Text style={text.caption}>
+              {b.label}
+              {shares ? <Text style={text.captionStrong}>{` ${band(shares, b)}%`}</Text> : null}
+            </Text>
+          </View>
+        ))}
     </View>
   );
 }
 
-// How the voices sounded through the day: one column per time bucket. Tap a column for its numbers.
+// How the voices sounded through the day: one bar per time bucket, each tone in its own colour (angry at the bottom,
+// happy on top). The red and amber at the bottom are the tension, so the dashed line marks 30%: a bar whose red and
+// amber reach above it needs a look. Touch a bar, or slide along them, to read it; the picked bar gets an ink mark.
 export function ToneChart({ points, bucketMinutes }: { points: TonePoint[]; bucketMinutes: number }) {
   const [picked, setPicked] = useState<number | null>(null);
+  const [width, setWidth] = useState(0);
   if (!points.length) return null;
 
-  // one slot for every bucket between the first and last one, so quiet stretches show as gaps
   const step = bucketMinutes * 60000;
   const first = new Date(points[0].start).getTime();
   const last = new Date(points[points.length - 1].start).getTime();
   const slots = Math.min(96, Math.round((last - first) / step) + 1);
   const byslot = new Map(points.map((p) => [Math.round((new Date(p.start).getTime() - first) / step), p]));
-  const selected = picked !== null ? byslot.get(picked) : points[points.length - 1];
+  const present = [...byslot.keys()].sort((a, b) => a - b);
+  const cur = picked !== null && byslot.has(picked) ? picked : present[present.length - 1];
+  const selected = byslot.get(cur)!;
+  const dense = slots > 30;
+
+  const pick = (e: GestureResponderEvent) => {
+    if (!width) return;
+    const slot = Math.max(0, Math.min(slots - 1, Math.floor((e.nativeEvent.locationX / width) * slots)));
+    let best = present[0];
+    for (const i of present) if (Math.abs(i - slot) < Math.abs(best - slot)) best = i;
+    if (best !== cur) {
+      haptic.tap();
+      setPicked(best);
+    }
+  };
 
   return (
     <View>
-      <View style={styles.plot}>
+      <View
+        style={[styles.plot, { gap: dense ? 2 : 4 }]}
+        onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
+        // a touch picks the nearest bar and sliding moves it; a vertical swipe still scrolls the screen
+        onStartShouldSetResponder={() => true}
+        onResponderGrant={pick}
+        onResponderMove={pick}
+        onResponderTerminationRequest={() => true}
+        accessible
+        accessibilityRole="adjustable"
+        accessibilityLabel="Voice tone through the day"
+        accessibilityValue={{ text: `${fmtTime(selected.start)}: mostly ${LABELS[selected.dominant].toLowerCase()}, ${selected.tension}% tense` }}
+        accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
+        onAccessibilityAction={(e) => {
+          const k = present.indexOf(cur);
+          if (e.nativeEvent.actionName === 'increment' && k < present.length - 1) setPicked(present[k + 1]);
+          if (e.nativeEvent.actionName === 'decrement' && k > 0) setPicked(present[k - 1]);
+        }}
+      >
         {Array.from({ length: slots }, (_, i) => {
           const p = byslot.get(i);
-          const sel = p === selected;
           return (
-            <Pressable
-              key={i}
-              style={styles.slot}
-              onPress={() => {
-                if (!p) return;
-                haptic.tap();
-                setPicked(i);
-              }}
-              hitSlop={{ top: space.s, bottom: space.s }}
-              accessibilityRole={p ? 'button' : undefined}
-              accessibilityLabel={p ? `${fmtTime(p.start)}: mostly ${LABELS[p.dominant]}` : undefined}
-            >
-              <View style={[styles.column, { opacity: sel ? 1 : 0.6 }]}>
-                {p ? BANDS.map((b) => <View key={b.key} style={{ height: (HEIGHT * band(p.shares, b)) / 100, backgroundColor: b.color }} />) : null}
-              </View>
-            </Pressable>
+            <View key={i} style={styles.slot} pointerEvents="none">
+              {p ? (
+                <View style={[styles.column, dense && styles.columnDense]}>
+                  {/* angry first, so it sits at the bottom; a 1 or 2 % share still shows as a clean stripe */}
+                  {BANDS.map((b) => {
+                    const v = band(p.shares, b);
+                    return v > 0 ? <View key={b.key} style={{ flexGrow: v, flexBasis: 0, minHeight: dense ? 2 : 3, backgroundColor: b.color }} /> : null;
+                  })}
+                </View>
+              ) : (
+                <View style={{ flex: 1 }} />
+              )}
+              <View style={[styles.mark, i === cur && { backgroundColor: colors.ink }]} />
+            </View>
           );
         })}
+        {/* the 30% line, measured from the bottom of the bars */}
+        <View style={[styles.guide, { bottom: MARK_ROOM + ((HEIGHT - MARK_ROOM) * LINE) / 100 }]} pointerEvents="none">
+          <View style={styles.guideLabel}>
+            <Text style={text.captionStrong}>30% tense</Text>
+          </View>
+        </View>
       </View>
-      {/* start, middle and end times: never truncated, however many columns there are */}
+      {/* start, middle and end times: never truncated, however many bars there are */}
       <View style={styles.axis}>
         {(slots > 2 ? [0, Math.floor((slots - 1) / 2), slots - 1] : [0, slots - 1]).map((i, k) => (
           <Text key={k} style={text.caption}>
@@ -80,62 +123,34 @@ export function ToneChart({ points, bucketMinutes }: { points: TonePoint[]; buck
       </View>
       <Legend />
 
-      {selected && (
-        <View style={styles.detail}>
-          <Icon name={TONE_ICON[selected.dominant]} size={icon.l} />
-          <View style={{ flex: 1 }}>
-            <Text style={text.captionStrong}>
-              {fmtTime(selected.start)} · {LABELS[selected.dominant]}
-            </Text>
-            <Text style={text.caption}>
-              {(['happy', 'calm', 'neutral', 'stressed', 'angry'] as Tone[])
-                .filter((t) => selected.shares[t] > 0)
-                .map((t) => `${LABELS[t]} ${selected.shares[t]}%`)
-                .join(' · ')}
-            </Text>
-          </View>
-          <Text style={text.caption}>{Math.max(1, Math.round(selected.speech_s / 60))} min</Text>
+      <View style={styles.detail}>
+        <Icon name={TONE_ICON[selected.dominant]} size={icon.l} />
+        <View style={{ flex: 1 }}>
+          <Text style={text.captionStrong}>
+            {fmtTime(selected.start)} · {LABELS[selected.dominant]}
+          </Text>
+          <Text style={text.caption}>
+            <Text style={text.captionStrong}>{selected.tension}% tense</Text>
+            {' · '}
+            {(['happy', 'calm', 'neutral', 'stressed', 'angry'] as Tone[])
+              .filter((t) => selected.shares[t] > 0)
+              .map((t) => `${LABELS[t]} ${selected.shares[t]}%`)
+              .join(' · ')}
+          </Text>
         </View>
-      )}
-    </View>
-  );
-}
-
-// A small bar per bucket: how tense the voices were. Cornflower above the 30% line, cobalt below.
-export function TensionStrip({ points, bucketMinutes }: { points: TonePoint[]; bucketMinutes: number }) {
-  if (!points.length) return null;
-  const step = bucketMinutes * 60000;
-  const first = new Date(points[0].start).getTime();
-  const last = new Date(points[points.length - 1].start).getTime();
-  const slots = Math.min(96, Math.round((last - first) / step) + 1);
-  const byslot = new Map(points.map((p) => [Math.round((new Date(p.start).getTime() - first) / step), p]));
-  const H = 56;
-  return (
-    <View accessible accessibilityLabel="How tense the voices sounded through the day. Above the line, 30 percent, needs a look.">
-      <View style={[styles.plot, styles.strip, { height: H }]}>
-        <View style={[styles.guide, { bottom: (H * 30) / 100 }]} />
-        {Array.from({ length: slots }, (_, i) => {
-          const p = byslot.get(i);
-          const t = p ? p.tension : 0;
-          return (
-            <View key={i} style={[styles.slot, { justifyContent: 'flex-end' }]}>
-              {p && <View style={[styles.bar, { height: Math.max(3, (H * t) / 100), backgroundColor: t > 30 ? colors.secondary : colors.primary }]} />}
-            </View>
-          );
-        })}
+        <Text style={text.caption}>{Math.max(1, Math.round(selected.speech_s / 60))} min</Text>
       </View>
-      <Text style={[text.caption, { marginTop: space.s }]}>Line = 30% tense</Text>
+      <Text style={[text.caption, { marginTop: space.s }]}>Red and amber at the bottom of a bar are tense speech. Above the dashed line (30%) needs a look.</Text>
     </View>
   );
 }
-
 const QUALITY: Record<string, { text: string; tone: PillTone }> = {
   good: { text: 'Good', tone: 'success' },
   fair: { text: 'Fair', tone: 'ink' },
   needs_attention: { text: 'Needs attention', tone: 'error' },
 };
 
-// The tone mix as one stacked bar (three bands) with the dominant face, and every tone's share in the legend.
+// The tone mix as one stacked bar with the dominant face, and every tone's share in the legend under it.
 export function ToneCard({ tones, period = 'this week' }: { tones: Dashboard['tones']; period?: string }) {
   if (!tones.items.length || !tones.dominant) {
     return (
@@ -172,23 +187,24 @@ export function ToneCard({ tones, period = 'this week' }: { tones: Dashboard['to
           return v > 0 ? <View key={b.key} style={{ flex: v, backgroundColor: b.color }} /> : null;
         })}
       </View>
-      <Text style={[text.caption, { marginTop: space.s }]}>{tones.items.map((t) => `${t.label} ${t.percent}%`).join(' · ')}</Text>
-      <Legend />
+      <Legend shares={shares} />
     </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  plot: { flexDirection: 'row', height: HEIGHT, alignItems: 'flex-end' },
-  strip: { backgroundColor: colors.background, borderRadius: radius.small, overflow: 'hidden' },
-  slot: { flex: 1, height: '100%', justifyContent: 'flex-end', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: colors.surface },
-  column: { borderRadius: radius.small, overflow: 'hidden' },
-  bar: { borderRadius: radius.pill },
-  guide: { position: 'absolute', left: 0, right: 0, height: 1, backgroundColor: colors.inkMuted },
+  plot: { flexDirection: 'row', height: HEIGHT },
+  slot: { flex: 1 },
+  // rounded tops, nearly square feet (a thin bottom stripe stays a stripe); 2 px of white between tones
+  column: { flex: 1, gap: 2, flexDirection: 'column-reverse', borderTopLeftRadius: 6, borderTopRightRadius: 6, borderBottomLeftRadius: 2, borderBottomRightRadius: 2, overflow: 'hidden' },
+  columnDense: { gap: 1, borderTopLeftRadius: 2, borderTopRightRadius: 2 },
+  mark: { height: 4, marginTop: MARK_ROOM - 4, marginHorizontal: '15%', borderRadius: radius.pill },
+  guide: { position: 'absolute', left: -4, right: -4, height: 0, borderTopWidth: 2, borderStyle: 'dashed', borderColor: colors.ink, zIndex: 1 },
+  guideLabel: { position: 'absolute', right: 4, bottom: 4, paddingHorizontal: 6, borderRadius: radius.pill, backgroundColor: colors.surface },
   axis: { flexDirection: 'row', justifyContent: 'space-between', marginTop: space.s },
   legend: { flexDirection: 'row', flexWrap: 'wrap', columnGap: space.m, rowGap: space.s, marginTop: space.s },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: space.s },
-  swatch: { width: 16, height: 16, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.line },
+  swatch: { width: 12, height: 12, borderRadius: 4 },
   detail: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -200,5 +216,5 @@ const styles = StyleSheet.create({
   },
   toneHead: { flexDirection: 'row', alignItems: 'center', gap: space.m },
   toneFace: { width: 56, height: 56, borderRadius: radius.pill, backgroundColor: colors.secondaryTint, alignItems: 'center', justifyContent: 'center' },
-  stack: { flexDirection: 'row', height: 16, borderRadius: radius.pill, overflow: 'hidden', marginTop: space.m },
+  stack: { flexDirection: 'row', height: 16, borderRadius: radius.pill, overflow: 'hidden', marginTop: space.m, gap: 2 },
 });

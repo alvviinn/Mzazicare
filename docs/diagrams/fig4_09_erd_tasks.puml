@@ -1,0 +1,55 @@
+@startuml fig4_09_erd_tasks
+!pragma layout smetana
+!include style.iuml
+left to right direction
+skinparam ranksep 90
+skinparam nodesep 30
+
+entity "User" as U {
+  * id : bigint <<PK>>
+  --
+  role : caretaker | user
+}
+entity "Shift" as S {
+  * id : bigint <<PK>>
+  --
+  caretaker_id : bigint <<FK User>>
+  start_time : datetime
+}
+entity "Task" as T {
+  * id : bigint <<PK>>
+  --
+  caretaker_id : bigint <<FK User>>
+  assigned_by_id : bigint <<FK User>> (family, or null)
+  title : varchar
+  recurring : bool
+  is_done : bool
+  done_at : datetime
+}
+entity "TaskCompletion" as TC {
+  * id : bigint <<PK>>
+  --
+  task_id : bigint <<FK Task>> (null once deleted)
+  caretaker_id : bigint <<FK User>>
+  shift_id : bigint <<FK Shift>>
+  title : varchar (copied)
+  done_at : datetime
+  photo : bytes
+  photo_type : varchar
+}
+entity "Chore" as CH {
+  * id : bigint <<PK>>
+  --
+  shift_id : bigint <<FK Shift>>
+  task_id : bigint <<FK Task>>
+  description : varchar
+  is_done : bool
+}
+
+U ||--o{ T : "has to-do (caregiver)\n/ assigns (family)"
+U ||--o{ S : works
+T |o--o{ TC : done with proof
+S |o--o{ TC : done during
+T |o--o{ CH : copied into
+S ||--o{ CH : snapshot of the day
+@enduml

@@ -1,0 +1,89 @@
+@startuml fig4_10_class
+!pragma layout smetana
+!include style.iuml
+skinparam ranksep 60
+skinparam nodesep 30
+
+package "API views (Django REST Framework)" {
+  class LocationView {
+    +post(latitude, longitude, accuracy, mocked)
+  }
+  class TaskDoneView {
+    +post(pk, photo)
+  }
+  class ToneView {
+    +post(raw audio)
+  }
+  class FirstAidChatView {
+    +post(message, topic, lang)
+  }
+  class AlertView {
+    +post(pk, status)
+  }
+}
+
+package "Backend services" {
+  class presence <<module>> {
+    ENTER_RADIUS_M = 15
+    EXIT_RADIUS_M = 20
+    +evaluate(caretaker)
+    +phase_of(shift)
+    +worked_minutes(shift)
+    +stop_manual(caretaker)
+  }
+  class voice_ai <<module>> {
+    +get_analyzer() : ToneAnalyzer
+    +add_to_shift(shift, result)
+  }
+  class push <<module>> {
+    +notify(users, title, body)
+  }
+}
+
+package "AI models (ml/)" {
+  class ToneAnalyzer {
+    -session : ONNX Runtime
+    angry_prob = 0.6
+    angry_min_windows = 3
+    +analyze(audio) : tones, distress
+  }
+  class FirstAidAssistant {
+    -model : multilingual-e5-small
+    -guide : 43 bilingual topics
+    +reply(message, topic, lang)
+  }
+}
+
+package "Models" {
+  class User {
+    email
+    role
+    sponsor
+    +members()
+  }
+  class Shift {
+    start_time
+    end_time
+    source
+  }
+  class Alert {
+    kind
+    status
+    +severity
+  }
+}
+
+LocationView ..> presence : uses
+TaskDoneView ..> presence : checks range
+ToneView ..> voice_ai : uses
+voice_ai ..> ToneAnalyzer : loads once
+FirstAidChatView ..> FirstAidAssistant : loads once
+presence ..> Shift : opens / closes
+ToneView ..> Alert : creates vocal_distress
+AlertView ..> Alert : confirms / dismisses
+Alert ..> push : post_save signal
+User "1" -- "0..*" Shift : caretaker / elderly
+User "1" -- "0..*" Alert : family
+Shift "0..1" -- "0..*" Alert
+User "0..1" -- "0..*" User : sponsor
+@enduml

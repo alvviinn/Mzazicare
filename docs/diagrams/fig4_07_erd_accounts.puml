@@ -1,0 +1,80 @@
+@startuml fig4_07_erd_accounts
+!pragma layout smetana
+!include style.iuml
+left to right direction
+skinparam ranksep 90
+skinparam nodesep 16
+
+entity "User" as U {
+  * id : bigint <<PK>>
+  --
+  email : varchar <<unique>>
+  name : varchar
+  role : user | caretaker | elderly
+  sponsor_id : bigint <<FK User>>
+  password : varchar (hashed)
+  two_factor_required : bool
+  google_sub : varchar
+  voice_consent_at : datetime
+}
+entity "Invite" as I {
+  * id : bigint <<PK>>
+  --
+  email : varchar <<unique>>
+  role : caretaker | elderly
+  sponsor_id : bigint <<FK User>>
+}
+entity "LoginChallenge" as L {
+  * id : bigint <<PK>>
+  --
+  user_id : bigint <<FK User>>
+  token_hash, code_hash : varchar
+  expires_at : datetime
+  attempts : smallint
+}
+entity "PushDevice" as PD {
+  * id : bigint <<PK>>
+  --
+  user_id : bigint <<FK User>>
+  token : varchar <<unique>>
+}
+entity "Message" as M {
+  * id : bigint <<PK>>
+  --
+  sender_id : bigint <<FK User>>
+  recipient_id : bigint <<FK User>>
+  body : text
+  read_at : datetime
+}
+entity "CheckIn" as CI {
+  * id : bigint <<PK>>
+  --
+  user_id : bigint <<FK User>>
+  mood : good | okay | unwell
+  created_at : datetime
+}
+entity "Medication" as MD {
+  * id : bigint <<PK>>
+  --
+  elderly_id : bigint <<FK User>>
+  name : varchar
+  dose : varchar
+  time : time
+}
+entity "MedicationLog" as ML {
+  * id : bigint <<PK>>
+  --
+  medication_id : bigint <<FK Medication>>
+  date : date
+  taken_at : datetime
+}
+
+U |o--o{ U : "sponsor_id\n(family links members)"
+U ||--o{ I : invites
+U ||--o{ L : signs in with
+U ||--o{ PD : registers
+U ||--o{ M : sends / receives
+U ||--o{ CI : answers
+U ||--o{ MD : takes
+MD ||--o{ ML : "taken on (one per day)"
+@enduml

@@ -30,6 +30,15 @@ export const colors = {
   warningTint: '#FFF1D6',
 };
 
+// Voice-tone charts only: each tone keeps its own colour (same as the web dashboard).
+export const toneColors = {
+  happy: '#3E9B6B', // green
+  calm: '#93CBA6', // light green, so calm never blurs into happy
+  neutral: '#84918D', // grey
+  stressed: '#BA8424', // amber
+  angry: '#C4503F', // red
+} as const;
+
 // Ink with transparency, for the sheet backdrop and the photo viewer.
 const alpha = (hex: string, a: number) => {
   const n = parseInt(hex.slice(1), 16);

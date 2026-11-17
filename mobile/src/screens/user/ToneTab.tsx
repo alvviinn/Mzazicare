@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { getLiveTone } from '../../api/client';
 import { Icon, IconName, TONE_ICON } from '../../components/Icon';
-import { TensionStrip, ToneCard, ToneChart } from '../../components/ToneChart';
+import { ToneCard, ToneChart } from '../../components/ToneChart';
 import { Card, Empty, ErrorState, Loading, PillTone, Ring, Section, StatusPill } from '../../components/ui';
 import { fmtTime, timeAgo } from '../../format';
-import { colors, icon, on, radius, space, TAP, text, textOnInk } from '../../theme';
+import { colors, icon, on, radius, space, TAP, text, textOnInk, toneColors } from '../../theme';
 import { LiveTone } from '../../types';
 
 const REFRESH_MS = 5000; // the chart follows the conversation: new speech shows within a few seconds
@@ -106,9 +106,8 @@ export default function ToneTab({ token }: { token: string }) {
         <Empty icon="chart" title="No speech yet" body="Fills in during today's visit." />
       ) : (
         <Card>
+          {/* one chart: the red and amber at its bottom are the tension, with the 30% line drawn on it */}
           <ToneChart points={data.series} bucketMinutes={data.bucket_minutes} />
-          <Text style={[text.captionStrong, styles.stripTitle]}>Tension</Text>
-          <TensionStrip points={data.series} bucketMinutes={data.bucket_minutes} />
         </Card>
       )}
 
@@ -167,7 +166,7 @@ export default function ToneTab({ token }: { token: string }) {
                 <View key={d.date} style={styles.day}>
                   <Text style={text.captionStrong}>{d.tension}%</Text>
                   <View style={styles.dayTrack}>
-                    <View style={[styles.dayFill, { height: `${Math.max(4, d.tension)}%`, backgroundColor: d.tension > 30 ? colors.secondary : colors.primary }]} />
+                    <View style={[styles.dayFill, { height: `${Math.max(4, d.tension)}%`, backgroundColor: d.tension > 30 ? toneColors.angry : d.tension > 15 ? toneColors.stressed : toneColors.happy }]} />
                   </View>
                   <Text style={text.caption}>{weekday(d.date)}</Text>
                 </View>
@@ -200,7 +199,6 @@ const styles = StyleSheet.create({
   sources: { flexDirection: 'row', flexWrap: 'wrap', gap: space.s, marginTop: space.m },
   source: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: colors.surface, borderRadius: radius.pill, paddingHorizontal: space.m, minHeight: 40 },
   why: { flexDirection: 'row', alignItems: 'center', gap: space.s, marginTop: space.m },
-  stripTitle: { marginTop: space.l, marginBottom: space.s },
   tiles: { flexDirection: 'row', gap: space.s },
   tile: { flex: 1, borderRadius: radius.card, padding: space.m, minHeight: 104, justifyContent: 'space-between' },
   tileWide: { flex: 1.4, flexDirection: 'row', alignItems: 'center', gap: space.m },
