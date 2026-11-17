@@ -1,0 +1,37 @@
+@startuml fig4_18_deployment
+!pragma layout smetana
+!include style.iuml
+left to right direction
+skinparam ranksep 70
+skinparam nodesep 30
+
+node "Android phones\n(family, caregiver, elderly)" as Phone {
+  artifact "MzaziCare.apk\n(React Native)" as APK
+}
+node "Family computer" as PC {
+  artifact "Web browser" as Browser
+}
+
+node "Microsoft Azure (South Africa North)" as Azure {
+  node "Azure Storage\nstatic website" as Storage {
+    artifact "Next.js static files" as Static
+  }
+  node "App Service\n(Linux, B1)" as AppSvc {
+    artifact "Django API (Gunicorn)\n+ tone model (ONNX)\n+ first-aid model" as Api
+  }
+  node "PostgreSQL Flexible\nServer (B1ms, v16)" as Pg {
+    database "MzaziCare database" as Db
+  }
+  node "Communication\nServices (email)" as ACS
+}
+node "Google Firebase" as Firebase {
+  artifact "Cloud Messaging" as FCM
+}
+
+Browser --> Static : HTTPS (pages)
+Browser --> Api : HTTPS REST
+APK --> Api : HTTPS REST
+Api --> Db : TLS
+Api --> ACS : sign-in codes
+Api --> FCM : push requests
+@enduml

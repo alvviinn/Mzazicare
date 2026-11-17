@@ -1,0 +1,38 @@
+@startuml fig4_17_architecture
+!pragma layout smetana
+!include style.iuml
+skinparam ranksep 60
+skinparam nodesep 35
+
+package "Presentation tier" {
+  component "Mobile app\nReact Native + Expo (TypeScript)\nfamily · caregiver · elderly" as App
+  component "Family web dashboard\nNext.js (static export)" as Web
+}
+
+package "Application tier: Django REST Framework API" {
+  component "Accounts\nJWT, two-step code,\nGoogle sign-in, roles" as Acc
+  component "Care API\nshifts, tasks, alerts, chat,\nmedicines, check-ins" as Care
+  component "Geofence engine\n(presence.py)" as Geo
+  component "Tone model\n(ONNX Runtime, in memory)" as Tone
+  component "First-aid assistant\n(multilingual-e5-small + guide)" as FA
+}
+
+database "PostgreSQL\n(data tier)" as DB
+
+component "Google Sign-In" as G
+component "Azure Communication\nServices Email" as Mail
+component "Firebase Cloud\nMessaging" as FCM
+
+App --> Acc : HTTPS, JSON, JWT
+Web --> Acc : HTTPS, JSON, JWT
+App --> Care : HTTPS, JSON, JWT
+Web --> Care : HTTPS, JSON, JWT
+Care --> Geo
+Care --> Tone
+Care --> FA
+Care --> DB : Django ORM
+Acc --> DB : Django ORM
+G <-- Acc : verify ID token
+Mail <-- Acc : sign-in code
+Care --> FCM : alerts, messages
+@enduml

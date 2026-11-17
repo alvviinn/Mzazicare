@@ -1,49 +1,40 @@
 @startuml fig4_11_activity
 !include style.iuml
-skinparam ranksep 30
+skinparam defaultFontSize 13
+skinparam ActivityFontSize 13
+skinparam ActivityDiamondFontSize 13
+skinparam ArrowFontSize 12
 
-|Caregiver phone|
 start
-:Sign in (CaretakerHome opens);
-:Share location every 15 s\n(also in the background);
-|Django API|
+:Caregiver signs in (CaretakerHome);
+:Phones share location every 15 s;
 repeat
-  :Compare caregiver and elderly phones\n(fresh, accurate, not mocked);
-repeat while (Within 15 m?) is (no: show distance)
+  :API compares the two phones\n(fresh, accurate, not mocked);
+repeat while (Within 15 m of the\nelderly phone?) is (no: show distance)
 ->yes;
-:Start today's Shift and open a segment;
+:API starts today's Shift\nand opens a segment;
 fork
-  |Caregiver phone|
-  :Tick a task and take a proof photo;
-  |Django API|
+  :Caregiver ticks a task\nand takes a photo;
   if (Still within 15 m?) then (yes)
-    :Save TaskCompletion with photo;
+    :Save TaskCompletion\nwith the photo;
   else (no)
-    :Refuse with 403;
+    :Refuse (403);
   endif
 fork again
-  |Caregiver phone|
-  :Record a 10 s clip\n(if both people agreed);
-  |Django API|
-  :Analyse in memory, keep tone shares,\ndiscard the audio;
-  if (3+ windows >= 60 % angry?) then (yes)
-    :Create vocal_distress Alert;
-    |Family|
-    :Get a push notification;
-    :Confirm or dismiss the alert;
+  :Phone sends a 10 s clip\n(both people agreed);
+  :Analyse in memory,\nkeep tone shares only;
+  if (3+ windows\n>= 60 % angry?) then (yes)
+    :vocal_distress Alert;\npush to the family;
   else (no)
   endif
 fork again
-  |Django API|
   if (Beyond 20 m?) then (yes)
-    :Close the segment (break);
-    :Open a new segment on return;
+    :Break: close the segment;
+    :Back within 15 m:\nnew segment, same shift;
   else (no)
   endif
 end fork
-|Django API|
-:Close the shift\n(End tapped, or midnight);
-|Family|
-:Review the day: timeline, breaks,\ntask photos, voice tone;
+:Shift closes\n(End tapped, or midnight);
+:Family reviews the day: timeline,\nbreaks, task photos, tone,\nand confirms or dismisses alerts;
 stop
 @enduml

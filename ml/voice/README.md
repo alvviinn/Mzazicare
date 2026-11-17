@@ -24,12 +24,42 @@ backend, so there is no train/serve mismatch (checked: `python -m voice.check_li
 | CREMA-D (91 actors) | happy, neutral, stressed, angry | acted |
 | LibriSpeech dev-clean (40 speakers) | neutral | natural read speech, adds variety |
 | ESC-50 (non-human classes) | noise | 5 s clips, 2 windows each |
+| ESC-50 laughing (round 2) | happy | crying baby left out; other human sounds (breathing, coughing...) -> noise |
+| VocalSound (round 2; Gong et al. 2022, CC BY-SA 4.0) | laughter -> happy; cough, sneeze, sniff, throat clearing, sigh -> noise | 3,365 people on their own phones/laptops; 1,500 training laughs, one other sound per speaker |
 
 Label mapping: fearful and sad -> `stressed` (a person who sounds distressed). Disgust and surprise are left out
 (ambiguous). Training clips also get background-noise and phone-band augmentation. Splits are by **speaker** (and by
 ESC-50 fold), so the test set contains only voices the model never heard.
 
-## Results (held-out speakers, 2,048 windows)
+## Round 2 (November 2026): laughter no longer reads as tense
+In a live test, people telling jokes and laughing showed as 34 % tense. Laughter was not in the training data, and the
+round-1 model gave ESC-50 laughter 65 % stressed + angry. Round 2 changes **only the model**: the same classes, the same
+live path (`voice.infer`), the same 30 % line and the same alert rule.
+
+What was done: VocalSound and ESC-50 laughter were added as happy, and coughs and other human sounds as noise
+(`MZAZI_VOICE_ROUND=2`, the default, writes `features_v2.npz` and trains into a staging folder, never straight into
+`artifacts/`). Two models were trained: one from scratch, with the checkpoint chosen on the round-1 speech and noise
+windows, and one fine-tuned from the live model (`--init`). Each one alone lost a little on a different tone. The
+deployed model is **their average** (`python -m voice.ensemble`), exported as one ONNX file with the same interface
+(about 250 k parameters, still real time on a CPU).
+
+Checked through the unchanged live path (`python -m voice.laugh_eval`). Gates were fixed before the test set was scored.
+A tone fails if its 95 % interval of change (paired bootstrap over whole speakers) lies below zero. Macro-F1 must not
+drop, plus the laughter and alert limits. **Test** (speakers never heard, scored once):
+
+| | round 1 | round 2 |
+|---|---|---|
+| happy / calm / neutral / stressed / angry recall | 47.8 / 65.6 / 84.1 / 79.6 / 78.5 % | 55.3 / 71.9 / 83.2 / 78.5 / 80.3 % |
+| speech accuracy (5 tones) / macro-F1 | 75.4 % / 70.6 % | 76.4 % / 72.7 % |
+| laughter counted as tense (stressed + angry share) | 4.3 % | 1.8 % |
+| simulated joking visits shown above the 30 % line | 22.8 % | **1.4 %** |
+| simulated arguments shown above the 30 % line | 100 % | 100 % |
+| alert: false alarms / heated arguments caught | 0.4 % / 94.7 % | 0.0 % / 94.8 % |
+
+All 12 gates passed on validation and on test. Round 1 is kept in `C:\mzazicare-data\voice\models\v1_live_backup`, and the
+full report is in `artifacts/round2_report.txt`. The table below is round 1.
+
+## Results, round 1 (held-out speakers, 2,048 windows)
 | | precision | recall | F1 | n |
 |---|---|---|---|---|
 | happy | 0.68 | 0.48 | 0.56 | 228 |
@@ -120,7 +150,7 @@ better on unseen speakers than summary numbers do.
   Kiswahili and code-switching, older voices, and a TV on in the background are not covered. Expect lower accuracy in the
   field until the model is tuned on consented recordings from the pilot.
 - LibriSpeech neutral is recorded very cleanly, so its 99 % is not a real-world number.
-- Happy is the weakest tone (often mistaken for stressed or angry). Calm has only 192 training clips.
+- Happy is the weakest tone (often mistaken for stressed or angry), better since round 2 (55 % recall). Calm has only 192 training clips.
 - The model cannot tell *who* is speaking, so it measures the tone of the room, not of the caretaker alone.
 - The family's confirm/dismiss decisions on alerts are the labels to use for the next training round.
 
@@ -130,6 +160,8 @@ python -m voice.get_data           # download datasets to C:\mzazicare-data\voic
 python -m voice.build_features     # MFCC cache
 python -m voice.train --epochs 30  # about 1 hour on a 4-core CPU; writes artifacts/
 python -m voice.operating_point    # alert-rule analysis
+python -m voice.laugh_eval val|test                 # round 2 checks against the live model (test: once)
+python -m voice.ensemble OUT DIR1 DIR2              # average trained models into one ONNX file
 python -m voice.compare train --model svm|rf|bilstm   # train an alternative model (saved to C:\mzazicare-data\voice\comparison)
 python -m voice.compare report     # compare them all with the deployed CNN -> artifacts/comparison.md
 python -m voice.check_live_path    # live pipeline vs. test labels

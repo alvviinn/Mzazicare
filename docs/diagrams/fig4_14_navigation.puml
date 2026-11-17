@@ -1,0 +1,41 @@
+@startuml fig4_14_navigation
+!pragma layout smetana
+!include style.iuml
+skinparam ranksep 55
+skinparam nodesep 25
+
+rectangle "LoginScreen\n(password or Google)" as Login
+rectangle "RegisterScreen" as Reg
+rectangle "Email code step\n(CodeStep)" as Code
+rectangle "Role check\n(GET /api/me/)" as Role
+
+package "UserHome (family)" {
+  rectangle "Home\n(Overview)" as FH
+  rectangle "Shifts" as FS
+  rectangle "Tone" as FT
+  rectangle "Chats" as FC
+  rectangle "People" as FP
+}
+package "CaretakerHome (caregiver)" {
+  rectangle "Today\n(ShiftTab)" as CT
+  rectangle "Tasks" as CK
+  rectangle "Hours" as CH
+  rectangle "First aid" as CF
+}
+rectangle "ElderlyHome\n(one screen)" as EH
+rectangle "ShiftDetailScreen" as SD
+rectangle "ChatScreen" as CS
+
+Login --> Reg : create account
+Login --> Code : new accounts
+Reg --> Code
+Code --> Role
+Login --> Role : older accounts / Google
+Role --> FH : role = user
+Role --> CT : role = caretaker
+Role --> EH : role = elderly
+FS --> SD : open a day
+CH --> SD : open a day
+FC --> CS
+EH --> CS : message the family
+@enduml

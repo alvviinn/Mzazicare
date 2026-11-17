@@ -1,0 +1,23 @@
+TEST (speakers never trained on), measured through the unchanged live path
+                              live (round 1)     round 2
+old_speech_accuracy                    75.4%       76.4%
+old_macro_f1                           70.6%       72.7%
+recall_happy                           47.8%       55.3%
+recall_calm                            65.6%       71.9%
+recall_neutral                         84.1%       83.2%
+recall_stressed                        79.6%       78.5%
+recall_angry                           78.5%       80.3%
+noise_kept_out                         96.7%       97.3%
+laughter_windows                         532         532
+laughter_tense_share                    4.3%        1.8%
+laughter_called_happy                   3.6%       90.8%
+laughter_called_tense                   3.6%        0.2%
+coughs_etc_tense_share                  2.7%        0.4%
+jokes_over_line                        22.8%        1.4%
+everyday_over_line                     86.0%       81.8%
+argument_over_line                    100.0%      100.0%
+alert_false_alarm                       0.4%        0.0%
+alert_heated                           94.7%       94.8%
+change vs round 1, 95 % interval (speaker bootstrap): recall_happy +1.4%..+14.1%, recall_calm +0.0%..+12.5%, recall_neutral -3.8%..+2.1%, recall_stressed -4.4%..+2.0%, recall_angry -1.7%..+6.4%, old_speech_accuracy -0.8%..+3.2%
+gates: recall_happy PASS, recall_calm PASS, recall_neutral PASS, recall_stressed PASS, recall_angry PASS, old_speech_accuracy PASS, old_macro_f1 PASS, laughter_tense_share PASS, jokes_over_line PASS, argument_over_line PASS, alert_false_alarm PASS, alert_heated PASS
+ALL GATES PASS

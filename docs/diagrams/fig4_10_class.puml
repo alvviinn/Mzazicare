@@ -1,8 +1,9 @@
 @startuml fig4_10_class
 !pragma layout smetana
 !include style.iuml
-skinparam ranksep 60
-skinparam nodesep 30
+left to right direction
+skinparam ranksep 70
+skinparam nodesep 20
 
 package "API views (Django REST Framework)" {
   class LocationView {
@@ -59,7 +60,7 @@ package "Models" {
     email
     role
     sponsor
-    +members()
+    members (related name)
   }
   class Shift {
     start_time

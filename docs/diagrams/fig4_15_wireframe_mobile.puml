@@ -1,0 +1,56 @@
+@startsalt fig4_15_wireframe_mobile
+scale 2
+{
+{+
+  <b>(a) Caregiver: Today tab
+  ==
+  {+ Good morning, Grace
+  In range · 6 m }
+  {+ Active today: 3 h 20 min }
+  {+ Tasks done: 4 of 6 }
+  [ Ask first aid ]
+  ..
+  [ End shift ]
+  ==
+  {Today | Tasks | Hours | First aid}
+} | . | {+
+  <b>(b) Caregiver: First aid tab
+  ==
+  {+ <b>Call 922 (ambulance) }
+  {+ "She fell in the bathroom" }
+  {+ <b>A fall
+  Call 922 or 999 if they hit their head...
+  1. Stay calm and check the area is safe
+  2. Check they are awake and breathing
+  Did they hit their head?
+  [Hit their head] | [Not hurt] }
+  "Type in English or Kiswahili   "
+  ==
+  {Today | Tasks | Hours | First aid}
+}
+. | . | .
+{+
+  <b>(c) Elderly person: home
+  ==
+  Good morning / Habari za asubuhi
+  {+ Grace is here with you }
+  {+ How do you feel?
+  [Good] | [Okay] | [Not well] }
+  {+ Today's medicine
+  08:00 Metformin | [I took it] }
+  ..
+  [ <b>I need help ]
+} | . | {+
+  <b>(d) Family: Home tab
+  ==
+  {+ Today: on shift · 3 h 20 min }
+  {+ <b>Alert: angry voices
+  [Confirm] | [Dismiss] }
+  {+ Medicines · How they feel }
+  {+ Tasks today: 4 of 6 }
+  {+ Recent shifts | [See all] }
+  ==
+  {Home | Shifts | Tone | Chats | People}
+}
+}
+@endsalt

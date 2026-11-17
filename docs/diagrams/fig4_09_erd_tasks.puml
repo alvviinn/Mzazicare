@@ -48,8 +48,8 @@ entity "Chore" as CH {
 
 U ||--o{ T : "has to-do (caregiver)\n/ assigns (family)"
 U ||--o{ S : works
-T |o--o{ TC : done with proof
-S |o--o{ TC : done during
 T |o--o{ CH : copied into
 S ||--o{ CH : snapshot of the day
+T |o--o{ TC : done with proof
+S |o--o{ TC : done during
 @enduml
