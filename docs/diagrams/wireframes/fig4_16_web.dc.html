@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MzaziCare family web dashboard wireframe</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#111}a:hover{color:#000}
+</style>
+</helmet>
+<div style="width: 1100px; height: 600px; box-sizing: border-box; padding: 24px; background: #FFFFFF; font-family: Inter, Arial, sans-serif; color: #111111">
+<div style="height: 100%; box-sizing: border-box; border: 2px solid #111111; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column">
+
+<header style="display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-bottom: 1.5px solid #111111">
+<span style="width: 10px; height: 10px; border-radius: 999px; background: #111111"></span>
+<span style="font-size: 18px; font-weight: 700">MzaziCare</span>
+<span style="font-size: 15px; color: #555555">Family dashboard</span>
+<span style="margin-left: auto; font-size: 15px; color: #555555">Wanjiru (family)</span>
+<button type="button" style="font-family: inherit; font-size: 14px; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 8px; padding: 6px 12px">Sign out</button>
+</header>
+
+<div style="flex-grow: 1; display: flex; min-height: 0">
+<nav aria-label="Dashboard menu" style="width: 190px; box-sizing: border-box; border-right: 1.5px solid #111111; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; font-size: 16px">
+<a href="#" style="text-decoration: none; padding: 9px 12px; border-radius: 8px; background: #E4E4E4; font-weight: 700">Home <span style="font-size: 13px; border: 1.5px solid #111111; border-radius: 999px; padding: 0 7px; margin-left: 6px">1</span></a>
+<a href="#" style="text-decoration: none; padding: 9px 12px">Shifts</a>
+<a href="#" style="text-decoration: none; padding: 9px 12px">Task history</a>
+<a href="#" style="text-decoration: none; padding: 9px 12px">Voice tone</a>
+<a href="#" style="text-decoration: none; padding: 9px 12px">Chats</a>
+<a href="#" style="text-decoration: none; padding: 9px 12px">People</a>
+</nav>
+
+<main style="flex-grow: 1; min-width: 0; padding: 18px; display: flex; flex-direction: column; gap: 14px">
+<section style="background: #111111; color: #FFFFFF; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 24px">
+<div>
+<div style="font-size: 14px; color: #DDDDDD">Today</div>
+<div style="font-size: 20px; font-weight: 700">Grace is on shift with Mama</div>
+</div>
+<div style="margin-left: auto; display: flex; gap: 24px; font-size: 15px">
+<span><b style="font-size: 18px">3 h 20 min</b> active</span>
+<span>In 08:05</span>
+<span>1 break</span>
+</div>
+</section>
+
+<section style="border: 2px solid #111111; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 16px; font-weight: 700">Alerts · open first, most severe first</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 15px; border-top: 1.5px solid #CCCCCC; padding-top: 8px">
+<span style="font-weight: 700">Vocal distress</span>
+<span style="color: #444444">Mama · 09:15 · confidence 91 %</span>
+<button type="button" style="margin-left: auto; font-family: inherit; font-size: 14px; font-weight: 600; background: #111111; color: #FFFFFF; border: 0; border-radius: 8px; padding: 7px 16px">Confirm</button>
+<button type="button" style="font-family: inherit; font-size: 14px; font-weight: 600; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 8px; padding: 6px 16px">Dismiss</button>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; flex-grow: 1">
+<section style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 16px; font-weight: 700">Tasks today</span><a href="#" style="font-size: 13px">History and photos</a></div>
+<div style="font-size: 15px; display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 14px; height: 14px; background: #111111; border: 1.5px solid #111111; border-radius: 3px"></span>Give breakfast · photo</span>
+<span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 14px; height: 14px; background: #111111; border: 1.5px solid #111111; border-radius: 3px"></span>Morning walk · photo</span>
+<span style="display: flex; align-items: center; gap: 8px; color: #555555"><span aria-hidden="true" style="width: 14px; height: 14px; border: 1.5px solid #111111; border-radius: 3px"></span>Evening medicine</span>
+</div>
+</section>
+<section style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 16px; font-weight: 700">Voice tone</span><a href="#" style="font-size: 13px">Live tone</a></div>
+<div style="display: flex; height: 14px; border: 1.5px solid #111111; border-radius: 4px; overflow: hidden">
+<span style="width: 62%; background: #BBBBBB"></span><span style="width: 30%; background: #E4E4E4"></span><span style="width: 8%; background: #111111"></span>
+</div>
+<div style="font-size: 14px; color: #444444">Calm 62 · Neutral 30 · Tense 8 (%)</div>
+<div style="font-size: 15px; font-weight: 600">Quality: good</div>
+</section>
+<section style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 16px; font-weight: 700">This week</span>
+<div style="font-size: 15px; display: flex; flex-direction: column; gap: 6px">
+<span>5 days worked</span>
+<span>6 h 40 average active time</span>
+<span>92 % of tasks done</span>
+</div>
+</section>
+<section style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 16px; font-weight: 700">Medicines</span><a href="#" style="font-size: 13px">Manage</a></div>
+<div style="font-size: 15px; display: flex; flex-direction: column; gap: 6px">
+<span>08:00 Metformin · taken</span>
+<span style="color: #555555">20:00 Amlodipine · later</span>
+</div>
+</section>
+<section style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 16px; font-weight: 700">How they feel</span>
+<span style="font-size: 15px">Mama · Good · 07:40</span>
+</section>
+<section style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 16px; font-weight: 700">Recent shifts</span><a href="#" style="font-size: 13px">See all</a></div>
+<div style="font-size: 15px; display: flex; flex-direction: column; gap: 6px">
+<span>Mon · 7 h 05 · 2 breaks</span>
+<span>Fri · 6 h 40 · 1 break</span>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":600}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -17,5 +17,4 @@ Dismissed --> Confirmed : family changes\nthe decision
 Confirmed --> [*] : decision kept\nwith the alert
 Dismissed --> [*] : decision kept\nwith the alert
 
-note "missed_chore and short_visit are defined\nin Alert.Kind but are created only in\ndemo data, not by the running system." as N1
 @enduml

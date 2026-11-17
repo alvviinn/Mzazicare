@@ -3,13 +3,13 @@ skinparam dpi 200
 skinparam shadowing false
 skinparam monochrome false
 skinparam defaultFontName Arial
-skinparam defaultFontSize 12
+skinparam defaultFontSize 13
 skinparam defaultFontColor #000000
 skinparam backgroundColor #FFFFFF
 skinparam ArrowColor #000000
-skinparam ArrowThickness 1
-skinparam roundCorner 6
-skinparam padding 2
+skinparam ArrowThickness 1.2
+skinparam roundCorner 8
+skinparam padding 3
 skinparam nodesep 40
 skinparam ranksep 50
 skinparam BorderColor #000000

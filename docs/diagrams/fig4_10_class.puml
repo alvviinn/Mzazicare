@@ -2,21 +2,21 @@
 !pragma layout smetana
 !include style.iuml
 left to right direction
-skinparam ranksep 70
-skinparam nodesep 20
+skinparam ranksep 55
+skinparam nodesep 16
 
 package "API views (Django REST Framework)" {
+  class FirstAidChatView {
+    +post(message, topic, lang)
+  }
+  class ToneView {
+    +post(raw audio)
+  }
   class LocationView {
     +post(latitude, longitude, accuracy, mocked)
   }
   class TaskDoneView {
     +post(pk, photo)
-  }
-  class ToneView {
-    +post(raw audio)
-  }
-  class FirstAidChatView {
-    +post(message, topic, lang)
   }
   class AlertView {
     +post(pk, status)
@@ -24,6 +24,10 @@ package "API views (Django REST Framework)" {
 }
 
 package "Backend services" {
+  class voice_ai <<module>> {
+    +get_analyzer() : ToneAnalyzer
+    +add_to_shift(shift, result)
+  }
   class presence <<module>> {
     ENTER_RADIUS_M = 15
     EXIT_RADIUS_M = 20
@@ -32,26 +36,22 @@ package "Backend services" {
     +worked_minutes(shift)
     +stop_manual(caretaker)
   }
-  class voice_ai <<module>> {
-    +get_analyzer() : ToneAnalyzer
-    +add_to_shift(shift, result)
-  }
   class push <<module>> {
     +notify(users, title, body)
   }
 }
 
 package "AI models (ml/)" {
+  class FirstAidAssistant {
+    -model : multilingual-e5-small
+    -guide : 43 bilingual topics
+    +reply(message, topic, lang)
+  }
   class ToneAnalyzer {
     -session : ONNX Runtime
     angry_prob = 0.6
     angry_min_windows = 3
     +analyze(audio) : tones, distress
-  }
-  class FirstAidAssistant {
-    -model : multilingual-e5-small
-    -guide : 43 bilingual topics
-    +reply(message, topic, lang)
   }
 }
 
@@ -60,7 +60,6 @@ package "Models" {
     email
     role
     sponsor
-    members (related name)
   }
   class Shift {
     start_time
@@ -74,17 +73,16 @@ package "Models" {
   }
 }
 
-LocationView ..> presence : uses
-TaskDoneView ..> presence : checks range
+FirstAidChatView ..> FirstAidAssistant : loads once
 ToneView ..> voice_ai : uses
 voice_ai ..> ToneAnalyzer : loads once
-FirstAidChatView ..> FirstAidAssistant : loads once
+LocationView ..> presence : uses
+TaskDoneView ..> presence : checks range
 presence ..> Shift : opens / closes
 ToneView ..> Alert : creates vocal_distress
 AlertView ..> Alert : confirms / dismisses
 Alert ..> push : post_save signal
 User "1" -- "0..*" Shift : caretaker / elderly
-User "1" -- "0..*" Alert : family
 Shift "0..1" -- "0..*" Alert
 User "0..1" -- "0..*" User : sponsor
 @enduml

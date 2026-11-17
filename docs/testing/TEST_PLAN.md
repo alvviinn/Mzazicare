@@ -1,6 +1,13 @@
 # MzaziCare: Emulated Field Test and Simulated Usability Test, Test Plan
 
-Owner: Testing agent. Status: **draft, waiting for the author's approval** (nothing has been run yet).
+Owner: Testing agent. Status: **approved by the author on 2026-11-17 with these decisions:** local backend (option B); location sharing continues in the background (Android foreground service), so the report keeps that wording; tests still keep both apps in the foreground.
+
+**Setup as executed (2026-11-17):**
+- Backend: local Django runserver on `127.0.0.1:8000` (reached from the emulators as `10.0.2.2:8000`), DEBUG on, no email service, so sign-in codes go to the console log `docs/testing/logs/backend.log`. Fresh test data: the app's database role cannot create databases, so a new empty schema `fieldtest_20261117` was created inside the local `mzazicare` database and selected with the libpq variable `PGOPTIONS=-c search_path=fieldtest_20261117`. All 27 tables were migrated into it; the development data in `public` is untouched. No file under `backend/` was edited.
+- App: debug build of `C:\mzb\mobile` for x86_64 (`-PreactNativeArchitectures=x86_64` on the Gradle command line; JDK 17 from Android Studio via `JAVA_HOME`), JavaScript served by Metro. `.env.local` temporarily set to `http://10.0.2.2:8000`; the original value is saved and will be restored.
+- mzb vs repository: built **as it is**. The three differing files only affect the family Tone tab, which no test task uses; recorded as a deviation.
+- Site coordinates: moved from the Arboretum to a point well inside **Karura Forest** (a public forest reserve), because the Arboretum is too small for a 200 m route that stays clear of homes.
+- One caregiver account per field-test run (a shift is one per caregiver per day, and a same-day return continues it), all in Test Family 1's circle with Test Elder 1.
 Report targets: TC-019 and TC-021 in Table 5.14, Table 5.13 (usability row), Section 5.4.4 (paras p660 and p661), Table 5.20 (objective 6), Section 5.5.1 (p670), Section 5.5.3 (p682) and Chapter 6 (p700, p704).
 
 All testing in this plan is **emulated** (Android emulators on the development laptop) or **simulated** (personas played by an AI agent). No physical phone, real home or real participant is involved, and the report text will say so.

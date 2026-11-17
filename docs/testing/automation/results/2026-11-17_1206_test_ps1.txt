@@ -1,0 +1,4 @@
+# scripts/test.ps1 run by the Automation agent
+# started: 2026-11-17 12:06:04 EAST  host: AK25PC  commit: 34f53e8 (working tree has uncommitted changes: 48 paths)
+
+==> Secret scan

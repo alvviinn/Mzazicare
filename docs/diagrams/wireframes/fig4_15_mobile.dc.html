@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MzaziCare mobile wireframes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#111}a:hover{color:#000}
+</style>
+</helmet>
+<div style="width: 880px; height: 1240px; box-sizing: border-box; padding: 40px; background: #FFFFFF; font-family: Inter, Arial, sans-serif; color: #111111; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; row-gap: 40px">
+
+<!-- (a) Caregiver: Today tab -->
+<section style="display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 17px; font-weight: 700">(a) Caregiver · Today tab</p>
+<div style="height: 520px; box-sizing: border-box; border: 2px solid #111111; border-radius: 32px; overflow: hidden; display: flex; flex-direction: column; background: #FFFFFF">
+<div style="flex-grow: 1; padding: 22px 20px 14px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span style="font-size: 20px; font-weight: 700">With Mama</span>
+<span style="font-size: 14px; border: 1.5px solid #111111; border-radius: 999px; padding: 4px 10px; font-weight: 600">In range · 6 m</span>
+</div>
+<div style="display: flex; gap: 6px; font-size: 13px; color: #555555">
+<span style="flex-grow: 1; border-top: 3px solid #111111; padding-top: 4px">Arrive</span>
+<span style="flex-grow: 1; border-top: 3px solid #111111; padding-top: 4px; color: #111111; font-weight: 600">On shift</span>
+<span style="flex-grow: 1; border-top: 3px solid #CCCCCC; padding-top: 4px">Done</span>
+</div>
+<div style="background: #F2F2F2; border-radius: 16px; padding: 16px">
+<div style="font-size: 30px; font-weight: 700">3 h 20 min</div>
+<div style="font-size: 15px; color: #555555; margin-top: 2px">active today · In 08:05 · 1 break</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px">
+<div style="font-size: 14px; color: #555555">Tasks</div>
+<div style="font-size: 22px; font-weight: 700">4/6</div>
+</div>
+<div style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px">
+<div style="font-size: 14px; color: #555555">This week</div>
+<div style="font-size: 22px; font-weight: 700">18 h 40</div>
+</div>
+</div>
+<button type="button" style="font-family: inherit; font-size: 16px; text-align: left; background: #FFFFFF; border: 1.5px dashed #111111; border-radius: 14px; padding: 12px 14px; color: #111111">What's happening? <span style="color: #555555">Open the first-aid guide</span></button>
+<button type="button" style="font-family: inherit; font-size: 17px; font-weight: 600; background: #111111; color: #FFFFFF; border: 0; border-radius: 14px; padding: 13px; margin-top: auto">End shift</button>
+</div>
+<nav aria-label="Caregiver tabs" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1.5px solid #111111; font-size: 13px; text-align: center">
+<span style="padding: 12px 0; font-weight: 700; background: #E4E4E4">Today</span>
+<span style="padding: 12px 0">Tasks</span>
+<span style="padding: 12px 0">Hours</span>
+<span style="padding: 12px 0">First aid</span>
+</nav>
+</div>
+</section>
+
+<!-- (b) Caregiver: First aid tab -->
+<section style="display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 17px; font-weight: 700">(b) Caregiver · First aid tab</p>
+<div style="height: 520px; box-sizing: border-box; border: 2px solid #111111; border-radius: 32px; overflow: hidden; display: flex; flex-direction: column; background: #FFFFFF">
+<div style="background: #111111; color: #FFFFFF; padding: 16px 20px; font-size: 16px; font-weight: 700; display: flex; justify-content: space-between">
+<span>Anyone in danger now?</span><span>Call 922</span>
+</div>
+<div style="flex-grow: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="align-self: flex-end; background: #E4E4E4; border-radius: 14px 14px 4px 14px; padding: 9px 12px; font-size: 15px">She fell in the bathroom</div>
+<div style="border: 1.5px solid #111111; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 17px; font-weight: 700">A fall</div>
+<div style="font-size: 14px; font-weight: 600">Call 922 or 999 if they hit their head, cannot move a leg or cannot get up.</div>
+<ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.45">
+<li>Stay calm, check the area is safe, and talk to them.</li>
+<li>Check they are awake and breathing normally.</li>
+</ol>
+<div style="font-size: 14px; color: #555555">Do not lift them by yourself.</div>
+</div>
+<div style="font-size: 15px; font-weight: 600">Did they hit their head, or are they in severe pain?</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button type="button" style="font-family: inherit; font-size: 14px; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 999px; padding: 7px 12px">Hit their head</button>
+<button type="button" style="font-family: inherit; font-size: 14px; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 999px; padding: 7px 12px">Not hurt, wants to get up</button>
+</div>
+<label style="margin-top: auto; display: flex; gap: 8px; align-items: center">
+<span style="position: absolute; left: -9999px">Your question</span>
+<input type="text" placeholder="e.g. &quot;she fell and hit her head&quot;" style="flex-grow: 1; font-family: inherit; font-size: 14px; border: 1.5px solid #111111; border-radius: 999px; padding: 9px 14px; color: #111111">
+</label>
+</div>
+<nav aria-label="Caregiver tabs" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1.5px solid #111111; font-size: 13px; text-align: center">
+<span style="padding: 12px 0">Today</span>
+<span style="padding: 12px 0">Tasks</span>
+<span style="padding: 12px 0">Hours</span>
+<span style="padding: 12px 0; font-weight: 700; background: #E4E4E4">First aid</span>
+</nav>
+</div>
+</section>
+
+<!-- (c) Elderly person: home -->
+<section style="display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 17px; font-weight: 700">(c) Elderly person · Home</p>
+<div style="height: 520px; box-sizing: border-box; border: 2px solid #111111; border-radius: 32px; overflow: hidden; display: flex; flex-direction: column; background: #FFFFFF">
+<div style="flex-grow: 1; padding: 22px 20px 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-size: 24px; font-weight: 700">Good morning</span>
+<span style="font-size: 14px; border: 1.5px solid #111111; border-radius: 8px; padding: 3px 8px; font-weight: 600">EN · SW</span>
+</div>
+<div style="background: #F2F2F2; border-radius: 16px; padding: 14px 16px; font-size: 19px; font-weight: 600">Grace is here with you</div>
+<div style="border: 1.5px solid #111111; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 19px; font-weight: 700">How do you feel?</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button type="button" style="font-family: inherit; font-size: 16px; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 12px; padding: 10px 0">Good</button>
+<button type="button" style="font-family: inherit; font-size: 16px; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 12px; padding: 10px 0">Okay</button>
+<button type="button" style="font-family: inherit; font-size: 16px; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 12px; padding: 10px 0">Not well</button>
+</div>
+</div>
+<div style="border: 1.5px solid #111111; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 19px; font-weight: 700">Today's medicine</div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 17px">
+<span>08:00 · Metformin</span>
+<button type="button" style="font-family: inherit; font-size: 15px; font-weight: 600; background: #E4E4E4; border: 1.5px solid #111111; border-radius: 10px; padding: 7px 12px">I took it</button>
+</div>
+</div>
+<button type="button" style="margin-top: auto; font-family: inherit; font-size: 22px; font-weight: 700; background: #111111; color: #FFFFFF; border: 0; border-radius: 18px; padding: 18px">I need help</button>
+</div>
+</div>
+</section>
+
+<!-- (d) Family: Home tab -->
+<section style="display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 17px; font-weight: 700">(d) Family · Home tab</p>
+<div style="height: 520px; box-sizing: border-box; border: 2px solid #111111; border-radius: 32px; overflow: hidden; display: flex; flex-direction: column; background: #FFFFFF">
+<div style="flex-grow: 1; padding: 22px 18px 14px; display: flex; flex-direction: column; gap: 10px">
+<div style="background: #111111; color: #FFFFFF; border-radius: 16px; padding: 14px 16px">
+<div style="font-size: 14px; color: #DDDDDD">Today</div>
+<div style="font-size: 18px; font-weight: 700">Grace is with Mama · 3 h 20 min</div>
+</div>
+<div style="border: 2px solid #111111; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 16px; font-weight: 700">Vocal distress · 09:15</div>
+<div style="font-size: 14px; color: #444444">Angry-sounding voices were picked up during the visit.</div>
+<div style="display: flex; gap: 8px">
+<button type="button" style="flex-grow: 1; font-family: inherit; font-size: 15px; font-weight: 600; background: #111111; color: #FFFFFF; border: 0; border-radius: 10px; padding: 9px 0">Confirm</button>
+<button type="button" style="flex-grow: 1; font-family: inherit; font-size: 15px; font-weight: 600; background: #FFFFFF; border: 1.5px solid #111111; border-radius: 10px; padding: 9px 0">Dismiss</button>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div style="background: #F2F2F2; border-radius: 12px; padding: 10px">
+<div style="font-size: 13px; color: #555555">Tasks today</div>
+<div style="font-size: 18px; font-weight: 700">4/6</div>
+</div>
+<div style="background: #F2F2F2; border-radius: 12px; padding: 10px">
+<div style="font-size: 13px; color: #555555">Medicines</div>
+<div style="font-size: 18px; font-weight: 700">1/2</div>
+</div>
+<div style="background: #F2F2F2; border-radius: 12px; padding: 10px">
+<div style="font-size: 13px; color: #555555">How they feel</div>
+<div style="font-size: 18px; font-weight: 700">Good</div>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px">
+<span style="font-size: 17px; font-weight: 700">Recent shifts</span>
+<a href="#" style="font-size: 14px">See all</a>
+</div>
+<div style="border-top: 1.5px solid #CCCCCC; padding-top: 8px; display: flex; justify-content: space-between; font-size: 15px">
+<span>Mon · 7 h 05</span><span style="color: #555555">2 breaks</span>
+</div>
+</div>
+<nav aria-label="Family tabs" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1.5px solid #111111; font-size: 13px; text-align: center">
+<span style="padding: 12px 0; font-weight: 700; background: #E4E4E4">Home</span>
+<span style="padding: 12px 0">Shifts</span>
+<span style="padding: 12px 0">Tone</span>
+<span style="padding: 12px 0">Chats</span>
+<span style="padding: 12px 0">People</span>
+</nav>
+</div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":880,"height":1240}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
