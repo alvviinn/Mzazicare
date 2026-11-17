@@ -39,8 +39,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.14'
-      # PyTorch is not needed for these tests (the model-shape test skips itself without it).
-      - run: pip install numpy scipy soundfile onnxruntime
+      # test_compare imports torch (CNN and BiLSTM shapes), so the CPU-only build is installed; without it the
+      # whole ML job failed on every push from 29 Oct 2026. scikit-learn is used by the classical baselines.
+      - run: pip install numpy scipy soundfile onnxruntime scikit-learn
+      - run: pip install torch --index-url https://download.pytorch.org/whl/cpu
       - run: python -m unittest discover -s voice/tests -t . -v
 
   mobile:
