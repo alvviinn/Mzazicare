@@ -1,0 +1,393 @@
+$ C:\Users\HP\AppData\Local/mzazicare-venv/Scripts/python.exe manage.py test --settings=config.settings_test -v 2
+# started 2026-11-17 17:42:07 EAST | commit 9ef3baa | dir backend
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Found 208 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: corsheaders, messages, rest_framework, staticfiles
+  Apply all migrations: accounts, admin, auth, care, contenttypes, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying accounts.0001_initial... OK
+  Applying accounts.0002_voice... OK
+  Applying accounts.0003_two_factor_and_google... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying care.0001_initial... OK
+  Applying care.0002_shift_ended_by_shift_last_in_range_at_shift_rearmed_and_more... OK
+  Applying care.0003_alter_alert_kind_checkin_medication_medicationlog... OK
+  Applying care.0004_tonereading_seconds... OK
+  Applying care.0005_voice... OK
+  Applying care.0006_task_assigned_by... OK
+  Applying care.0007_task_completion... OK
+  Applying care.0008_alert_evidence_trackpoint... OK
+  Applying care.0009_pushdevice... OK
+  Applying care.0010_alert_handled_by... OK
+  Applying sessions.0001_initial...test_duplicate_email_is_rejected_case_insensitively (accounts.tests.test_auth_and_roles.RegistrationAndLoginTests.test_duplicate_email_is_rejected_case_insensitively) ... Bad Request: /api/auth/register/
+ok
+test_everyone_starts_as_a_normal_family_user (accounts.tests.test_auth_and_roles.RegistrationAndLoginTests.test_everyone_starts_as_a_normal_family_user) ... ok
+test_login_success_and_failure (accounts.tests.test_auth_and_roles.RegistrationAndLoginTests.test_login_success_and_failure) ... Bad Request: /api/auth/login/
+ok
+test_password_is_hashed_never_stored_plainly (accounts.tests.test_auth_and_roles.RegistrationAndLoginTests.test_password_is_hashed_never_stored_plainly) ... ok
+test_protected_endpoint_needs_a_token (accounts.tests.test_auth_and_roles.RegistrationAndLoginTests.test_protected_endpoint_needs_a_token) ... Unauthorized: /api/me/
+ok
+test_session_lasts_about_three_months (accounts.tests.test_auth_and_roles.RegistrationAndLoginTests.test_session_lasts_about_three_months) ... ok
+test_validation (accounts.tests.test_auth_and_roles.RegistrationAndLoginTests.test_validation) ... Bad Request: /api/auth/register/
+Bad Request: /api/auth/register/
+Bad Request: /api/auth/register/
+ok
+test_account_owned_by_another_family_cannot_be_taken (accounts.tests.test_auth_and_roles.RoleLinkingTests.test_account_owned_by_another_family_cannot_be_taken) ... Bad Request: /api/team/
+ok
+test_existing_account_is_converted_and_linked (accounts.tests.test_auth_and_roles.RoleLinkingTests.test_existing_account_is_converted_and_linked) ... ok
+test_guards (accounts.tests.test_auth_and_roles.RoleLinkingTests.test_guards) ... Bad Request: /api/team/
+Bad Request: /api/team/
+Bad Request: /api/team/
+Bad Request: /api/team/
+ok
+test_only_family_accounts_may_add_people (accounts.tests.test_auth_and_roles.RoleLinkingTests.test_only_family_accounts_may_add_people) ... Bad Request: /api/team/
+ok
+test_profiles_link_the_three_roles_together (accounts.tests.test_auth_and_roles.RoleLinkingTests.test_profiles_link_the_three_roles_together) ... ok
+test_unknown_email_becomes_an_invite_and_applies_on_registration (accounts.tests.test_auth_and_roles.RoleLinkingTests.test_unknown_email_becomes_an_invite_and_applies_on_registration) ... ok
+test_a_refusal_raises (accounts.tests.test_azure_email.BackendTests.test_a_refusal_raises) ... ok
+test_fail_silently_counts_nothing (accounts.tests.test_azure_email.BackendTests.test_fail_silently_counts_nothing) ... ok
+test_registration_emails_the_code_through_azure (accounts.tests.test_azure_email.BackendTests.test_registration_emails_the_code_through_azure) ... ok
+test_registration_is_undone_if_azure_refuses (accounts.tests.test_azure_email.BackendTests.test_registration_is_undone_if_azure_refuses) ... Bad Request: /api/auth/register/
+ok
+test_sends_one_request_with_the_message (accounts.tests.test_azure_email.BackendTests.test_sends_one_request_with_the_message) ... ok
+test_parses_endpoint_and_key (accounts.tests.test_azure_email.ConnectionStringTests.test_parses_endpoint_and_key) ... ok
+test_rejects_a_broken_string (accounts.tests.test_azure_email.ConnectionStringTests.test_rejects_a_broken_string) ... ok
+test_signature_follows_the_acs_hmac_scheme (accounts.tests.test_azure_email.SigningTests.test_signature_follows_the_acs_hmac_scheme) ... ok
+test_a_code_works_once_and_only_with_its_challenge (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_a_code_works_once_and_only_with_its_challenge) ... Bad Request: /api/auth/verify/
+Bad Request: /api/auth/verify/
+ok
+test_a_new_account_gets_a_code_instead_of_a_token (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_a_new_account_gets_a_code_instead_of_a_token) ... ok
+test_a_wrong_password_sends_no_code (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_a_wrong_password_sends_no_code) ... Bad Request: /api/auth/login/
+ok
+test_codes_expire_after_ten_minutes (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_codes_expire_after_ten_minutes) ... Bad Request: /api/auth/verify/
+ok
+test_development_echo_returns_the_code (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_development_echo_returns_the_code) ... ok
+test_every_password_sign_in_of_a_new_account_needs_the_code (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_every_password_sign_in_of_a_new_account_needs_the_code) ... ok
+test_existing_accounts_keep_signing_in_with_the_password_alone (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_existing_accounts_keep_signing_in_with_the_password_alone) ... ok
+test_only_hashes_are_stored (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_only_hashes_are_stored) ... ok
+test_only_the_newest_sign_in_attempt_counts (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_only_the_newest_sign_in_attempt_counts) ... Bad Request: /api/auth/verify/
+ok
+test_registration_is_undone_if_the_code_cannot_be_emailed (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_registration_is_undone_if_the_code_cannot_be_emailed) ... Bad Request: /api/auth/register/
+ok
+test_resend_waits_a_little_and_replaces_the_code (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_resend_waits_a_little_and_replaces_the_code) ... Bad Request: /api/auth/resend/
+Bad Request: /api/auth/verify/
+ok
+test_wrong_codes_are_limited (accounts.tests.test_two_factor_and_google.EmailCodeTests.test_wrong_codes_are_limited) ... Bad Request: /api/auth/verify/
+Bad Request: /api/auth/verify/
+Bad Request: /api/auth/verify/
+Bad Request: /api/auth/verify/
+Bad Request: /api/auth/verify/
+Bad Request: /api/auth/verify/
+ok
+test_a_forged_token_is_refused (accounts.tests.test_two_factor_and_google.GoogleSignInTests.test_a_forged_token_is_refused) ... Bad Request: /api/auth/google/
+Bad Request: /api/auth/google/
+ok
+test_an_email_already_linked_to_another_google_account_is_refused (accounts.tests.test_two_factor_and_google.GoogleSignInTests.test_an_email_already_linked_to_another_google_account_is_refused) ... Bad Request: /api/auth/google/
+ok
+test_first_google_sign_in_creates_an_account_without_a_code (accounts.tests.test_two_factor_and_google.GoogleSignInTests.test_first_google_sign_in_creates_an_account_without_a_code) ... ok
+test_google_links_to_an_existing_account_with_the_same_email (accounts.tests.test_two_factor_and_google.GoogleSignInTests.test_google_links_to_an_existing_account_with_the_same_email) ... ok
+test_new_account_from_google_takes_its_invite (accounts.tests.test_two_factor_and_google.GoogleSignInTests.test_new_account_from_google_takes_its_invite) ... ok
+test_off_when_not_configured (accounts.tests.test_two_factor_and_google.GoogleSignInTests.test_off_when_not_configured) ... Bad Request: /api/auth/google/
+ok
+test_tokens_for_other_apps_or_unverified_emails_are_refused (accounts.tests.test_two_factor_and_google.GoogleSignInTests.test_tokens_for_other_apps_or_unverified_emails_are_refused) ... Bad Request: /api/auth/google/
+Bad Request: /api/auth/google/
+Bad Request: /api/auth/google/
+ok
+test_an_old_position_is_not_shown_as_evidence (care.tests.test_alerts_and_map.AlertEvidenceTests.test_an_old_position_is_not_shown_as_evidence) ... ok
+test_open_alerts_come_most_severe_first (care.tests.test_alerts_and_map.AlertEvidenceTests.test_open_alerts_come_most_severe_first) ... ok
+test_sos_alert_names_the_patient_and_where_the_phone_was (care.tests.test_alerts_and_map.AlertEvidenceTests.test_sos_alert_names_the_patient_and_where_the_phone_was) ... ok
+test_sample_data_has_a_map_trail_and_alert_evidence (care.tests.test_alerts_and_map.DemoDataTests.test_sample_data_has_a_map_trail_and_alert_evidence) ... ok
+test_family_sees_the_trail_and_geofence_the_caretaker_does_not (care.tests.test_alerts_and_map.ShiftMapTests.test_family_sees_the_trail_and_geofence_the_caretaker_does_not) ... ok
+test_positions_are_kept_only_while_a_shift_is_open (care.tests.test_alerts_and_map.ShiftMapTests.test_positions_are_kept_only_while_a_shift_is_open) ... ok
+test_trail_is_deleted_with_the_shift (care.tests.test_alerts_and_map.ShiftMapTests.test_trail_is_deleted_with_the_shift) ... ok
+test_clip_outside_a_shift_is_refused_and_nothing_is_kept (care.tests.test_audio_capture.ClipUploadTests.test_clip_outside_a_shift_is_refused_and_nothing_is_kept) ... Conflict: /api/audio/tone/
+Conflict: /api/audio/tone/
+ok
+test_clip_without_both_consents_is_refused_before_it_is_analysed (care.tests.test_audio_capture.ClipUploadTests.test_clip_without_both_consents_is_refused_before_it_is_analysed) ... Forbidden: /api/audio/tone/
+Forbidden: /api/audio/tone/
+ok
+test_clips_from_both_phones_land_on_the_same_shift_with_their_source (care.tests.test_audio_capture.ClipUploadTests.test_clips_from_both_phones_land_on_the_same_shift_with_their_source) ... ok
+test_consent_must_be_a_real_yes_or_no (care.tests.test_audio_capture.ConsentTests.test_consent_must_be_a_real_yes_or_no) ... Bad Request: /api/audio/consent/
+Bad Request: /api/audio/consent/
+ok
+test_each_person_agrees_for_themselves_and_can_withdraw (care.tests.test_audio_capture.ConsentTests.test_each_person_agrees_for_themselves_and_can_withdraw) ... ok
+test_family_cannot_consent_for_others_or_themselves (care.tests.test_audio_capture.ConsentTests.test_family_cannot_consent_for_others_or_themselves) ... Forbidden: /api/audio/consent/
+ok
+test_the_real_model_reads_an_aac_m4a_clip_like_the_phones_send (care.tests.test_audio_capture.PhoneFormatTests.test_the_real_model_reads_an_aac_m4a_clip_like_the_phones_send) ... ok
+test_both_phones_record_during_a_shift_once_both_agreed (care.tests.test_audio_capture.WhenToRecordTests.test_both_phones_record_during_a_shift_once_both_agreed) ... ok
+test_no_locations_at_all_means_no_recording (care.tests.test_audio_capture.WhenToRecordTests.test_no_locations_at_all_means_no_recording) ... ok
+test_nobody_is_recorded_without_a_verified_shift (care.tests.test_audio_capture.WhenToRecordTests.test_nobody_is_recorded_without_a_verified_shift) ... ok
+test_one_person_not_agreeing_stops_both_phones (care.tests.test_audio_capture.WhenToRecordTests.test_one_person_not_agreeing_stops_both_phones) ... ok
+test_recording_stops_when_the_caretaker_walks_away (care.tests.test_audio_capture.WhenToRecordTests.test_recording_stops_when_the_caretaker_walks_away) ... ok
+test_the_family_account_is_never_asked_to_record (care.tests.test_audio_capture.WhenToRecordTests.test_the_family_account_is_never_asked_to_record) ... ok
+test_bad_status_and_other_families_alerts (care.tests.test_chat_and_dashboard.AlertTests.test_bad_status_and_other_families_alerts) ... Bad Request: /api/alerts/1/
+Bad Request: /api/alerts/1/
+ok
+test_family_confirms_or_dismisses_and_open_alerts_come_first (care.tests.test_chat_and_dashboard.AlertTests.test_family_confirms_or_dismisses_and_open_alerts_come_first) ... ok
+test_another_familys_people_stay_out_of_reach (care.tests.test_chat_and_dashboard.ChatTests.test_another_familys_people_stay_out_of_reach) ... Forbidden: /api/chat/
+Forbidden: /api/chat/
+ok
+test_anyone_in_the_circle_can_chat_with_anyone_else_in_it (care.tests.test_chat_and_dashboard.ChatTests.test_anyone_in_the_circle_can_chat_with_anyone_else_in_it) ... Forbidden: /api/chat/
+ok
+test_family_chats_separately_with_each_person (care.tests.test_chat_and_dashboard.ChatTests.test_family_chats_separately_with_each_person) ... ok
+test_message_validation (care.tests.test_chat_and_dashboard.ChatTests.test_message_validation) ... Bad Request: /api/chat/
+Bad Request: /api/chat/
+ok
+test_outsiders_cannot_chat_with_the_family (care.tests.test_chat_and_dashboard.ChatTests.test_outsiders_cannot_chat_with_the_family) ... Forbidden: /api/chat/
+ok
+test_unread_count_clears_when_the_thread_is_opened (care.tests.test_chat_and_dashboard.ChatTests.test_unread_count_clears_when_the_thread_is_opened) ... ok
+test_dashboard_is_for_family_accounts_only (care.tests.test_chat_and_dashboard.DashboardTests.test_dashboard_is_for_family_accounts_only) ... Forbidden: /api/dashboard/
+Forbidden: /api/dashboard/
+ok
+test_live_shift_shows_as_on_shift_then_paused (care.tests.test_chat_and_dashboard.DashboardTests.test_live_shift_shows_as_on_shift_then_paused) ... ok
+test_not_matched_until_a_caretaker_and_an_elderly_person_are_linked (care.tests.test_chat_and_dashboard.DashboardTests.test_not_matched_until_a_caretaker_and_an_elderly_person_are_linked) ... ok
+test_today_chores_are_the_caretakers_own_to_do_list (care.tests.test_chat_and_dashboard.DashboardTests.test_today_chores_are_the_caretakers_own_to_do_list) ... ok
+test_mostly_neutral_conversation_is_rated_good_not_penalised (care.tests.test_chat_and_dashboard.ToneSummaryTests.test_mostly_neutral_conversation_is_rated_good_not_penalised) ... ok
+test_no_readings_means_no_rating (care.tests.test_chat_and_dashboard.ToneSummaryTests.test_no_readings_means_no_rating) ... ok
+test_percentages_add_up_to_exactly_100 (care.tests.test_chat_and_dashboard.ToneSummaryTests.test_percentages_add_up_to_exactly_100) ... ok
+test_quality_follows_the_stressed_plus_angry_share (care.tests.test_chat_and_dashboard.ToneSummaryTests.test_quality_follows_the_stressed_plus_angry_share) ... ok
+test_a_person_not_linked_yet_has_no_contacts (care.tests.test_circle.ContactsTests.test_a_person_not_linked_yet_has_no_contacts) ... ok
+test_everyone_sees_the_rest_of_their_circle (care.tests.test_circle.ContactsTests.test_everyone_sees_the_rest_of_their_circle) ... ok
+test_unread_counts (care.tests.test_circle.ContactsTests.test_unread_counts) ... ok
+test_closed_emergencies_stop_coming_back_after_a_few_minutes (care.tests.test_circle.EmergencyTests.test_closed_emergencies_stop_coming_back_after_a_few_minutes) ... ok
+test_closed_or_old_emergencies_no_longer_take_over_the_screen (care.tests.test_circle.EmergencyTests.test_closed_or_old_emergencies_no_longer_take_over_the_screen) ... ok
+test_false_alarm_closes_it_everywhere_and_the_elder_no_longer_sees_it (care.tests.test_circle.EmergencyTests.test_false_alarm_closes_it_everywhere_and_the_elder_no_longer_sees_it) ... ok
+test_first_responder_is_recorded_and_everyone_is_told (care.tests.test_circle.EmergencyTests.test_first_responder_is_recorded_and_everyone_is_told) ... ok
+test_handled_on_the_dashboard_closes_it_on_every_phone (care.tests.test_circle.EmergencyTests.test_handled_on_the_dashboard_closes_it_on_every_phone) ... ok
+test_handling_on_a_phone_closes_it_on_the_dashboard_with_who_and_when (care.tests.test_circle.EmergencyTests.test_handling_on_a_phone_closes_it_on_the_dashboard_with_who_and_when) ... ok
+test_help_button_reaches_family_and_caretaker_on_the_emergency_channel (care.tests.test_circle.EmergencyTests.test_help_button_reaches_family_and_caretaker_on_the_emergency_channel) ... ok
+test_help_message_lands_in_each_chat (care.tests.test_circle.EmergencyTests.test_help_message_lands_in_each_chat) ... ok
+test_open_emergency_is_listed_for_family_caretaker_and_the_elder (care.tests.test_circle.EmergencyTests.test_open_emergency_is_listed_for_family_caretaker_and_the_elder) ... ok
+test_who_may_respond (care.tests.test_circle.EmergencyTests.test_who_may_respond) ... Forbidden: /api/emergency/1/handle/
+Bad Request: /api/emergency/1/handle/
+ok
+test_caretaker_presence_in_plain_terms (care.tests.test_elder.ElderEndpointsTests.test_caretaker_presence_in_plain_terms) ... ok
+test_emergency_button_alerts_and_messages_the_family_without_duplicates (care.tests.test_elder.ElderEndpointsTests.test_emergency_button_alerts_and_messages_the_family_without_duplicates) ... ok
+test_feeling_check_in (care.tests.test_elder.ElderEndpointsTests.test_feeling_check_in) ... Bad Request: /api/elder/checkin/
+ok
+test_no_caretaker_linked (care.tests.test_elder.ElderEndpointsTests.test_no_caretaker_linked) ... ok
+test_not_feeling_well_alerts_the_family_once_in_three_hours (care.tests.test_elder.ElderEndpointsTests.test_not_feeling_well_alerts_the_family_once_in_three_hours) ... ok
+test_only_the_elderly_can_use_elder_endpoints (care.tests.test_elder.ElderEndpointsTests.test_only_the_elderly_can_use_elder_endpoints) ... Forbidden: /api/elder/sos/
+Forbidden: /api/elder/checkin/
+Forbidden: /api/elder/home/
+Forbidden: /api/elder/sos/
+Forbidden: /api/elder/checkin/
+Forbidden: /api/elder/home/
+ok
+test_due_missed_and_later_states (care.tests.test_elder.MedicineTests.test_due_missed_and_later_states) ... ok
+test_elderly_person_marks_it_taken_and_double_taps_are_harmless (care.tests.test_elder.MedicineTests.test_elderly_person_marks_it_taken_and_double_taps_are_harmless) ... ok
+test_family_adds_and_removes_a_reminder (care.tests.test_elder.MedicineTests.test_family_adds_and_removes_a_reminder) ... ok
+test_family_cannot_mark_medicine_as_taken (care.tests.test_elder.MedicineTests.test_family_cannot_mark_medicine_as_taken) ... Forbidden: /api/medicines/1/take/
+ok
+test_validation_and_permissions (care.tests.test_elder.MedicineTests.test_validation_and_permissions) ... Bad Request: /api/medicines/
+Bad Request: /api/medicines/
+Bad Request: /api/medicines/
+Bad Request: /api/medicines/
+Forbidden: /api/medicines/
+ok
+test_button_topic_and_bad_input (care.tests.test_firstaid.AccessAndInputTests.test_button_topic_and_bad_input) ... Bad Request: /api/firstaid/chat/
+Bad Request: /api/firstaid/chat/
+Bad Request: /api/firstaid/chat/
+Bad Request: /api/firstaid/chat/
+ok
+test_message_is_passed_on (care.tests.test_firstaid.AccessAndInputTests.test_message_is_passed_on) ... ok
+test_missing_model_gives_503 (care.tests.test_firstaid.AccessAndInputTests.test_missing_model_gives_503) ... Service Unavailable: /api/firstaid/chat/
+ok
+test_only_caretakers_can_use_it (care.tests.test_firstaid.AccessAndInputTests.test_only_caretakers_can_use_it) ... Forbidden: /api/firstaid/chat/
+Forbidden: /api/firstaid/chat/
+Unauthorized: /api/firstaid/chat/
+ok
+test_safety_question_answer (care.tests.test_firstaid.AccessAndInputTests.test_safety_question_answer) ... Bad Request: /api/firstaid/chat/
+Bad Request: /api/firstaid/chat/
+ok
+test_answers_in_kiswahili (care.tests.test_firstaid.RealAssistantTests.test_answers_in_kiswahili) ... ok
+test_follow_up_by_button_and_by_typed_yes (care.tests.test_firstaid.RealAssistantTests.test_follow_up_by_button_and_by_typed_yes) ... ok
+test_life_threatening_message_says_call_922 (care.tests.test_firstaid.RealAssistantTests.test_life_threatening_message_says_call_922) ... ok
+test_not_first_aid (care.tests.test_firstaid.RealAssistantTests.test_not_first_aid) ... ok
+test_safety_question_yes_and_no (care.tests.test_firstaid.RealAssistantTests.test_safety_question_yes_and_no)
+When the danger signals are unclear the assistant asks "Is someone in danger right now?" (round-3 policy). ... ok
+test_small_problem_gets_advice_with_danger_banner (care.tests.test_firstaid.RealAssistantTests.test_small_problem_gets_advice_with_danger_banner) ... ok
+test_a_break_never_ends_the_shift_however_long (care.tests.test_presence.PresenceEngineTests.test_a_break_never_ends_the_shift_however_long) ... ok
+test_a_few_seconds_out_of_range_is_gps_noise_not_a_break (care.tests.test_presence.PresenceEngineTests.test_a_few_seconds_out_of_range_is_gps_noise_not_a_break) ... ok
+test_an_old_manual_shift_that_never_reached_the_elder_is_discarded_when_the_day_closes (care.tests.test_presence.PresenceEngineTests.test_an_old_manual_shift_that_never_reached_the_elder_is_discarded_when_the_day_closes) ... ok
+test_fake_gps_location_is_never_counted (care.tests.test_presence.PresenceEngineTests.test_fake_gps_location_is_never_counted) ... ok
+test_gps_jitter_at_the_edge_does_not_pause (care.tests.test_presence.PresenceEngineTests.test_gps_jitter_at_the_edge_does_not_pause) ... ok
+test_if_the_caretaker_was_not_seen_near_midnight_yesterday_ends_when_last_seen (care.tests.test_presence.PresenceEngineTests.test_if_the_caretaker_was_not_seen_near_midnight_yesterday_ends_when_last_seen) ... ok
+test_inaccurate_fix_cannot_start_or_resume_a_shift (care.tests.test_presence.PresenceEngineTests.test_inaccurate_fix_cannot_start_or_resume_a_shift) ... ok
+test_manual_stop_ends_the_days_shift_and_keeps_verified_time (care.tests.test_presence.PresenceEngineTests.test_manual_stop_ends_the_days_shift_and_keeps_verified_time) ... ok
+test_new_day_starts_a_new_shift (care.tests.test_presence.PresenceEngineTests.test_new_day_starts_a_new_shift) ... ok
+test_no_auto_restart_after_manual_stop_until_the_caretaker_has_left (care.tests.test_presence.PresenceEngineTests.test_no_auto_restart_after_manual_stop_until_the_caretaker_has_left) ... ok
+test_no_shift_until_within_15_metres (care.tests.test_presence.PresenceEngineTests.test_no_shift_until_within_15_metres) ... ok
+test_phase_goes_waiting_active_break_away (care.tests.test_presence.PresenceEngineTests.test_phase_goes_waiting_active_break_away) ... ok
+test_presence_across_midnight_is_split_between_the_two_days (care.tests.test_presence.PresenceEngineTests.test_presence_across_midnight_is_split_between_the_two_days) ... ok
+test_shift_starts_automatically_inside_15_metres (care.tests.test_presence.PresenceEngineTests.test_shift_starts_automatically_inside_15_metres) ... ok
+test_silent_elder_phone_prevents_a_shift (care.tests.test_presence.PresenceEngineTests.test_silent_elder_phone_prevents_a_shift) ... ok
+test_stepping_out_is_a_break_and_coming_back_continues_the_same_shift (care.tests.test_presence.PresenceEngineTests.test_stepping_out_is_a_break_and_coming_back_continues_the_same_shift) ... ok
+test_task_list_is_snapshotted_into_the_shift (care.tests.test_presence.PresenceEngineTests.test_task_list_is_snapshotted_into_the_shift) ... ok
+test_timer_stops_when_out_of_range_at_the_last_moment_in_range (care.tests.test_presence.PresenceEngineTests.test_timer_stops_when_out_of_range_at_the_last_moment_in_range) ... ok
+test_a_broken_key_is_logged_not_raised (care.tests.test_push.FirebaseConfigTests.test_a_broken_key_is_logged_not_raised) ... Push not sent (Firebase credentials): Expecting value: line 1 column 1 (char 0)
+ok
+test_no_key_configured_sends_nothing (care.tests.test_push.FirebaseConfigTests.test_no_key_configured_sends_nothing) ... ok
+test_other_errors_keep_the_phone (care.tests.test_push.FirebaseConfigTests.test_other_errors_keep_the_phone) ... Push rejected (400): Invalid payload
+ok
+test_disabled_sends_nothing (care.tests.test_push.OffSwitchTests.test_disabled_sends_nothing) ... ok
+test_any_role_can_register_and_unregister (care.tests.test_push.RegisterTests.test_any_role_can_register_and_unregister) ... ok
+test_cannot_unregister_someone_elses_phone (care.tests.test_push.RegisterTests.test_cannot_unregister_someone_elses_phone) ... ok
+test_rejects_garbage_and_anonymous (care.tests.test_push.RegisterTests.test_rejects_garbage_and_anonymous) ... Bad Request: /api/push/
+Bad Request: /api/push/
+Unauthorized: /api/push/
+ok
+test_chat_message_goes_to_the_recipient (care.tests.test_push.SendTests.test_chat_message_goes_to_the_recipient) ... ok
+test_demo_alerts_are_silent (care.tests.test_push.SendTests.test_demo_alerts_are_silent) ... ok
+test_network_errors_never_break_the_request (care.tests.test_push.SendTests.test_network_errors_never_break_the_request) ... Push send failed: offline
+ok
+test_nobody_registered_means_nothing_sent (care.tests.test_push.SendTests.test_nobody_registered_means_nothing_sent) ... ok
+test_sos_also_reaches_the_caretaker (care.tests.test_push.SendTests.test_sos_also_reaches_the_caretaker) ... ok
+test_unregistered_phones_are_forgotten (care.tests.test_push.SendTests.test_unregistered_phones_are_forgotten) ... ok
+test_unwell_alert_goes_to_the_family_only (care.tests.test_push.SendTests.test_unwell_alert_goes_to_the_family_only) ... ok
+test_an_open_emergency_is_shown_to_the_caretaker (care.tests.test_shift_api.ShiftApiTests.test_an_open_emergency_is_shown_to_the_caretaker) ... ok
+test_fake_location_raises_an_alert_for_the_family_once (care.tests.test_shift_api.ShiftApiTests.test_fake_location_raises_an_alert_for_the_family_once) ... ok
+test_hours_summary (care.tests.test_shift_api.ShiftApiTests.test_hours_summary) ... ok
+test_location_validation_and_roles (care.tests.test_shift_api.ShiftApiTests.test_location_validation_and_roles) ... Bad Request: /api/location/
+Forbidden: /api/location/
+ok
+test_manual_start_is_gone (care.tests.test_shift_api.ShiftApiTests.test_manual_start_is_gone)
+Shifts only start by themselves (in range). Older apps still call start: they get a clear refusal. ... Bad Request: /api/shift/start/
+ok
+test_manual_stop (care.tests.test_shift_api.ShiftApiTests.test_manual_stop) ... Bad Request: /api/shift/stop/
+ok
+test_only_caretakers_use_shift_endpoints (care.tests.test_shift_api.ShiftApiTests.test_only_caretakers_use_shift_endpoints) ... Forbidden: /api/shift/state/
+Forbidden: /api/shift/start/
+Forbidden: /api/shift/state/
+Forbidden: /api/shift/start/
+ok
+test_shift_starts_by_itself_when_both_phones_report_close_together (care.tests.test_shift_api.ShiftApiTests.test_shift_starts_by_itself_when_both_phones_report_close_together) ... ok
+test_state_before_any_location_is_unknown (care.tests.test_shift_api.ShiftApiTests.test_state_before_any_location_is_unknown) ... ok
+test_caretaker_never_sees_another_caretakers_days_in_their_list (care.tests.test_shift_detail.ShiftViewsTests.test_caretaker_never_sees_another_caretakers_days_in_their_list) ... ok
+test_detail_shows_arrival_break_return_and_departure (care.tests.test_shift_detail.ShiftViewsTests.test_detail_shows_arrival_break_return_and_departure) ... ok
+test_family_sees_the_same_shift_plus_the_tone_of_the_visit (care.tests.test_shift_detail.ShiftViewsTests.test_family_sees_the_same_shift_plus_the_tone_of_the_visit) ... ok
+test_hours_recent_uses_the_day_cards (care.tests.test_shift_detail.ShiftViewsTests.test_hours_recent_uses_the_day_cards) ... ok
+test_list_has_one_card_per_day_newest_first (care.tests.test_shift_detail.ShiftViewsTests.test_list_has_one_card_per_day_newest_first) ... ok
+test_list_is_not_available_to_the_elderly (care.tests.test_shift_detail.ShiftViewsTests.test_list_is_not_available_to_the_elderly) ... Forbidden: /api/shifts/
+ok
+test_live_shift_state_reports_the_phase_and_todays_card (care.tests.test_shift_detail.ShiftViewsTests.test_live_shift_state_reports_the_phase_and_todays_card) ... ok
+test_other_people_cannot_open_the_shift (care.tests.test_shift_detail.ShiftViewsTests.test_other_people_cannot_open_the_shift) ... Not Found: /api/shifts/1/
+Not Found: /api/shifts/1/
+Not Found: /api/shifts/1/
+Not Found: /api/shifts/99999/
+ok
+test_todays_shift_can_still_be_opened_after_tapping_end (care.tests.test_shift_detail.ShiftViewsTests.test_todays_shift_can_still_be_opened_after_tapping_end) ... ok
+test_caretaker_cannot_change_or_delete_a_family_task (care.tests.test_tasks.FamilyAssignedTaskTests.test_caretaker_cannot_change_or_delete_a_family_task) ... Forbidden: /api/tasks/1/
+Forbidden: /api/tasks/1/
+Forbidden: /api/tasks/1/
+ok
+test_caretaker_ticks_it_off_only_inside_the_area (care.tests.test_tasks.FamilyAssignedTaskTests.test_caretaker_ticks_it_off_only_inside_the_area) ... Forbidden: /api/tasks/1/done/
+ok
+test_family_assigns_a_task_and_the_caretaker_sees_who_set_it (care.tests.test_tasks.FamilyAssignedTaskTests.test_family_assigns_a_task_and_the_caretaker_sees_who_set_it) ... ok
+test_family_can_edit_and_remove_their_task_but_not_tick_it (care.tests.test_tasks.FamilyAssignedTaskTests.test_family_can_edit_and_remove_their_task_but_not_tick_it) ... Forbidden: /api/tasks/1/
+ok
+test_family_can_only_assign_to_their_own_caretakers (care.tests.test_tasks.FamilyAssignedTaskTests.test_family_can_only_assign_to_their_own_caretakers) ... Bad Request: /api/tasks/
+Bad Request: /api/tasks/
+Bad Request: /api/tasks/1/
+Bad Request: /api/tasks/
+ok
+test_family_cannot_touch_the_caretakers_own_tasks (care.tests.test_tasks.FamilyAssignedTaskTests.test_family_cannot_touch_the_caretakers_own_tasks) ... Bad Request: /api/tasks/1/
+ok
+test_family_sees_all_their_caretakers_tasks (care.tests.test_tasks.FamilyAssignedTaskTests.test_family_sees_all_their_caretakers_tasks) ... ok
+test_a_double_tap_records_the_task_once (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_a_double_tap_records_the_task_once) ... ok
+test_a_task_cannot_be_ticked_without_a_photo (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_a_task_cannot_be_ticked_without_a_photo) ... Bad Request: /api/tasks/1/
+Bad Request: /api/tasks/1/done/
+Bad Request: /api/tasks/1/done/
+ok
+test_an_oversized_photo_is_refused (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_an_oversized_photo_is_refused) ... Content Too Large: /api/tasks/1/done/
+ok
+test_history_keeps_every_day_a_recurring_task_was_done (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_history_keeps_every_day_a_recurring_task_was_done) ... ok
+test_history_shows_who_assigned_the_task (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_history_shows_who_assigned_the_task) ... ok
+test_history_survives_the_task_being_deleted (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_history_survives_the_task_being_deleted) ... ok
+test_no_photo_is_kept_when_the_caretaker_is_outside_the_area (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_no_photo_is_kept_when_the_caretaker_is_outside_the_area) ... Forbidden: /api/tasks/1/done/
+ok
+test_nobody_else_can_see_the_photo (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_nobody_else_can_see_the_photo) ... Bad Request: /api/tasks/completions/1/photo/
+Bad Request: /api/tasks/completions/1/photo/
+Forbidden: /api/tasks/completions/1/photo/
+Unauthorized: /api/tasks/completions/1/photo/
+ok
+test_the_family_sees_the_proof_photo (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_the_family_sees_the_proof_photo) ... ok
+test_unticking_removes_that_proof (care.tests.test_tasks.ProofPhotoAndHistoryTests.test_unticking_removes_that_proof) ... ok
+test_one_off_task_stays_visible_only_on_the_day_it_was_done (care.tests.test_tasks.RecurringTaskRulesTests.test_one_off_task_stays_visible_only_on_the_day_it_was_done) ... ok
+test_recurring_task_is_always_listed (care.tests.test_tasks.RecurringTaskRulesTests.test_recurring_task_is_always_listed) ... ok
+test_recurring_task_resets_on_the_next_working_day_only (care.tests.test_tasks.RecurringTaskRulesTests.test_recurring_task_resets_on_the_next_working_day_only) ... ok
+test_test_dates_are_the_weekdays_we_think_they_are (care.tests.test_tasks.RecurringTaskRulesTests.test_test_dates_are_the_weekdays_we_think_they_are) ... ok
+test_a_caretaker_cannot_touch_someone_elses_task (care.tests.test_tasks.TaskApiTests.test_a_caretaker_cannot_touch_someone_elses_task) ... Bad Request: /api/tasks/1/done/
+ok
+test_cannot_mark_done_outside_the_elders_area (care.tests.test_tasks.TaskApiTests.test_cannot_mark_done_outside_the_elders_area) ... Forbidden: /api/tasks/1/done/
+ok
+test_cannot_mark_done_when_location_is_unknown (care.tests.test_tasks.TaskApiTests.test_cannot_mark_done_when_location_is_unknown) ... Forbidden: /api/tasks/1/done/
+ok
+test_cannot_mark_done_with_a_faked_location (care.tests.test_tasks.TaskApiTests.test_cannot_mark_done_with_a_faked_location) ... Forbidden: /api/tasks/1/done/
+ok
+test_completion_is_recorded_on_the_open_shift (care.tests.test_tasks.TaskApiTests.test_completion_is_recorded_on_the_open_shift) ... ok
+test_create_tick_untick_delete (care.tests.test_tasks.TaskApiTests.test_create_tick_untick_delete) ... ok
+test_the_elderly_have_no_task_list (care.tests.test_tasks.TaskApiTests.test_the_elderly_have_no_task_list) ... Forbidden: /api/tasks/
+Forbidden: /api/tasks/
+ok
+test_unticking_and_editing_work_anywhere (care.tests.test_tasks.TaskApiTests.test_unticking_and_editing_work_anywhere) ... ok
+test_validation (care.tests.test_tasks.TaskApiTests.test_validation) ... Bad Request: /api/tasks/
+Bad Request: /api/tasks/
+ok
+test_audio_is_not_analysed_outside_a_verified_shift (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_audio_is_not_analysed_outside_a_verified_shift) ... Conflict: /api/audio/tone/
+ok
+test_distress_raises_one_alert_per_half_hour_for_the_family_to_review (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_distress_raises_one_alert_per_half_hour_for_the_family_to_review) ... ok
+test_empty_and_oversized_clips_are_rejected (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_empty_and_oversized_clips_are_rejected) ... Bad Request: /api/audio/tone/
+Content Too Large: /api/audio/tone/
+ok
+test_missing_model_gives_503 (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_missing_model_gives_503) ... Service Unavailable: /api/audio/tone/
+ok
+test_no_distress_means_no_alert (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_no_distress_means_no_alert) ... ok
+test_only_the_two_people_in_the_visit_may_send_audio (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_only_the_two_people_in_the_visit_may_send_audio) ... Forbidden: /api/audio/tone/
+Conflict: /api/audio/tone/
+Unauthorized: /api/audio/tone/
+ok
+test_results_accumulate_per_shift_and_always_sum_to_100 (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_results_accumulate_per_shift_and_always_sum_to_100) ... ok
+test_unreadable_audio_is_a_400_not_a_crash (care.tests.test_tone_endpoint.ToneEndpointRulesTests.test_unreadable_audio_is_a_400_not_a_crash) ... Bad Request: /api/audio/tone/
+ok
+test_real_model_end_to_end_on_a_synthetic_clip (care.tests.test_tone_endpoint.ToneEndpointWithRealModelTests.test_real_model_end_to_end_on_a_synthetic_clip) ... ok
+test_chart_points_current_tone_and_day_stats (care.tests.test_tone_live.LiveToneTests.test_chart_points_current_tone_and_day_stats) ... ok
+test_each_analysed_clip_leaves_a_sample_but_no_audio (care.tests.test_tone_live.LiveToneTests.test_each_analysed_clip_leaves_a_sample_but_no_audio) ... ok
+test_earlier_days_give_a_trend_and_a_usual_level (care.tests.test_tone_live.LiveToneTests.test_earlier_days_give_a_trend_and_a_usual_level) ... ok
+test_empty_day (care.tests.test_tone_live.LiveToneTests.test_empty_day) ... ok
+test_only_the_family_can_see_it (care.tests.test_tone_live.LiveToneTests.test_only_the_family_can_see_it) ... Forbidden: /api/tone/live/
+Forbidden: /api/tone/live/
+Unauthorized: /api/tone/live/
+ok
+test_shift_detail_carries_the_tone_timeline_for_family_only (care.tests.test_tone_live.LiveToneTests.test_shift_detail_carries_the_tone_timeline_for_family_only) ... ok
+test_state_is_live_only_while_in_range_and_hearing_speech (care.tests.test_tone_live.LiveToneTests.test_state_is_live_only_while_in_range_and_hearing_speech) ... ok
+test_haversine_is_accurate_at_short_range (care.tests.test_presence.DistanceTests.test_haversine_is_accurate_at_short_range) ... ok
+
+----------------------------------------------------------------------
+Ran 208 tests in 38.468s
+
+OK
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+ OK
+System check identified no issues (0 silenced).
+# finished 2026-11-17 17:42:59 EAST exit=0

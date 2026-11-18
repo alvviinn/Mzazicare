@@ -1,0 +1,3 @@
+$ npx tsc --noEmit
+# started 2026-11-17 17:43:44 EAST | commit 9ef3baa | dir mobile
+# finished 2026-11-17 17:44:16 EAST exit=0

@@ -1,0 +1,4 @@
+$ C:\Users\HP\AppData\Local/mzazicare-venv/Scripts/python.exe manage.py check --settings=config.settings_test
+# started 2026-11-17 17:41:49 EAST | commit 9ef3baa | dir backend
+System check identified no issues (0 silenced).
+# finished 2026-11-17 17:41:58 EAST exit=0

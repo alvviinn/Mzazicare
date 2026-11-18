@@ -1,0 +1,76 @@
+operation,phase,n,status,ms,at
+Sign in (password step),warm-up,1,200,6945.9,2026-11-18T07:50:01
+Sign in (password step),warm-up,2,200,6652.9,2026-11-18T07:50:10
+Sign in (password step),warm-up,3,200,6450.3,2026-11-18T07:50:18
+Sign in (password step),warm-up,4,200,9190.8,2026-11-18T07:50:29
+Sign in (password step),warm-up,5,200,7787.0,2026-11-18T07:50:39
+Sign in (password step),measured,6,200,7418.0,2026-11-18T07:50:49
+Sign in (password step),measured,7,200,5328.0,2026-11-18T07:50:56
+Sign in (password step),measured,8,200,6291.4,2026-11-18T07:51:04
+Sign in (password step),measured,9,400,6278.7,2026-11-18T07:51:12
+Sign in (password step),measured,10,400,5235.7,2026-11-18T07:51:20
+Sign in (password step),measured,11,400,5407.4,2026-11-18T07:51:27
+Sign in (password step),measured,12,400,5351.6,2026-11-18T07:51:34
+Sign in (password step),measured,13,400,5219.5,2026-11-18T07:51:42
+Sign in (password step),measured,14,400,5575.0,2026-11-18T07:51:49
+Sign in (password step),measured,15,400,5530.8,2026-11-18T07:51:57
+Load the family overview,warm-up,1,200,1224.0,2026-11-18T07:52:00
+Load the family overview,warm-up,2,200,1296.1,2026-11-18T07:52:03
+Load the family overview,warm-up,3,200,984.9,2026-11-18T07:52:06
+Load the family overview,warm-up,4,200,1062.0,2026-11-18T07:52:09
+Load the family overview,warm-up,5,200,1311.0,2026-11-18T07:52:13
+Load the family overview,measured,6,200,1734.2,2026-11-18T07:52:16
+Load the family overview,measured,7,200,1319.4,2026-11-18T07:52:20
+Load the family overview,measured,8,200,896.2,2026-11-18T07:52:23
+Load the family overview,measured,9,200,890.7,2026-11-18T07:52:25
+Load the family overview,measured,10,200,1072.6,2026-11-18T07:52:29
+Load the family overview,measured,11,200,836.9,2026-11-18T07:52:31
+Load the family overview,measured,12,200,996.8,2026-11-18T07:52:34
+Load the family overview,measured,13,200,864.5,2026-11-18T07:52:37
+Load the family overview,measured,14,200,1128.8,2026-11-18T07:52:40
+Load the family overview,measured,15,200,874.9,2026-11-18T07:52:43
+Report a location and update the shift,warm-up,1,200,766.7,2026-11-18T07:52:46
+Report a location and update the shift,warm-up,2,200,917.4,2026-11-18T07:52:49
+Report a location and update the shift,warm-up,3,200,862.9,2026-11-18T07:52:52
+Report a location and update the shift,warm-up,4,200,766.6,2026-11-18T07:52:55
+Report a location and update the shift,warm-up,5,200,828.2,2026-11-18T07:52:57
+Report a location and update the shift,measured,6,200,779.2,2026-11-18T07:53:00
+Report a location and update the shift,measured,7,200,876.6,2026-11-18T07:53:03
+Report a location and update the shift,measured,8,200,950.7,2026-11-18T07:53:06
+Report a location and update the shift,measured,9,200,795.4,2026-11-18T07:53:09
+Report a location and update the shift,measured,10,200,764.1,2026-11-18T07:53:12
+Report a location and update the shift,measured,11,200,925.8,2026-11-18T07:53:15
+Report a location and update the shift,measured,12,200,823.6,2026-11-18T07:53:17
+Report a location and update the shift,measured,13,200,909.6,2026-11-18T07:53:20
+Report a location and update the shift,measured,14,200,765.7,2026-11-18T07:53:23
+Report a location and update the shift,measured,15,200,909.8,2026-11-18T07:53:26
+Tick a task with a photograph,warm-up,1,201,1172.9,2026-11-18T07:53:36
+Tick a task with a photograph,warm-up,2,201,1207.1,2026-11-18T07:53:42
+Tick a task with a photograph,warm-up,3,201,1155.9,2026-11-18T07:53:48
+Tick a task with a photograph,warm-up,4,201,1134.1,2026-11-18T07:53:54
+Tick a task with a photograph,warm-up,5,201,1192.0,2026-11-18T07:54:00
+Tick a task with a photograph,measured,6,201,1239.4,2026-11-18T07:54:10
+Tick a task with a photograph,measured,7,201,1239.3,2026-11-18T07:54:16
+Tick a task with a photograph,measured,8,201,1370.5,2026-11-18T07:54:22
+Tick a task with a photograph,measured,9,201,1240.4,2026-11-18T07:54:28
+Tick a task with a photograph,measured,10,201,1178.7,2026-11-18T07:54:34
+Tick a task with a photograph,measured,11,201,1154.6,2026-11-18T07:54:44
+Tick a task with a photograph,measured,12,201,1132.9,2026-11-18T07:54:50
+Tick a task with a photograph,measured,13,201,1122.0,2026-11-18T07:54:56
+Tick a task with a photograph,measured,14,201,1164.0,2026-11-18T07:55:02
+Tick a task with a photograph,measured,15,201,1113.9,2026-11-18T07:55:08
+Analyse a 10-second audio clip,warm-up,1,200,5882.7,2026-11-18T07:55:20
+Analyse a 10-second audio clip,warm-up,2,200,1144.3,2026-11-18T07:55:23
+Analyse a 10-second audio clip,warm-up,3,200,1016.2,2026-11-18T07:55:26
+Analyse a 10-second audio clip,warm-up,4,200,1094.4,2026-11-18T07:55:29
+Analyse a 10-second audio clip,warm-up,5,200,964.1,2026-11-18T07:55:32
+Analyse a 10-second audio clip,measured,6,200,1261.4,2026-11-18T07:55:39
+Analyse a 10-second audio clip,measured,7,200,1003.8,2026-11-18T07:55:42
+Analyse a 10-second audio clip,measured,8,200,1088.7,2026-11-18T07:55:45
+Analyse a 10-second audio clip,measured,9,200,959.8,2026-11-18T07:55:48
+Analyse a 10-second audio clip,measured,10,200,993.3,2026-11-18T07:55:51
+Analyse a 10-second audio clip,measured,11,200,1531.8,2026-11-18T07:55:58
+Analyse a 10-second audio clip,measured,12,200,1295.3,2026-11-18T07:56:01
+Analyse a 10-second audio clip,measured,13,200,1461.7,2026-11-18T07:56:05
+Analyse a 10-second audio clip,measured,14,200,1341.0,2026-11-18T07:56:08
+Analyse a 10-second audio clip,measured,15,200,1005.2,2026-11-18T07:56:11

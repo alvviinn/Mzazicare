@@ -34,14 +34,14 @@ outstanding. It is the bridge between the proposal chapters and [Chapter 4](chap
 The elderly person's own app (mood check-in, medicine reminders, emergency button, English and Kiswahili, three text sizes); separate chats between the family and each person;
 the caretaker's own to-do list with daily-repeating tasks; verified hours; manual start/stop that is still geofence-verified; the emergency banner for caretakers.
 
-## 4. Proposal items not yet built
+## 4. Proposal items: how they ended up
 
-| Item | Notes |
+| Item | Outcome |
 |---|---|
-| **FR-03 triage chatbot** (fine-tuned mBERT, FirstAidQA, code-switched queries) | Not started. Needs its own datasets and a safety review (it must not give unsafe medical advice) |
-| **Behavioural anomaly detection** (unsupervised, visit-pattern baseline) | Not started. Visit and hours data now exist to build it |
-| Phone recording for the tone model | Consent flow and an Android audio-format decision first |
-| Offline resilience and sync | Not started; the app shows a clear error when the server cannot be reached |
+| **FR-03 triage chatbot** (fine-tuned mBERT, FirstAidQA, code-switched queries) | Built as the caretakers' **first-aid assistant**. A fine-tuned multilingual-e5-small (English and Kiswahili) recognises the situation, but the advice comes only from a vetted guide of 43 topics, and danger words always put "call for help now" first. Uses FirstAidQA among other sources. See `ml/firstaid/README.md` |
+| **Behavioural anomaly detection** (unsupervised, visit-pattern baseline) | **Dropped** from the scope. Missed visits, short visits, mood and the tone model's distress alert cover the main warning signs |
+| Phone recording for the tone model | Built: both phones, only during a verified visit, only with both people's consent; works in the background |
+| Offline resilience and sync | Partly: the caretaker's task changes (including ticks with their photo) are queued while offline and sent when the connection returns |
 | Web dashboard (Next.js) | Done (family accounts only; caretakers and elderly use the phone app) |
 | NFR-02 performance measured | Not benchmarked |
 

@@ -1,0 +1,4 @@
+$ C:\Users\HP\AppData\Local/mzazicare-venv/Scripts/python.exe manage.py makemigrations --check --dry-run --settings=config.settings_test
+# started 2026-11-17 17:41:59 EAST | commit 9ef3baa | dir backend
+No changes detected
+# finished 2026-11-17 17:42:06 EAST exit=0

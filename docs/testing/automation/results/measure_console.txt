@@ -1,0 +1,83 @@
+Sign in (password step) 1 200 6946
+Sign in (password step) 2 200 6653
+Sign in (password step) 3 200 6450
+Sign in (password step) 4 200 9191
+Sign in (password step) 5 200 7787
+Sign in (password step) 6 200 7418
+Sign in (password step) 7 200 5328
+Sign in (password step) 8 200 6291
+Sign in (password step) 9 400 6279
+Sign in (password step) 10 400 5236
+Sign in (password step) 11 400 5407
+Sign in (password step) 12 400 5352
+Sign in (password step) 13 400 5220
+Sign in (password step) 14 400 5575
+Sign in (password step) 15 400 5531
+Load the family overview 1 200 1224
+Load the family overview 2 200 1296
+Load the family overview 3 200 985
+Load the family overview 4 200 1062
+Load the family overview 5 200 1311
+Load the family overview 6 200 1734
+Load the family overview 7 200 1319
+Load the family overview 8 200 896
+Load the family overview 9 200 891
+Load the family overview 10 200 1073
+Load the family overview 11 200 837
+Load the family overview 12 200 997
+Load the family overview 13 200 865
+Load the family overview 14 200 1129
+Load the family overview 15 200 875
+Report a location and update 1 200 767
+Report a location and update 2 200 917
+Report a location and update 3 200 863
+Report a location and update 4 200 767
+Report a location and update 5 200 828
+Report a location and update 6 200 779
+Report a location and update 7 200 877
+Report a location and update 8 200 951
+Report a location and update 9 200 795
+Report a location and update 10 200 764
+Report a location and update 11 200 926
+Report a location and update 12 200 824
+Report a location and update 13 200 910
+Report a location and update 14 200 766
+Report a location and update 15 200 910
+Tick a task with a photograp 1 201 1173
+Tick a task with a photograp 2 201 1207
+Tick a task with a photograp 3 201 1156
+Tick a task with a photograp 4 201 1134
+Tick a task with a photograp 5 201 1192
+Tick a task with a photograp 6 201 1239
+Tick a task with a photograp 7 201 1239
+Tick a task with a photograp 8 201 1371
+Tick a task with a photograp 9 201 1240
+Tick a task with a photograp 10 201 1179
+Tick a task with a photograp 11 201 1155
+Tick a task with a photograp 12 201 1133
+Tick a task with a photograp 13 201 1122
+Tick a task with a photograp 14 201 1164
+Tick a task with a photograp 15 201 1114
+Analyse a 10-second audio cl 1 200 5883
+Analyse a 10-second audio cl 2 200 1144
+Analyse a 10-second audio cl 3 200 1016
+Analyse a 10-second audio cl 4 200 1094
+Analyse a 10-second audio cl 5 200 964
+Analyse a 10-second audio cl 6 200 1261
+Analyse a 10-second audio cl 7 200 1004
+Analyse a 10-second audio cl 8 200 1089
+Analyse a 10-second audio cl 9 200 960
+Analyse a 10-second audio cl 10 200 993
+Analyse a 10-second audio cl 11 200 1532
+Analyse a 10-second audio cl 12 200 1295
+Analyse a 10-second audio cl 13 200 1462
+Analyse a 10-second audio cl 14 200 1341
+Analyse a 10-second audio cl 15 200 1005
+
+| Operation | n | Median (ms) | 95th pct (ms) | Max (ms) | Warm-up median (ms) | Non-2xx |
+| Sign in (password step) | 10 | 5469 | 7418 | 7418 | 6946 | 7 |
+| Load the family overview | 10 | 946 | 1734 | 1734 | 1224 | 0 |
+| Report a location and update the shift | 10 | 850 | 951 | 951 | 828 | 0 |
+| Tick a task with a photograph | 10 | 1171 | 1370 | 1370 | 1173 | 0 |
+| Analyse a 10-second audio clip | 10 | 1175 | 1532 | 1532 | 1094 | 0 |
+C:\Users\HP\OneDrive\Desktop\MzaziCare\docs\testing\automation\results\2026-11-18_0749_perf.csv

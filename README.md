@@ -35,8 +35,7 @@ each role sees its own home screen.
 | Elderly home screen, mood check-in, SOS that closes for everyone once handled, medicine reminders | Done (added beyond the proposal) |
 | Acoustic tone model (trained, tested, served) | Done. Round 2 (laughter no longer reads as tense): 76.4 % on speech alone, every tone at least as good as round 1 |
 | Phone recording for the tone model (both phones, only during a verified visit, only with both people's consent) | Done, works in the background |
-| First-aid assistant for caretakers (fine-tuned multilingual model, advice only from a vetted guide) | Done |
-| Behavioural anomaly detection | Not started |
+| Medical triage chatbot, delivered as the caretakers' first-aid assistant (English and Kiswahili; advice only from a vetted guide) | Done. The proposal named mBERT; a fine-tuned multilingual-e5-small (also multilingual, English and Kiswahili) is used instead |
 | Deployment | API and dashboard on Microsoft Azure; Android app as a signed APK |
 
 Details, decisions and the differences from the original proposal are in [`docs/`](docs/).

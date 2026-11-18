@@ -1,0 +1,896 @@
+2026-11-17T19:50:29 emulator-5556 tap "Create account" at 540,1555
+2026-11-17T19:50:43 emulator-5556 tapxy 595,960
+2026-11-17T19:50:48 emulator-5556 type "Test Family 1"
+2026-11-17T19:50:49 emulator-5556 tapxy 595,1205
+2026-11-17T19:50:53 emulator-5556 type "testfamily1@example.com"
+2026-11-17T19:50:54 emulator-5556 tapxy 525,1450
+2026-11-17T19:50:57 emulator-5556 type "MzTest2026"
+2026-11-17T19:50:58 emulator-5556 tapxy 525,1695
+2026-11-17T19:51:00 emulator-5556 type "MzTest2026"
+2026-11-17T19:51:00 emulator-5556 key BACK
+2026-11-17T19:51:04 emulator-5556 tap "Create account" at 540,717
+2026-11-17T19:51:07 emulator-5556 tapxy 540,1875
+2026-11-17T19:51:18 emulator-5556 shot ../usability/screens/setup_family1_code.png
+2026-11-17T19:51:24 emulator-5556 tapxy 525,1450
+2026-11-17T19:51:28 emulator-5556 type "MzTest2026"
+2026-11-17T19:51:28 emulator-5556 key BACK
+2026-11-17T19:51:30 emulator-5556 tapxy 525,1695
+2026-11-17T19:51:32 emulator-5556 type "MzTest2026"
+2026-11-17T19:51:33 emulator-5556 key BACK
+2026-11-17T19:51:41 emulator-5556 tapxy 540,1965
+2026-11-17T19:52:00 emulator-5556 shot ../usability/screens/setup_family1_code.png
+2026-11-17T19:52:38 emulator-5556 tap "Have an account? Sign in" at 539,2135
+2026-11-17T19:52:42 emulator-5556 tapxy 595,960
+2026-11-17T19:52:46 emulator-5556 type "testfamily1@example.com"
+2026-11-17T19:52:48 emulator-5556 key BACK
+2026-11-17T19:52:48 emulator-5556 tapxy 525,1205
+2026-11-17T19:52:51 emulator-5556 type "MzTest2026"
+2026-11-17T19:52:52 emulator-5556 key BACK
+2026-11-17T19:52:56 emulator-5556 tap "Sign in" at 540,2135
+2026-11-17T19:54:12 emulator-5556 tapxy 595,960
+2026-11-17T19:54:17 emulator-5556 type "testfamily1@example.com"
+2026-11-17T19:54:17 emulator-5556 key BACK
+2026-11-17T19:54:19 emulator-5556 tapxy 525,1205
+2026-11-17T19:54:22 emulator-5556 type "MzTest2026"
+2026-11-17T19:54:23 emulator-5556 key BACK
+2026-11-17T19:54:24 emulator-5556 tapxy 540,1385
+2026-11-17T19:54:51 emulator-5556 shot ../usability/screens/setup_debug.png
+2026-11-17T19:54:58 emulator-5556 type "413856"
+2026-11-17T19:55:01 emulator-5556 key BACK
+2026-11-17T19:55:03 emulator-5556 tapxy 540,1290
+2026-11-17T19:55:16 emulator-5556 shot ../usability/screens/setup_family1_home.png
+2026-11-17T19:56:28 emulator-5556 shot ../usability/screens/setup_family1_home.png
+2026-11-17T19:56:37 emulator-5556 tapxy 557,2166
+2026-11-17T19:56:45 emulator-5556 tap "Dismiss" at 180,2228
+2026-11-17T19:56:47 emulator-5556 tapxy 940,2248
+2026-11-17T19:56:59 emulator-5556 tapxy 130,412
+2026-11-17T19:57:03 emulator-5556 shot ../usability/screens/setup_add_person.png
+2026-11-17T19:57:12 emulator-5556 tapxy 295,1743
+2026-11-17T19:57:12 emulator-5556 tapxy 595,2078
+2026-11-17T19:57:19 emulator-5556 type "testcaregiver1@example.com"
+2026-11-17T19:57:19 emulator-5556 key BACK
+2026-11-17T19:57:28 emulator-5556 tapxy 540,2238
+2026-11-17T19:57:45 emulator-5556 tap "Add a person" at 130,445
+2026-11-17T19:57:50 emulator-5556 tapxy 785,1743
+2026-11-17T19:57:51 emulator-5556 tapxy 595,2078
+2026-11-17T19:57:56 emulator-5556 type "testelder1@example.com"
+2026-11-17T19:57:57 emulator-5556 key BACK
+2026-11-17T19:58:00 emulator-5556 tapxy 540,2238
+2026-11-17T19:58:09 emulator-5556 tap "Add a person" at 470,1502
+2026-11-17T19:58:13 emulator-5556 tapxy 295,1743
+2026-11-17T19:58:14 emulator-5556 tapxy 595,2078
+2026-11-17T19:58:22 emulator-5556 type "testcaregiver2@example.com"
+2026-11-17T19:58:23 emulator-5556 key BACK
+2026-11-17T19:58:26 emulator-5556 tapxy 540,2238
+2026-11-17T19:58:34 emulator-5556 tap "Add a person" at 470,1502
+2026-11-17T19:58:38 emulator-5556 tapxy 295,1743
+2026-11-17T19:58:39 emulator-5556 tapxy 595,2078
+2026-11-17T19:58:45 emulator-5556 type "testcaregiver3@example.com"
+2026-11-17T19:58:46 emulator-5556 key BACK
+2026-11-17T19:58:48 emulator-5556 tapxy 540,2238
+2026-11-17T19:58:57 emulator-5556 tap "Add a person" at 470,1502
+2026-11-17T19:59:01 emulator-5556 tapxy 295,1743
+2026-11-17T19:59:02 emulator-5556 tapxy 595,2078
+2026-11-17T19:59:09 emulator-5556 type "testcaregiver4@example.com"
+2026-11-17T19:59:09 emulator-5556 key BACK
+2026-11-17T19:59:12 emulator-5556 tapxy 540,2238
+2026-11-17T19:59:21 emulator-5556 shot ../usability/screens/setup_people_invited.png
+2026-11-17T19:59:27 emulator-5556 tapxy 595,2078
+2026-11-17T19:59:45 emulator-5556 key BACK
+2026-11-17T19:59:48 emulator-5556 tapxy 785,1743
+2026-11-17T19:59:51 emulator-5556 shot ../usability/screens/setup_debug.png
+2026-11-17T19:59:57 emulator-5556 tapxy 595,2078
+2026-11-17T20:00:02 emulator-5556 type "testelder1@example.com"
+2026-11-17T20:00:03 emulator-5556 key BACK
+2026-11-17T20:00:12 emulator-5556 tap "Add elder" at 540,2238
+2026-11-17T20:00:22 emulator-5556 shot ../usability/screens/setup_debug.png
+2026-11-17T20:00:30 emulator-5556 tapxy 996,2159
+2026-11-17T20:00:33 emulator-5556 tapxy 540,2250
+2026-11-17T20:00:51 emulator-5556 tap "Add a person" at 130,445
+2026-11-17T20:00:55 emulator-5556 tapxy 295,1743
+2026-11-17T20:00:58 emulator-5556 tapxy 595,2078
+2026-11-17T20:01:05 emulator-5556 type "testcaregiver2@example.com"
+2026-11-17T20:01:07 emulator-5556 key BACK
+2026-11-17T20:01:15 emulator-5556 tap "Add caretaker" at 540,2238
+2026-11-17T20:01:24 emulator-5556 tap "Add a person" at 130,445
+2026-11-17T20:01:29 emulator-5556 tapxy 295,1743
+2026-11-17T20:01:31 emulator-5556 tapxy 595,2078
+2026-11-17T20:01:41 emulator-5556 type "testcaregiver3@example.com"
+2026-11-17T20:01:42 emulator-5556 key BACK
+2026-11-17T20:01:51 emulator-5556 tap "Add caretaker" at 540,2238
+2026-11-17T20:02:00 emulator-5556 tap "Add a person" at 130,445
+2026-11-17T20:02:05 emulator-5556 tapxy 295,1743
+2026-11-17T20:02:07 emulator-5556 tapxy 595,2078
+2026-11-17T20:02:14 emulator-5556 type "testcaregiver4@example.com"
+2026-11-17T20:02:15 emulator-5556 key BACK
+2026-11-17T20:02:24 emulator-5556 tap "Add caretaker" at 540,2238
+2026-11-17T20:02:33 emulator-5556 shot ../usability/screens/setup_people_invited.png
+2026-11-17T20:02:38 emulator-5556 tapxy 980,150
+2026-11-17T20:02:48 emulator-5556 swipe up
+2026-11-17T20:02:55 emulator-5556 tap "Sign out" at 540,2238
+2026-11-17T20:03:08 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-17T20:03:26 emulator-5556 tap "Create an account" at 540,1555
+2026-11-17T20:03:31 emulator-5556 tapxy 595,960
+2026-11-17T20:03:35 emulator-5556 type "Test Caregiver 1"
+2026-11-17T20:03:36 emulator-5556 key BACK
+2026-11-17T20:03:39 emulator-5556 tapxy 595,1205
+2026-11-17T20:03:43 emulator-5556 type "testcaregiver1@example.com"
+2026-11-17T20:03:45 emulator-5556 key BACK
+2026-11-17T20:03:47 emulator-5556 tapxy 525,1450
+2026-11-17T20:03:50 emulator-5556 type "MzTest2026"
+2026-11-17T20:03:51 emulator-5556 key BACK
+2026-11-17T20:03:54 emulator-5556 tapxy 525,1695
+2026-11-17T20:03:56 emulator-5556 type "MzTest2026"
+2026-11-17T20:03:57 emulator-5556 key BACK
+2026-11-17T20:04:02 emulator-5556 tapxy 540,1875
+2026-11-17T20:04:17 emulator-5556 shot ../usability/screens/setup_debug.png
+2026-11-17T20:04:27 emulator-5556 type "506839"
+2026-11-17T20:04:31 emulator-5556 tapxy 540,1290
+2026-11-17T20:04:46 emulator-5556 shot ../usability/screens/setup_caregiver1_first.png
+2026-11-17T20:06:45 emulator-5556 tapxy 557,2166
+2026-11-17T20:06:50 emulator-5556 tap "Dismiss" at 180,2228
+2026-11-17T20:06:51 emulator-5556 tapxy 980,150
+2026-11-17T20:06:55 emulator-5556 swipe up
+2026-11-17T20:07:00 emulator-5556 tap "Sign out" at 540,2238
+2026-11-17T20:07:05 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-17T20:07:14 emulator-5556 tap "Create an account" at 540,1555
+2026-11-17T20:07:20 emulator-5556 tapxy 595,960
+2026-11-17T20:07:24 emulator-5556 type "Test Elder 1"
+2026-11-17T20:07:25 emulator-5556 key BACK
+2026-11-17T20:07:28 emulator-5556 tapxy 595,1205
+2026-11-17T20:07:32 emulator-5556 type "testelder1@example.com"
+2026-11-17T20:07:34 emulator-5556 key BACK
+2026-11-17T20:07:36 emulator-5556 tapxy 525,1450
+2026-11-17T20:07:39 emulator-5556 type "MzTest2026"
+2026-11-17T20:07:40 emulator-5556 key BACK
+2026-11-17T20:07:43 emulator-5556 tapxy 525,1695
+2026-11-17T20:07:46 emulator-5556 type "MzTest2026"
+2026-11-17T20:07:47 emulator-5556 key BACK
+2026-11-17T20:07:53 emulator-5556 tapxy 540,1875
+2026-11-17T20:08:09 emulator-5556 type "541755"
+2026-11-17T20:08:12 emulator-5556 tapxy 540,1290
+2026-11-17T20:08:28 emulator-5556 shot ../usability/screens/setup_elder1_home.png
+2026-11-17T22:13:23 emulator-5556 tapxy 996,2166
+2026-11-17T22:13:26 emulator-5556 tap "Text size, Language" at 970,229
+2026-11-17T22:13:33 emulator-5556 swipe up
+2026-11-17T22:13:43 emulator-5556 tap "Sign out" at 540,2238
+2026-11-17T22:13:55 emulator-5556 tap "Create an account" at 540,1555
+2026-11-17T22:14:00 emulator-5556 tapxy 595,960
+2026-11-17T22:14:04 emulator-5556 type "Test Caregiver 2"
+2026-11-17T22:14:05 emulator-5556 key BACK
+2026-11-17T22:14:07 emulator-5556 tapxy 595,1205
+2026-11-17T22:14:12 emulator-5556 type "testcaregiver2@example.com"
+2026-11-17T22:14:13 emulator-5556 key BACK
+2026-11-17T22:14:16 emulator-5556 tapxy 525,1450
+2026-11-17T22:14:18 emulator-5556 type "MzTest2026"
+2026-11-17T22:14:19 emulator-5556 key BACK
+2026-11-17T22:14:22 emulator-5556 tapxy 525,1695
+2026-11-17T22:14:24 emulator-5556 type "MzTest2026"
+2026-11-17T22:14:26 emulator-5556 key BACK
+2026-11-17T22:14:31 emulator-5556 tapxy 540,1875
+2026-11-17T22:15:13 emulator-5556 tapxy 540,1105
+2026-11-17T22:15:15 emulator-5556 type "876370"
+2026-11-17T22:15:17 emulator-5556 key BACK
+2026-11-17T22:15:21 emulator-5556 tap "Continue" NOT FOUND
+2026-11-17T22:16:18 emulator-5556 tap "Your account" at 980,150
+2026-11-17T22:16:31 emulator-5556 tap "Sign out" at 540,2238
+2026-11-17T22:16:35 emulator-5556 tapxy 595,960
+2026-11-17T22:16:36 emulator-5556 type "testfamily1@example.com"
+2026-11-17T22:16:37 emulator-5556 key BACK
+2026-11-17T22:16:38 emulator-5556 tapxy 525,1205
+2026-11-17T22:16:39 emulator-5556 type "MzTest2026"
+2026-11-17T22:16:40 emulator-5556 key BACK
+2026-11-17T22:16:44 emulator-5556 tap "Sign in" NOT FOUND
+2026-11-17T22:17:16 emulator-5556 tapxy 996,2166
+2026-11-17T22:17:19 emulator-5556 tap "Your account" at 980,150
+2026-11-17T22:17:27 emulator-5556 shot ../../../../scratch_acct.png
+2026-11-17T22:17:31 emulator-5556 tapxy 575,2258
+2026-11-17T22:17:45 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-17T22:17:54 emulator-5556 tapxy 595,960
+2026-11-17T22:17:58 emulator-5556 type "testfamily1@example.com"
+2026-11-17T22:17:59 emulator-5556 tapxy 525,1205
+2026-11-17T22:18:01 emulator-5556 type "MzTest2026"
+2026-11-17T22:18:02 emulator-5556 key BACK
+2026-11-17T22:18:12 emulator-5556 tapxy 540,1385
+2026-11-17T22:18:32 emulator-5556 tapxy 540,1105
+2026-11-17T22:18:33 emulator-5556 type "241672"
+2026-11-17T22:18:35 emulator-5556 key BACK
+2026-11-17T22:18:37 emulator-5556 tapxy 540,1295
+2026-11-17T22:19:13 emulator-5556 tap "People" at 940,2248
+2026-11-17T22:19:23 emulator-5556 tapxy 996,2166
+2026-11-17T22:19:35 emulator-5556 tapxy 940,2248
+2026-11-17T22:19:40 emulator-5556 shot C:/Users/HP/AppData/Local/Temp/claude/f21cecc17c3e2bf0/9381adf6-e690-4a7b-b0b2-f843a5df9979/scratchpad/s.png
+2026-11-17T22:19:43 emulator-5556 tapxy 130,378
+2026-11-17T22:19:53 emulator-5556 tapxy 295,1743
+2026-11-17T22:19:55 emulator-5556 tapxy 595,2078
+2026-11-17T22:20:01 emulator-5556 type "testcaregiver5@example.com"
+2026-11-17T22:20:03 emulator-5556 key BACK
+2026-11-17T22:20:12 emulator-5556 tapxy 540,2238
+2026-11-17T22:20:27 emulator-5556 tapxy 980,150
+2026-11-17T22:20:33 emulator-5556 tapxy 575,2258
+2026-11-17T22:20:40 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-17T22:20:54 emulator-5556 tap "Create an account" at 540,1555
+2026-11-17T22:20:59 emulator-5556 tapxy 595,960
+2026-11-17T22:21:03 emulator-5556 type "Test Caregiver 3"
+2026-11-17T22:21:04 emulator-5556 key BACK
+2026-11-17T22:21:07 emulator-5556 tapxy 595,1205
+2026-11-17T22:21:11 emulator-5556 type "testcaregiver3@example.com"
+2026-11-17T22:21:12 emulator-5556 key BACK
+2026-11-17T22:21:15 emulator-5556 tapxy 525,1450
+2026-11-17T22:21:17 emulator-5556 type "MzTest2026"
+2026-11-17T22:21:18 emulator-5556 key BACK
+2026-11-17T22:21:21 emulator-5556 tapxy 525,1695
+2026-11-17T22:21:23 emulator-5556 type "MzTest2026"
+2026-11-17T22:21:24 emulator-5556 key BACK
+2026-11-17T22:21:30 emulator-5556 tapxy 540,1875
+2026-11-17T22:22:13 emulator-5556 tapxy 540,1105
+2026-11-17T22:22:16 emulator-5556 type "604255"
+2026-11-17T22:22:19 emulator-5556 tapxy 540,1295
+2026-11-17T22:27:56 emulator-5556 shot field_test/screens/main_cg3_arrived.png
+2026-11-17T23:16:29 emulator-5556 tap "End shift" at 540,2098
+2026-11-17T23:16:43 emulator-5556 shot field_test/screens/main_cg3_end_tap.png
+2026-11-17T23:16:54 emulator-5556 tapxy 996,2159
+2026-11-17T23:16:57 emulator-5556 tapxy 540,2075
+2026-11-17T23:17:01 emulator-5556 shot field_test/screens/main_cg3_end_dialog.png
+2026-11-17T23:17:12 emulator-5556 tap "END SHIFT" at 866,1299
+2026-11-17T23:17:19 emulator-5556 shot field_test/screens/main_cg3_ended.png
+2026-11-17T23:18:55 emulator-5556 tapxy 980,150
+2026-11-17T23:19:00 emulator-5556 tapxy 575,2258
+2026-11-17T23:19:08 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-17T23:19:24 emulator-5556 tap "Create an account" at 540,1555
+2026-11-17T23:19:29 emulator-5556 tapxy 595,960
+2026-11-17T23:19:33 emulator-5556 type "Test Caregiver 4"
+2026-11-17T23:19:35 emulator-5556 key BACK
+2026-11-17T23:19:37 emulator-5556 tapxy 595,1205
+2026-11-17T23:19:42 emulator-5556 type "testcaregiver4@example.com"
+2026-11-17T23:19:43 emulator-5556 key BACK
+2026-11-17T23:19:46 emulator-5556 tapxy 525,1450
+2026-11-17T23:19:48 emulator-5556 type "MzTest2026"
+2026-11-17T23:19:50 emulator-5556 key BACK
+2026-11-17T23:19:53 emulator-5556 tapxy 525,1695
+2026-11-17T23:19:56 emulator-5556 type "MzTest2026"
+2026-11-17T23:19:57 emulator-5556 key BACK
+2026-11-17T23:20:16 emulator-5556 tapxy 540,1875
+2026-11-17T23:20:47 emulator-5556 tapxy 540,1105
+2026-11-17T23:20:50 emulator-5556 type "380340"
+2026-11-17T23:20:54 emulator-5556 tapxy 540,1295
+2026-11-17T23:40:27 emulator-5556 tapxy 996,2159
+2026-11-17T23:40:30 emulator-5556 shot field_test/screens/e1_cg4_before_end.png
+2026-11-17T23:40:30 emulator-5556 tapxy 540,2075
+2026-11-17T23:40:41 emulator-5556 tap "END SHIFT" at 866,1299
+2026-11-17T23:40:48 emulator-5556 shot field_test/screens/e1_cg4_ended.png
+2026-11-17T23:42:18 emulator-5556 tapxy 980,150
+2026-11-17T23:42:24 emulator-5556 tapxy 575,2258
+2026-11-17T23:42:31 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-17T23:42:40 emulator-5556 tap "Create an account" at 540,1555
+2026-11-17T23:42:45 emulator-5556 tapxy 595,960
+2026-11-17T23:42:49 emulator-5556 type "Test Caregiver 5"
+2026-11-17T23:42:50 emulator-5556 key BACK
+2026-11-17T23:42:53 emulator-5556 tapxy 595,1205
+2026-11-17T23:42:58 emulator-5556 type "testcaregiver5@example.com"
+2026-11-17T23:43:00 emulator-5556 key BACK
+2026-11-17T23:43:02 emulator-5556 tapxy 525,1450
+2026-11-17T23:43:05 emulator-5556 type "MzTest2026"
+2026-11-17T23:43:06 emulator-5556 key BACK
+2026-11-17T23:43:08 emulator-5556 tapxy 525,1695
+2026-11-17T23:43:11 emulator-5556 type "MzTest2026"
+2026-11-17T23:43:12 emulator-5556 key BACK
+2026-11-17T23:43:18 emulator-5556 tapxy 540,1875
+2026-11-17T23:43:41 emulator-5556 tapxy 540,1105
+2026-11-17T23:43:44 emulator-5556 type "147107"
+2026-11-17T23:43:47 emulator-5556 tapxy 540,1295
+2026-11-18T00:02:17 emulator-5556 tapxy 996,2159
+2026-11-18T00:02:20 emulator-5556 shot field_test/screens/e2_cg5_before_end.png
+2026-11-18T00:02:22 emulator-5556 tapxy 540,2075
+2026-11-18T00:02:32 emulator-5556 tap "END SHIFT" NOT FOUND
+2026-11-18T00:02:38 emulator-5556 shot field_test/screens/e2_cg5_ended.png
+2026-11-18T00:05:23 emulator-5556 tapxy 980,150
+2026-11-18T00:05:28 emulator-5556 tapxy 575,2258
+2026-11-18T00:05:36 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-18T00:05:42 emulator-5556 tapxy 595,960
+2026-11-18T00:05:47 emulator-5556 type "testfamily1@example.com"
+2026-11-18T00:05:49 emulator-5556 tapxy 525,1205
+2026-11-18T00:05:52 emulator-5556 type "MzTest2026"
+2026-11-18T00:05:54 emulator-5556 tapxy 540,1385
+2026-11-18T00:06:16 emulator-5556 tapxy 540,1105
+2026-11-18T00:06:19 emulator-5556 type "580386"
+2026-11-18T00:06:22 emulator-5556 tapxy 540,1295
+2026-11-18T00:06:40 emulator-5556 tapxy 960,1743
+2026-11-18T00:06:49 emulator-5556 tapxy 940,2248
+2026-11-18T00:06:57 emulator-5556 tap "Give a task" NOT FOUND
+2026-11-18T00:07:08 emulator-5556 tapxy 996,2159
+2026-11-18T00:07:10 emulator-5556 tapxy 940,2248
+2026-11-18T00:07:21 emulator-5556 tapxy 540,1310
+2026-11-18T00:07:33 emulator-5556 tapxy 229,1453
+2026-11-18T00:07:35 emulator-5556 tapxy 560,1828
+2026-11-18T00:07:41 emulator-5556 type "Make lunch for Mama"
+2026-11-18T00:07:43 emulator-5556 tapxy 216,1998
+2026-11-18T00:07:45 emulator-5556 tapxy 540,2238
+2026-11-18T00:07:58 emulator-5556 key MOVE_END
+2026-11-18T00:07:59 emulator-5556 key DEL
+2026-11-18T00:07:59 emulator-5556 key DEL
+2026-11-18T00:08:07 emulator-5556 tapxy 216,1163
+2026-11-18T00:08:08 emulator-5556 tapxy 540,1423
+2026-11-18T00:08:23 emulator-5556 tapxy 540,2238
+2026-11-18T00:08:36 emulator-5556 tapxy 540,1310
+2026-11-18T00:08:41 emulator-5556 tapxy 589,1453
+2026-11-18T00:08:42 emulator-5556 tapxy 560,1828
+2026-11-18T00:08:47 emulator-5556 type "Make lunch for Mama"
+2026-11-18T00:08:52 emulator-5556 tapxy 540,1423
+2026-11-18T00:08:59 emulator-5556 tapxy 540,1310
+2026-11-18T00:09:04 emulator-5556 tapxy 229,1593
+2026-11-18T00:09:05 emulator-5556 tapxy 560,1828
+2026-11-18T00:09:09 emulator-5556 type "Make lunch for Mama"
+2026-11-18T00:09:14 emulator-5556 tapxy 540,1423
+2026-11-18T00:09:26 emulator-5556 shot C:/Users/HP/AppData/Local/Temp/claude/f21cecc17c3e2bf0/9381adf6-e690-4a7b-b0b2-f843a5df9979/scratchpad/s.png
+2026-11-18T00:09:30 emulator-5556 tapxy 540,300
+2026-11-18T00:09:36 emulator-5556 tap "Give a task" NOT FOUND
+2026-11-18T00:09:41 emulator-5556 tapxy 589,1453
+2026-11-18T00:09:42 emulator-5556 tapxy 560,1828
+2026-11-18T00:09:53 emulator-5556 shot C:/Users/HP/AppData/Local/Temp/claude/f21cecc17c3e2bf0/9381adf6-e690-4a7b-b0b2-f843a5df9979/scratchpad/s.png
+2026-11-18T00:09:57 emulator-5556 tapxy 1006,1126
+2026-11-18T00:10:07 emulator-5556 tapxy 589,1453
+2026-11-18T00:10:09 emulator-5556 tapxy 560,1828
+2026-11-18T00:10:17 emulator-5556 type "Make lunch for Mama"
+2026-11-18T00:10:26 emulator-5556 tapxy 540,1423
+2026-11-18T00:10:39 emulator-5556 tapxy 540,2238
+2026-11-18T00:10:46 emulator-5556 tapxy 1006,1126
+2026-11-18T00:10:51 emulator-5556 tapxy 229,1593
+2026-11-18T00:10:52 emulator-5556 tapxy 560,1828
+2026-11-18T00:11:00 emulator-5556 type "Make lunch for Mama"
+2026-11-18T00:11:04 emulator-5556 tapxy 540,1423
+2026-11-18T00:11:13 emulator-5556 tapxy 540,2238
+2026-11-18T00:11:25 emulator-5556 tapxy 1006,1126
+2026-11-18T00:11:33 emulator-5556 tap "For Test Caregiver 3" at 229,1453
+2026-11-18T00:11:37 emulator-5556 tapxy 560,1828
+2026-11-18T00:11:45 emulator-5556 type "Make lunch for Mama"
+2026-11-18T00:11:48 emulator-5556 tapxy 540,1423
+2026-11-18T00:11:52 emulator-5556 tapxy 540,2238
+2026-11-18T00:12:04 emulator-5556 tap "Add a reminder" at 540,910
+2026-11-18T00:12:16 emulator-5556 tapxy 595,1673
+2026-11-18T00:12:23 emulator-5556 type "Blood pressure tablet"
+2026-11-18T00:12:31 emulator-5556 tapxy 840,1083
+2026-11-18T00:12:34 emulator-5556 type "00:30"
+2026-11-18T00:12:41 emulator-5556 tapxy 540,1423
+2026-11-18T00:12:49 emulator-5556 tapxy 540,2238
+2026-11-18T00:13:12 emulator-5556 tapxy 980,150
+2026-11-18T00:13:18 emulator-5556 tapxy 575,2258
+2026-11-18T00:13:25 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-18T00:13:54 MARK SESSION C1 start (persona Mama Akinyi, account testcaregiver3)
+2026-11-18T00:13:54 MARK C1 T1 start: sign in
+2026-11-18T00:13:57 emulator-5556 shot usability/screens/C1_T1_signin.png
+2026-11-18T00:14:19 emulator-5556 shot C:/Users/HP/AppData/Local/Temp/claude/f21cecc17c3e2bf0/9381adf6-e690-4a7b-b0b2-f843a5df9979/scratchpad/s.png
+2026-11-18T00:14:24 MARK C1 hesitation: sign-in screen in English only, no language choice before sign-in
+2026-11-18T00:14:24 emulator-5556 tapxy 595,960
+2026-11-18T00:14:31 emulator-5556 type "testcaregiver3@example.com"
+2026-11-18T00:14:33 emulator-5556 tapxy 525,1205
+2026-11-18T00:14:36 emulator-5556 type "MzTest2026"
+2026-11-18T00:14:38 emulator-5556 tapxy 540,1385
+2026-11-18T00:15:40 MARK C1 INCIDENT (environment): Sign in stayed 'busy' >60 s, no request reached the backend (first launch after permissions were revoked); app force-stopped and relaunched; T1 time restarted
+2026-11-18T00:15:57 MARK C1 T1 restart: sign in
+2026-11-18T00:16:14 emulator-5556 shot C:/Users/HP/AppData/Local/Temp/claude/f21cecc17c3e2bf0/9381adf6-e690-4a7b-b0b2-f843a5df9979/scratchpad/s.png
+2026-11-18T00:16:20 emulator-5556 tapxy 595,960
+2026-11-18T00:16:26 emulator-5556 type "testcaregiver3@example.com"
+2026-11-18T00:16:27 emulator-5556 tapxy 525,1205
+2026-11-18T00:16:30 emulator-5556 type "MzTest2026"
+2026-11-18T00:16:33 emulator-5556 tapxy 540,1385
+2026-11-18T00:16:52 emulator-5556 tapxy 540,1105
+2026-11-18T00:16:55 emulator-5556 type "143021"
+2026-11-18T00:16:58 emulator-5556 tapxy 540,1295
+2026-11-18T00:17:08 emulator-5556 shot usability/screens/C1_T2_after_signin.png
+2026-11-18T00:17:16 MARK C1 T1 end: success (signed in after code)
+2026-11-18T00:17:17 MARK C1 T2 start: allow location, see shift on Today
+2026-11-18T00:17:17 MARK C1 hesitation: Android location prompt appeared straight after sign-in with no app explanation first; persona chooses the first button 'While using the app'
+2026-11-18T00:17:19 emulator-5556 tap "While using the app" at 540,1450
+2026-11-18T00:17:26 emulator-5556 shot usability/screens/C1_T2_after_allow.png
+2026-11-18T00:18:12 emulator-5556 shot usability/screens/C1_T2_today.png
+2026-11-18T00:18:20 MARK C1 T2 end: success (shift started automatically, 'On shift', 'In range 3 m'); no background-location prompt was shown
+2026-11-18T00:18:20 MARK C1 T3 start: tick task with proof photo
+2026-11-18T00:18:23 emulator-5556 tap "Tasks: 0 of 1 done" at 332,1326
+2026-11-18T00:18:34 emulator-5556 tapxy 996,2159
+2026-11-18T00:18:37 emulator-5556 tap "Make lunch for Mama. Take a photo" at 560,1195
+2026-11-18T00:18:44 emulator-5556 shot usability/screens/C1_T3_tick.png
+2026-11-18T00:18:52 emulator-5556 tap "While using the app" at 540,1192
+2026-11-18T00:19:02 emulator-5556 shot usability/screens/C1_T3_camera.png
+2026-11-18T00:19:17 emulator-5556 tapxy 540,2138
+2026-11-18T00:19:25 emulator-5556 shot usability/screens/C1_T3_after_shutter.png
+2026-11-18T00:19:36 MARK C1 hesitation: camera screen shows icons only (Retake / Done / Cancel as symbols, English labels only to screen readers); persona taps the middle tick
+2026-11-18T00:19:37 emulator-5556 tapxy 540,2138
+2026-11-18T00:19:49 emulator-5556 shot usability/screens/C1_T3_done.png
+2026-11-18T00:19:56 MARK C1 T3 end: success (task done with photo, 'All done')
+2026-11-18T00:19:56 MARK C1 T4 start: check this week's hours
+2026-11-18T00:19:56 emulator-5556 tapxy 996,2159
+2026-11-18T00:19:58 emulator-5556 tapxy 665,2248
+2026-11-18T00:20:05 emulator-5556 shot usability/screens/C1_T4_hours.png
+2026-11-18T00:20:13 MARK C1 T4 end: success (Hours tab: Week 34 min, Today 2 min)
+2026-11-18T00:20:13 MARK C1 T5 start: ask first aid about a fall
+2026-11-18T00:20:13 emulator-5556 tapxy 915,2248
+2026-11-18T00:20:20 emulator-5556 shot usability/screens/C1_T5_firstaid.png
+2026-11-18T00:20:29 emulator-5556 tap "Switch to Kiswahili" at 654,142
+2026-11-18T00:20:48 MARK C1 observation: first-aid language switch changes only that screen; tab bar stays English
+2026-11-18T00:20:48 emulator-5556 tapxy 450,2098
+2026-11-18T00:20:55 emulator-5556 type "Mama ameanguka chini jikoni"
+2026-11-18T00:21:03 emulator-5556 tapxy 970,1503
+2026-11-18T00:21:17 emulator-5556 shot usability/screens/C1_T5_answer.png
+2026-11-18T00:21:26 MARK C1 T5 end: success (Kiswahili question answered in Kiswahili with fall steps and follow-up choices)
+2026-11-18T00:21:26 MARK SESSION C1 end
+2026-11-18T00:21:53 emulator-5556 tapxy 996,2159
+2026-11-18T00:21:55 emulator-5556 tapxy 165,2248
+2026-11-18T00:21:59 emulator-5556 tapxy 980,150
+2026-11-18T00:22:04 emulator-5556 tapxy 575,2258
+2026-11-18T00:22:12 emulator-5556 tap "SIGN OUT" NOT FOUND
+2026-11-18T00:22:57 emulator-5556 tap "Only this time" at 540,1593
+2026-11-18T00:23:04 emulator-5556 tapxy 996,2159
+2026-11-18T00:23:05 emulator-5556 tapxy 980,150
+2026-11-18T00:23:17 emulator-5556 tapxy 575,2258
+2026-11-18T00:23:27 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-18T00:24:04 MARK SESSION C2 start (persona Kevin, account testcaregiver4)
+2026-11-18T00:24:04 MARK C2 T1 start: sign in
+2026-11-18T00:24:04 emulator-5556 tapxy 595,960
+2026-11-18T00:24:10 emulator-5556 type "testcaregiver4@example.com"
+2026-11-18T00:24:10 emulator-5556 tapxy 525,1205
+2026-11-18T00:24:13 emulator-5556 type "MzTest2026"
+2026-11-18T00:24:14 emulator-5556 tapxy 540,1385
+2026-11-18T00:24:32 emulator-5556 tapxy 540,1105
+2026-11-18T00:24:34 emulator-5556 type "143820"
+2026-11-18T00:24:35 emulator-5556 tapxy 540,1295
+2026-11-18T00:24:53 MARK C2 T1 end: success
+2026-11-18T00:24:53 MARK C2 T2 start: allow location, see shift on Today
+2026-11-18T00:24:53 MARK C2 choice: persona habitually picks 'Only this time' for location
+2026-11-18T00:24:56 emulator-5556 tap "Only this time" at 540,1593
+2026-11-18T00:25:37 emulator-5556 shot usability/screens/C2_T2_today.png
+2026-11-18T00:25:47 MARK C2 T2 end: success (shift started: 'On shift', 'In range 3 m')
+2026-11-18T00:25:47 MARK C2 side check: HOME pressed (phone put away) with 'Only this time' location permission
+2026-11-18T00:25:47 emulator-5556 key HOME
+2026-11-18T00:27:34 MARK C2 side check result: location posts continued 100 s after HOME (last post 10 s old) with ONE_TIME permission, because the foreground service kept running
+2026-11-18T00:27:39 MARK C2 T3 start: tick task with proof photo
+2026-11-18T00:27:39 emulator-5556 tapxy 996,2159
+2026-11-18T00:27:40 emulator-5556 tapxy 415,2248
+2026-11-18T00:27:52 emulator-5556 tapxy 560,1195
+2026-11-18T00:28:00 emulator-5556 tap "Only this time" at 540,1335
+2026-11-18T00:28:13 emulator-5556 tapxy 540,2138
+2026-11-18T00:28:23 emulator-5556 tapxy 540,2138
+2026-11-18T00:28:33 emulator-5556 shot usability/screens/C2_T3_done.png
+2026-11-18T00:28:42 MARK C2 T3 end: success (1/2 done, photo stored)
+2026-11-18T00:28:42 MARK C2 T4 start: check this week's hours
+2026-11-18T00:28:42 emulator-5556 tapxy 665,2248
+2026-11-18T00:28:50 MARK C2 T4 end: success
+2026-11-18T00:28:50 MARK C2 T5 start: ask first aid about a fall
+2026-11-18T00:28:50 emulator-5556 tapxy 915,2248
+2026-11-18T00:28:58 emulator-5556 tap "A fall" at 159,1090
+2026-11-18T00:29:10 emulator-5556 shot usability/screens/C2_T5_answer.png
+2026-11-18T00:29:20 MARK C2 T5 end: success (tapped 'A fall', numbered steps and Do-not list)
+2026-11-18T00:29:20 MARK SESSION C2 end
+2026-11-18T00:29:38 emulator-5556 tapxy 165,2248
+2026-11-18T00:29:43 emulator-5556 tapxy 980,150
+2026-11-18T00:29:48 emulator-5556 tapxy 575,2258
+2026-11-18T00:29:56 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-18T00:30:31 MARK SESSION C3 start (persona Naliaka, account testcaregiver5)
+2026-11-18T00:30:32 MARK C3 T1 start: sign in
+2026-11-18T00:30:32 emulator-5556 tapxy 595,960
+2026-11-18T00:30:38 emulator-5556 type "testcaregiver5@example.com"
+2026-11-18T00:30:41 emulator-5556 tapxy 525,1205
+2026-11-18T00:30:44 emulator-5556 type "mztest2026"
+2026-11-18T00:30:46 emulator-5556 tapxy 540,1385
+2026-11-18T00:30:53 emulator-5556 shot usability/screens/C3_T1_wrong_password.png
+2026-11-18T00:31:01 MARK C3 error 1: typed password in lower case; message 'Incorrect email or password.' shown under the field
+2026-11-18T00:31:01 emulator-5556 tapxy 525,1205
+2026-11-18T00:31:02 emulator-5556 key MOVE_END
+2026-11-18T00:31:03 emulator-5556 key DEL
+2026-11-18T00:31:03 emulator-5556 key DEL
+2026-11-18T00:31:03 emulator-5556 key DEL
+2026-11-18T00:31:04 emulator-5556 key DEL
+2026-11-18T00:31:04 emulator-5556 key DEL
+2026-11-18T00:31:04 emulator-5556 key DEL
+2026-11-18T00:31:05 emulator-5556 key DEL
+2026-11-18T00:31:05 emulator-5556 key DEL
+2026-11-18T00:31:06 emulator-5556 key DEL
+2026-11-18T00:31:06 emulator-5556 key DEL
+2026-11-18T00:31:06 emulator-5556 key DEL
+2026-11-18T00:31:07 emulator-5556 key DEL
+2026-11-18T00:31:08 emulator-5556 type "MzTest2026"
+2026-11-18T00:31:13 emulator-5556 tapxy 540,1475
+2026-11-18T00:31:27 emulator-5556 tapxy 540,1105
+2026-11-18T00:31:30 emulator-5556 type "492962"
+2026-11-18T00:31:33 emulator-5556 tapxy 540,1295
+2026-11-18T00:31:48 MARK C3 T1 end: success with 1 error (wrong password case)
+2026-11-18T00:31:49 MARK C3 T2 start: allow location, see shift on Today
+2026-11-18T00:31:49 MARK C3 error 2: unsure about the location prompt, taps 'Don't allow'
+2026-11-18T00:31:51 emulator-5556 tap "Don" at 540,1736
+2026-11-18T00:32:00 emulator-5556 shot usability/screens/C3_T2_denied.png
+2026-11-18T00:32:07 emulator-5556 tapxy 402,1250
+2026-11-18T00:32:22 MARK C3 wrong path 1: tapped the 'Location off - turn on in Settings' line; it is text, nothing happens
+2026-11-18T00:32:23 emulator-5556 key HOME
+2026-11-18T00:32:42 MARK C3 wrong path 2: left the app and reopened it; no new location prompt
+2026-11-18T00:32:42 emulator-5556 swipe down
+2026-11-18T00:32:51 MARK C3 wrong path 3: pulled down to refresh; still 'Location off'. Limit of 3 wrong paths reached -> moderator hint: 'Open the phone Settings, Apps, MzaziCare, Permissions, Location'
+2026-11-18T00:32:56 emulator-5556 key HOME
+2026-11-18T00:33:07 emulator-5556 tap "Apps" at 237,1132
+2026-11-18T00:33:23 emulator-5556 tap "MzaziCare" at 298,708
+2026-11-18T00:33:30 emulator-5556 tap "Permissions" at 199,1339
+2026-11-18T00:33:37 emulator-5556 tap "Location" at 277,1752
+2026-11-18T00:33:50 emulator-5556 tap "Allow only while using the app" at 550,1033
+2026-11-18T00:33:53 emulator-5556 shot usability/screens/C3_T2_settings.png
+2026-11-18T00:34:38 emulator-5556 shot usability/screens/C3_T2_today.png
+2026-11-18T00:35:15 MARK C3 finding: after 'Allow only while using the app' in Settings and returning, the app still shows 'Location off' and posts nothing for 65 s
+2026-11-18T00:35:16 emulator-5556 swipe down
+2026-11-18T00:35:56 MARK C3 pull-to-refresh did not help; second moderator hint: 'close the app fully (recent apps, swipe it away) and open it again'
+2026-11-18T00:35:56 emulator-5556 key APP_SWITCH
+2026-11-18T00:36:04 emulator-5556 key HOME
+2026-11-18T00:36:52 emulator-5556 shot usability/screens/C3_T2_after_restart.png
+2026-11-18T00:37:07 MARK C3 T2 end: FAILED (over 5 min; even after allowing in Settings, pull-to-refresh and swiping the app away, the app kept 'Location off' and posted no location)
+2026-11-18T00:37:19 MARK C3 diagnosis (read-only): useLocationSharing.ts requests permission once when the screen mounts (deps token, lang) and never re-checks on return to the app; swiping from recents did not end the process (same pid). Moderator restarts the app (force-stop, as a phone restart would) to continue
+2026-11-18T00:38:18 MARK C3 after restart: sharing at once, shift started ('On shift', 'In range 3 m')
+2026-11-18T00:38:19 MARK C3 T3 start: tick task with proof photo
+2026-11-18T00:38:19 emulator-5556 tapxy 996,2159
+2026-11-18T00:38:22 emulator-5556 tap "Tasks: 0 of 1 done" at 332,1326
+2026-11-18T00:38:30 emulator-5556 tap "Take a photo and mark as done" at 560,1195
+2026-11-18T00:38:40 emulator-5556 tap "While using the app" at 540,1192
+2026-11-18T00:38:59 emulator-5556 tapxy 540,2138
+2026-11-18T00:39:10 emulator-5556 tapxy 980,2138
+2026-11-18T00:39:17 emulator-5556 shot usability/screens/C3_T3_after_cancel.png
+2026-11-18T00:39:25 MARK C3 error 3: after the photo tapped the cross (Cancel) thinking it meant 'finish'; back on Tasks, still 0/1, no message
+2026-11-18T00:39:25 emulator-5556 tapxy 560,1195
+2026-11-18T00:39:34 emulator-5556 tapxy 540,2138
+2026-11-18T00:39:40 emulator-5556 tapxy 540,2138
+2026-11-18T00:40:00 MARK C3 T3 end: success with 1 error (Cancel instead of Done)
+2026-11-18T00:40:00 MARK C3 T4 start: check this week's hours
+2026-11-18T00:40:00 emulator-5556 tapxy 165,2248
+2026-11-18T00:40:08 emulator-5556 tap "This week" at 843,1403
+2026-11-18T00:40:16 MARK C3 T4 end: success (tapped the 'This week' card on Today, opened Hours)
+2026-11-18T00:40:16 MARK C3 T5 start: ask first aid about a fall
+2026-11-18T00:40:16 emulator-5556 tapxy 165,2248
+2026-11-18T00:40:21 emulator-5556 tapxy 540,360
+2026-11-18T00:40:26 emulator-5556 type "mzee ameanguka"
+2026-11-18T00:40:28 emulator-5556 key ENTER
+2026-11-18T00:40:41 emulator-5556 shot usability/screens/C3_T5_answer.png
+2026-11-18T00:40:55 MARK C3 hesitation: typed in 'What's happening?' on Today and pressed Enter; it opened First aid with her words in the box but Enter added a new line instead of sending
+2026-11-18T00:40:55 emulator-5556 tapxy 970,1503
+2026-11-18T00:41:08 emulator-5556 shot usability/screens/C3_T5_answer.png
+2026-11-18T00:41:17 MARK C3 T5 end: success (answer in Kiswahili; screen switched to Kiswahili by itself)
+2026-11-18T00:41:17 MARK SESSION C3 end
+2026-11-18T00:42:08 emulator-5556 tapxy 165,2248
+2026-11-18T00:42:12 emulator-5556 tapxy 980,150
+2026-11-18T00:42:18 emulator-5556 tapxy 575,2258
+2026-11-18T00:42:26 emulator-5556 tap "SIGN OUT" NOT FOUND
+2026-11-18T00:43:13 emulator-5556 tap "Only this time" at 540,1593
+2026-11-18T00:43:19 emulator-5556 tapxy 996,2159
+2026-11-18T00:43:23 emulator-5556 tap "Your account" at 980,150
+2026-11-18T00:43:31 emulator-5556 tap "Sign out" at 540,2238
+2026-11-18T00:43:38 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-18T00:44:16 emulator-5556 tapxy 595,960
+2026-11-18T00:44:21 emulator-5556 type "testelder1@example.com"
+2026-11-18T00:44:21 emulator-5556 tapxy 525,1205
+2026-11-18T00:44:24 emulator-5556 type "MzTest2026"
+2026-11-18T00:44:25 emulator-5556 tapxy 540,1385
+2026-11-18T00:44:42 emulator-5556 tapxy 540,1105
+2026-11-18T00:44:43 emulator-5556 type "381032"
+2026-11-18T00:44:45 emulator-5556 tapxy 540,1295
+2026-11-18T00:45:02 emulator-5556 tap "While using the app" at 540,1450
+2026-11-18T00:45:19 MARK SESSION E1 start (persona Mzee Kamau, account testelder1; signed in by the moderator as the family would)
+2026-11-18T00:45:20 MARK E1 T1 start: switch to Kiswahili and larger text
+2026-11-18T00:45:20 emulator-5556 tapxy 996,2166
+2026-11-18T00:45:21 emulator-5556 shot usability/screens/E1_home.png
+2026-11-18T00:45:27 MARK E1 hesitation: looks for Kiswahili; only an 'AA' circle at the top right, nothing says 'Language'; tries it
+2026-11-18T00:45:28 emulator-5556 tapxy 970,229
+2026-11-18T00:45:34 emulator-5556 shot usability/screens/E1_T1_settings.png
+2026-11-18T00:45:40 emulator-5556 tapxy 866,1358
+2026-11-18T00:45:42 emulator-5556 tapxy 785,1663
+2026-11-18T00:45:46 emulator-5556 shot usability/screens/E1_T1_after.png
+2026-11-18T00:45:53 emulator-5556 tapxy 960,1178
+2026-11-18T00:45:58 emulator-5556 shot usability/screens/E1_T1_home_sw_large.png
+2026-11-18T00:46:08 MARK E1 T1 end: success ('AA' sheet has Text size and Language; chose largest text and Kiswahili; home switched at once)
+2026-11-18T00:46:08 MARK E1 observation: at the largest text size the red 'Nahitaji msaada' button is half behind the Android navigation bar
+2026-11-18T00:46:08 MARK E1 T2 start: is the caregiver here?
+2026-11-18T00:46:08 MARK E1 T2 end: success ('Test yuko nawe' at the top; test accounts all have first name 'Test')
+2026-11-18T00:46:08 MARK E1 T3 start: record how he feels
+2026-11-18T00:46:09 emulator-5556 tapxy 851,1140
+2026-11-18T00:46:14 emulator-5556 shot usability/screens/E1_T3_mood.png
+2026-11-18T00:46:21 MARK E1 T3 end: success ('Si vizuri', confirmation 'Familia imeambiwa')
+2026-11-18T00:46:21 MARK E1 T4 start: mark the medicine taken
+2026-11-18T00:46:24 emulator-5556 tap "Nimekunywa" at 575,1734
+2026-11-18T00:46:30 emulator-5556 shot usability/screens/E1_T4_medicine.png
+2026-11-18T00:46:37 MARK E1 T4 end: success ('Imekunywa')
+2026-11-18T00:46:37 MARK E1 T5 start: message the family
+2026-11-18T00:46:38 emulator-5556 swipe up
+2026-11-18T00:46:41 emulator-5556 shot usability/screens/E1_T5_scrolled.png
+2026-11-18T00:46:46 emulator-5556 tapxy 140,1288
+2026-11-18T00:46:59 MARK E1 observation: chat screen stays English ('Say hi to Test', 'Message') with Kiswahili selected
+2026-11-18T00:46:59 emulator-5556 tapxy 460,2258
+2026-11-18T00:47:05 emulator-5556 type "Sijisikii vizuri leo"
+2026-11-18T00:47:13 emulator-5556 tapxy 970,1463
+2026-11-18T00:47:18 emulator-5556 shot usability/screens/E1_T5_sent.png
+2026-11-18T00:47:27 MARK E1 T5 end: success (scrolled to the circle row, 'Mwandikie Test Family 1, Familia', message sent)
+2026-11-18T00:47:27 emulator-5556 tapxy 100,140
+2026-11-18T00:47:32 MARK E1 T6 start: find 'I need help', open it and cancel
+2026-11-18T00:47:34 emulator-5556 tap "Nahitaji msaada" at 540,2238
+2026-11-18T00:47:37 emulator-5556 shot usability/screens/E1_T6_help.png
+2026-11-18T00:47:46 emulator-5556 tap "HAPANA" at 607,1299
+2026-11-18T00:47:51 MARK E1 T6 end: success (confirmation 'Omba msaada? ... HAPANA / NDIYO, TUMA'; chose HAPANA; nothing sent)
+2026-11-18T00:47:51 MARK SESSION E1 end
+2026-11-18T00:48:19 emulator-5556 tapxy 970,229
+2026-11-18T00:48:26 emulator-5556 tapxy 213,1358
+2026-11-18T00:48:28 emulator-5556 tapxy 295,1663
+2026-11-18T00:48:33 emulator-5556 tapxy 960,1178
+2026-11-18T00:48:37 emulator-5556 swipe down
+2026-11-18T00:48:49 MARK SESSION E2 start (persona Cucu Wairimu, account testelder1; app set back to English and normal text by the moderator)
+2026-11-18T00:48:49 MARK E2 T1 start: switch to Kiswahili
+2026-11-18T00:48:50 emulator-5556 shot usability/screens/E2_home.png
+2026-11-18T00:49:10 MARK E2 hesitation: reads the first screen, finds no word 'Kiswahili' or 'Lugha'; does not open the unlabelled 'AA' circle on her own (persona does not open menus untold). Moderator hint: 'gusa duara lenye AA juu kulia' (tap the AA circle at the top right)
+2026-11-18T00:49:10 emulator-5556 tapxy 970,229
+2026-11-18T00:49:14 emulator-5556 tapxy 785,1663
+2026-11-18T00:49:17 emulator-5556 tapxy 960,1178
+2026-11-18T00:49:23 MARK E2 T1 end: success with help (1 hint)
+2026-11-18T00:49:37 MARK E2 CORRECTION: the previous 'T1 end' mark is void; after the hint the agent's taps landed on a scrolled screen and opened a chat with Test Caregiver 3 (agent operation error, not persona). Back to home, T1 continues
+2026-11-18T00:49:37 emulator-5556 tapxy 100,140
+2026-11-18T00:49:42 emulator-5556 swipe down
+2026-11-18T00:49:53 emulator-5556 tap "Text size, Language" at 970,150
+2026-11-18T00:50:02 emulator-5556 tap "Kiswahili" at 785,1663
+2026-11-18T00:50:10 emulator-5556 tap "Close" at 540,1144
+2026-11-18T00:50:29 emulator-5556 tapxy 960,1178
+2026-11-18T00:50:36 MARK E2 T1 end: success with help (1 hint: tap the AA circle; then chose Kiswahili and closed the sheet with its X)
+2026-11-18T00:50:42 MARK E2 T2 start: is the caregiver here?
+2026-11-18T00:50:42 MARK E2 T2 end: success (read 'Test ametoka kidogo' = stepped out)
+2026-11-18T00:50:43 MARK E2 T3 start: record how she feels
+2026-11-18T00:50:51 MARK E2 hesitation: mood already recorded by E1 on the same account ('Si vizuri'); she reads 'Badilisha' (change)
+2026-11-18T00:50:53 emulator-5556 tap "Badilisha" at 928,890
+2026-11-18T00:51:02 emulator-5556 tap "Sawa" at 540,960
+2026-11-18T00:51:14 MARK E2 T3 end: success ('Badilisha' then 'Sawa')
+2026-11-18T00:51:14 MARK E2 T4 not run: the only medicine (00:30) already shows 'Imekunywa' from session E1 on the same account
+2026-11-18T00:51:14 MARK E2 T5 start: message the family
+2026-11-18T00:51:15 emulator-5556 shot usability/screens/E2_T5_first_screen.png
+2026-11-18T00:51:25 emulator-5556 tap "Mwandikie Test" at 540,1490
+2026-11-18T00:51:38 emulator-5556 tapxy 460,2258
+2026-11-18T00:51:42 emulator-5556 type "Niko sawa"
+2026-11-18T00:51:47 emulator-5556 tapxy 970,1463
+2026-11-18T00:51:53 MARK E2 T5 end: success (the large 'Mwandikie Test' button opened the chat with Test Family 1 while the caregiver had stepped out; typed 'Niko sawa', sent)
+2026-11-18T00:51:58 emulator-5556 tapxy 100,140
+2026-11-18T00:52:02 MARK E2 T6 start: find 'I need help', open it and cancel
+2026-11-18T00:52:05 emulator-5556 tap "Nahitaji msaada" at 540,2238
+2026-11-18T00:52:13 emulator-5556 tap "HAPANA" at 607,1299
+2026-11-18T00:52:19 MARK E2 T6 end: success (read the question, chose HAPANA; nothing sent)
+2026-11-18T00:52:19 MARK SESSION E2 end
+2026-11-18T00:52:49 emulator-5556 tapxy 970,229
+2026-11-18T00:52:55 emulator-5556 tap "Ondoka" NOT FOUND
+2026-11-18T00:53:00 emulator-5556 tap "Sign out" NOT FOUND
+2026-11-18T00:53:17 emulator-5556 tap "Toka" at 540,2238
+2026-11-18T00:53:32 MARK OBSERVATION (setup): elderly person's 'Toka' (sign out) signs out with one tap, no confirmation (caregiver and family sign-out ask first)
+2026-11-18T00:53:48 MARK SESSION F1 start (persona Brian, account testfamily1)
+2026-11-18T00:53:48 MARK F1 T1 start: sign in with the emailed code
+2026-11-18T00:53:48 emulator-5556 tapxy 595,960
+2026-11-18T00:54:00 emulator-5556 type "testfamily1@example.com"
+2026-11-18T00:54:01 emulator-5556 tapxy 525,1205
+2026-11-18T00:54:04 emulator-5556 type "MzTest2026"
+2026-11-18T00:54:05 emulator-5556 tapxy 540,1385
+2026-11-18T00:54:17 emulator-5556 tapxy 540,1105
+2026-11-18T00:54:19 emulator-5556 type "580386"
+2026-11-18T00:54:21 emulator-5556 tapxy 540,1295
+2026-11-18T00:54:49 MARK F1 agent operation error: input raced the screen and the code went into the email field; cleared and repeated (not counted as persona error); T1 time restarts
+2026-11-18T00:54:49 MARK F1 T1 restart
+2026-11-18T00:54:50 emulator-5556 tapxy 595,960
+2026-11-18T00:54:51 emulator-5556 key MOVE_END
+2026-11-18T00:54:52 emulator-5556 key DEL
+2026-11-18T00:54:52 emulator-5556 key DEL
+2026-11-18T00:54:52 emulator-5556 key DEL
+2026-11-18T00:54:53 emulator-5556 key DEL
+2026-11-18T00:54:53 emulator-5556 key DEL
+2026-11-18T00:54:53 emulator-5556 key DEL
+2026-11-18T00:54:54 emulator-5556 key DEL
+2026-11-18T00:54:54 emulator-5556 key DEL
+2026-11-18T00:54:55 emulator-5556 key DEL
+2026-11-18T00:54:55 emulator-5556 key DEL
+2026-11-18T00:54:56 emulator-5556 key DEL
+2026-11-18T00:54:56 emulator-5556 key DEL
+2026-11-18T00:54:57 emulator-5556 key DEL
+2026-11-18T00:54:57 emulator-5556 key DEL
+2026-11-18T00:54:58 emulator-5556 key DEL
+2026-11-18T00:54:58 emulator-5556 key DEL
+2026-11-18T00:54:59 emulator-5556 key DEL
+2026-11-18T00:54:59 emulator-5556 key DEL
+2026-11-18T00:55:00 emulator-5556 key DEL
+2026-11-18T00:55:00 emulator-5556 key DEL
+2026-11-18T00:55:00 emulator-5556 key DEL
+2026-11-18T00:55:00 emulator-5556 key DEL
+2026-11-18T00:55:01 emulator-5556 key DEL
+2026-11-18T00:55:01 emulator-5556 key DEL
+2026-11-18T00:55:01 emulator-5556 key DEL
+2026-11-18T00:55:01 emulator-5556 key DEL
+2026-11-18T00:55:02 emulator-5556 key DEL
+2026-11-18T00:55:02 emulator-5556 key DEL
+2026-11-18T00:55:02 emulator-5556 key DEL
+2026-11-18T00:55:02 emulator-5556 key DEL
+2026-11-18T00:55:05 emulator-5556 type "testfamily1@example.com"
+2026-11-18T00:55:09 emulator-5556 tapxy 540,1475
+2026-11-18T00:55:46 emulator-5556 tapxy 540,1105
+2026-11-18T00:55:49 emulator-5556 type "484957"
+2026-11-18T00:55:52 emulator-5556 tapxy 540,1295
+2026-11-18T00:56:11 MARK F1 T1 end: success (alert card 'Not feeling well' shown at the top of Home)
+2026-11-18T00:56:11 MARK F1 T2 start: add a caregiver and an elderly person by email
+2026-11-18T00:56:11 emulator-5556 tapxy 996,2159
+2026-11-18T00:56:12 emulator-5556 tapxy 940,2248
+2026-11-18T00:56:20 emulator-5556 tap "Add a person" at 130,445
+2026-11-18T00:56:29 emulator-5556 tapxy 295,1743
+2026-11-18T00:56:30 emulator-5556 tapxy 595,2078
+2026-11-18T00:56:36 emulator-5556 type "f1.caregiver@example.com"
+2026-11-18T00:56:43 emulator-5556 tapxy 540,1423
+2026-11-18T00:56:55 MARK F1 hesitation: first tap on 'Add caretaker' with the keyboard open only closed the keyboard; the button moved down; second tap needed (same seen in the task and reminder forms)
+2026-11-18T00:56:56 emulator-5556 tapxy 540,2238
+2026-11-18T00:57:03 emulator-5556 tap "Add a person" at 130,445
+2026-11-18T00:57:08 emulator-5556 tapxy 785,1743
+2026-11-18T00:57:09 emulator-5556 tapxy 595,2078
+2026-11-18T00:57:14 emulator-5556 type "f1.elder@example.com"
+2026-11-18T00:57:16 emulator-5556 tapxy 540,1423
+2026-11-18T00:57:25 emulator-5556 tapxy 540,2238
+2026-11-18T00:57:38 MARK F1 T2 end: success (both invited, 1 hesitation: keyboard/button jump)
+2026-11-18T00:57:38 MARK F1 T3 start: give the caregiver a task
+2026-11-18T00:57:39 emulator-5556 swipe up
+2026-11-18T00:57:52 emulator-5556 tapxy 989,1090
+2026-11-18T00:58:00 emulator-5556 tap "For Test Caregiver 3" at 229,1453
+2026-11-18T00:58:01 emulator-5556 tapxy 560,1828
+2026-11-18T00:58:07 emulator-5556 type "Buy milk and bread"
+2026-11-18T00:58:09 emulator-5556 tapxy 540,1423
+2026-11-18T00:58:19 emulator-5556 tapxy 540,2238
+2026-11-18T00:58:24 MARK F1 T3 end: success ('Tasks you set' Add, chose Test Caregiver 3, 'Buy milk and bread'; same keyboard/button jump)
+2026-11-18T00:58:24 MARK F1 T4 start: open today's shift and read its timeline
+2026-11-18T00:58:24 emulator-5556 tapxy 996,2159
+2026-11-18T00:58:25 emulator-5556 tapxy 140,2248
+2026-11-18T00:58:33 emulator-5556 tap "Timeline" at 540,1445
+2026-11-18T00:58:39 emulator-5556 shot usability/screens/F1_T4_timeline.png
+2026-11-18T00:58:48 MARK F1 T4 end: success (Home card 'Timeline' -> Arrived 12:37, Break 12:45 still out, Active 7 min, Start Auto, Tasks 1/1; header shows 'Test · Test' because all test first names are 'Test')
+2026-11-18T00:58:48 MARK F1 T5 start: confirm or dismiss an alert
+2026-11-18T00:58:48 emulator-5556 tapxy 100,140
+2026-11-18T00:58:53 emulator-5556 swipe down
+2026-11-18T00:58:57 emulator-5556 tap "Noted" at 305,700
+2026-11-18T00:59:03 emulator-5556 shot usability/screens/F1_T5_after_noted.png
+2026-11-18T00:59:11 MARK F1 T5 end: success ('Noted' on the alert card; alert status confirmed; card removed)
+2026-11-18T00:59:11 MARK F1 T6 start: send a chat message
+2026-11-18T00:59:11 emulator-5556 tapxy 996,2159
+2026-11-18T00:59:12 emulator-5556 tapxy 740,2248
+2026-11-18T00:59:23 emulator-5556 swipe up
+2026-11-18T00:59:33 MARK F1 hesitation: the elderly person's chat with 2 unread messages is listed below all caregivers; had to scroll to find it
+2026-11-18T00:59:35 emulator-5556 tap "Chat with Test Elder 1" at 540,1454
+2026-11-18T00:59:43 emulator-5556 tapxy 460,2258
+2026-11-18T00:59:50 emulator-5556 type "Pole Mama, I will call you at lunch"
+2026-11-18T00:59:52 emulator-5556 tapxy 970,1463
+2026-11-18T01:00:02 MARK F1 T6 end: success (read both messages from the elderly person, replied)
+2026-11-18T01:00:02 MARK SESSION F1 end
+2026-11-18T01:00:25 emulator-5556 tapxy 100,140
+2026-11-18T01:00:31 emulator-5556 tap "Your account" at 980,150
+2026-11-18T01:00:39 emulator-5556 tap "Sign out" at 540,2238
+2026-11-18T01:00:46 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-18T01:01:19 MARK SESSION F2 start (persona Wanjiru, account testfamily1)
+2026-11-18T01:01:19 MARK F2 T1 start: sign in with the emailed code
+2026-11-18T01:01:19 emulator-5556 tapxy 595,960
+2026-11-18T01:01:24 emulator-5556 type "testfamily1@example.com"
+2026-11-18T01:01:27 emulator-5556 tapxy 525,1205
+2026-11-18T01:01:30 emulator-5556 type "MzTest2026"
+2026-11-18T01:01:32 emulator-5556 tapxy 540,1385
+2026-11-18T01:02:17 emulator-5556 tapxy 540,1105
+2026-11-18T01:02:19 emulator-5556 type "309573"
+2026-11-18T01:02:22 emulator-5556 tapxy 540,1295
+2026-11-18T01:02:35 MARK F2 T1 end: success
+2026-11-18T01:02:35 MARK F2 T2 start: add a caregiver and an elderly person by email
+2026-11-18T01:02:35 emulator-5556 tapxy 996,2159
+2026-11-18T01:02:37 emulator-5556 tapxy 940,2248
+2026-11-18T01:02:44 emulator-5556 tap "Add a person" at 130,445
+2026-11-18T01:02:49 emulator-5556 tapxy 595,2078
+2026-11-18T01:02:54 emulator-5556 type "f2.caregiver@example.com"
+2026-11-18T01:02:56 emulator-5556 tapxy 540,1423
+2026-11-18T01:02:58 emulator-5556 tapxy 540,2238
+2026-11-18T01:03:11 emulator-5556 tap "Add a person" at 130,445
+2026-11-18T01:03:18 emulator-5556 tapxy 595,2078
+2026-11-18T01:03:22 emulator-5556 type "f2.elder@example.com"
+2026-11-18T01:03:25 emulator-5556 tapxy 540,1423
+2026-11-18T01:03:27 emulator-5556 tapxy 540,2238
+2026-11-18T01:03:47 emulator-5556 shot usability/screens/F2_T2_people_row.png
+2026-11-18T01:03:55 emulator-5556 tapxy 470,445
+2026-11-18T01:03:59 emulator-5556 shot usability/screens/F2_T2_invite_tap.png
+2026-11-18T01:04:09 MARK F2 error: added the elderly person without changing the role (default 'Caretaker'); invite stored as caretaker
+2026-11-18T01:04:09 MARK F2 T2 end: FAILED (wrong role; the People row shows only 'Invited' for pending people, the role is not visible, and tapping a pending invite does nothing, so the error is neither visible nor correctable)
+2026-11-18T01:04:09 MARK F2 T3 start: give the caregiver a task
+2026-11-18T01:04:09 emulator-5556 tapxy 1006,1086
+2026-11-18T01:04:22 emulator-5556 tapxy 589,1453
+2026-11-18T01:04:23 emulator-5556 tapxy 560,1828
+2026-11-18T01:04:28 emulator-5556 type "Wash the bedsheets"
+2026-11-18T01:04:31 emulator-5556 tapxy 540,1423
+2026-11-18T01:04:33 emulator-5556 tapxy 540,2238
+2026-11-18T01:04:38 MARK F2 T3 end: success (Test Caregiver 4, 'Wash the bedsheets')
+2026-11-18T01:04:38 MARK F2 T4 start: open today's shift and read its timeline
+2026-11-18T01:04:38 emulator-5556 tapxy 996,2159
+2026-11-18T01:04:40 emulator-5556 tapxy 140,2248
+2026-11-18T01:04:48 emulator-5556 tap "Timeline" at 540,895
+2026-11-18T01:05:01 MARK F2 T4 end: success (Timeline: Active 7 min, Breaks 1)
+2026-11-18T01:05:01 MARK F2 T5 not run: no open alert (the only alert was confirmed in F1; a new 'not well' alert is limited to one per 3 hours)
+2026-11-18T01:05:01 MARK F2 T6 start: send a chat message
+2026-11-18T01:05:01 emulator-5556 tapxy 100,140
+2026-11-18T01:05:04 emulator-5556 tapxy 996,2159
+2026-11-18T01:05:06 emulator-5556 tapxy 740,2248
+2026-11-18T01:05:13 emulator-5556 tap "Chat with Test Caregiver 4" at 540,987
+2026-11-18T01:05:19 emulator-5556 tapxy 460,2258
+2026-11-18T01:05:25 emulator-5556 type "Please wash the bedsheets today"
+2026-11-18T01:05:28 emulator-5556 tapxy 970,1463
+2026-11-18T01:05:37 MARK F2 T6 end: success
+2026-11-18T01:05:37 MARK SESSION F2 end
+2026-11-18T01:05:55 emulator-5556 tapxy 100,140
+2026-11-18T01:06:01 emulator-5556 tap "Your account" at 980,150
+2026-11-18T01:06:09 emulator-5556 tap "Sign out" at 0,0
+2026-11-18T01:06:16 emulator-5556 tap "SIGN OUT" at 0,0
+2026-11-18T01:06:44 MARK SESSION F3 start (persona Otieno, account testfamily1)
+2026-11-18T01:06:44 MARK F3 T1 start: sign in with the emailed code
+2026-11-18T01:06:44 emulator-5556 tapxy 595,960
+2026-11-18T01:06:47 emulator-5556 type "testfamily1@example.com"
+2026-11-18T01:06:49 emulator-5556 tapxy 525,1205
+2026-11-18T01:06:52 emulator-5556 type "MzTest2026"
+2026-11-18T01:06:55 emulator-5556 tapxy 540,1385
+2026-11-18T01:07:21 MARK F3 CORRECTION: the session start above is void (agent's sign-out of the previous session had not happened; the app was still signed in)
+2026-11-18T01:07:21 emulator-5556 tapxy 980,150
+2026-11-18T01:07:29 emulator-5556 tapxy 575,2258
+2026-11-18T01:07:52 emulator-5556 tapxy 575,2258
+2026-11-18T01:07:59 emulator-5556 tap "SIGN OUT" at 540,2238
+2026-11-18T01:08:41 emulator-5556 tapxy 980,150
+2026-11-18T01:08:55 emulator-5556 tapxy 540,2238
+2026-11-18T01:09:07 emulator-5556 shot C:/Users/HP/AppData/Local/Temp/claude/f21cecc17c3e2bf0/9381adf6-e690-4a7b-b0b2-f843a5df9979/scratchpad/s.png
+2026-11-18T01:09:13 emulator-5556 tapxy 996,2159
+2026-11-18T01:09:15 emulator-5556 tapxy 540,2250
+2026-11-18T01:09:26 emulator-5556 tap "SIGN OUT" at 874,1299
+2026-11-18T01:09:42 MARK F2 correction (after the session): the account sheet's Care circle list does show 'f2.elder@example.com, Caretaker, Invited'; F2.md updated
+2026-11-18T01:09:42 MARK SESSION F3 start (persona Otieno, account testfamily1)
+2026-11-18T01:09:43 MARK F3 T1 start: sign in with the emailed code
+2026-11-18T01:09:43 emulator-5556 tapxy 595,960
+2026-11-18T01:09:48 emulator-5556 type "testfamily1@example.com"
+2026-11-18T01:09:51 emulator-5556 tapxy 525,1205
+2026-11-18T01:09:54 emulator-5556 type "MzTest2026"
+2026-11-18T01:09:57 emulator-5556 tapxy 540,1385
+2026-11-18T01:10:36 emulator-5556 tapxy 540,1105
+2026-11-18T01:10:39 emulator-5556 type "930552"
+2026-11-18T01:10:41 emulator-5556 tapxy 540,1295
+2026-11-18T01:10:54 MARK F3 T1 end: success
+2026-11-18T01:10:54 MARK F3 T2 start: add a caregiver and an elderly person by email
+2026-11-18T01:10:54 emulator-5556 tapxy 996,2159
+2026-11-18T01:10:56 emulator-5556 tapxy 940,2248
+2026-11-18T01:11:10 MARK F3 hesitation: looks for a labelled 'Add caregiver' button; finds the plus circle 'Add' at the start of the row of people
+2026-11-18T01:11:13 emulator-5556 tap "Add a person" at 130,445
+2026-11-18T01:11:17 emulator-5556 tapxy 295,1743
+2026-11-18T01:11:19 emulator-5556 tapxy 595,2078
+2026-11-18T01:11:24 emulator-5556 type "f3.caregiver@example.com"
+2026-11-18T01:11:26 emulator-5556 tapxy 540,1423
+2026-11-18T01:11:29 emulator-5556 tapxy 540,2238
+2026-11-18T01:11:37 emulator-5556 tap "Add a person" at 130,445
+2026-11-18T01:11:41 MARK F3 hesitation: reads both role buttons before typing; chooses 'Elder'
+2026-11-18T01:11:41 emulator-5556 tapxy 785,1743
+2026-11-18T01:11:45 emulator-5556 tapxy 595,2078
+2026-11-18T01:11:49 emulator-5556 type "f3.elder@example.com"
+2026-11-18T01:11:52 emulator-5556 tapxy 540,1423
+2026-11-18T01:11:54 emulator-5556 tapxy 540,2238
+2026-11-18T01:12:05 MARK F3 T2 end: success (both roles correct)
+2026-11-18T01:12:06 MARK F3 T3 start: give the caregiver a task
+2026-11-18T01:12:06 emulator-5556 tapxy 1006,1086
+2026-11-18T01:12:14 emulator-5556 tapxy 229,1593
+2026-11-18T01:12:15 emulator-5556 tapxy 560,1828
+2026-11-18T01:12:23 emulator-5556 type "Help Mama walk after lunch"
+2026-11-18T01:12:26 emulator-5556 tapxy 540,1423
+2026-11-18T01:12:28 emulator-5556 tapxy 540,2238
+2026-11-18T01:12:33 MARK F3 T3 end: success (Test Caregiver 5, 'Help Mama walk after lunch')
+2026-11-18T01:12:34 MARK F3 T4 start: open today's shift and read its timeline
+2026-11-18T01:12:34 emulator-5556 tapxy 996,2159
+2026-11-18T01:12:35 emulator-5556 tapxy 340,2248
+2026-11-18T01:12:41 emulator-5556 shot usability/screens/F3_T4_shifts.png
+2026-11-18T01:12:51 emulator-5556 tap "CANCEL" at 686,1299
+2026-11-18T01:12:54 MARK F3 agent operation error: the agent's blind tap to close the developer banner (996,2159) hit a task's delete icon; 'Remove task?' appeared; CANCEL; nothing removed; not counted
+2026-11-18T01:13:00 emulator-5556 tapxy 340,2248
+2026-11-18T01:13:06 emulator-5556 shot usability/screens/F3_T4_shifts.png
+2026-11-18T01:13:20 MARK F3 finding: Shifts tab says '8 days worked' / 'active over 8 days' while there were 8 shifts on 2 days (ShiftsTab.tsx uses shifts.length)
+2026-11-18T01:13:21 emulator-5556 swipe up
+2026-11-18T01:13:32 emulator-5556 tap "Today, Test Caregiver 5" at 540,568
+2026-11-18T01:13:37 emulator-5556 shot usability/screens/F3_T4_timeline.png
+2026-11-18T01:13:45 MARK F3 T4 end: success (Shifts tab, scrolled, 'Today, Test Caregiver 5' -> timeline)
+2026-11-18T01:13:45 MARK F3 T5 not run: no open alert
+2026-11-18T01:13:45 MARK F3 T6 start: send a chat message
+2026-11-18T01:13:46 emulator-5556 tapxy 100,140
+2026-11-18T01:13:49 emulator-5556 tapxy 740,2248
+2026-11-18T01:13:56 emulator-5556 tap "Chat with Test Caregiver 5" at 540,1148
+2026-11-18T01:14:04 emulator-5556 tapxy 460,2258
+2026-11-18T01:14:09 emulator-5556 type "Thank you for today"
+2026-11-18T01:14:11 emulator-5556 tapxy 970,1463
+2026-11-18T01:14:21 MARK F3 T6 end: success
+2026-11-18T01:14:21 MARK SESSION F3 end

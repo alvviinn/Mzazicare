@@ -1,0 +1,52 @@
+[
+ {
+  "check": "HTTP redirects to HTTPS",
+  "pass": true,
+  "detail": "301 -> https://mzazicare-api-1cu8tn.azurewebsites.net/api/"
+ },
+ {
+  "check": "HSTS header on API",
+  "pass": false,
+  "detail": "missing"
+ },
+ {
+  "check": "DEBUG off (404 shows no debug page)",
+  "pass": true,
+  "detail": "404, 179 bytes"
+ },
+ {
+  "check": "CORS refuses an unknown origin",
+  "pass": true,
+  "detail": "200, Access-Control-Allow-Origin=None"
+ },
+ {
+  "check": "No token -> 401",
+  "pass": true,
+  "detail": "401"
+ },
+ {
+  "check": "Invalid token -> 401",
+  "pass": true,
+  "detail": "401"
+ },
+ {
+  "check": "Other family's shift by ID refused",
+  "pass": true,
+  "detail": "shift 6 as Auto Family 2 -> 404"
+ },
+ {
+  "check": "Elderly account cannot read task lists",
+  "pass": true,
+  "detail": "403"
+ },
+ {
+  "check": "Admin not open",
+  "pass": true,
+  "detail": "302 /admin/login/?next=/admin/"
+ },
+ {
+  "check": "Wrong password gives a generic error",
+  "pass": true,
+  "detail": "400"
+ }
+]

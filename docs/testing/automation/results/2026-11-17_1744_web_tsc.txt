@@ -1,0 +1,3 @@
+﻿$ npx tsc --noEmit  (web, refreshed copy in C:\Users\HP\AppData\Local\mzazicare-web)
+# 2026-11-17 17:44:43 commit 9ef3baa
+# exit=0

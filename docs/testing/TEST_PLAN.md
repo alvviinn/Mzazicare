@@ -92,3 +92,12 @@ Output: `docs/testing/usability/` (personas, session logs, screenshots, `SUS.md`
 
 - Report changes as exact before/after text in `docs/testing/REPORT_INSERTS.md`, with one request to the Chapter 5 agent in `docs/AGENT_SYNC.md`.
 - Every number comes from a logged run. Anything needing your decision goes to AGENT_SYNC under "Decisions & conflicts" as "needs user".
+
+## 8. Changes made during execution (17 November 2026)
+
+- **Devices.** The author asked to run only the Emulated Galaxy A13 ("you can use the one for the a13 only"). The Pixel 10 profile could not run alongside it on this laptop (System UI stopped responding at 100 % CPU) and the C: drive was too full for a second data partition, so the Pixel 10 and A04 virtual devices were deleted. All field runs and usability sessions use the A13 profile (1080 × 2408, density 400, Android 12). The screen-size spread in section 3 is therefore not covered; the report states this.
+- **Elderly person's phone.** With one emulator, the elderly person's phone is an **API-level simulation** (`field_test/elder_sim.py`): it signs in as Test Elder 1 with the same two-step sign-in and posts `POST /api/location/ {latitude, longitude, accuracy 5, mocked false}` at the house point every 15 s, the request the app's background task sends. Approved by the author on 17 November 2026 ("yes approved"). The caregiver's phone is the real app on the emulator.
+- **Site coordinates.** H = (-1.240000, 36.833000), inside Karura Forest (public forest reserve), not the Arboretum area named above.
+- **Measured post interval.** The app on the emulator posted every 24–31 s, not every 15 s (`MOCK_CHECK.md`). Timing tolerance for each boundary is one measured caregiver post interval from the run's own log (detection happens at the first post past the boundary; a break is stamped at the last in-range post).
+- **E3 (poor accuracy).** `emu geo fix` always reports 5 m accuracy, so E3 is **not executable** and is reported as such.
+- **Accounts.** Test Caregiver 1 (gate check) and Test Caregiver 2 (signed in at the house while Test Elder 1's last fix was fresh) each received an automatic shift during setup, recorded in `MOCK_CHECK.md`; a shift is one per caregiver per day, so the timed runs use Test Caregivers 3 (main), 4 (E1) and 5 (E2, invited from the family's People tab on 17 November).

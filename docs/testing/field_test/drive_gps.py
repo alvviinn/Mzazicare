@@ -1,7 +1,8 @@
 """Emulated field test driver (TC-019). Testing agent, MzaziCare.
 
-Drives the caregiver emulator's GPS with `adb -s <serial> emu geo fix <lon> <lat>` along a timed route and keeps the
-elderly person's emulator fixed at the house. Every injected fix and every planned boundary crossing is logged with
+Drives the caregiver emulator's GPS with `adb -s <serial> emu geo fix <lon> <lat>` along a timed route. The elderly
+person's phone is either a second emulator kept fixed at the house, or (elder serial "-") an API-level simulation run
+separately by elder_sim.py, as approved by the author on 17 November 2026. Every injected fix and every planned boundary crossing is logged with
 the host clock (the backend runs on the same host, so both use one clock).
 
 Site model: a standalone house in a Nairobi estate, placed on a coordinate inside Karura Forest (a public forest
@@ -13,6 +14,7 @@ Scenarios: main, e1_near_edge, e2_short_out, e3_poor_accuracy (e3 requires a wor
 
 import json
 import math
+import os
 import subprocess
 import sys
 import time
@@ -23,6 +25,7 @@ H = (-1.240000, 36.833000)  # the house (elderly person's phone), inside Karura 
 ENTER, EXIT = 15.0, 20.0  # metres, from backend/care/presence.py
 WALK = 1.2  # m/s walking pace
 STEP_S = 2.0  # seconds between injected caregiver fixes
+ADB = os.path.join(os.environ['LOCALAPPDATA'], 'Android', 'Sdk', 'platform-tools', 'adb.exe')
 
 # Points: metres (north, east) from H
 P = {
@@ -66,13 +69,16 @@ class Driver:
 
     def geo(self, serial, n, e):
         lat, lon = to_latlon(n, e)
-        subprocess.run(['adb', '-s', serial, 'emu', 'geo', 'fix', f'{lon:.7f}', f'{lat:.7f}'],
-                       capture_output=True, timeout=15)
+        try:
+            subprocess.run([ADB, '-s', serial, 'emu', 'geo', 'fix', f'{lon:.7f}', f'{lat:.7f}'],
+                           capture_output=True, timeout=15)
+        except subprocess.TimeoutExpired:  # one hung adb call must not end the run; the emulator keeps its last fix
+            self.emit('adb_timeout', n=n, e=e)
         return lat, lon
 
     def fix(self, n, e):
         """Inject one caregiver fix; re-assert the elderly phone every 5 s; log planned crossings."""
-        if time.time() - self.last_elder >= 5:
+        if self.elder != '-' and time.time() - self.last_elder >= 5:
             self.geo(self.elder, 0, 0)
             self.last_elder = time.time()
         lat, lon = self.geo(self.cg, n, e)
@@ -108,12 +114,18 @@ class Driver:
 
 def scenario(d, name, speed):
     m = lambda minutes: int(minutes * 60 / speed)  # noqa: E731
-    d.stay(60, 'start on the road, both phones settle')
-    d.walk('R'); d.walk('G'); d.walk('I')  # noqa: E702
+    if name != 'main_resume_break':
+        d.stay(60, 'start on the road, both phones settle')
+        d.walk('R'); d.walk('G'); d.walk('I')  # noqa: E702
     if name == 'main':
         d.stay(m(15), 'first stay')
         d.walk('G'); d.walk('R'); d.walk('K')  # noqa: E702
         d.stay(m(10), 'break at the shop')
+        d.walk('R'); d.walk('G'); d.walk('I')  # noqa: E702
+        d.stay(m(15), 'second stay')
+    elif name == 'main_resume_break':  # restart after a driver crash during the shop break (same run id)
+        d.pos = P['K']
+        d.stay(max(0, int(UNTIL - time.time())), 'break at the shop (resumed)')
         d.walk('R'); d.walk('G'); d.walk('I')  # noqa: E702
         d.stay(m(15), 'second stay')
     elif name == 'e1_near_edge':
@@ -138,8 +150,11 @@ def scenario(d, name, speed):
 if __name__ == '__main__':
     name, cg, elder, run_id = sys.argv[1:5]
     speed = float(sys.argv[sys.argv.index('--speed') + 1]) if '--speed' in sys.argv else 1.0
+    UNTIL = float(sys.argv[sys.argv.index('--until') + 1]) if '--until' in sys.argv else 0.0
     out = Path(__file__).parent / 'raw' / f'{run_id}.jsonl'
     out.parent.mkdir(exist_ok=True)
     drv = Driver(cg, elder, out)
+    if name == 'main_resume_break':
+        drv.inside = False  # the caregiver is at the shop, outside the geofence
     drv.emit('run_start', scenario=name, caregiver=cg, elder=elder, run_id=run_id, house=H)
     scenario(drv, name, speed)

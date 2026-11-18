@@ -1,0 +1,28 @@
+$ C:\Users\HP\AppData\Local/mzazicare-ml/Scripts/python.exe -m unittest discover -s firstaid/tests -t . -v
+# started 2026-11-17 17:43:40 EAST | commit 9ef3baa | dir ml
+test_keyword_labelling_keeps_only_clear_questions (firstaid.tests.test_firstaid.DataTests.test_keyword_labelling_keeps_only_clear_questions) ... ok
+test_variations_stay_close_to_the_original (firstaid.tests.test_firstaid.DataTests.test_variations_stay_close_to_the_original) ... ok
+test_checker_catches_mistakes (firstaid.tests.test_firstaid.GuideTests.test_checker_catches_mistakes) ... ok
+test_core_topics_exist (firstaid.tests.test_firstaid.GuideTests.test_core_topics_exist) ... ok
+test_every_life_threatening_topic_says_call_922 (firstaid.tests.test_firstaid.GuideTests.test_every_life_threatening_topic_says_call_922) ... ok
+test_guide_has_no_problems (firstaid.tests.test_firstaid.GuideTests.test_guide_has_no_problems) ... ok
+test_detects_kiswahili_and_english (firstaid.tests.test_firstaid.LanguageTests.test_detects_kiswahili_and_english) ... ok
+test_calm_messages_raise_no_alarm (firstaid.tests.test_firstaid.SafetyCheckTests.test_calm_messages_raise_no_alarm) ... ok
+test_danger_words_in_both_languages (firstaid.tests.test_firstaid.SafetyCheckTests.test_danger_words_in_both_languages) ... ok
+test_clinical_and_kiswahili_words_name_the_situation (firstaid.tests.test_lexicon.LexiconTests.test_clinical_and_kiswahili_words_name_the_situation) ... ok
+test_every_topic_it_names_exists_in_the_guide (firstaid.tests.test_lexicon.LexiconTests.test_every_topic_it_names_exists_in_the_guide) ... ok
+test_health_messages_are_recognised (firstaid.tests.test_lexicon.LexiconTests.test_health_messages_are_recognised) ... ok
+test_idioms_objects_and_animals_are_not_first_aid (firstaid.tests.test_lexicon.LexiconTests.test_idioms_objects_and_animals_are_not_first_aid) ... ok
+test_life_threatening_first (firstaid.tests.test_lexicon.LexiconTests.test_life_threatening_first) ... ok
+test_banner_needs_confidence (firstaid.tests.test_safety_policy.DecideCheckTests.test_banner_needs_confidence) ... ok
+test_banner_never_when_it_may_not_be_first_aid (firstaid.tests.test_safety_policy.DecideCheckTests.test_banner_never_when_it_may_not_be_first_aid) ... ok
+test_no_danger_answers_normally (firstaid.tests.test_safety_policy.DecideCheckTests.test_no_danger_answers_normally) ... ok
+test_strong_danger_still_says_call_999 (firstaid.tests.test_safety_policy.DecideCheckTests.test_strong_danger_still_says_call_999) ... ok
+test_weak_danger_with_confident_topic_gives_advice_with_banner (firstaid.tests.test_safety_policy.DecideCheckTests.test_weak_danger_with_confident_topic_gives_advice_with_banner) ... ok
+test_weak_danger_without_inline_asks_the_question (firstaid.tests.test_safety_policy.DecideCheckTests.test_weak_danger_without_inline_asks_the_question) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.229s
+
+OK
+# finished 2026-11-17 17:43:44 EAST exit=0

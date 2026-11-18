@@ -1,7 +1,75 @@
 {
-  "retrieved_at": "2026-11-17T12:51:08+03:00",
+  "retrieved_at": "2026-11-17T13:02:41+03:00",
   "source": "GitHub REST API, public, unauthenticated (gh CLI not signed in)",
   "latest_run_on_main": {
+    "id": 44060828045,
+    "url": "https://github.com/alvviinn/Mzazicare/actions/runs/44060828045",
+    "created_at": "2026-11-17T10:00:48Z",
+    "head_sha": "9ef3baa737c62cf8524171ca15b5c47aaad44407",
+    "commit_message": "update Read.me file",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "Backend (Django)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T10:00:51Z",
+        "completed_at": "2026-11-17T10:01:30Z"
+      },
+      {
+        "name": "Mobile (TypeScript)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T10:00:51Z",
+        "completed_at": "2026-11-17T10:01:11Z"
+      },
+      {
+        "name": "ML (features, data rules, inference)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T10:00:51Z",
+        "completed_at": "2026-11-17T10:01:47Z"
+      },
+      {
+        "name": "Secret scan",
+        "conclusion": "success",
+        "started_at": "2026-11-17T10:00:51Z",
+        "completed_at": "2026-11-17T10:01:24Z"
+      }
+    ]
+  },
+  "first_green_run_after_fix": {
+    "id": 44059739866,
+    "url": "https://github.com/alvviinn/Mzazicare/actions/runs/44059739866",
+    "created_at": "2026-11-17T09:53:38Z",
+    "head_sha": "979f2aa308c98ee4fa99b5f8b0c2545cf7829930",
+    "commit_message": "install torch and scikit-learn for the ML tests in CI",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "Backend (Django)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T09:53:41Z",
+        "completed_at": "2026-11-17T09:54:13Z"
+      },
+      {
+        "name": "ML (features, data rules, inference)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T09:53:42Z",
+        "completed_at": "2026-11-17T09:54:40Z"
+      },
+      {
+        "name": "Mobile (TypeScript)",
+        "conclusion": "success",
+        "started_at": "2026-11-17T09:53:41Z",
+        "completed_at": "2026-11-17T09:54:03Z"
+      },
+      {
+        "name": "Secret scan",
+        "conclusion": "success",
+        "started_at": "2026-11-17T09:53:42Z",
+        "completed_at": "2026-11-17T09:54:12Z"
+      }
+    ]
+  },
+  "previous_failing_run": {
     "id": 44052919547,
     "url": "https://github.com/alvviinn/Mzazicare/actions/runs/44052919547",
     "created_at": "2026-11-17T09:09:11Z",
@@ -13,43 +81,34 @@
         "name": "Mobile (TypeScript)",
         "conclusion": "success",
         "started_at": "2026-11-17T09:09:15Z",
-        "completed_at": "2026-11-17T09:09:35Z",
-        "failed_steps": []
+        "completed_at": "2026-11-17T09:09:35Z"
       },
       {
         "name": "Backend (Django)",
         "conclusion": "success",
         "started_at": "2026-11-17T09:09:15Z",
-        "completed_at": "2026-11-17T09:09:53Z",
-        "failed_steps": []
+        "completed_at": "2026-11-17T09:09:53Z"
       },
       {
         "name": "Secret scan",
         "conclusion": "success",
         "started_at": "2026-11-17T09:09:15Z",
-        "completed_at": "2026-11-17T09:09:54Z",
-        "failed_steps": []
+        "completed_at": "2026-11-17T09:09:54Z"
       },
       {
         "name": "ML (features, data rules, inference)",
         "conclusion": "failure",
         "started_at": "2026-11-17T09:09:15Z",
-        "completed_at": "2026-11-17T09:09:41Z",
-        "failed_steps": [
-          "Run python -m unittest discover -s voice/tests -t . -v"
-        ]
+        "completed_at": "2026-11-17T09:09:41Z"
       }
     ]
   },
-  "last_successful_run_on_main": {
-    "id": 40591038452,
-    "url": "https://github.com/alvviinn/Mzazicare/actions/runs/40591038452",
-    "created_at": "2026-10-27T21:57:46Z",
-    "head_sha": "53e6c9314721eadbf4dec8ca451fcb432adf347c"
-  },
-  "failing_since": {
+  "failure_period": {
     "first_failing_commit": "b653e08",
-    "date": "2026-10-29",
-    "cause": "ml/voice/tests/test_compare.py imports torch and voice.compare imports sklearn; the ML job installs neither (reproduced locally, results/*_ci_ml_job_repro.txt)"
-  }
+    "from": "2026-10-29",
+    "last_failing_run": 44052919547,
+    "fixed_by_commit": "979f2aa (install torch and scikit-learn for the ML tests in CI)",
+    "last_success_before": "40591038452 on 2026-10-27"
+  },
+  "not_yet_pushed": "Local ci.yml additions by the Automation agent (pandas, first-aid test step, web type-check job) are not in these runs."
 }

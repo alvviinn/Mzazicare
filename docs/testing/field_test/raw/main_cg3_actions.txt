@@ -1,0 +1,5 @@
+23:16:29.6  tap "End shift" (missed: the debug build's LogBox banner covered the lower half of the button; no dialog opened)
+23:16:57.3  dismissed the banner, tapped "End shift" -> dialog "End your shift? Your hours so far are saved. If you come back today, the same shift carries on." [KEEP GOING] [END SHIFT]
+23:17:12.7  tapped "END SHIFT" -> Today screen: "Done for today. 32 min active today. In 10:27 PM, 1 break. Done. Step 3 of 3"
+Screenshots: screens/main_cg3_arrived.png, main_cg3_end_tap.png, main_cg3_end_dialog.png, main_cg3_ended.png
+Driver incident: 22:47:27 one `adb emu geo fix` call hung (15 s timeout) and the driver exited during the shop break; the emulator kept the shop position; restarted 22:48:09 with scenario main_resume_break, same run id, break end kept at the planned time.
