@@ -2,10 +2,23 @@
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+  <!-- Keep running in the background: ask once to be left out of battery saving, and after a restart remind
+       the person to open the app (Android only lets location sharing start while the app is on screen). -->
+  <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
   <application>
     <service
       android:name="com.mzazicare.mickeeper.MicKeeperService"
       android:exported="false"
       android:foregroundServiceType="microphone" />
+    <receiver
+      android:name="com.mzazicare.mickeeper.ResumeReceiver"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+      </intent-filter>
+    </receiver>
   </application>
 </manifest>

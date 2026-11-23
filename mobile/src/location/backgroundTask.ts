@@ -3,6 +3,7 @@ import * as TaskManager from 'expo-task-manager';
 import { sendLocation, SESSION_EXPIRED } from '../api/client';
 import { stopVoice, voiceTick } from '../audio/voiceService';
 import { loadSession } from '../auth/session';
+import { setResumeReminder } from '../../modules/mic-keeper';
 
 // Keeps sending this phone's position while MzaziCare is in the background or the screen is off,
 // so a visit is verified (and the shift timer runs) without anyone keeping the app open.
@@ -67,7 +68,11 @@ TaskManager.defineTask<{ locations: Location.LocationObject[] }>(LOCATION_TASK, 
 });
 
 // Starts the service (or leaves it running). Must be called while the app is on screen.
-export async function startBackgroundSharing(notice: { title: string; body: string }) {
+export async function startBackgroundSharing(
+  notice: { title: string; body: string },
+  resume: { title: string; body: string },
+) {
+  setResumeReminder(true, resume.title, resume.body); // after a restart or update: "tap to turn it back on"
   if (await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK)) return;
   await Location.startLocationUpdatesAsync(LOCATION_TASK, {
     accuracy: Location.Accuracy.High,
@@ -85,6 +90,7 @@ export async function startBackgroundSharing(notice: { title: string; body: stri
 }
 
 export async function stopBackgroundSharing() {
+  setResumeReminder(false);
   try {
     if (await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK)) await Location.stopLocationUpdatesAsync(LOCATION_TASK);
   } catch {

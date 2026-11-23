@@ -10,6 +10,12 @@ const NOTICE = {
   sw: { title: 'MzaziCare inashiriki mahali', body: 'Hii inathibitisha ziara za matunzo. Inazimwa ukitoka kwenye akaunti.' },
 };
 
+// After a phone restart or an app update Android will not restart the sharing by itself (see ResumeReceiver.kt).
+const RESUME = {
+  en: { title: 'Open MzaziCare to turn it back on', body: 'Your phone restarted, so MzaziCare stopped. Tap here so care visits keep being recorded.' },
+  sw: { title: 'Fungua MzaziCare ili iwake tena', body: 'Simu yako ilizimwa na kuwashwa, kwa hivyo MzaziCare ilisimama. Gusa hapa ili ziara za matunzo ziendelee kurekodiwa.' },
+};
+
 // Shares this phone's position with the server, which compares the caretaker's and the elder's phones
 // to verify visits (15 m geofence) and start and stop the shift by itself.
 // The sharing keeps running in the background (backgroundTask.ts) after this screen closes;
@@ -48,7 +54,7 @@ export function useLocationSharing(token: string, lang: 'en' | 'sw' = 'en') {
         return;
       }
       try {
-        await startBackgroundSharing(NOTICE[lang]);
+        await startBackgroundSharing(NOTICE[lang], RESUME[lang]);
         background = true;
       } catch {
         // E.g. Expo Go, or the phone refused the service: fall back to sending while the app is open.

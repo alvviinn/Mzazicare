@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { stopShift } from '../../api/client';
 import { Icon, IconName } from '../../components/Icon';
+import { BatteryNotice } from '../../components/BatteryNotice';
 import { SharingBanner } from '../../components/SharingBanner';
 import { Avatar, Button, Card, Empty, ErrorState, ErrorText, haptic, Loading, PressScale, Ring, StatusPill, Stepper } from '../../components/ui';
 import { fmtDuration, fmtTime } from '../../format';
@@ -209,6 +210,7 @@ export default function ShiftTab({
       )}
 
       {sharing !== 'sharing' && <SharingBanner status={sharing} />}
+      <BatteryNotice />
 
       {/* Two tiles of different weight, alternating the two tints. */}
       <View style={styles.tiles}>

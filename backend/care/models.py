@@ -25,6 +25,8 @@ class Location(models.Model):
     accuracy = models.FloatField(null=True, blank=True)  # metres, as reported by the phone
     mocked = models.BooleanField(default=False)  # phone says the fix comes from a mock-location app
     updated_at = models.DateTimeField(default=timezone.now)
+    # When this phone was last sent a "MzaziCare has stopped, tap to turn it back on" push (see wake.py).
+    nudged_at = models.DateTimeField(null=True, blank=True)
 
 
 class TrackPoint(models.Model):

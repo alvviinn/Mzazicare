@@ -3,6 +3,7 @@ import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } 
 import { getContacts, getElderHome, getEmergencies, sendCheckIn, sendSos, takeMedicine } from '../api/client';
 import { useVoiceMonitoring } from '../audio/useVoiceMonitoring';
 import { Icon, IconName, MOOD_ICON } from '../components/Icon';
+import { BatteryNotice } from '../components/BatteryNotice';
 import { SharingBanner } from '../components/SharingBanner';
 import { Avatar, Button, Card, haptic, OfflineBanner, PressScale, Sheet, StatusBarStrip } from '../components/ui';
 import { VoiceCard } from '../components/VoiceCard';
@@ -349,6 +350,7 @@ export default function ElderlyHome({ token, profile, onSignOut }: Props) {
 
         <VoiceCard voice={voice} lang={lang} scale={scale} />
         <SharingBanner status={sharing.status} lang={lang} scale={scale} />
+        <BatteryNotice lang={lang} scale={scale} />
       </ScrollView>
       <StatusBarStrip />
 

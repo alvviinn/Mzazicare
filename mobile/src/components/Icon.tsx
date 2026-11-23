@@ -8,6 +8,7 @@ import {
   ArrowUp,
   AudioWaveform,
   BadgeCheck,
+  BatteryWarning,
   BellCheck,
   BellPlus,
   BellRing,
@@ -96,6 +97,7 @@ import { colors, icon } from '../theme';
 const SET = {
   alert: CircleAlert,
   back: ArrowLeft,
+  battery: BatteryWarning,
   bellCheck: BellCheck,
   bellPlus: BellPlus,
   bellRing: BellRing,

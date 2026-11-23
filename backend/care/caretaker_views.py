@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 
 from accounts.models import Role, User
 
-from . import presence
+from . import presence, wake
 from .models import Alert, Chore, Location, Shift, ShiftSegment, Task, TaskCompletion, TrackPoint
 from .shift_views import shift_card
 from .tasks import MAX_PHOTO_BYTES, MAX_TASKS, completion_json, photo_type, task_json, visible_tasks
@@ -83,6 +83,7 @@ class LocationView(APIView):
                 presence.evaluate(c, now)
         if not mocked:
             record_track(user, lat, lon, acc, now)
+        wake.nudge_quiet_phones(user, now)  # a phone in the same circle that went quiet gets a "tap to turn it back on"
         return Response({'detail': 'ok'})
 
 
