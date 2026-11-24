@@ -60,7 +60,7 @@ Placement, captions and every text change: `docs/diagrams/CHAPTER4_FIGURES.md` (
 
 ## Decisions & conflicts
 
-- (Ch5 agent, 2026-11-17) The report file is `C:\Users\HP\OneDrive - Strathmore University\AlvinKimani_167148_DrEstherKhakata(25)_Chapter5_v2.docx`. The Ch5 agent rebuilds the whole file from the untouched original on every build, so edits made directly in the .docx are lost. Deliver figures as PNG files with a register entry, and text changes as exact before/after text under Requests. The Ch5 agent inserts them.
+- (Ch5 agent, 2026-11-17) The report file is `C:\Users\HP\OneDrive - Strathmore University\167148_Alvin_Kimani_Thuo_ProgressReview.docx`. The Ch5 agent rebuilds the whole file from the untouched original on every build, so edits made directly in the .docx are lost. Deliver figures as PNG files with a register entry, and text changes as exact before/after text under Requests. The Ch5 agent inserts them.
 - (Ch5 agent) The build already puts placeholders in Chapter 4 for Figure 4.6 (Mobile Application Wireframes), Figure 4.7 (Web Dashboard Wireframe) and Figure 4.8 (System Architecture Diagram). It also rewrites the paragraphs before and after Figure 4.8, and adds captions to Figures 4.1 to 4.5.
 - (Ch5 agent) Report wording: the roles are "the family", "the caregiver" and "the elderly person" (the code says caretaker). The geofence is 15 m to enter and 20 m to leave. Emergency number 922, with 999 as the second.
 

@@ -1,76 +1,30 @@
-import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-import { stopShift } from '../../api/client';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Icon, IconName } from '../../components/Icon';
 import { BatteryNotice } from '../../components/BatteryNotice';
 import { SharingBanner } from '../../components/SharingBanner';
-import { Avatar, Button, Card, Empty, ErrorState, ErrorText, haptic, Loading, PressScale, Ring, StatusPill, Stepper } from '../../components/ui';
+import { Avatar, Card, Empty, ErrorState, Loading, PressScale, Ring, StatusPill, Stepper } from '../../components/ui';
 import { fmtDuration, fmtTime } from '../../format';
 import { SharingStatus } from '../../location/useLocationSharing';
-import { useOnline } from '../../net';
 import { t } from '../../strings';
 import { colors, icon, on, radius, space, TAP, text, textOnInk } from '../../theme';
 import { Contact, ShiftState } from '../../types';
 
 const s = t.shift;
 
-// End, with loading, success and error feedback. Used by the fixed button at the bottom.
-// There is no Start: a shift only starts by itself when the caretaker's phone is in range of the elder's.
-export function useShiftAction(token: string, onChanged: () => Promise<void>, notify: (message: string) => void) {
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
-
-  async function run(action: () => Promise<unknown>, done: string) {
-    setBusy(true);
-    setError('');
-    try {
-      await action();
-      await onChanged();
-      haptic.success();
-      notify(done);
-    } catch (e) {
-      haptic.warn();
-      setError(e instanceof Error ? e.message : t.common.somethingWrong);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  return {
-    busy,
-    error,
-    end: () =>
-      Alert.alert(s.endTitle, s.endBody, [
-        { text: s.endKeep, style: 'cancel' },
-        { text: s.endConfirm, style: 'destructive', onPress: () => run(() => stopShift(token), s.ended) },
-      ]),
-  };
-}
-
-// The screen's one primary action (cobalt), fixed at the bottom within thumb reach. Before the shift, a note instead.
-export function ShiftActionBar({ state, action }: { state: ShiftState | null; action: ReturnType<typeof useShiftAction> }) {
-  const online = useOnline();
+// No buttons: a shift starts by itself when the caretaker's phone is within range of the elder's, stepping away
+// is a break, and the day closes by itself at midnight. The bar at the bottom only says so.
+export function ShiftActionBar({ state }: { state: ShiftState | null }) {
   if (!state?.elderly) return null;
-  if (state.phase === 'none' || state.phase === 'ended') {
-    return (
-      <View style={styles.bar} accessibilityLiveRegion="polite">
-        <View style={styles.autoNote}>
-          <Icon name="pin" color={colors.inkMuted} />
-          <Text style={[text.caption, { flex: 1 }]}>{s.autoStart(state.range.radius_m, state.elderly.name.split(' ')[0])}</Text>
-        </View>
-      </View>
-    );
-  }
+  const name = state.elderly.name.split(' ')[0];
+  const before = state.phase === 'none' || state.phase === 'ended';
   return (
-    <View style={styles.bar}>
-      <ErrorText>{action.error}</ErrorText>
-      <Button
-        title={!online ? s.offlineAction : s.end}
-        icon={!online ? 'offline' : 'stop'}
-        onPress={action.end}
-        loading={action.busy}
-        disabled={!online}
-      />
+    <View style={styles.bar} accessibilityLiveRegion="polite">
+      <View style={styles.autoNote}>
+        <Icon name="pin" color={colors.inkMuted} />
+        <Text style={[text.caption, { flex: 1 }]}>
+          {before ? s.autoStart(state.range.radius_m, name) : s.autoEnd(name)}
+        </Text>
+      </View>
     </View>
   );
 }

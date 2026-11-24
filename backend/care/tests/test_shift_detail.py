@@ -2,6 +2,8 @@
 
 from datetime import timedelta
 
+from django.utils import timezone
+
 from care import presence
 from care.models import Chore, Shift, ShiftSegment, ToneReading
 
@@ -78,10 +80,10 @@ class ShiftViewsTests(FamilyTestCase):
         self.assertEqual((state['phase'], state['today']['status']), ('break', 'paused'))
         self.assertEqual(state['today']['breaks'], 1)  # the break is on the record straight away
 
-    def test_todays_shift_can_still_be_opened_after_tapping_end(self):
+    def test_todays_shift_can_still_be_opened_after_an_older_app_ended_it(self):
         self.put_in_range(5)
         self.caretaker_api.get('/api/shift/state/')
-        self.caretaker_api.post('/api/shift/stop/')
+        presence._end(presence.current_shift(self.caretaker), 'manual', timezone.now())  # what older apps' End did
         state = self.caretaker_api.get('/api/shift/state/').data
         self.assertEqual((state['status'], state['phase']), ('none', 'ended'))
         self.assertIsNotNone(state['today'])

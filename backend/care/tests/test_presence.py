@@ -156,18 +156,22 @@ class PresenceEngineTests(FamilyTestCase):
         presence.evaluate(self.caretaker, self.at(24 * 60 + 5))  # next morning
         self.assertFalse(Shift.objects.filter(pk=shift.pk).exists())
 
-    # ---- manual stop (there is no manual start) ----
-    def test_manual_stop_ends_the_days_shift_and_keeps_verified_time(self):
+    # ---- shifts ended by older app versions (there is no manual start or end any more) ----
+    def ended_by_old_app(self, at):
+        """What an older app's End button did."""
+        presence._end(presence.evaluate(self.caretaker, at), 'manual', at)
+
+    def test_old_manual_end_kept_the_verified_time(self):
         shift = self.tick(0, 10)
         self.tick(10, 5)
-        presence.stop_manual(self.caretaker, self.at(10))
+        self.ended_by_old_app(self.at(10))
         shift = self.fresh(shift)
         self.assertEqual((shift.ended_by, self.worked(shift)), ('manual', 10))
 
-    def test_no_auto_restart_after_manual_stop_until_the_caretaker_has_left(self):
+    def test_after_an_old_manual_end_no_restart_until_the_caretaker_has_left(self):
         first = self.tick(0, 10)
         self.tick(5, 5)
-        presence.stop_manual(self.caretaker, self.at(5))
+        self.ended_by_old_app(self.at(5))
         self.assertIsNone(self.tick(10, 4))  # still standing there: stays ended
         self.tick(15, 100)  # leaves
         self.assertTrue(self.fresh(first).rearmed)

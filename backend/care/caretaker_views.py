@@ -152,14 +152,13 @@ class ShiftStartView(APIView):
 
 
 class ShiftStopView(APIView):
+    """Manual end was removed too: a shift ends by itself (leaving range is a break, the day closes at midnight).
+    Kept only so older app versions, which still show an End button, get a clear answer."""
+
     def post(self, request):
         require_caretaker(request.user)
-        now = timezone.now()
-        try:
-            presence.stop_manual(request.user, now)
-        except ValueError as e:
-            raise ValidationError({'detail': str(e)})
-        return Response(state_json(request.user, now))
+        raise ValidationError({'detail': 'Shifts end by themselves: stepping away is a break, and the day closes at '
+                                         'midnight. Please update the app.'})
 
 
 class HoursView(APIView):

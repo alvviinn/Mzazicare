@@ -15,7 +15,7 @@ import ChatScreen from './ChatScreen';
 import ShiftDetailScreen from './ShiftDetailScreen';
 import FirstAidTab, { FirstAidChat } from './caretaker/FirstAidTab';
 import HoursTab from './caretaker/HoursTab';
-import ShiftTab, { ShiftActionBar, useShiftAction } from './caretaker/ShiftTab';
+import ShiftTab, { ShiftActionBar } from './caretaker/ShiftTab';
 import TasksTab from './caretaker/TasksTab';
 
 type Props = { token: string; profile: Profile; onSignOut: () => void };
@@ -93,7 +93,6 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
 
   const notify = useCallback((message: string) => setNotice({ message }), []);
   const hide = useCallback(() => setNotice(null), []);
-  const action = useShiftAction(token, load, notify);
 
   // Tapping a notification: a message opens that person's chat, an emergency opens Today (with its banner).
   usePushTap((tap) => {
@@ -139,7 +138,7 @@ export default function CaretakerHome({ token, profile, onSignOut }: Props) {
       title={tab === 'tasks' ? t.tabs.tasks : tab === 'hours' ? t.tabs.hours : undefined}
       footer={
         <View>
-          {tab === 'shift' && <ShiftActionBar state={state} action={action} />}
+          {tab === 'shift' && <ShiftActionBar state={state} />}
           {tabBar}
         </View>
       }

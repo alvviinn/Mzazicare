@@ -1,8 +1,8 @@
 """Geofence presence engine.
 
 The geofence is centred on the ELDER's phone: the caretaker is "in range" when their phone is within
-ENTER_RADIUS_M of it. Time is only counted while in range (ShiftSegment rows), so manual start/stop
-still produces verified hours.
+ENTER_RADIUS_M of it. Time is only counted while in range (ShiftSegment rows). Shifts start and end by
+themselves: there is no manual start or end (shifts ended manually by older app versions are still handled).
 
 A shift is one DAY of work for one caretaker with one elderly person. Stepping out of range is a *break*:
 the shift stays open, the timer stops, and when the caretaker comes back the same shift continues. Only a
@@ -251,15 +251,6 @@ def evaluate(caretaker, now=None):
                 s.rearmed = True
                 s.save(update_fields=['rearmed'])
     return current_shift(caretaker, now)
-
-
-def stop_manual(caretaker, now=None):
-    """Caretaker taps End: finished for now. If they come back the same day, the same shift continues."""
-    now = now or timezone.now()
-    shift = evaluate(caretaker, now)  # settle the segment first so the final minutes are right
-    if not shift:
-        raise ValueError('There is no shift to end. It may have ended already. Pull down to refresh.')
-    _end(shift, 'manual', now)
 
 
 def current_reading(caretaker, shift, now=None):

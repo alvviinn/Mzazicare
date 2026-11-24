@@ -23,12 +23,14 @@ class ShiftApiTests(FamilyTestCase):
         self.assertIn('start by themselves', r.data['detail'])
         self.assertEqual(Shift.objects.count(), 0)
 
-    def test_manual_stop(self):
+    def test_manual_end_is_gone(self):
+        """Shifts only end by themselves. Older apps still call stop: refused, and the shift keeps counting."""
         self.put_in_range(5)
         self.caretaker_api.get('/api/shift/state/')  # in range: the shift starts automatically
-        stopped = self.caretaker_api.post('/api/shift/stop/').data
-        self.assertEqual(stopped['status'], 'none')
-        self.assertEqual(self.caretaker_api.post('/api/shift/stop/').status_code, 400)  # nothing to stop
+        r = self.caretaker_api.post('/api/shift/stop/')
+        self.assertEqual(r.status_code, 400)
+        self.assertIn('end by themselves', r.data['detail'])
+        self.assertEqual(self.caretaker_api.get('/api/shift/state/').data['status'], 'active')
 
     def test_hours_summary(self):
         self.put_in_range()

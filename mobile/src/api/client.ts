@@ -161,7 +161,6 @@ export const takeMedicine = (token: string, id: number): Promise<void> =>
 export const getShiftState = (token: string): Promise<ShiftState> => request('/api/shift/state/', { token });
 
 
-export const stopShift = (token: string): Promise<ShiftState> => request('/api/shift/stop/', { ...post(), token });
 
 export const getHours = (token: string): Promise<Hours> => request('/api/hours/', { token });
 
